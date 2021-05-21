@@ -1,0 +1,291 @@
+#!/bin/bash
+#-------------------------------------------------------------------------------------------------#
+#                         Brazilian global Atmospheric Model - BAM_V2.2.1                         #
+#-------------------------------------------------------------------------------------------------#
+#BOP                                                                                              #
+# Descrição:                                                                                      #
+#     Script com funções utilizadas pelos scripts do modelo BAM                                   #
+#                                                                                                 #
+# Uso:                                                                                            #
+#                                                                                                 #
+#                                                                                                 #
+# Notas:                                                                                          #
+#                                                                                                 #
+# Revisões:                                                                                       #
+#    * 19-05-2021: de Mattos, J. G. Z.  - Código Inicial                                          #
+#                                                                                                 #
+# TODO:                                                                                           #
+#                                                                                                 #
+# DIMNT/CGCT/INPE, 2021                                                                           #
+#EOP                                                                                              #
+#-------------------------------------------------------------------------------------------------#
+whereami(){
+    for i in $(seq 0 $((${#FUNCNAME[@]}-1)) );do
+       if [ ${FUNCNAME[$i]} == 'main' ];then
+          echo $(dirname $(readlink -e ${BASH_SOURCE[$i]}))
+          break
+       fi
+    done
+}
+
+#-----------------------------------------------------------------------------#
+# return a subword of a string
+#-----------------------------------------------------------------------------#
+
+subwrd(){
+   str=$(printf "%s " "${@}" | awk '{ for (i=1; i<=NF-1; i++) printf("%s ",$i)}')
+   n=$(printf "%s " "${@}" | awk '{ print $NF }')
+   printf "%s " "${str}" | awk -v var=${n} '{print $var}'
+}
+
+#-----------------------------------------------------------------------------#
+# return usage from main program
+#-----------------------------------------------------------------------------#
+usage(){
+   echo
+   echo "Usage:"
+   echo " "
+   sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' ${1} 
+}
+
+#-----------------------------------------------------------------------------#
+# Return information about MPI requested resources 
+#-----------------------------------------------------------------------------#
+getMPIinfo(){
+
+
+   #
+   # set default MPI info
+   #
+
+   export MPITasks=240        # Numero de processadores que serao utilizados no Job
+   export TasksPerNode=40     # Numero de processadores utilizados por tarefas MPI
+   export ThreadsPerMPITask=1 # Number of cores hosting OpenMP threads
+
+   #
+   # get MPI info for atual machine
+   #
+   case $(hostname) in
+      clogin*) export MaxTasksPerNode=40;;
+      eslogin*) export MaxTasksPerNode=24;;
+      *) echo "Unknown Machine $(hostname). ABORT!"; exit 1
+   esac
+
+   args=${@} #save arguments temporarily
+   while (( $# )); do
+      opt=$1
+      case ${opt} in
+         -np) MPITasks=$2; shift 2 ;;
+          -N) TasksPerNode=$2; shift 2;;
+          -d) ThreadsPerMPITask=$2; shift 2;;
+          -c) CoresPerNode=$2; shift 2;;
+          *) echo -e "\033[31;1mWarning:\033[m Unknown argument:\033[33;1m $opt\033[m"; shift 1;;
+      esac
+   done
+   set -- $args #restore arguments
+
+
+   if [ ${TasksPerNode} > ${MaxTasksPerNode} -o ${ThreadsPerMPITask} > 1 ];then
+      export TasksPerNode=$((${MaxTasksPerNode}/${ThreadsPerMPITask})) # Number of Processors used by each MPI tasks
+   fi
+
+   export PEs=$((${MPITasks}/${ThreadsPerMPITask}))
+   export Nodes=$(((${MPITasks}+${MaxTasksPerNode}-1)/${MaxTasksPerNode}))
+   
+}
+
+#-----------------------------------------------------------------------------#
+# Get BAM trunc
+#-----------------------------------------------------------------------------#
+getBAMSize(){
+
+   trunc=${1}
+
+   case ${trunc} in
+      21)   IM=64;    JM=32;    timestep=3600;;
+      31)   IM=96;    JM=48;    timestep=1800;;
+      42)   IM=128;   JM=64;    timestep=1200;;
+      62)   IM=192;   JM=96;    timestep=900;;
+      106)  IM=320;   JM=160;   timestep=600;;
+      126)  IM=384;   JM=192;   timestep=450;;
+      133)  IM=400;   JM=200;   timestep=450;;
+      159)  IM=480;   JM=240;   timestep=360;;
+      170)  IM=512;   JM=256;   timestep=360;;
+      213)  IM=640;   JM=320;   timestep=300;;
+      254)  IM=768;   JM=384;   timestep=240;;
+      299)  IM=900;   JM=450;   timestep=200;;
+      319)  IM=960;   JM=480;   timestep=180;;
+      341)  IM=1024;  JM=512;   timestep=180;;
+      382)  IM=1152;  JM=576;   timestep=150;;
+      511)  IM=1536;  JM=768;   timestep=120;;
+      533)  IM=1600;  JM=800;   timestep=120;;
+      666)  IM=2000;  JM=1000;  timestep=90;;
+      863)  IM=2592;  JM=1296;  timestep=60;;
+      1279) IM=3840;  JM=1920;  timestep=20;;
+      1332) IM=4000;  JM=2000;  timestep=20;;
+      *)echo "Truncamento desconhecido ${trunc}"
+        return 1
+   esac
+}
+
+submitPre(){
+
+   #
+   # include paths
+   #
+   . EnvironmentalVariables
+ 
+   #
+   #  Run GetSST.ksh
+   #  To deGRIB NCEP SST file with the script GetSST.ksh
+   #  and to format properly the file for SSTWeekly)
+   #
+ 
+   dirEXEC=${SUBTBASE}/pre/exec
+
+   # get MPI requested
+   MPITasks=${1}
+   TasksPerNode=${2}
+   ThreadsPerMPITask=${3}
+
+   # adjust MPI info from MPI resource requested
+   getMPIinfo -np ${MPITasks} -N ${TasksPerNode} -d ${ThreadsPerMPITask}
+   
+
+cat <<EOT1 > ${dirEXEC}/pre.qsb
+#!/bin/bash
+#PBS -o ${dirEXEC}/Out.MPI${MPITasks}
+#PBS -j oe
+#PBS -l walltime=00:15:00
+#PBS -A CPTEC
+#PBS -l nodes=${Nodes}:ppn=${TasksPerNode}
+#PBS -V
+#PBS -S /bin/bash
+#PBS -N ${preEXEC}
+#PBS -q pesq
+
+.  /opt/modules/default/etc/modules.sh
+module load craype-x86-skylake
+#module list
+export OMP_WAIT_POLICY=PASSIVE
+
+cd \${PBS_O_WORKDIR}
+
+time aprun -n ${PEs} -N ${TasksPerNode} -d ${ThreadsPerMPITask} ${dirEXEC}/${preEXEC} > saida${MPITasks}.txt
+rm -f ${dirExec}/Dump.* > /dev/null 2>&1 
+EOT1
+
+cd ${dirEXEC}
+PID=$(qsub -W block=true pre.qsb; exit ${PIPESTATUS[0]})
+status=$?
+
+return $status
+
+}
+
+getSST(){
+   echo -e "Getting SST File ...."
+   #
+   # include paths
+   #
+   . EnvironmentalVariables
+ 
+   #
+   #  Run GetSST.ksh
+   #  To deGRIB NCEP SST file with the script GetSST.ksh
+   #  and to format properly the file for SSTWeekly)
+   #
+ 
+   PREIN=${SUBTBASE}/pre/datain
+ 
+   runDate=${1}
+   runHour=${runDate:8:2}
+ 
+   LABELI=${runDate}
+   c=0
+   while [ ${c} -le 4 ];do
+      dirdata=${dadosExternos}/${LABELI}/dataout/NCEP
+      YMD=${LABELI:0:8}
+      HH=${LABELI:8:2}
+      # Possible SST GRIB files:
+      # Ondem de importancia
+      files=(rtgssthr_grb_0.083.grib2.${YMD} \
+             rtgssthr_grb_0.5.grib2.${YMD}   \
+             gdas1.T${HH}Z.sstgrb2.${LABELI} \
+             gdas1.T${HH}Z.sstgrb.${LABELI})
+ 
+      for file in ${file[@]};do
+         arq=${dirdata}/${file}
+         if [ -e ${arq} ];then
+            g1=$(${wgrib1} ${dirdata}/${file} 2> /dev/null | wc -l)
+            g2=$(${wgrib2} ${dirdata}/${file} 2> /dev/null | wc -l)
+            if [ $g1 -gt 0 ];then
+              ${wgrib1} -s -4yr -d 1 -ieee  ${dirdata}/${file} -o ${PREIN}/gdas1.T${runHour}Z.sstgrd.${runDate}
+              if [ $? -ne 0 ];then
+                 echo -e "\033[31;1m GRIB1: Erro ao converter arquivo ${file} ... \033[m"
+                 break 1
+              else
+                 return 0
+              fi
+           elif [ $g2 -gt 0 ];then
+              ${wgrib2} -s -YY -d 1 -order we:ns  ${dirdata}/${file} -ieee ${PREIN}/gdas1.T${runHour}Z.sstgrd.${runDate}
+              if [ $? -ne 0 ];then
+                 echo -e "\033[31;1m GRIB2: Erro ao converter arquivo ${file} ... \033[m"
+                 break 1
+              else
+                 return 0
+              fi
+           fi        
+         fi
+      done
+   
+      echo -e "\033[31;1m Arquivo SST original para o dia ${runDate} não encontrado ... \033[m"
+      echo -e "\033[34;1m buscando arquivo já convertido para formato binário ... \033[m"
+   
+      if [ -e ${PREIN}/gdas1.T${HH}Z.sstgrd.${LABELI} ];then
+         echo -e "\033[34;1m Arquivo SST encontrado: \033[m\033[32;1m gdas1.T${HH}Z.sstgrd.${LABELI}\033[m"
+         cp -pvfr ${PREIN}/gdas1.T${HH}Z.sstgrd.${LABELI}  ${PREIN}/gdas1.T${runHour}Z.sstgrd.${runDate} > /dev/null 2>&1 
+         return 0
+      else
+         echo -e "\033[31;1m Arquivo SST o dia ${runDate} não encontrado ... \033[m"
+      fi
+      LABELI=$(${inctime} ${LABELI} -6h %y4%m2%d2%h2)
+      c=$((c+1))
+   done
+   echo -e "\033[31;1m Nenhum arquivo SST o dia ${runDate}, ABORT ... \033[m"
+   return 2
+}
+
+getSoilFiles(){
+
+  #
+  # include paths
+  #
+  . EnvironmentalVariables
+
+  #
+  #  Run GetSST.ksh
+  #  To deGRIB NCEP SST file with the script GetSST.ksh
+  #  and to format properly the file for SSTWeekly)
+  #
+
+  PREIN=${SUBTBASE}/pre/datain
+
+  runDate=${1}
+
+  DATA=${runDate}
+  file="${dadosExternos}/${DATA}/dataout/Umid_Solo/GL_SM.GPNR.${DATA}.vfm"
+  c=0
+  until [ -e ${file} -o $c -gt 3 ]; do
+     DATA=$(${inctime} ${DATA} -6h %y4%m2%d2%h2)
+     file="${dadosExternos}/${DATA}/dataout/Umid_Solo/GL_SM.GPNR.${DATA}.vfm"
+     c=$((c+1))
+  done
+  if [ ! -e ${file} ];then
+     echo -ne "\033[32;1m Soil moisture file for\033[m: \033[34;1m${LABELANL}\033[m \033[32;1m Not Found\033[m"
+     return -1
+  else
+     ln -s ${file} ${PREIN}/GL_SM.GPNR.${runDate}.vfm > /dev/null 2>&1
+  fi
+
+}
