@@ -315,8 +315,8 @@ MendCut=$(echo $TRC | awk '{ print (int(1/((5+(40000/($1*3)))*(3/(40000)))) +1) 
 #-----------------------------------------------------------------------------#
 # Parse NameList to get Pre-processes
 case ${NMLOPT} in
-   0)nml=geral;;
-   1)nml=opt;;
+   0)nml=opt;;
+   1)nml=geral;;
    2)nml=debug;;
    3)nml=das;;
    *) echo -e "\033[31;1m Lista de processos desconhecida:\033[m \`-n ${NMLOPT}\`"
@@ -329,6 +329,9 @@ echo -e "\033[33;1mlist of processes that will be executed\033[m"
 echo ""
 modulesToRun=''
 while read -r opt name; do
+
+   assign $name $opt
+
    if [ ${opt} -eq 0 ];then
       echo -en "[\033[31;1mNOT\033[m] "
    elif [ ${opt} -eq 1 ];then
@@ -378,16 +381,20 @@ fi
 sed -i "s;#nproc#;${MPITasks};g" ${dirExec}/PRE_cfg.nml
 
 # get SST files
-getSST ${LABELI}
-if [ $? -ne 0 ];then
-   echo -e "\033[31;1m Nenhum arquivo de SST encontrado para o dia:\033[m \033[32;m${LABELI}\033[m"
-   exit $?
+if [ ${SSTWeekly} -eq 1 ];then
+   getSST ${LABELI}
+   if [ $? -ne 0 ];then
+      echo -e "\033[31;1m Nenhum arquivo de SST encontrado para o dia:\033[m \033[32;m${LABELI}\033[m"
+      exit $?
+   fi
 fi
 # get SoilMoisture files
-getSoilFiles ${LABELI}
-if [ $? -ne 0 ];then
-   echo -e "\033[31;1m Nenhum arquivo de Umidade do Solo encontrado para o dia:\033[m \033[32;m${LABELI}\033[m"
-   exit $?
+if [ ${SoilMoisture} -eq 1 ];then
+   getSoilFiles ${LABELI}
+   if [ $? -ne 0 ];then
+      echo -e "\033[31;1m Nenhum arquivo de Umidade do Solo encontrado para o dia:\033[m \033[32;m${LABELI}\033[m"
+      exit $?
+   fi
 fi
 
 # submit Pre-process
