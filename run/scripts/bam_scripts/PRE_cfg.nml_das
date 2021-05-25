@@ -37,13 +37,13 @@ $ModulesNameList
   modCfg(7)%moduleName     = 'DeltaTempColdestClima',
 
   modCfg(8)%moduleName     = 'FLUXCO2Clima',
-  modCfg(8)%dependencies   = 'Chopping', 'LandSeaMask',
+  modCfg(8)%dependencies   = 'LandSeaMask',
 
   modCfg(9)%moduleName     = 'LandSeaMask',
   modCfg(9)%dependencies   = 'TopoWaterPercNavy',
 
   modCfg(10)%moduleName     = 'OCMClima',
-  modCfg(10)%dependencies   = 'Chopping', 'LandSeaMask',
+  modCfg(10)%dependencies   = 'LandSeaMask',
 
   modCfg(11)%moduleName     = 'PorceClayMaskIBIS',
   modCfg(11)%dependencies   = 'PorceClayMaskIBISClima', 'LandSeaMask',
@@ -72,10 +72,10 @@ $ModulesNameList
   modCfg(21)%moduleName     = 'SoilMoistureWeekly',
 
   modCfg(22)%moduleName     = 'SSTClima',
-  modCfg(22)%dependencies   = 'Chopping', 'LandSeaMask',
+  modCfg(22)%dependencies   = 'LandSeaMask',
 
   modCfg(23)%moduleName     = 'SSTMonthlyDirec',
-  modCfg(23)%dependencies   = 'Chopping', 'VegetationMaskIBIS',  ! depends on vegetation's model (e.g. IBIS); chopping should run twice to provide GANLNMC*
+  modCfg(23)%dependencies   = 'VegetationMaskIBIS',  ! depends on vegetation's model (e.g. IBIS); chopping should run twice to provide GANLNMC*
 
   modCfg(24)%moduleName     = 'SSTWeekly',
   modCfg(24)%dependencies   = 'SSTWeeklyNCEP',

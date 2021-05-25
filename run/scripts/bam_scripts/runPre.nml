@@ -1,41 +1,3 @@
-Albedo
-AlbedoClima
-Chopping
-DeepSoilTemperature
-DeepSoilTemperatureClima
-DeltaTempColdest
-DeltaTempColdestClima
-FLUXCO2Clima
-LandSeaMask
-OCMClima
-PorceClayMaskIBIS
-PorceClayMaskIBISClima
-PorceSandMaskIBIS
-PorceSandMaskIBISClima
-RoughnessLength
-RoughnessLengthClima
-SnowClima
-SoilMoisture
-SoilMoistureClima
-SoilMoistureWeekly
-SSTClima
-SSTMonthlyDirec
-SSTWeekly
-SSTWeeklyNCEP
-Temperature
-TemperatureClima
-TopographyGradient
-TopoSpectral
-TopoWaterPercGT30
-TopoWaterPercNavy
-VarTopo
-VegetationAlbedoSSiB
-VegetationMask
-VegetationMaskIBIS
-VegetationMaskIBISClima
-
-
-
 #------------------------------------------------#
 # Lista de processos do Pre-processamento do BAM #
 #------------------------------------------------#
@@ -73,7 +35,7 @@ geral:
 1 Temperature
 1 DeltaTempColdestClima
 1 DeltaTempColdest
-0 NDVIClima=
+0 NDVIClima
 0 NDVI
 1 OCMClima
 1 PorceClayMaskIBISClima
