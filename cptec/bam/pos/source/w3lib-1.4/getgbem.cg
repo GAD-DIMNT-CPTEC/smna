@@ -1,0 +1,138 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgbem.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgbem.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgbem( lugb, lugi, jf, j, jpds, jgds, jens, mbuf, cbuf, nlen, nnum, mnum, kf, k, kpds, kgds, kens, lb, f, iret )
+  220.       $MR_j_0 = 0[loc( j ),0]
+  220.       if ( $MR_j_0 >= 0 ) then
+  221.          $MR_mnum_S1 = 0[loc( mnum ),0]
+  221.          if ( $MR_mnum_S1 >= 0 ) then
+  222.             irgi = 0
+  222.          else
+  224.             $MR_mnum_S2 = -1 - $MR_mnum_S1
+  224.             0[loc( mnum ),0] = $MR_mnum_S2
+  225.             irgi = 1
+  225.          endif
+  227.          $MR_mnum_S3 = 0[loc( mnum ),0]
+  227.          $LCS_MR_0 = $MR_j_0 - $MR_mnum_S3
+  227.          jr = $LCS_MR_0
+  228.          if ( $LCS_MR_0 >= 0 ) then
+  228.             $MR_nnum_S4 = 0[loc( nnum ),0]
+  228.             if ( $LCS_MR_0 >= $MR_nnum_S4 ) then
+  228.                $irgi_S5 = irgi
+  228.                if ( $irgi_S5 == 0 ) then
+  228.                   goto 10
+  228.                else
+  228.                   goto 20
+  228.                endif
+  228.             else
+  228.    10          continue
+  229.                call getgb1s( substr[cbuf,0:1], 0[loc( nlen ),0], 0[loc( nnum ),0], jr, 0[loc( jpds ),0], 0[loc( jgds ),0], 0[loc( jens ),0], kr, 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kens ),0], lskip, lgrib, irgs )
+  231.                $kr_S7 = kr
+  231.                $irgs_S6 = irgs
+  231.                $LCS_k_1 = loc( k )
+  231.                $MR_S8 = 0[$LCS_k_1,0]
+  231.                $LCS_2 = $irgs_S6 /= 0
+  231.                $MR_S9 = cvmg( $MR_S8, $MR_mnum_S3 + $kr_S7, $LCS_2 )
+  231.                0[$LCS_k_1,0] = $MR_S9
+  232.                $irgi_S10 = irgi
+  232.                if ( $irgi_S10 == 1 ) then
+  232.                   if ( int( $LCS_2 ) == 0 ) then
+  232.                      $MR_mnum_S11 = -1 - $MR_mnum_S3
+  232.                      0[loc( mnum ),0] = $MR_mnum_S11
+  232.                   endif
+  233.                   if ( $irgs_S6 > 0 ) then
+  233.                      $MR_nnum_S12 = 0[loc( nnum ),0]
+  233.                      $LCS_mnum_3 = loc( mnum )
+  233.                      $MR_mnum_S13 = 0[$LCS_mnum_3,0]
+  233.                      $MR_mnum_S14 = $MR_nnum_S12 + $MR_mnum_S13
+  233.                      0[$LCS_mnum_3,0] = $MR_mnum_S14
+  233.                   endif
+  233.                endif
+  233.             endif
+  233.          else
+  233.    20       continue
+  235.             0[loc( mnum ),0] = $MR_j_0
+  236.             irgi = 1
+  237.             irgs = 1
+  237.          endif
+  237.       else
+  240.          $MR_mnum_S15 = -1 - $MR_j_0
+  240.          0[loc( mnum ),0] = $MR_mnum_S15
+  241.          irgi = 1
+  242.          irgs = 1
+  242.       endif
+  246.       jr = 0
+  247.       $irgs_S16 = irgs
+  247.       $irgi_S17 = irgi
+  247.       if ( int( $irgi_S17 == 1 .and. $irgs_S16 == 1 ) /= 0 ) then
+  256.          $MR_S18 = 0[loc( k ),0]
+  256.          $k_S26 = $MR_S18
+  254.          $LIS_E0 = loc( kens )
+  247.          do
+  248.             $LCS_lugi_4 = loc( lugi )
+  248.             if ( 0[$LCS_lugi_4,0] > 0 ) then
+  249.                call getgi( 0[$LCS_lugi_4,0], 0[loc( mnum ),0], 0[loc( mbuf ),0], substr[cbuf,0:1], 0[loc( nlen ),0], 0[loc( nnum ),0], irgi )
+  249.             else
+  251.                $Con_P10 = 32000
+  251.                $Con_P11 = 4000
+  251.                call getgir( 0[loc( lugb ),0], $Con_P10, $Con_P11, 0[loc( mnum ),0], 0[loc( mbuf ),0], substr[cbuf,0:1], 0[loc( nlen ),0], 0[loc( nnum ),0], irgi )
+  251.             endif
+  253.             $irgi_S17 = irgi
+  253.             if ( $irgi_S17 <= 1 ) then
+  254.                call getgb1s( substr[cbuf,0:1], 0[loc( nlen ),0], 0[loc( nnum ),0], jr, 0[loc( jpds ),0], 0[loc( jgds ),0], 0[loc( jens ),0], kr, 0[loc( kpds ),0], 0[loc( kgds ),0], 0[$LIS_E0,0], lskip, lgrib, irgs )
+  256.                $irgs_S16 = irgs
+  256.                if ( $irgs_S16 == 0 ) then
+  256.                   $MR_mnum_S20 = 0[loc( mnum ),0]
+  256.                   $kr_S19 = kr
+  256.                   $k_S26 = $kr_S19 + $MR_mnum_S20
+  256.                endif
+  257.                if ( $irgi_S17 == 1 ) then
+  257.                   if ( $irgs_S16 == 0 ) then
+  257.                      $LCS_mnum_5 = loc( mnum )
+  257.                      $MR_mnum_S21 = 0[$LCS_mnum_5,0]
+  257.                      $MR_mnum_S22 = -1 - $MR_mnum_S21
+  257.                      0[$LCS_mnum_5,0] = $MR_mnum_S22
+  257.                   endif
+  258.                   if ( $irgs_S16 > 0 ) then
+  258.                      $MR_nnum_S23 = 0[loc( nnum ),0]
+  258.                      $LCS_mnum_6 = loc( mnum )
+  258.                      $MR_mnum_S24 = 0[$LCS_mnum_6,0]
+  258.                      $MR_mnum_S25 = $MR_nnum_S23 + $MR_mnum_S24
+  258.                      0[$LCS_mnum_6,0] = $MR_mnum_S25
+  258.                   endif
+  258.                endif
+  258.             endif
+  259.             if ( int( $irgi_S17 == 1 .and. $irgs_S16 == 1 ) == 0 ) exit
+  259.          enddo
+  256.          0[loc( k ),0] = $k_S26
+  256.       endif
+  263.       if ( $irgi_S17 > 1 ) then
+  264.          0[loc( iret ),0] = 96
+  265.       else if ( $irgs_S16 /= 0 ) then
+  266.          0[loc( iret ),0] = 99
+  266.       else
+  267.          $t_S0 = lengds( 0[loc( kgds ),0] )
+  267.          if ( $t_S0 > 0[loc( jf ),0] ) then
+  268.             0[loc( iret ),0] = 98
+  268.          else
+  270.             call getgb1r( 0[loc( lugb ),0], lskip, lgrib, 0[loc( kf ),0], 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kens ),0], 0[loc( lb )].B, 0[loc( f ),0], 0[loc( iret ),0] )
+  270.          endif
+  270.       endif
+  274.       return
+  274.       end
+  274.       

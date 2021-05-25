@@ -1,0 +1,248 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  baciof.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/baciof.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       module bacio_module
+    2.       end
+    2.       
+   24.       
+   24.       subroutine baseto( nopt, vopt )
+   56.       if ( nopt > 0 ) then
+   56.          if ( nopt <= 20 ) then
+   56.             baopts(nopt) = vopt
+   56.          endif
+   56.       endif
+   58.       return
+   58.       end
+   58.       
+   60.       
+   60.       subroutine baopen( lu, cfn, iret )
+   60.       t$3 = _len( cfn )
+   93.       if ( lu <= 0 .orelse. lu > 999 ) then
+   94.          iret = 6
+   94.       else
+   98.          t$4 = 1 + _len( cfn )
+   98.          t$6 = int( _alloc( 1 + _len( cfn ) ), 8 )
+   98.           _substr(t$5,1,( 1 + _len( cfn ) )) = //(  _substr(cfn,1,_len( cfn )), '' )
+   98.          iret = bacio( 4, ib, jb, 1, nb, ka, fd(lu),  _substr(t$5,1,( 1 + _len( cfn ) )), a )
+   98.          _free( t$6 )
+   98.       endif
+  100.       return
+  100.       end
+  100.       
+  102.       
+  102.       subroutine baopenr( lu, cfn, iret )
+  102.       t$9 = _len( cfn )
+  134.       if ( lu <= 0 .orelse. lu > 999 ) then
+  135.          iret = 6
+  135.       else
+  139.          t$10 = 1 + _len( cfn )
+  139.          t$12 = int( _alloc( 1 + _len( cfn ) ), 8 )
+  139.           _substr(t$11,1,( 1 + _len( cfn ) )) = //(  _substr(cfn,1,_len( cfn )), '' )
+  139.          iret = bacio( 1, ib, jb, 1, nb, ka, fd(lu),  _substr(t$11,1,( 1 + _len( cfn ) )), a )
+  139.          _free( t$12 )
+  139.       endif
+  141.       return
+  141.       end
+  141.       
+  143.       
+  143.       subroutine baopenw( lu, cfn, iret )
+  143.       t$15 = _len( cfn )
+  175.       if ( lu <= 0 .orelse. lu > 999 ) then
+  176.          iret = 6
+  176.       else
+  180.          t$16 = 1 + _len( cfn )
+  180.          t$18 = int( _alloc( 1 + _len( cfn ) ), 8 )
+  180.           _substr(t$17,1,( 1 + _len( cfn ) )) = //(  _substr(cfn,1,_len( cfn )), '' )
+  180.          iret = bacio( 2, ib, jb, 1, nb, ka, fd(lu),  _substr(t$17,1,( 1 + _len( cfn ) )), a )
+  180.          _free( t$18 )
+  180.       endif
+  182.       return
+  182.       end
+  182.       
+  184.       
+  184.       subroutine baopenwt( lu, cfn, iret )
+  184.       t$21 = _len( cfn )
+  216.       if ( lu <= 0 .orelse. lu > 999 ) then
+  217.          iret = 6
+  217.       else
+  221.          t$22 = 1 + _len( cfn )
+  221.          t$24 = int( _alloc( 1 + _len( cfn ) ), 8 )
+  221.           _substr(t$23,1,( 1 + _len( cfn ) )) = //(  _substr(cfn,1,_len( cfn )), '' )
+  221.          iret = bacio( 128, ib, jb, 1, nb, ka, fd(lu),  _substr(t$23,1,( 1 + _len( cfn ) )), a )
+  221.          _free( t$24 )
+  221.       endif
+  223.       return
+  223.       end
+  223.       
+  225.       
+  225.       subroutine baopenwa( lu, cfn, iret )
+  225.       t$27 = _len( cfn )
+  257.       if ( lu <= 0 .orelse. lu > 999 ) then
+  258.          iret = 6
+  258.       else
+  262.          t$28 = 1 + _len( cfn )
+  262.          t$30 = int( _alloc( 1 + _len( cfn ) ), 8 )
+  262.           _substr(t$29,1,( 1 + _len( cfn ) )) = //(  _substr(cfn,1,_len( cfn )), '' )
+  262.          iret = bacio( 256, ib, jb, 1, nb, ka, fd(lu),  _substr(t$29,1,( 1 + _len( cfn ) )), a )
+  262.          _free( t$30 )
+  262.       endif
+  264.       return
+  264.       end
+  264.       
+  266.       
+  266.       subroutine baclose( lu, iret )
+  297.       if ( lu <= 0 .orelse. lu > 999 ) then
+  298.          iret = 6
+  298.       else
+  302.          iret = bacio( 8, ib, jb, 1, nb, ka, fd(lu), cfn, a )
+  303.          if ( iret == 0 ) then
+  303.             fd(lu) = 0
+  303.          endif
+  303.       endif
+  305.       return
+  305.       end
+  305.       
+  307.       
+  307.       subroutine baread( lu, ib, nb, ka, a )
+  307.       t$35 = nb
+  345.       t$38 = _zla( 0, nb )
+  353.       if ( fd(lu) <= 0 ) then
+  354.          ka = 0
+  356.       else if ( ib >= 0 ) then
+  356.          goto 10
+  356.       else if ( baopts(1) == 1 ) then
+  358.          ka = 0
+  358.       else
+  358.    10    continue
+  361.          if ( nb <= 0 ) then
+  362.             ka = 0
+  364.          else if ( baopts(1) == 1 ) then
+  377.             ka = 0
+  378.             if ( lux + -lu /= 0 ) then
+  379.                jy = 0
+  380.                $I_L380_6 = 0
+  380. !dir$ ivdep
+  380.                do
+  380.                   ns(1 + $I_L380_6) = 0
+  381.                   nn(1 + $I_L380_6) = 0
+  380.                   $I_L380_6 = 1 + $I_L380_6
+  380.                   if ( $I_L380_6 >= 4 ) exit
+  380.                enddo
+  380.             else
+  383.                $I_L383_14 = 0
+  383. !dir$ loop_info (automatic) cache_nt( ns )
+  383.                do
+  385.                   $SCF_P0 = ib + -ns(1 + mod( ( jy + $I_L383_14 ), 4 ))
+  386.                   if ( ka < nb ) then
+  386.                      if ( ka + $SCF_P0 >= 0 ) then
+  386.                         if ( ka + $SCF_P0 < nn(1 + mod( ( jy + $I_L383_14 ), 4 )) ) then
+  387.                            $k_S2 = min( nb + -ka, nn(1 + mod( ( jy + $I_L383_14 ), 4 )) + -ka + -$SCF_P0 )
+  388.                            $F_A33 = $k_S2
+  388.                            if ( $F_A33 > 0 ) then
+  388.                               $I_L388_8 = 0
+  388.                               do
+  388.                                   _substr(a(ka + $I_L388_8 + 1),1,1) =  _substr(y(ka + $SCF_P0 + $I_L388_8 + 1, 1 + mod( ( jy + $I_L383_14 ), 4 )),1,1)
+  388.                                  $I_L388_8 = 1 + $I_L388_8
+  388.                                  if ( $I_L388_8 >= $F_A33 ) exit
+  388.                               enddo
+  388.                            endif
+  389.                            ka = ka + $k_S2
+  389.                         endif
+  389.                      endif
+  389.                   endif
+  391.                   $I_L383_14 = 1 + $I_L383_14
+  390.                   if ( $I_L383_14 >= 4 ) exit
+  390.                enddo
+  390.             endif
+  395.             if ( ka < nb ) then
+  396.                lux = abs( lu )
+  397.                jy = 1 + mod( jy, 4 )
+  398.                ns(jy) = ka + ib
+  399.                t$39 = bacio( 16, ns(jy), jb, 1, 4096, nn(jy), fd(abs( lu )),  _substr(cfn,1,1),  _substr(y(1, jy),1,1) )
+  401.                if ( nn(jy) > 0 ) then
+  402.                   $k_S3 = min( nn(jy), nb + -ka )
+  403.                   $F_A34 = $k_S3
+  403.                   if ( $k_S3 > 0 ) then
+  403.                      $I_L403_10 = 0
+  403.                      do
+  403.                          _substr(a(ka + $I_L403_10 + 1),1,1) =  _substr(y(1 + $I_L403_10, jy),1,1)
+  403.                         $I_L403_10 = 1 + $I_L403_10
+  403.                         if ( $I_L403_10 >= $F_A34 ) exit
+  403.                      enddo
+  403.                   endif
+  404.                   ka = ka + $k_S3
+  404.                endif
+  408.                if ( nn(jy) == 4096 .and. ka < nb ) then
+  408.                   do
+  409.                      jy = 1 + mod( jy, 4 )
+  410.                      ns(jy) = ns(jy) + nn(jy)
+  411.                      t$39 = bacio( 80, ns(jy), jb, 1, 4096, nn(jy), fd(lux),  _substr(cfn,1,1),  _substr(y(1, jy),1,1) )
+  413.                      if ( nn(jy) > 0 ) then
+  414.                         $k_S4 = min( nn(jy), nb + -ka )
+  415.                         $F_A35 = $k_S4
+  415.                         if ( $k_S4 > 0 ) then
+  415.                            $I_L415_12 = 0
+  415.                            do
+  415.                                _substr(a(ka + $I_L415_12 + 1),1,1) =  _substr(y(1 + $I_L415_12, jy),1,1)
+  415.                               $I_L415_12 = 1 + $I_L415_12
+  415.                               if ( $I_L415_12 >= $F_A35 ) exit
+  415.                            enddo
+  415.                         endif
+  416.                         ka = ka + $k_S4
+  416.                      endif
+  417.                      if ( ( nn(jy) == 4096 .and. ka < nb ) == 0 ) exit
+  417.                   enddo
+  417.                endif
+  417.             endif
+  417.          else if ( ib >= 0 ) then
+  369.             t$39 = bacio( 16, ib, jb, 1, nb, ka, fd(lu),  _substr(cfn,1,1),  _substr(a(1),1,1) )
+  369.          else
+  371.             t$39 = bacio( 80, 0, jb, 1, nb, ka, fd(lu),  _substr(cfn,1,1),  _substr(a(1),1,1) )
+  371.          endif
+  371.       endif
+  422.       return
+  422.       end
+  422.       
+  424.       
+  424.       subroutine bawrite( lu, ib, nb, ka, a )
+  424.       t$42 = nb
+  459.       t$43 = _zla( 0, nb )
+  462.       if ( fd(lu) <= 0 ) then
+  463.          ka = 0
+  465.       else if ( nb <= 0 ) then
+  467.          ka = 0
+  467.       else if ( ib >= 0 ) then
+  472.          t$44 = bacio( 32, ib, jb, 1, nb, ka, fd(lu),  _substr(cfn,1,1),  _substr(a(1),1,1) )
+  472.       else
+  474.          t$44 = bacio( 96, 0, jb, 1, nb, ka, fd(lu),  _substr(cfn,1,1),  _substr(a(1),1,1) )
+  474.       endif
+  477.       return
+  477.       end
+  477.       
+  479.       
+  479.       subroutine wryte( lu, nb, a )
+  479.       t$46 = nb
+  511.       t$47 = _zla( 0, nb )
+  514.       if ( fd(lu) > 0 ) then
+  517.          if ( nb > 0 ) then
+  521.             t$48 = bacio( 96, 0, jb, 1, nb, ka, fd(lu),  _substr(cfn,1,1),  _substr(a(1),1,1) )
+  521.          endif
+  521.       endif
+  524.       return
+  524.       end
+  524.       

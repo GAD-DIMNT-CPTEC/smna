@@ -1,0 +1,227 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  r63w72.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/r63w72.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine r63w72( kpds, kgds, ipds, igds )
+   39.       $LCS_kpds_0 = loc( kpds )
+   39.       $MR_kpds_0 = 22[$LCS_kpds_0,0]
+   39.       $MR_ipds_S9 = cvmg( 45, 28, $MR_kpds_0 == 2 )
+   39.       $LCS_ipds_1 = loc( ipds )
+   39.       0[$LCS_ipds_1,0] = $MR_ipds_S9
+   44.       1[$LCS_ipds_1,0] = 18[$LCS_kpds_0,0]
+   45.       2[$LCS_ipds_1,0] = 0[$LCS_kpds_0,0]
+   46.       3[$LCS_ipds_1,0] = 1[$LCS_kpds_0,0]
+   47.       4[$LCS_ipds_1,0] = 2[$LCS_kpds_0,0]
+   48.       $MR_kpds_10 = 3[$LCS_kpds_0,0]
+   48.       $PRT_P85 = _ash( $MR_kpds_10 + _rsh( _ash( $MR_kpds_10, 6 ), 25 ), 7 )
+   48.       5[$LCS_ipds_1,0] = $PRT_P85 - and( -2, $PRT_P85 + _rsh( $PRT_P85, 31 ) )
+   49.       $PRT_P86 = _ash( $MR_kpds_10 + _rsh( _ash( $MR_kpds_10, 5 ), 26 ), 6 )
+   49.       6[$LCS_ipds_1,0] = $PRT_P86 - and( -2, $PRT_P86 + _rsh( $PRT_P86, 31 ) )
+   50.       7[$LCS_ipds_1,0] = 4[$LCS_kpds_0,0]
+   51.       $MR_kpds_15 = 5[$LCS_kpds_0,0]
+   51.       8[$LCS_ipds_1,0] = $MR_kpds_15
+   51.       $SW_MR_kpds_V3 = $MR_kpds_15
+   52.       switch( -101 + $SW_MR_kpds_V3 + 1 )
+   52.       
+   56.          case 1 :
+   56.             goto 10
+   56.          case 4 :
+   56.             goto 10
+   56.          case 6 :
+   56.             goto 10
+   56.          case 8 :
+   56.             goto 10
+   56.          case 10 :
+   56.             goto 10
+   56.          case 12 :
+   56.             goto 10
+   56.          case 14 :
+   56.             goto 10
+   56.          case 16 :
+   56.             goto 10
+   56.          case 21 :
+   56.             goto 10
+   56.          case 28 :
+   56.             goto 10
+   56.          case 41 :
+   56.             goto 10
+   56.          case 136 :
+   56.    10       continue
+   56.             $MR_kpds_S11 = 6[loc( kpds ),0]
+   56.             $LCS_MR_kpds_2 = $MR_kpds_S11 + _rsh( _ash( $MR_kpds_S11, 7 ), 24 )
+   56.             $PRT_P87 = _ash( $LCS_MR_kpds_2, 8 )
+   56.             $LCS_ipds_3 = loc( ipds )
+   56.             9[$LCS_ipds_3,0] = $PRT_P87 - and( -256, $PRT_P87 + _rsh( _ash( $PRT_P87, 7 ), 24 ) )
+   57.             $MR_ipds_18 = $MR_kpds_S11 - and( -256, $LCS_MR_kpds_2 )
+   57.             10[$LCS_ipds_3,0] = $MR_ipds_18
+   59.          case 137 :
+   59.          case 42 : 135 :
+   59.          case 29 : 40 :
+   59.          case 22 : 27 :
+   59.          case 17 : 20 :
+   59.          case 15 :
+   59.          case 13 :
+   59.          case 11 :
+   59.          case 9 :
+   59.          case 7 :
+   59.          case 5 :
+   59.          case 2 : 3 :
+   59.          case 0 :
+   59.             9[$LCS_ipds_1,0] = 0
+   60.             $MR_kpds_S10 = 6[$LCS_kpds_0,0]
+   60.             10[$LCS_ipds_1,0] = $MR_kpds_S10
+   62.       $LCS_kpds_4 = loc( kpds )
+   62.       $LCS_ipds_5 = loc( ipds )
+   62.       11[$LCS_ipds_5,0] = 7[$LCS_kpds_4,0]
+   63.       12[$LCS_ipds_5,0] = 8[$LCS_kpds_4,0]
+   64.       13[$LCS_ipds_5,0] = 9[$LCS_kpds_4,0]
+   65.       14[$LCS_ipds_5,0] = 10[$LCS_kpds_4,0]
+   66.       15[$LCS_ipds_5,0] = 11[$LCS_kpds_4,0]
+   67.       16[$LCS_ipds_5,0] = 12[$LCS_kpds_4,0]
+   68.       17[$LCS_ipds_5,0] = 13[$LCS_kpds_4,0]
+   69.       18[$LCS_ipds_5,0] = 14[$LCS_kpds_4,0]
+   70.       19[$LCS_ipds_5,0] = 15[$LCS_kpds_4,0]
+   71.       20[$LCS_ipds_5,0] = 16[$LCS_kpds_4,0]
+   72.       21[$LCS_ipds_5,0] = 19[$LCS_kpds_4,0]
+   73.       22[$LCS_ipds_5,0] = 20[$LCS_kpds_4,0]
+   74.       23[$LCS_ipds_5,0] = $MR_kpds_0
+   75.       24[$LCS_ipds_5,0] = 21[$LCS_kpds_4,0]
+   76.       $MR_ipds_S12 = 0[$LCS_ipds_5,0]
+   76.       if ( $MR_ipds_S12 > 28 ) then
+   77.          25[$LCS_ipds_5,0] = 0
+   78.          26[$LCS_ipds_5,0] = 0
+   78.       endif
+   82.       $LCS_kgds_6 = loc( kgds )
+   82.       $MR_kgds_47 = 18[$LCS_kgds_6,0]
+   82.       $LCS_igds_7 = loc( igds )
+   82.       0[$LCS_igds_7,0] = $MR_kgds_47
+   83.       $MR_kgds_49 = 19[$LCS_kgds_6,0]
+   83.       1[$LCS_igds_7,0] = $MR_kgds_49
+   84.       $MR_kgds_51 = 0[$LCS_kgds_6,0]
+   84.       2[$LCS_igds_7,0] = $MR_kgds_51
+   85.       3[$LCS_igds_7,0] = 1[$LCS_kgds_6,0]
+   86.       $MR_kgds_55 = 2[$LCS_kgds_6,0]
+   86.       4[$LCS_igds_7,0] = $MR_kgds_55
+   87.       5[$LCS_igds_7,0] = 3[$LCS_kgds_6,0]
+   88.       6[$LCS_igds_7,0] = 4[$LCS_kgds_6,0]
+   89.       7[$LCS_igds_7,0] = 5[$LCS_kgds_6,0]
+   90.       8[$LCS_igds_7,0] = 6[$LCS_kgds_6,0]
+   91.       9[$LCS_igds_7,0] = 7[$LCS_kgds_6,0]
+   92.       $MR_kgds_67 = 8[$LCS_kgds_6,0]
+   92.       10[$LCS_igds_7,0] = $MR_kgds_67
+   93.       $MR_kgds_69 = 9[$LCS_kgds_6,0]
+   93.       11[$LCS_igds_7,0] = $MR_kgds_69
+   94.       $MR_kgds_71 = 10[$LCS_kgds_6,0]
+   94.       12[$LCS_igds_7,0] = $MR_kgds_71
+   95.       $MR_kgds_73 = 11[$LCS_kgds_6,0]
+   95.       13[$LCS_igds_7,0] = $MR_kgds_73
+   96.       $MR_kgds_75 = 12[$LCS_kgds_6,0]
+   96.       14[$LCS_igds_7,0] = $MR_kgds_75
+   97.       $MR_kgds_77 = 13[$LCS_kgds_6,0]
+   97.       15[$LCS_igds_7,0] = $MR_kgds_77
+   98.       $MR_kgds_79 = 14[$LCS_kgds_6,0]
+   98.       16[$LCS_igds_7,0] = $MR_kgds_79
+   99.       $MR_igds_82 = 15[$LCS_kgds_6,0]
+   99.       17[$LCS_igds_7,0] = $MR_igds_82
+  101.       if ( $MR_kgds_51 == 0 .orelse. $MR_kgds_51 == 4 ) then
+  102.          $LCS_igds_9 = loc( igds )
+  102.          10[$LCS_igds_9,0] = $MR_kgds_69
+  103.          11[$LCS_igds_9,0] = $MR_kgds_67
+  103.       else
+  105.          if ( $MR_kgds_51 == 1 ) then
+  106.             10[$LCS_igds_7,0] = $MR_kgds_75
+  107.             11[$LCS_igds_7,0] = $MR_kgds_73
+  108.             12[$LCS_igds_7,0] = $MR_kgds_67
+  109.             13[$LCS_igds_7,0] = $MR_kgds_71
+  111.          else if ( $MR_kgds_51 == 3 ) then
+  112.             $LCS_igds_8 = loc( igds )
+  112.             14[$LCS_igds_8,0] = $MR_kgds_73
+  113.             15[$LCS_igds_8,0] = $MR_kgds_75
+  114.             16[$LCS_igds_8,0] = $MR_kgds_77
+  115.             17[$LCS_igds_8,0] = $MR_kgds_79
+  115.          endif
+  115.       endif
+  118.       if ( $MR_kgds_51 == 0 ) then
+  118.          if ( $MR_kgds_47 == 0 ) then
+  118.             if ( $MR_kgds_49 /= 255 ) then
+  119.                if ( $MR_kgds_55 > 0 ) then
+  119.                   $I_L119_S15 = 0
+  120.                   $LCS_10 = $MR_kgds_55
+  120.                   if ( -179 + $LCS_10 > 0 ) then
+  120.                      $LB_Y0 = 1
+  120.                      $UB_Y1 = 200
+  120.                      $Subscript_Y2 = 22
+  120.                      $Subscript_Y3 = 21 + $LCS_10
+  120.                      $Subscript_Y4 = 1
+  120.                      _rbounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y43 )
+  120.                   endif
+  120.                   $LCS_11 = $MR_kgds_55
+  120.                   if ( -182 + $LCS_11 > 0 ) then
+  120.                      $LB_Y0 = 1
+  120.                      $UB_Y1 = 200
+  120.                      $Subscript_Y2 = 19
+  120.                      $Subscript_Y3 = 18 + $LCS_11
+  120.                      $Subscript_Y4 = 1
+  120.                      _rbounds_error( $_File_Y40, $Line_Y42, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y45 )
+  120.                   endif
+  119.                   $LCS_12 = $MR_kgds_55
+  119.                   if ( $LCS_12 >= 4 ) then !  99.50%
+  119.                      $TC_0 = and( -4, $LCS_12 )
+  119.                      $LC_S13 = -$TC_0
+  119.                      $SI_S14 = 0
+  120.                      $LIS_S3 = loc( kgds )
+  120.                      $LIS_S5 = loc( igds )
+  119.                      if ( $LC_S13 < -15 ) then
+  119.                         do
+  120.                            $LCS_13 = $LIS_S3 + $SI_S14
+  120.                            $LCS_14 = $LIS_S5 + $SI_S14
+  120.                            18[$LCS_14:4:1] = 21[$LCS_13:4:1]
+  120.                            22[$LCS_14:4:1] = 25[$LCS_13:4:1]
+  120.                            26[$LCS_14:4:1] = 29[$LCS_13:4:1]
+  120.                            30[$LCS_14:4:1] = 33[$LCS_13:4:1]
+  119.                            $SI_S14 = 64 + $SI_S14
+  119.                            $LC_S13 = 16 + $LC_S13
+  119.                            if ( $LC_S13 >= -15 ) exit
+  119.                         enddo
+  119.                      endif
+  119.                      if ( $LC_S13 < 0 ) then
+  119.                         do
+  120.                            18[$LIS_S5 + $SI_S14:4:1] = 21[$LIS_S3 + $SI_S14:4:1]
+  119.                            $SI_S14 = 16 + $SI_S14
+  119.                            $LC_S13 = 4 + $LC_S13
+  119.                            if ( $LC_S13 >= 0 ) exit
+  119.                         enddo
+  119.                      endif
+  119.                      $I_L119_S15 = $TC_0
+  119.                   endif
+  119.                   $LCS_MR_kgds_15 = $MR_kgds_55
+  119.                   if ( $LCS_MR_kgds_15 > $I_L119_S15 ) then !  99.50%
+  120.                      $LIS_S7 = loc( kgds )
+  120.                      $LIS_S8 = loc( igds )
+  119.                      do
+  120.                         18[$LIS_S8,$I_L119_S15] = 21[$LIS_S7,$I_L119_S15]
+  121.                         $I_L119_S15 = 1 + $I_L119_S15
+  119.                         if ( $I_L119_S15 >= $LCS_MR_kgds_15 ) exit
+  119.                      enddo
+  119.                   endif
+  119.                endif
+  119.             endif
+  119.          endif
+  119.       endif
+  125.       return
+  125.       end
+  125.       

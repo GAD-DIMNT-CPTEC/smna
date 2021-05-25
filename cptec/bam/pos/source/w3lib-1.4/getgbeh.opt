@@ -1,0 +1,47 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgbeh.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgbeh.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgbeh( lugb, lugi, j, jpds, jgds, jens, kg, kf, k, kpds, kgds, kens, iret )
+  198.       if ( lugi <= 0 ) then
+    2.          goto 10
+  198.       else if ( j < 0 ) then
+  198.          goto 40
+  198.       else if ( lux + -lugi /= 0 ) then
+  198.    40    continue
+  199.          lux = lugi
+  200.          jj = min( j, -1 + -j )
+  200.       else
+  200.    10    continue
+  201.          if ( lugi > 0 ) then
+  201.             goto 20
+  201.          else if ( j < 0 ) then
+  201.             goto 30
+  201.          else if ( lugb + -lux /= 0 ) then
+  201.    30       continue
+  202.             lux = lugb
+  203.             jj = min( j, -1 + -j )
+  203.          else
+  203.    20       continue
+  205.             jj = j
+  205.          endif
+  205.       endif
+  209.       call getgbemh( lugb, lugi, jj, jpds(1), jgds(1), jens(1), 262144,  _substr(cbuf(1),1,1), nlen, nnum, mnum, kg, kf, k, kpds(1), kgds(1), kens(1), iret )
+  212.       lux = cvmg( lux, 0, iret /= 96 )
+  215.       return
+  215.       end
+  215.       

@@ -1,0 +1,100 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgbmh.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgbmh.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgbmh( lugb, lugi, j, jpds, jgds, mbuf, cbuf, nlen, nnum, mnum, kg, kf, k, kpds, kgds, iret )
+    2.       t$1 = mbuf
+  198.       t$2 = _zla( 0, mbuf )
+  203.       $I_A1 = 0
+  203. !dir$ ivdep
+  203.       do
+  203.          jens(1 + $I_A1) = -1
+  203.          $I_A1 = 1 + $I_A1
+  203.          if ( $I_A1 >= 200 ) exit
+  203.       enddo
+  204.       if ( j >= 0 ) then
+  205.          if ( mnum >= 0 ) then
+  206.             irgi = 0
+  206.          else
+  208.             mnum = -1 + -mnum
+  209.             irgi = 1
+  209.          endif
+  211.          jr = j + -mnum
+  212.          if ( j + -mnum < 0 ) then
+  210.             goto 10
+  212.          else if ( j + -mnum < nnum ) then
+  212.             goto 20
+  212.          else if ( irgi == 0 ) then
+  212.    20       continue
+  213.             call getgb1s(  _substr(cbuf(1),1,1), nlen, nnum, jr, jpds(1), jgds(1), jens(1), kr, kpds(1), kgds(1), kens(1), lskip, lgrib, irgs )
+  215.             k = cvmg( k, mnum + kr, irgs /= 0 )
+  216.             if ( irgi == 1 ) then
+  216.                if ( irgs == 0 ) then
+  216.                   mnum = -1 + -mnum
+  216.                endif
+  217.                if ( irgs > 0 ) then
+  217.                   mnum = mnum + nnum
+  217.                endif
+  217.             endif
+  217.          else
+  217.    10       continue
+  219.             mnum = j
+  220.             irgi = 1
+  221.             irgs = 1
+  221.          endif
+  221.       else
+  224.          mnum = -1 + -j
+  225.          irgi = 1
+  226.          irgs = 1
+  226.       endif
+  230.       jr = 0
+  231.       if ( irgi == 1 .and. irgs == 1 ) then
+  231.          do
+  232.             if ( lugi > 0 ) then
+  233.                call getgi( lugi, mnum, mbuf,  _substr(cbuf(1),1,1), nlen, nnum, irgi )
+  233.             else
+  235.                call getgir( lugb, 32000, 4000, mnum, mbuf,  _substr(cbuf(1),1,1), nlen, nnum, irgi )
+  235.             endif
+  237.             if ( irgi <= 1 ) then
+  238.                call getgb1s(  _substr(cbuf(1),1,1), nlen, nnum, jr, jpds(1), jgds(1), jens(1), kr, kpds(1), kgds(1), kens(1), lskip, lgrib, irgs )
+  240.                if ( irgs == 0 ) then
+  240.                   k = mnum + kr
+  240.                endif
+  241.                if ( irgi == 1 ) then
+  241.                   if ( irgs == 0 ) then
+  241.                      mnum = -1 + -mnum
+  241.                   endif
+  242.                   if ( irgs > 0 ) then
+  242.                      mnum = mnum + nnum
+  242.                   endif
+  242.                endif
+  242.             endif
+  243.             if ( ( irgi == 1 .and. irgs == 1 ) == 0 ) exit
+  243.          enddo
+  243.       endif
+  247.       if ( irgi > 1 ) then
+  248.          iret = 96
+  249.       else if ( irgs /= 0 ) then
+  250.          iret = 99
+  250.       else
+  252.          kg = lgrib
+  253.          kf = lengds( kgds(1) )
+  254.          iret = 0
+  254.       endif
+  258.       return
+  258.       end
+  258.       

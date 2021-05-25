@@ -1,0 +1,94 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgi.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgi.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgi( lugi, mnum, mbuf, cbuf, nlen, nnum, iret )
+   64.       0[loc( nlen ),0] = 0
+   65.       0[loc( nnum ),0] = 0
+   66.       0[loc( iret ),0] = 3
+   67.       $Con_P19 = 0
+   67.       $Con_P20 = 162
+   67.       call baread( 0[loc( lugi ),0], $Con_P19, $Con_P20, lhead, substr[chead,0:162] )
+   68.       if ( lhead == 162 ) then
+   68.          if ( substr[chead,41:6] == 'GB1IX1' ) then
+   69.             $_StackCntrl_O1 = $_StaticCntrl_O0
+   69.             (1,$_StackCntrl_O1)[0].L = loc( substr[chead,81:81] )
+   69.             (3,$_StackCntrl_O1)[0].L = loc( ios )
+   69.             $LCS_IOitem_0 = loc( $_IOitem_P0[0] )
+   69.             $_StackDv_P1[0].L = pointer to array[1] of integer( $LCS_IOitem_0 )
+   69.             (1,$_StackDv_P1)[0].L = 32
+   69.             (2,$_StackDv_P1)[0].L = and( 0xfffffffffffffffeUL, (2,$_StackDv_P1)[0].L )
+   69.             (2,$_StackDv_P1)[0].L = and( 0xfffffffffffffffdUL, (2,$_StackDv_P1)[0].L )
+   69.             (2,$_StackDv_P1)[0].L = and( 0xfffffffffffffff3UL, (2,$_StackDv_P1)[0].L )
+   69.             (2,$_StackDv_P1)[0].L = and( 0xffffffffffffffefUL, (2,$_StackDv_P1)[0].L )
+   69.             (2,$_StackDv_P1)[0].L = or( 64, notand( 2016, (2,$_StackDv_P1)[0].L ) )
+   69.             (2,$_StackDv_P1)[0].L = or( 65536, notand( 522240, (2,$_StackDv_P1)[0].L ) )
+   69.             (2,$_StackDv_P1)[0].L = and( -524289UL, (2,$_StackDv_P1)[0].L )
+   69.             (2,$_StackDv_P1)[0].L = and( -4293918721UL, (2,$_StackDv_P1)[0].L )
+   69.             (2,$_StackDv_P1)[0].L = and( 0xffffff00ffffffffUL, (2,$_StackDv_P1)[0].L )
+   69.             (2,$_StackDv_P1)[0].L = and( 0xffff00ffffffffffUL, (2,$_StackDv_P1)[0].L )
+   69.             (2,$_StackDv_P1)[0].L = and( 0xff00ffffffffffffUL, (2,$_StackDv_P1)[0].L )
+   69.             (2,$_StackDv_P1)[0].L = or( 0x100000000000000UL, notand( 0xff00000000000000UL, (2,$_StackDv_P1)[0].L ) )
+   69.             (6,$_StackDv_P1)[0] = 0
+   69.             (7,$_StackDv_P1)[0] = 131074
+   69.             (4,$_StackDv_P1)[0].L = int( $LCS_IOitem_0, 8 )
+   69.             (5,$_StackDv_P1)[0].L = 32
+   69.             (6,$_StackDv_P1)[0].L = 1
+   69.             (7,$_StackDv_P1)[0].L = 3
+   69.             (8,$_StackDv_P1)[0].L = 1
+   69.             $_StackIolist_O3 = $_StaticIolist_O2
+   69.             (2,$_StackIolist_O3)[0].L = int( loc( $_StackDv_P1 ), 8 )
+   69.             t$5 = _frf( pointer to integer (kind=8)( loc( $_StackCntrl_O1 ) ), pointer to integer (kind=8)( loc( $_StackIolist_O3[0].L ) ), pointer to integer (kind=8)( loc( $_IO_Lib_Stack_O4 ) ) )
+   69.             $nskp_S1 = $_IOitem_P0[0]
+   69.             $MR_nlen_10 = (1,$_IOitem_P0)[0]
+   69.             0[loc( nlen ),0] = $MR_nlen_10
+   69.             $MR_nnum_S0 = (2,$_IOitem_P0)[0]
+   69.             $LCS_nnum_1 = loc( nnum )
+   69.             0[$LCS_nnum_1,0] = $MR_nnum_S0
+   70.             if ( ios == 0 ) then
+   71.                $MR_mnum_14 = 0[loc( mnum ),0]
+   71.                $nskp_S2 = $nskp_S1 + $MR_nlen_10 * $MR_mnum_14
+   71.                nskp = $nskp_S2
+   72.                $MR_nnum_S3 = $MR_nnum_S0 - $MR_mnum_14
+   72.                0[$LCS_nnum_1,0] = $MR_nnum_S3
+   73.                $LCS_2 = $MR_nlen_10 * $MR_nnum_S3
+   73.                nbuf = $LCS_2
+   74.                $LCS_iret_3 = loc( iret )
+   74.                0[$LCS_iret_3,0] = 0
+   75.                $MR_mbuf_16 = 0[loc( mbuf ),0]
+   75.                if ( $LCS_2 > $MR_mbuf_16 ) then
+   76.                   $MR_nnum_S3 = $MR_mbuf_16 / $MR_nlen_10
+   76.                   0[$LCS_nnum_1,0] = $MR_nnum_S3
+   77.                   $nbuf_S4 = $MR_nlen_10 * $MR_nnum_S3
+   77.                   nbuf = $nbuf_S4
+   78.                   0[$LCS_iret_3,0] = 1
+   78.                endif
+   80.                if ( $MR_nlen_10 * $MR_nnum_S3 > 0 ) then
+   81.                   call baread( 0[loc( lugi ),0], nskp, nbuf, lbuf, substr[cbuf,0:1] )
+   82.                   $nbuf_S5 = nbuf
+   82.                   $MR_lbuf_17 = lbuf
+   82.                   $LCS_iret_4 = loc( iret )
+   82.                   $MR_iret_S6 = 0[$LCS_iret_4,0]
+   82.                   $MR_iret_S7 = cvmg( $MR_iret_S6, 2, $MR_lbuf_17 - $nbuf_S5 == 0 )
+   82.                   0[$LCS_iret_4,0] = $MR_iret_S7
+   82.                endif
+   82.             endif
+   82.          endif
+   82.       endif
+   88.       return
+   88.       end
+   88.       

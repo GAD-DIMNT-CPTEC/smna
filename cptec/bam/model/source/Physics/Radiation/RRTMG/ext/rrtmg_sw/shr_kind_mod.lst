@@ -1,0 +1,240 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/../../csm_share/shr/shr_kind_mod.f90
+Compiled : 12/11/20  23:53:53
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps ../../csm_share/shr/shr_kind_mod.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/../../csm_share/shr/shr_kind_mod.f90
+Date     : 12/11/2020  23:53:53
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_24953/shr_kind_mod_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     There are no optimizations or loops to mark
+
+
+    1.    !===============================================================================
+    2.    ! SVN $Id: shr_kind_mod.F90 41285 2012-10-26 01:46:45Z sacks $
+    3.    ! SVN $URL: https://svn-ccsm-models.cgd.ucar.edu/csm_share/trunk_tags/share3_130528/shr/shr_kind_mod.F90 $
+    4.    !===============================================================================
+    5.    
+    6.    MODULE shr_kind_mod
+    7.    
+    8.       !----------------------------------------------------------------------------
+    9.       ! precision/kind constants add data public
+   10.       !----------------------------------------------------------------------------
+   11.       PUBLIC
+   12.       INTEGER,PARAMETER :: SHR_KIND_R8 = selected_real_kind(12) ! 8 byte real
+   13.       INTEGER,PARAMETER :: SHR_KIND_R4 = selected_real_kind( 6) ! 4 byte real
+   14.       INTEGER,PARAMETER :: SHR_KIND_RN = kind(1.0)              ! native real
+   15.       INTEGER,PARAMETER :: SHR_KIND_I8 = selected_int_kind (13) ! 8 byte integer
+   16.       INTEGER,PARAMETER :: SHR_KIND_I4 = selected_int_kind ( 6) ! 4 byte integer
+   17.       INTEGER,PARAMETER :: SHR_KIND_IN = kind(1)                ! native integer
+   18.       INTEGER,PARAMETER :: SHR_KIND_CS = 80                     ! short char
+   19.       INTEGER,PARAMETER :: SHR_KIND_CL = 256                    ! long char
+   20.       INTEGER,PARAMETER :: SHR_KIND_CX = 512                    ! extra-long char
+   21.       INTEGER,PARAMETER :: SHR_KIND_CXX= 4096                   ! extra-extra-long char
+   22.    
+   23.    END MODULE shr_kind_mod
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+               C r o s s   R e f e r e n c e   for   SHR_KIND_MOD
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+KIND                                                              Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0      17
+
+SELECTED_INT_KIND                                                 Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0      16
+
+SELECTED_REAL_KIND                                                Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0      13
+
+SHR_KIND_CL                                                       INTEGER, PARAMETER
+  Decl      19
+  Set 
+  Used
+
+SHR_KIND_CS                                                       INTEGER, PARAMETER
+  Decl      18
+  Set 
+  Used
+
+SHR_KIND_CX                                                       INTEGER, PARAMETER
+  Decl      20
+  Set 
+  Used
+
+SHR_KIND_CXX                                                      INTEGER, PARAMETER
+  Decl      21
+  Set 
+  Used
+
+SHR_KIND_I4                                                       INTEGER, PARAMETER
+  Decl      16
+  Set 
+  Used
+
+SHR_KIND_I8                                                       INTEGER, PARAMETER
+  Decl      15
+  Set 
+  Used
+
+SHR_KIND_IN                                                       INTEGER, PARAMETER
+  Decl      17
+  Set 
+  Used
+
+SHR_KIND_MOD                                                      Module
+  Decl       6
+  Set 
+  Used
+
+SHR_KIND_R4                                                       INTEGER, PARAMETER
+  Decl      13
+  Set 
+  Used
+
+SHR_KIND_R8                                                       INTEGER, PARAMETER
+  Decl      12
+  Set 
+  Used
+
+SHR_KIND_RN                                                       INTEGER, PARAMETER
+  Decl      14
+  Set 
+  Used
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+KIND(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   SHR_KIND_MOD (Line 14, file shr_kind_mod.f90)
+                   SHR_KIND_MOD (Line 17, file shr_kind_mod.f90)
+
+Name  Messages
+----  --------
+SELECTED_INT_KIND(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   SHR_KIND_MOD (Line 15, file shr_kind_mod.f90)
+                   SHR_KIND_MOD (Line 16, file shr_kind_mod.f90)
+
+Name  Messages
+----  --------
+SELECTED_REAL_KIND(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   SHR_KIND_MOD (Line 12, file shr_kind_mod.f90)
+                   SHR_KIND_MOD (Line 13, file shr_kind_mod.f90)
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  Module (line 6, file shr_kind_mod.f90)
+
+      Calls:       SELECTED_REAL_KIND(Intrinsic) (Line 12, file shr_kind_mod.f90)
+                   SELECTED_REAL_KIND(Intrinsic) (Line 13, file shr_kind_mod.f90)
+                   KIND(Intrinsic) (Line 14, file shr_kind_mod.f90)
+                   KIND(Intrinsic) (Line 17, file shr_kind_mod.f90)
+                   SELECTED_INT_KIND(Intrinsic) (Line 15, file shr_kind_mod.f90)
+                   SELECTED_INT_KIND(Intrinsic) (Line 16, file shr_kind_mod.f90)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

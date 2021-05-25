@@ -1,0 +1,53 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgb1re.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgb1re.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgb1re( lugb, lskip, lgrib, kf, kpds, kgds, kens, kprob, xprob, kclust, kmembr, lb, f, iret )
+    2.       $LCS_lgrib_0 = 0[loc( lgrib ),0]
+    2.       $MR_lgrib_S0 = $LCS_lgrib_0
+    2.       t$1 = $MR_lgrib_S0
+    2.       t$3 = int( _alloc( max( 0, $LCS_lgrib_0 ) ), 8 )
+   61.       call baread( 0[loc( lugb ),0], 0[loc( lskip ),0], 0[loc( lgrib ),0], lread, substr[0,t$3:1] )
+   64.       $MR_lgrib_S1 = 0[loc( lgrib ),0]
+   64.       if ( lread - $MR_lgrib_S1 == 0 ) then
+   65.          call w3fi63( substr[0,t$3:1], 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( lb )].B, 0[loc( f ),0], kptr[0], 0[loc( iret ),0] )
+   66.          $MR_iret_S2 = 0[loc( iret ),0]
+   66.          if ( $MR_iret_S2 == 0 ) then
+   66.             if ( 22[loc( kpds ),0] == 2 ) then
+   67.                if ( or( 8, -9 + t$1 ) < 0 ) then
+   67.                   $LB_Y0 = 1
+   67.                   $UB_Y1 = t$1
+   67.                   $Subscript_Y5 = 9
+   67.                   _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+   67.                endif
+   67.                $Con_P6 = 86
+   67.                call pdseup( 0[loc( kens ),0], 0[loc( kprob ),0], 0[loc( xprob ),0], 0[loc( kclust ),0], 0[loc( kmembr ),0], $Con_P6, substr[0,8 + t$3:1] )
+   67.             endif
+   67.          endif
+   67.       else
+   70.          0[loc( iret ),0] = 97
+   70.       endif
+   74.       $MR_iret_S3 = 0[loc( iret ),0]
+   74.       if ( $MR_iret_S3 == 0 ) then
+   75.          0[loc( kf ),0] = (9,kptr)[0]
+   75.       else
+   77.          0[loc( kf ),0] = 0
+   77.       endif
+    2.       _free( t$3 )
+   81.       return
+   81.       end
+   81.       

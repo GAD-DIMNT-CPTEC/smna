@@ -1,0 +1,1032 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrtmg_sw_cldprmc.f90
+Compiled : 12/12/20  00:22:31
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps rrtmg_sw_cldprmc.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrtmg_sw_cldprmc.f90
+Date     : 12/12/2020  00:22:31
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_9636/rrtmg_sw_cldprmc_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     A - Pattern matched      a - atomic memory operation
+                              b - blocked
+     C - Collapsed            c - conditional and/or computed
+     D - Deleted               
+     E - Cloned               f - fused
+     G - Accelerated          g - partitioned
+     I - Inlined              i - interchanged
+     M - Multithreaded        m - partitioned
+                              n - non-blocking remote transfer
+                              p - partial
+                              r - unrolled
+                              s - shortloop
+     V - Vectorized           w - unwound
+
+
+    1.         !     path:      $Source: /storm/rc1/cvsroot/rc/rrtmg_sw/src/rrtmg_sw_cldprmc.f90,v $
+    2.         !     author:    $Author: mike $
+    3.         !     revision:  $Revision: 1.4 $
+    4.         !     created:   $Date: 2008/01/03 21:35:36 $
+    5.         
+    6.               module rrtmg_sw_cldprmc
+    7.         
+    8.         !  --------------------------------------------------------------------------
+    9.         ! |                                                                          |
+   10.         ! |  Copyright 2002-2007, Atmospheric & Environmental Research, Inc. (AER).  |
+   11.         ! |  This software may be used, copied, or redistributed as long as it is    |
+   12.         ! |  not sold and this copyright notice is reproduced on each copy made.     |
+   13.         ! |  This model is provided as is without any express or implied warranties. |
+   14.         ! |                       (http://www.rtweb.aer.com/)                        |
+   15.         ! |                                                                          |
+   16.         !  --------------------------------------------------------------------------
+   17.         
+   18.         ! ------- Modules -------
+   19.         
+   20.               use shr_kind_mod, only: r8 => shr_kind_r8
+   21.         
+   22.         !      use parkind, only : jpim, jprb
+   23.               use parrrsw, only : ngptsw, jpband, jpb1, jpb2
+   24.               use rrsw_cld, only : extliq1, ssaliq1, asyliq1, &
+   25.                                    extice2, ssaice2, asyice2, &
+   26.                                    extice3, ssaice3, asyice3, fdlice3, &
+   27.                                    abari, bbari, cbari, dbari, ebari, fbari
+   28.               use rrsw_wvn, only : wavenum1, wavenum2, ngb
+   29.               use rrsw_vsn, only : hvrclc, hnamclc
+   30.         
+   31.               implicit none
+   32.         
+   33.               contains
+   34.         
+   35.         ! ----------------------------------------------------------------------------
+   36.               subroutine cldprmc_sw( &        !              cldprmc_sw( &
+   37.                                     nlayers, &!                      nlayers                                    , &
+   38.                                     inflag , &!                      inflag                                     , &
+   39.                                     iceflag, &!                      iceflag                                    , &
+   40.                                     liqflag, &!                      liqflag                                    , &
+   41.                                     cldfmc , &!                      cldfmc              (1:ngptsw,1:nlayers)   , &
+   42.                                     ciwpmc , &!                      ciwpmc              (1:ngptsw,1:nlayers)   , &
+   43.                                     clwpmc , &!                      clwpmc              (1:ngptsw,1:nlayers)   , &
+   44.                                     reicmc , &!                      reicmc              (1:nlayers)            , &
+   45.                                     dgesmc , &!                      dgesmc              (1:nlayers)            , &
+   46.                                     relqmc , &!                      relqmc              (1:nlayers)            , &
+   47.                                     taormc , &!                      taormc              (1:ngptsw,1:nlayers)   , & 
+   48.                                     taucmc , &!                      taucmc              (1:ngptsw,1:nlayers)   , & 
+   49.                                     ssacmc , &!                      ssacmc              (1:ngptsw,1:nlayers)   , & 
+   50.                                     asmcmc , &!                      asmcmc              (1:ngptsw,1:nlayers)   , & 
+   51.                                     fsfcmc   )!                      fsfcmc              (1:ngptsw,1:nlayers)   ) 
+   52.         ! ----------------------------------------------------------------------------
+   53.         
+   54.         ! Purpose: Compute the cloud optical properties for each cloudy layer
+   55.         ! and g-point interval for use by the McICA method.  
+   56.         ! Note: Only inflag = 0 and inflag=2/liqflag=1/iceflag=2,3 are available;
+   57.         ! (Hu & Stamnes, Key, and Fu) are implemented. 
+   58.         
+   59.         ! ------- Input -------
+   60.         
+   61.               integer, intent(in) :: nlayers         ! total number of layers
+   62.               integer, intent(in) :: inflag          ! see definitions
+   63.               integer, intent(in) :: iceflag         ! see definitions
+   64.               integer, intent(in) :: liqflag         ! see definitions
+   65.         
+   66.               real(kind=r8), intent(in) :: cldfmc(1:ngptsw,1:nlayers)        ! cloud fraction [mcica]
+   67.                                                                 !    Dimensions: (ngptsw,nlayers)
+   68.               real(kind=r8), intent(in) :: ciwpmc(1:ngptsw,1:nlayers)        ! cloud ice water path [mcica]
+   69.                                                                 !    Dimensions: (ngptsw,nlayers)
+   70.               real(kind=r8), intent(in) :: clwpmc(1:ngptsw,1:nlayers)        ! cloud liquid water path [mcica]
+   71.                                                                 !    Dimensions: (ngptsw,nlayers)
+   72.               real(kind=r8), intent(in) :: relqmc(1:nlayers)           ! cloud liquid particle effective radius (microns)
+   73.                                                                 !    Dimensions: (nlayers)
+   74.               real(kind=r8), intent(in) :: reicmc(1:nlayers)           ! cloud ice particle effective radius (microns)
+   75.                                                                 !    Dimensions: (nlayers)
+   76.               real(kind=r8), intent(in) :: dgesmc(1:nlayers)           ! cloud ice particle generalized effective size (microns)
+   77.                                                                 !    Dimensions: (nlayers)
+   78.               real(kind=r8), intent(in) :: fsfcmc(1:ngptsw,1:nlayers)        ! cloud forward scattering fraction 
+   79.                                                                 !    Dimensions: (ngptsw,nlayers)
+   80.         
+   81.         ! ------- Output -------
+   82.         
+   83.               real(kind=r8), intent(inout) :: taucmc(1:ngptsw,1:nlayers)     ! cloud optical depth (delta scaled)
+   84.                                                                 !    Dimensions: (ngptsw,nlayers)
+   85.               real(kind=r8), intent(inout) :: ssacmc(1:ngptsw,1:nlayers)     ! single scattering albedo (delta scaled)
+   86.                                                                 !    Dimensions: (ngptsw,nlayers)
+   87.               real(kind=r8), intent(inout) :: asmcmc(1:ngptsw,1:nlayers)     ! asymmetry parameter (delta scaled)
+   88.                                                                 !    Dimensions: (ngptsw,nlayers)
+   89.               real(kind=r8), intent(out) :: taormc(1:ngptsw,1:nlayers)       ! cloud optical depth (non-delta scaled)
+   90.                                                                 !    Dimensions: (ngptsw,nlayers)
+   91.         
+   92.         ! ------- Local -------
+   93.         
+   94.         !      integer :: ncbands
+   95.               integer :: ib, lay, istr, index, icx, ig
+   96.         
+   97.               real(kind=r8), parameter :: eps = 1.e-06_r8     ! epsilon
+   98.               real(kind=r8), parameter :: cldmin = 1.e-80_r8  ! minimum value for cloud quantities
+   99.               real(kind=r8) :: cwp                            ! total cloud water path
+  100.               real(kind=r8) :: radliq                         ! cloud liquid droplet radius (microns)
+  101.               real(kind=r8) :: radice                         ! cloud ice effective radius (microns)
+  102.               real(kind=r8) :: dgeice                         ! cloud ice generalized effective size (microns)
+  103.               real(kind=r8) :: factor
+  104.               real(kind=r8) :: fint
+  105.         
+  106.               real(kind=r8) :: taucldorig_a, taucloud_a, ssacloud_a, ffp, ffp1, ffpssa
+  107.               real(kind=r8) :: tauiceorig, scatice, ssaice, tauice, tauliqorig, scatliq, ssaliq, tauliq
+  108.         
+  109.               real(kind=r8) :: fdelta(ngptsw)
+  110.               real(kind=r8) :: extcoice(ngptsw), gice(ngptsw)
+  111.               real(kind=r8) :: ssacoice(ngptsw), forwice(ngptsw)
+  112.               real(kind=r8) :: extcoliq(ngptsw), gliq(ngptsw)
+  113.               real(kind=r8) :: ssacoliq(ngptsw), forwliq(ngptsw)
+  114.         
+  115.         ! Initialize
+  116.         
+  117.               hvrclc = '$Revision: 1.4 $'
+  118.         
+  119.         ! Initialize
+  120.         
+  121.         ! Some of these initializations are done in rrtmg_sw.f90.
+  122.  C----<       do lay = 1, nlayers
+  123.  C C--<          do ig = 1, ngptsw
+  124.  C C                taormc(ig,lay) = taucmc(ig,lay)
+  125.  C C    !            taucmc(ig,lay) = 0.0_r8
+  126.  C C    !            ssacmc(ig,lay) = 1.0_r8
+  127.  C C    !            asmcmc(ig,lay) = 0.0_r8
+  128.  C C-->          enddo
+  129.  C---->       enddo
+  130.         
+  131.         ! Main layer loop
+  132.  1----<       do lay = 1, nlayers
+  133.  1      
+  134.  1      ! Main g-point interval loop
+  135.  1 2--<          do ig = 1, ngptsw 
+  136.  1 2                cwp = ciwpmc(ig,lay) + clwpmc(ig,lay)
+  137.  1 2                if (cldfmc(ig,lay) .ge. cldmin .and. &
+  138.  1 2                   (cwp .ge. cldmin .or. taucmc(ig,lay) .ge. cldmin)) then
+  139.  1 2    
+  140.  1 2    ! (inflag=0): Cloud optical properties input directly
+  141.  1 2                   if (inflag .eq. 0) then
+  142.  1 2    ! Cloud optical properties already defined in taucmc, ssacmc, asmcmc are unscaled;
+  143.  1 2    ! Apply delta-M scaling here (using Henyey-Greenstein approximation)
+  144.  1 2                      taucldorig_a = taucmc(ig,lay)
+  145.  1 2                      ffp = fsfcmc(ig,lay)
+  146.  1 2                      ffp1 = 1.0_r8 - ffp
+  147.  1 2                      ffpssa = 1.0_r8 - ffp * ssacmc(ig,lay)
+  148.  1 2                      ssacloud_a = ffp1 * ssacmc(ig,lay) / ffpssa
+  149.  1 2                      taucloud_a = ffpssa * taucldorig_a
+  150.  1 2    
+  151.  1 2                      taormc(ig,lay) = taucldorig_a
+  152.  1 2                      ssacmc(ig,lay) = ssacloud_a
+  153.  1 2                      taucmc(ig,lay) = taucloud_a
+  154.  1 2                      asmcmc(ig,lay) = (asmcmc(ig,lay) - ffp) / (ffp1)
+  155.  1 2    
+  156.  1 2                   elseif (inflag .eq. 1) then 
+  157.  1 2                      stop 'INFLAG = 1 OPTION NOT AVAILABLE WITH MCICA'
+  158.  1 2    
+  159.  1 2    ! (inflag=2): Separate treatement of ice clouds and water clouds.
+  160.  1 2                   elseif (inflag .eq. 2) then       
+  161.  1 2                      radice = reicmc(lay)
+  162.  1 2    
+  163.  1 2    ! Calculation of absorption coefficients due to ice clouds.
+  164.  1 2                      if (ciwpmc(ig,lay) .eq. 0.0) then
+  165.  1 2                         extcoice(ig) = 0.0_r8
+  166.  1 2                         ssacoice(ig) = 0.0_r8
+  167.  1 2                         gice(ig)     = 0.0_r8
+  168.  1 2                         forwice(ig)  = 0.0_r8
+  169.  1 2    
+  170.  1 2    ! (iceflag = 1): 
+  171.  1 2    ! Note: This option uses Ebert and Curry approach for all particle sizes similar to
+  172.  1 2    ! CAM3 implementation, though this is somewhat unjustified for large ice particles
+  173.  1 2                      elseif (iceflag .eq. 1) then
+  174.  1 2                         ib = ngb(ig)
+  175.  1 2                         if (wavenum2(ib) .gt. 1.43e04_r8) then
+  176.  1 2                            icx = 1
+  177.  1 2                         elseif (wavenum2(ib) .gt. 7.7e03_r8) then
+  178.  1 2                            icx = 2
+  179.  1 2                         elseif (wavenum2(ib) .gt. 5.3e03_r8) then
+  180.  1 2                            icx = 3
+  181.  1 2                         elseif (wavenum2(ib) .gt. 4.0e03_r8) then
+  182.  1 2                            icx = 4
+  183.  1 2                         elseif (wavenum2(ib) .ge. 2.5e03_r8) then
+  184.  1 2                            icx = 5
+  185.  1 2                         endif
+  186.  1 2                         extcoice(ig) = (abari(icx) + bbari(icx)/radice)
+  187.  1 2                         ssacoice(ig) = 1._r8 - cbari(icx) - dbari(icx) * radice
+  188.  1 2                         gice(ig) = ebari(icx) + fbari(icx) * radice
+  189.  1 2    ! Check to ensure upper limit of gice is within physical limits for large particles
+  190.  1 2                         if (gice(ig).ge.1._r8) gice(ig) = 1._r8 - eps
+  191.  1 2                         forwice(ig) = gice(ig)*gice(ig)
+  192.  1 2    ! Check to ensure all calculated quantities are within physical limits.
+  193.  1 2                         if (extcoice(ig) .lt. 0.0_r8) stop 'ICE EXTINCTION LESS THAN 0.0'
+  194.  1 2                         if (ssacoice(ig) .gt. 1.0_r8) stop 'ICE SSA GRTR THAN 1.0'
+  195.  1 2                         if (ssacoice(ig) .lt. 0.0_r8) stop 'ICE SSA LESS THAN 0.0'
+  196.  1 2                         if (gice(ig) .gt. 1.0_r8) stop 'ICE ASYM GRTR THAN 1.0'
+  197.  1 2                         if (gice(ig) .lt. 0.0_r8) stop 'ICE ASYM LESS THAN 0.0'
+  198.  1 2    
+  199.  1 2    ! For iceflag=2 option, combine with iceflag=0 option to handle large particle sizes.
+  200.  1 2    ! Use iceflag=2 option for ice particle effective radii from 5.0 to 131.0 microns
+  201.  1 2    ! and use iceflag=0 option for ice particles greater than 131.0 microns.
+  202.  1 2    ! *** NOTE: Transition between two methods has not been smoothed.
+  203.  1 2    
+  204.  1 2                      elseif (iceflag .eq. 2) then
+  205.  1 2                         if (radice .lt. 5.0_r8) stop 'ICE RADIUS OUT OF BOUNDS'
+  206.  1 2                         if (radice .ge. 5.0_r8 .and. radice .le. 131._r8) then
+  207.  1 2                            factor = (radice - 2._r8)/3._r8
+  208.  1 2                            index = int(factor)
+  209.  1 2                            if (index .eq. 43) index = 42
+  210.  1 2                            fint = factor - float(index)
+  211.  1 2                            ib = ngb(ig)
+  212.  1 2                            extcoice(ig) = extice2(index,ib) + fint * &
+  213.  1 2                                          (extice2(index+1,ib) -  extice2(index,ib))
+  214.  1 2                            ssacoice(ig) = ssaice2(index,ib) + fint * &
+  215.  1 2                                          (ssaice2(index+1,ib) -  ssaice2(index,ib))
+  216.  1 2                            gice(ig) = asyice2(index,ib) + fint * &
+  217.  1 2                                          (asyice2(index+1,ib) -  asyice2(index,ib))
+  218.  1 2                            forwice(ig) = gice(ig)*gice(ig)
+  219.  1 2    ! Check to ensure all calculated quantities are within physical limits.
+  220.  1 2                            if (extcoice(ig) .lt. 0.0_r8) stop 'ICE EXTINCTION LESS THAN 0.0'
+  221.  1 2                            if (ssacoice(ig) .gt. 1.0_r8) stop 'ICE SSA GRTR THAN 1.0'
+  222.  1 2                            if (ssacoice(ig) .lt. 0.0_r8) stop 'ICE SSA LESS THAN 0.0'
+  223.  1 2                            if (gice(ig) .gt. 1.0_r8) stop 'ICE ASYM GRTR THAN 1.0'
+  224.  1 2                            if (gice(ig) .lt. 0.0_r8) stop 'ICE ASYM LESS THAN 0.0'
+  225.  1 2                         elseif (radice .gt. 131._r8) then
+  226.  1 2                            ib = ngb(ig)
+  227.  1 2                            if (wavenum2(ib) .gt. 1.43e04_r8) then
+  228.  1 2                               icx = 1
+  229.  1 2                            elseif (wavenum2(ib) .gt. 7.7e03_r8) then
+  230.  1 2                               icx = 2
+  231.  1 2                            elseif (wavenum2(ib) .gt. 5.3e03_r8) then
+  232.  1 2                               icx = 3
+  233.  1 2                            elseif (wavenum2(ib) .gt. 4.0e03_r8) then
+  234.  1 2                               icx = 4
+  235.  1 2                            elseif (wavenum2(ib) .ge. 2.5e03_r8) then
+  236.  1 2                               icx = 5
+  237.  1 2                            endif
+  238.  1 2                            extcoice(ig) = (abari(icx) + bbari(icx)/radice)
+  239.  1 2                            ssacoice(ig) = 1._r8 - cbari(icx) - dbari(icx) * radice
+  240.  1 2                            gice(ig) = ebari(icx) + fbari(icx) * radice
+  241.  1 2    ! Check to ensure upper limit of gice is within physical limits for large particles
+  242.  1 2                            if (gice(ig).ge.1.0_r8) gice(ig) = 1.0_r8-eps
+  243.  1 2                            forwice(ig) = gice(ig)*gice(ig)
+  244.  1 2    ! Check to ensure all calculated quantities are within physical limits.
+  245.  1 2                            if (extcoice(ig) .lt. 0.0_r8) stop 'ICE EXTINCTION LESS THAN 0.0'
+  246.  1 2                            if (ssacoice(ig) .gt. 1.0_r8) stop 'ICE SSA GRTR THAN 1.0'
+  247.  1 2                            if (ssacoice(ig) .lt. 0.0_r8) stop 'ICE SSA LESS THAN 0.0'
+  248.  1 2                            if (gice(ig) .gt. 1.0_r8) stop 'ICE ASYM GRTR THAN 1.0'
+  249.  1 2                            if (gice(ig) .lt. 0.0_r8) stop 'ICE ASYM LESS THAN 0.0'
+  250.  1 2                         endif
+  251.  1 2    
+  252.  1 2    ! For iceflag=3 option, combine with iceflag=0 option to handle large particle sizes
+  253.  1 2    ! Use iceflag=3 option for ice particle effective radii from 3.2 to 91.0 microns
+  254.  1 2    ! (generalized effective size, dge, from 5 to 140 microns), and use iceflag=0 option
+  255.  1 2    ! for ice particle effective radii greater than 91.0 microns (dge = 140 microns).
+  256.  1 2    ! *** NOTE: Fu parameterization requires particle size in generalized effective size.
+  257.  1 2    ! *** NOTE: Transition between two methods has not been smoothed. 
+  258.  1 2    
+  259.  1 2                      elseif (iceflag .eq. 3) then
+  260.  1 2                         dgeice = dgesmc(lay)
+  261.  1 2                         if (dgeice .lt. 5.0_r8) stop 'ICE GENERALIZED EFFECTIVE SIZE OUT OF BOUNDS'
+  262.  1 2                         if (dgeice .ge. 5.0_r8 .and. dgeice .le. 140._r8) then
+  263.  1 2                            factor = (dgeice - 2._r8)/3._r8
+  264.  1 2                            index = int(factor)
+  265.  1 2                            if (index .eq. 46) index = 45
+  266.  1 2                            fint = factor - float(index)
+  267.  1 2                            ib = ngb(ig)
+  268.  1 2                            extcoice(ig) = extice3(index,ib) + fint * &
+  269.  1 2                                          (extice3(index+1,ib) - extice3(index,ib))
+  270.  1 2                            ssacoice(ig) = ssaice3(index,ib) + fint * &
+  271.  1 2                                          (ssaice3(index+1,ib) - ssaice3(index,ib))
+  272.  1 2                            gice(ig) = asyice3(index,ib) + fint * &
+  273.  1 2                                      (asyice3(index+1,ib) - asyice3(index,ib))
+  274.  1 2                            fdelta(ig) = fdlice3(index,ib) + fint * &
+  275.  1 2                                        (fdlice3(index+1,ib) - fdlice3(index,ib))
+  276.  1 2                            if (fdelta(ig) .lt. 0.0_r8) stop 'FDELTA LESS THAN 0.0'
+  277.  1 2                            if (fdelta(ig) .gt. 1.0_r8) stop 'FDELTA GT THAN 1.0'
+  278.  1 2                            forwice(ig) = fdelta(ig) + 0.5_r8 / ssacoice(ig)
+  279.  1 2    ! See Fu 1996 p. 2067 
+  280.  1 2                            if (forwice(ig) .gt. gice(ig)) forwice(ig) = gice(ig)
+  281.  1 2    ! Check to ensure all calculated quantities are within physical limits.  
+  282.  1 2                            if (extcoice(ig) .lt. 0.0_r8) stop 'ICE EXTINCTION LESS THAN 0.0'
+  283.  1 2                            if (ssacoice(ig) .gt. 1.0_r8) stop 'ICE SSA GRTR THAN 1.0'
+  284.  1 2                            if (ssacoice(ig) .lt. 0.0_r8) stop 'ICE SSA LESS THAN 0.0'
+  285.  1 2                            if (gice(ig) .gt. 1.0_r8) stop 'ICE ASYM GRTR THAN 1.0'
+  286.  1 2                            if (gice(ig) .lt. 0.0_r8) stop 'ICE ASYM LESS THAN 0.0'
+  287.  1 2                         elseif (dgeice .gt. 140._r8) then
+  288.  1 2                            ib = ngb(ig)
+  289.  1 2                            if (wavenum2(ib) .gt. 1.43e04_r8) then
+  290.  1 2                               icx = 1
+  291.  1 2                            elseif (wavenum2(ib) .gt. 7.7e03_r8) then
+  292.  1 2                               icx = 2
+  293.  1 2                            elseif (wavenum2(ib) .gt. 5.3e03_r8) then
+  294.  1 2                               icx = 3
+  295.  1 2                            elseif (wavenum2(ib) .gt. 4.0e03_r8) then
+  296.  1 2                               icx = 4
+  297.  1 2                            elseif (wavenum2(ib) .ge. 2.5e03_r8) then
+  298.  1 2                               icx = 5
+  299.  1 2                            endif
+  300.  1 2                            extcoice(ig) = (abari(icx) + bbari(icx)/radice)
+  301.  1 2                            ssacoice(ig) = 1._r8 - cbari(icx) - dbari(icx) * radice
+  302.  1 2                            gice(ig) = ebari(icx) + fbari(icx) * radice
+  303.  1 2    ! Check to ensure upper limit of gice is within physical limits for large particles
+  304.  1 2                            if (gice(ig).ge.1._r8) gice(ig) = 1._r8 - eps
+  305.  1 2                            forwice(ig) = gice(ig)*gice(ig)
+  306.  1 2    ! Check to ensure all calculated quantities are within physical limits.
+  307.  1 2                            if (extcoice(ig) .lt. 0.0_r8) stop 'ICE EXTINCTION LESS THAN 0.0'
+  308.  1 2                            if (ssacoice(ig) .gt. 1.0_r8) stop 'ICE SSA GRTR THAN 1.0'
+  309.  1 2                            if (ssacoice(ig) .lt. 0.0_r8) stop 'ICE SSA LESS THAN 0.0'
+  310.  1 2                            if (gice(ig) .gt. 1.0_r8) stop 'ICE ASYM GRTR THAN 1.0'
+  311.  1 2                            if (gice(ig) .lt. 0.0_r8) stop 'ICE ASYM LESS THAN 0.0'
+  312.  1 2                         endif
+  313.  1 2                      endif
+  314.  1 2    
+  315.  1 2    ! Calculation of absorption coefficients due to water clouds.
+  316.  1 2                      if (clwpmc(ig,lay) .eq. 0.0_r8) then
+  317.  1 2                         extcoliq(ig) = 0.0_r8
+  318.  1 2                         ssacoliq(ig) = 0.0_r8
+  319.  1 2                         gliq(ig) = 0.0_r8
+  320.  1 2                         forwliq(ig) = 0.0_r8
+  321.  1 2    
+  322.  1 2                      elseif (liqflag .eq. 1) then
+  323.  1 2                         radliq = relqmc(lay)
+  324.  1 2                         if (radliq .lt. 1.5_r8 .or. radliq .gt. 60._r8) stop &
+  325.  1 2                            'liquid effective radius out of bounds'
+  326.  1 2                         index = int(radliq - 1.5_r8)
+  327.  1 2                         if (index .eq. 0) index = 1
+  328.  1 2                         if (index .eq. 58) index = 57
+  329.  1 2                         fint = radliq - 1.5_r8 - float(index)
+  330.  1 2                         ib = ngb(ig)
+  331.  1 2                         extcoliq(ig) = extliq1(index,ib) + fint * &
+  332.  1 2                                       (extliq1(index+1,ib) - extliq1(index,ib))
+  333.  1 2                         ssacoliq(ig) = ssaliq1(index,ib) + fint * &
+  334.  1 2                                       (ssaliq1(index+1,ib) - ssaliq1(index,ib))
+  335.  1 2                         if (fint .lt. 0._r8 .and. ssacoliq(ig) .gt. 1._r8) &
+  336.  1 2                                        ssacoliq(ig) = ssaliq1(index,ib)
+  337.  1 2                         gliq(ig) = asyliq1(index,ib) + fint * &
+  338.  1 2                                   (asyliq1(index+1,ib) - asyliq1(index,ib))
+  339.  1 2                         forwliq(ig) = gliq(ig)*gliq(ig)
+  340.  1 2    ! Check to ensure all calculated quantities are within physical limits.
+  341.  1 2                         if (extcoliq(ig) .lt. 0.0_r8) stop 'LIQUID EXTINCTION LESS THAN 0.0'
+  342.  1 2                         if (ssacoliq(ig) .gt. 1.0_r8) stop 'LIQUID SSA GRTR THAN 1.0'
+  343.  1 2                         if (ssacoliq(ig) .lt. 0.0_r8) stop 'LIQUID SSA LESS THAN 0.0'
+  344.  1 2                         if (gliq(ig) .gt. 1.0_r8) stop 'LIQUID ASYM GRTR THAN 1.0'
+  345.  1 2                         if (gliq(ig) .lt. 0.0_r8) stop 'LIQUID ASYM LESS THAN 0.0'
+  346.  1 2                      endif
+  347.  1 2       
+  348.  1 2                      tauliqorig = clwpmc(ig,lay) * extcoliq(ig)
+  349.  1 2                      tauiceorig = ciwpmc(ig,lay) * extcoice(ig)
+  350.  1 2                      taormc(ig,lay) = tauliqorig + tauiceorig
+  351.  1 2    
+  352.  1 2                      ssaliq = ssacoliq(ig) * (1._r8 - forwliq(ig)) / &
+  353.  1 2                              (1._r8 - forwliq(ig) * ssacoliq(ig))
+  354.  1 2                      tauliq = (1._r8 - forwliq(ig) * ssacoliq(ig)) * tauliqorig
+  355.  1 2                      ssaice = ssacoice(ig) * (1._r8 - forwice(ig)) / &
+  356.  1 2                              (1._r8 - forwice(ig) * ssacoice(ig))
+  357.  1 2                      tauice = (1._r8 - forwice(ig) * ssacoice(ig)) * tauiceorig
+  358.  1 2    
+  359.  1 2                      scatliq = ssaliq * tauliq
+  360.  1 2                      scatice = ssaice * tauice
+  361.  1 2                      taucmc(ig,lay) = tauliq + tauice
+  362.  1 2    
+  363.  1 2    ! Ensure non-zero taucmc and scatice
+  364.  1 2                      if(taucmc(ig,lay).eq.0.) taucmc(ig,lay) = cldmin
+  365.  1 2                      if(scatice.eq.0.) scatice = cldmin
+  366.  1 2    
+  367.  1 2                      ssacmc(ig,lay) = (scatliq + scatice) / taucmc(ig,lay)
+  368.  1 2    
+  369.  1 2                      if (iceflag .eq. 3) then
+  370.  1 2    ! In accordance with the 1996 Fu paper, equation A.3, 
+  371.  1 2    ! the moments for ice were calculated depending on whether using spheres
+  372.  1 2    ! or hexagonal ice crystals.
+  373.  1 2    ! Set asymetry parameter to first moment (istr=1)
+  374.  1 2                         istr = 1
+  375.  1 2                         asmcmc(ig,lay) = (1.0_r8/(scatliq+scatice))* &
+  376.  1 2                            (scatliq*(gliq(ig)**istr - forwliq(ig)) / &
+  377.  1 2                            (1.0_r8 - forwliq(ig)) + scatice * ((gice(ig)-forwice(ig))/ &
+  378.  1 2                            (1.0_r8 - forwice(ig)))**istr)
+  379.  1 2    
+  380.  1 2                      else 
+  381.  1 2    ! This code is the standard method for delta-m scaling. 
+  382.  1 2    ! Set asymetry parameter to first moment (istr=1)
+  383.  1 2                         istr = 1
+  384.  1 2                         asmcmc(ig,lay) = (scatliq *  &
+  385.  1 2                            (gliq(ig)**istr - forwliq(ig)) / &
+  386.  1 2                            (1.0_r8 - forwliq(ig)) + scatice * (gice(ig)**istr - forwice(ig)) / &
+  387.  1 2                            (1.0_r8 - forwice(ig)))/(scatliq + scatice)
+  388.  1 2                      endif 
+  389.  1 2    
+  390.  1 2                   endif
+  391.  1 2    
+  392.  1 2                endif
+  393.  1 2    
+  394.  1 2    ! End g-point interval loop
+  395.  1 2-->          enddo
+  396.  1      
+  397.  1      ! End layer loop
+  398.  1---->       enddo
+  399.         
+  400.               end subroutine cldprmc_sw
+  401.         
+  402.               end module rrtmg_sw_cldprmc
+
+ftn-6003 ftn: SCALAR File = rrtmg_sw_cldprmc.f90, Line = 122 
+  A loop starting at line 122 was collapsed into the loop starting at line 123.
+
+ftn-6315 ftn: VECTOR File = rrtmg_sw_cldprmc.f90, Line = 132 
+  A loop starting at line 132 was not vectorized because the target array (fdelta) would require rank expansion.
+
+  403.         
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+             C r o s s   R e f e r e n c e   for   RRTMG_SW_CLDPRMC
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+ABARI                           Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(5), SAVE
+  Decl
+  Set 
+  Used     186     238     300
+
+ASMCMC                          Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>), INTENT(INOUT)
+  Decl      50      87
+  Set      154     375     384
+  Used
+
+ASYICE2                         Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(43, 16:29), SAVE
+  Decl
+  Set 
+  Used     216     217
+
+ASYICE3                         Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(46, 16:29), SAVE
+  Decl
+  Set 
+  Used     272     273
+
+ASYLIQ1                         Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(58, 16:29), SAVE
+  Decl
+  Set 
+  Used     337     338
+
+BBARI                           Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(5), SAVE
+  Decl
+  Set 
+  Used     186     238     300
+
+CBARI                           Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(5), SAVE
+  Decl
+  Set 
+  Used     187     239     301
+
+CIWPMC                          Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>), INTENT(IN)
+  Decl      42      68
+  Set 
+  Used     136     164     349
+
+CLDFMC                          Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>), INTENT(IN)
+  Decl      41      66
+  Set 
+  Used
+
+CLDMIN                                                            REAL(KIND=8), PARAMETER
+  Decl      98
+  Set 
+  Used     137     138     364     365
+
+CLDPRMC_SW                                                        Subroutine, Module procedure
+  Decl      36
+  Set 
+  Used
+
+CLWPMC                          Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>), INTENT(IN)
+  Decl      43      70
+  Set 
+  Used     136     316     348
+
+CWP                             Stack                             REAL(KIND=8)
+  Decl      99
+  Set      136
+  Used
+
+DBARI                           Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(5), SAVE
+  Decl
+  Set 
+  Used     187     239     301
+
+DGEICE                          Stack                             REAL(KIND=8)
+  Decl     102
+  Set      260
+  Used     261     262     263     287
+
+DGESMC                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      45      76
+  Set 
+  Used     260
+
+EBARI                           Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(5), SAVE
+  Decl
+  Set 
+  Used     188     240     302
+
+EPS                                                               REAL(KIND=8), PARAMETER
+  Decl      97
+  Set 
+  Used     190     242     304
+
+EXTCOICE                        Stack                             REAL(KIND=8), DIMENSION(112)
+  Decl     110
+  Set      165     186     212     238     268     300
+  Used     193     220     245     282     307     349
+
+EXTCOLIQ                        Stack                             REAL(KIND=8), DIMENSION(112)
+  Decl     112
+  Set      317     331
+  Used     341     348
+
+EXTICE2                         Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(43, 16:29), SAVE
+  Decl
+  Set 
+  Used     212     213
+
+EXTICE3                         Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(46, 16:29), SAVE
+  Decl
+  Set 
+  Used     268     269
+
+EXTLIQ1                         Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(58, 16:29), SAVE
+  Decl
+  Set 
+  Used     331     332
+
+FACTOR                          Stack                             REAL(KIND=8)
+  Decl     103
+  Set      207     263
+  Used     208     210     264     266
+
+FBARI                           Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(5), SAVE
+  Decl
+  Set 
+  Used     188     240     302
+
+FDELTA                          Stack                             REAL(KIND=8), DIMENSION(112)
+  Decl     109
+  Set      274
+  Used     276     277     278
+
+FDLICE3                         Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(46, 16:29), SAVE
+  Decl
+  Set 
+  Used     274     275
+
+FFP                             Stack                             REAL(KIND=8)
+  Decl     106
+  Set      145
+  Used     146     147     154
+
+FFP1                            Stack                             REAL(KIND=8)
+  Decl     106
+  Set      146
+  Used     148     154
+
+FFPSSA                          Stack                             REAL(KIND=8)
+  Decl     106
+  Set      147
+  Used     148     149
+
+FINT                            Stack                             REAL(KIND=8)
+  Decl     104
+  Set      210     266     329
+  Used     212     214     216     268     270     272     274     331     333     337
+
+FLOAT                                                             Function, REAL, INTRINSIC
+  Decl
+  Set 
+  Used       0     266     329
+
+FORWICE                         Stack                             REAL(KIND=8), DIMENSION(112)
+  Decl     111
+  Set      168     191     218     243     278     280     305
+  Used     280     355     356     357     377     378     386     387
+
+FORWLIQ                         Stack                             REAL(KIND=8), DIMENSION(112)
+  Decl     113
+  Set      320     339
+  Used     352     353     354     376     377     385     386
+
+FSFCMC                          Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>), INTENT(IN)
+  Decl      51      78
+  Set 
+  Used     145
+
+GICE                            Stack                             REAL(KIND=8), DIMENSION(112)
+  Decl     110
+  Set      167     188     190     216     240     242     272     302     304
+  Used     190     191     196     197     218     223     224     242     243     248     249     280     285     286     304
+           305     310     311     377     386
+
+GLIQ                            Stack                             REAL(KIND=8), DIMENSION(112)
+  Decl     112
+  Set      319     337
+  Used     339     344     345     376     385
+
+HVRCLC                          Use assoc                         CHARACTER(18), From module RRSW_VSN, SAVE
+  Decl
+  Set      117
+  Used
+
+IB                              Stack                             INTEGER
+  Decl      95
+  Set      174     211     226     267     288     330
+  Used     175     177     179     181     183     212     213     214     215     216     217     227     229     231     233
+           235     268     269     270     271     272     273     274     275     289     291     293     295     297     331
+           332     333     334     336     337     338
+
+ICEFLAG                         Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      39      63
+  Set 
+  Used     173     204     259     369
+
+ICX                             Stack                             INTEGER
+  Decl      95
+  Set      176     178     180     182     184     228     230     232     234     236     290     292     294     296     298
+  Used     186     187     188     238     239     240     300     301     302
+
+IG                              Stack                             INTEGER
+  Decl      95
+  Set 
+  Used     124     136     138     144     145     147     148     151     152     153     154     164     165     166     167
+           168     174     186     187     188     190     191     193     194     195     196     197     211     212     214
+           216     218     220     221     222     223     224     226     238     239     240     242     243     245     246
+           247     248     249     267     268     270     272     274     276     277     278     280     282     283     284
+           285     286     288     300     301     302     304     305     307     308     309     310     311     316     317
+           318     319     320     330     331     333     335     336     337     339     341     342     343     344     345
+           348     349     350     352     353     354     355     356     357     361     364     367     375     376     377
+           378     384     385     386     387
+
+INDEX                           Stack                             INTEGER
+  Decl      95
+  Set      208     209     264     265     326     327     328
+  Used     209     210     212     213     214     215     216     217     265     266     268     269     270     271     272
+           273     274     275     327     328     329     331     332     333     334     336     337     338
+
+INFLAG                          Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      38      62
+  Set 
+  Used     141     156     160
+
+INT                                                               Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     264     326
+
+ISTR                            Stack                             INTEGER
+  Decl      95
+  Set      374     383
+  Used     376     378     385     386
+
+LAY                             Stack                             INTEGER
+  Decl      95
+  Set 
+  Used     124     136     138     144     145     147     148     151     152     153     154     161     164     260     316
+           323     348     349     350     361     364     367     375     384
+
+LIQFLAG                         Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      40      64
+  Set 
+  Used     322
+
+NGB                             Use assoc                         INTEGER, From module RRSW_WVN, DIMENSION(112), SAVE
+  Decl
+  Set 
+  Used     174     211     226     267     288     330
+
+NGPTSW                          Use assoc                         INTEGER, PARAMETER, From module PARRRSW
+  Decl
+  Set 
+  Used      66      68      70      78      83      85      87      89     109     110     111     112     113     123     135
+
+NLAYERS                         Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      37      61
+  Set 
+  Used      66      68      70      72      74      76      78      83      85      87      89     122     132
+
+PARRRSW                                                           Module
+  Decl
+  Set 
+  Used      23
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD
+  Decl      20
+  Set 
+  Used      66      68      70      72      74      76      78      83      85      87      89      97      98      99     100
+           101     102     103     104     106     107     109     110     111     112     113
+
+RADICE                          Stack                             REAL(KIND=8)
+  Decl     101
+  Set      161
+  Used     186     187     188     205     206     207     225     238     239     240     300     301     302
+
+RADLIQ                          Stack                             REAL(KIND=8)
+  Decl     100
+  Set      323
+  Used     324     326     329
+
+REICMC                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      44      74
+  Set 
+  Used     161
+
+RELQMC                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      46      72
+  Set 
+  Used     323
+
+RRSW_CLD                                                          Module
+  Decl
+  Set 
+  Used      24
+
+RRSW_VSN                                                          Module
+  Decl
+  Set 
+  Used      29
+
+RRSW_WVN                                                          Module
+  Decl
+  Set 
+  Used      28
+
+RRTMG_SW_CLDPRMC                                                  Module
+  Decl       6
+  Set 
+  Used
+
+SCATICE                         Stack                             REAL(KIND=8)
+  Decl     107
+  Set      360     365
+  Used     365     367     375     377     386     387
+
+SCATLIQ                         Stack                             REAL(KIND=8)
+  Decl     107
+  Set      359
+  Used     367     375     376     384     387
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used      20
+
+SSACLOUD_A                      Stack                             REAL(KIND=8)
+  Decl     106
+  Set      148
+  Used     152
+
+SSACMC                          Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>), INTENT(INOUT)
+  Decl      49      85
+  Set      152     367
+  Used     147     148
+
+SSACOICE                        Stack                             REAL(KIND=8), DIMENSION(112)
+  Decl     111
+  Set      166     187     214     239     270     301
+  Used     194     195     221     222     246     247     278     283     284     308     309     355     356     357
+
+SSACOLIQ                        Stack                             REAL(KIND=8), DIMENSION(112)
+  Decl     113
+  Set      318     333     336
+  Used     335     342     343     352     353     354
+
+SSAICE                          Stack                             REAL(KIND=8)
+  Decl     107
+  Set      355
+  Used     360
+
+SSAICE2                         Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(43, 16:29), SAVE
+  Decl
+  Set 
+  Used     214     215
+
+SSAICE3                         Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(46, 16:29), SAVE
+  Decl
+  Set 
+  Used     270     271
+
+SSALIQ                          Stack                             REAL(KIND=8)
+  Decl     107
+  Set      352
+  Used     359
+
+SSALIQ1                         Use assoc                         REAL(KIND=8), From module RRSW_CLD, DIMENSION(58, 16:29), SAVE
+  Decl
+  Set 
+  Used     333     334     336
+
+TAORMC                          Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>), INTENT(OUT)
+  Decl      47      89
+  Set      124     151     350
+  Used
+
+TAUCLDORIG_A                    Stack                             REAL(KIND=8)
+  Decl     106
+  Set      144
+  Used     149     151
+
+TAUCLOUD_A                      Stack                             REAL(KIND=8)
+  Decl     106
+  Set      149
+  Used     153
+
+TAUCMC                          Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>), INTENT(INOUT)
+  Decl      48      83
+  Set      153     361     364
+  Used     124     138     144     364     367
+
+TAUICE                          Stack                             REAL(KIND=8)
+  Decl     107
+  Set      357
+  Used     360     361
+
+TAUICEORIG                      Stack                             REAL(KIND=8)
+  Decl     107
+  Set      349
+  Used     350     357
+
+TAULIQ                          Stack                             REAL(KIND=8)
+  Decl     107
+  Set      354
+  Used     359     361
+
+TAULIQORIG                      Stack                             REAL(KIND=8)
+  Decl     107
+  Set      348
+  Used     350     354
+
+WAVENUM2                        Use assoc                         REAL(KIND=8), From module RRSW_WVN, DIMENSION(16:29), SAVE
+  Decl
+  Set 
+  Used     175     177     179     181     183     227     229     231     233     235     289     291     293     295     297
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+CLDPRMC_SW in RRTMG_SW_CLDPRMC
+      Defined as:  Subroutine (line 36, file rrtmg_sw_cldprmc.f90)
+
+      Interface:   None
+
+      Calls:       INT(Intrinsic) (Line 208, file rrtmg_sw_cldprmc.f90)
+                   INT(Intrinsic) (Line 264, file rrtmg_sw_cldprmc.f90)
+                   INT(Intrinsic) (Line 326, file rrtmg_sw_cldprmc.f90)
+                   FLOAT(Intrinsic) (Line 210, file rrtmg_sw_cldprmc.f90)
+                   FLOAT(Intrinsic) (Line 266, file rrtmg_sw_cldprmc.f90)
+                   FLOAT(Intrinsic) (Line 329, file rrtmg_sw_cldprmc.f90)
+
+Name  Messages
+----  --------
+FLOAT(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   CLDPRMC_SW in RRTMG_SW_CLDPRMC (Line 210, file rrtmg_sw_cldprmc.f90)
+                   CLDPRMC_SW in RRTMG_SW_CLDPRMC (Line 266, file rrtmg_sw_cldprmc.f90)
+                   CLDPRMC_SW in RRTMG_SW_CLDPRMC (Line 329, file rrtmg_sw_cldprmc.f90)
+
+Name  Messages
+----  --------
+INT(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   CLDPRMC_SW in RRTMG_SW_CLDPRMC (Line 208, file rrtmg_sw_cldprmc.f90)
+                   CLDPRMC_SW in RRTMG_SW_CLDPRMC (Line 264, file rrtmg_sw_cldprmc.f90)
+                   CLDPRMC_SW in RRTMG_SW_CLDPRMC (Line 326, file rrtmg_sw_cldprmc.f90)
+
+Name  Messages
+----  --------
+PARRRSW
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_CLDPRMC
+
+Name  Messages
+----  --------
+RRSW_CLD
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_CLDPRMC
+
+Name  Messages
+----  --------
+RRSW_VSN
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_CLDPRMC
+
+Name  Messages
+----  --------
+RRSW_WVN
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_CLDPRMC
+
+Name  Messages
+----  --------
+RRTMG_SW_CLDPRMC
+      Defined as:  Module (line 6, file rrtmg_sw_cldprmc.f90)
+
+        Uses:      SHR_KIND_MOD
+                   PARRRSW
+                   RRSW_CLD
+                   RRSW_WVN
+                   RRSW_VSN
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_CLDPRMC
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,59 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  sbytes.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/sbytes.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine sbytes( iout, in, iskip, nbyte, nskip, n )
+   41.       icon = 32 + -nbyte
+   42.       if ( 32 + -nbyte >= 0 ) then
+   43.          mask = masks(nbyte)
+   47.          index = _rsh( iskip, 5 )
+   51.          ii = mod( iskip, 32 )
+   55.          istep = nbyte + nskip
+   59.          iwords = ( nbyte + nskip ) / 32
+   63.          ibits = mod( nbyte + nskip, 32 )
+   65.          i = 1
+   65.          if ( n > 0 ) then
+   65.             $I_L65_6 = 0
+   65.             do
+   66.                j = and( mask, in(1 + $I_L65_6) )
+   67.                movel = -nbyte + -ii + 32
+   71.                if ( -nbyte + -ii + 32 > 0 ) then
+   72.                   msk = cvmg( lshift_ec( mask, abs( -nbyte + -ii + 32 ) ), rshift_ec( mask, abs( -nbyte + -ii + 32 ) ), -nbyte + -ii + 32 > 0 )
+   73.                   iout(1 + index) = or( notand( cvmg( lshift_ec( mask, abs( -nbyte + -ii + 32 ) ), rshift_ec( mask, abs( -nbyte + -ii + 32 ) ), -nbyte + -ii + 32 > 0 ), iout(1 + index) ), cvmg( lshift_ec( j, abs( -nbyte + -ii + 32 ) ), rshift_ec( j, abs( -nbyte + -ii + 32 ) ), -nbyte + -ii + 32 > 0 ) )
+   78.                else if ( -nbyte + -ii + 32 < 0 ) then
+   79.                   msk = masks(32 + -ii)
+   80.                   iout(1 + index) = or( notand( msk, iout(1 + index) ), cvmg( lshift_ec( j, abs( -nbyte + -ii + 32 ) ), rshift_ec( j, abs( -nbyte + -ii + 32 ) ), -nbyte + -ii + 32 > 0 ) )
+   82.                   itemp = and( iout(2 + index), masks(nbitsw + -nbyte + -ii + 32) )
+   83.                   iout(2 + index) = or( itemp, cvmg( lshift_ec( j, abs( -nbyte + -ii + 64 ) ), rshift_ec( j, abs( -nbyte + -ii + 64 ) ), -nbyte + -ii + 64 > 0 ) )
+   83.                else
+   88.                   iout(1 + index) = or( j, notand( mask, iout(1 + index) ) )
+   88.                endif
+   91.                ii = ii + mod( nbyte + nskip, 32 )
+   92.                index = index + ( nbyte + nskip ) / 32
+   93.                if ( ii >= 32 ) then
+   94.                   ii = -32 + ii
+   95.                   index = 1 + index
+   95.                endif
+   98.                $I_L65_6 = 1 + $I_L65_6
+   96.                if ( $I_L65_6 >= n ) exit
+   96.             enddo
+   98.             i = ( 1 + n )
+   98.          endif
+   98.       endif
+  101.       return
+  101.       end
+  101.       

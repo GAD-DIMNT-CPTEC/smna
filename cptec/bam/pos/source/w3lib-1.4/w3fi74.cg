@@ -1,0 +1,585 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi74.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi74.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi74( igds, icomp, gds, lengds, npts, igerr )
+   49.       isum = 0
+   50.       0[loc( igerr ),0] = 0
+   63.       $MR_igds_0 = 2[loc( igds ),0]
+   63.       $SW_MR_igds_V0 = $MR_igds_0
+   63.       switch( 1 + $SW_MR_igds_V0 )
+   63.       
+   68.          case 1 :
+   68.             goto 10
+   68.             goto 20
+   68.          case 3 :
+   68.             goto 10
+   68.             goto 20
+   68.          case 5 :
+   68.             goto 10
+   68.             goto 20
+   68.          case 6 :
+   68.             goto 10
+   68.             goto 20
+   68.          case 51 :
+   68.             goto 10
+   68.             goto 20
+   68.          case 202 :
+   68.             goto 10
+   68.             goto 20
+   68.          case 203 :
+   68.             goto 10
+   68.             goto 20
+   68.          case 204 :
+   68.             goto 10
+   68.             goto 20
+   68.          case 205 :
+   68.    10       continue
+   68.             $LCS_lengds_1 = loc( lengds )
+   68.             0[$LCS_lengds_1,0] = 32
+   72.             if ( $MR_igds_0 == 0 ) then
+   72.                $LCS_igds_0 = loc( igds )
+   72.                $MR_igds_S43 = 0[$LCS_igds_0,0]
+   72.                if ( $MR_igds_S43 == 0 ) then
+   72.                   $MR_igds_S44 = 1[$LCS_igds_0,0]
+   72.                   if ( $MR_igds_S44 /= 255 ) then
+   74.                      $MR_igds_S45 = 4[$LCS_igds_0,0]
+   74.                      $MR_lengds_S46 = 32 + _lsh( $MR_igds_S45, 1 )
+   74.                      0[$LCS_lengds_1,0] = $MR_lengds_S46
+   74.                   endif
+   74.                endif
+   74.             endif
+   74.             goto 20
+   78.          case 2 :
+   78.             goto 70
+   78.             goto 20
+   78.          case 4 :
+   78.             goto 70
+   78.             goto 20
+   78.          case 14 :
+   78.    70       continue
+   78.             0[loc( lengds ),0] = 42
+   78.    20       continue
+   87.             $MR_lengds_S47 = 0[loc( lengds ),0]
+   87.             $PRT_P30 = _ash( $MR_lengds_S47 + _rsh( _ash( $MR_lengds_S47, 15 ), 16 ), 16 )
+   87.             substr[gds,0:1] = character*1( $PRT_P30 - and( -256, $PRT_P30 + _rsh( _ash( $PRT_P30, 7 ), 24 ) ) )
+   88.             $LCS_MR_lengds_2 = $MR_lengds_S47 + _rsh( _ash( $MR_lengds_S47, 7 ), 24 )
+   88.             $PRT_P31 = _ash( $LCS_MR_lengds_2, 8 )
+   88.             substr[gds,1:1] = character*1( $PRT_P31 - and( -256, $PRT_P31 + _rsh( _ash( $PRT_P31, 7 ), 24 ) ) )
+   89.             substr[gds,2:1] = character*1( $MR_lengds_S47 - and( -256, $LCS_MR_lengds_2 ) )
+   95.             $LCS_igds_3 = loc( igds )
+   95.             $MR_igds_S48 = 0[$LCS_igds_3,0]
+   95.             substr[gds,3:1] = character*1( $MR_igds_S48 )
+   96.             $MR_igds_S49 = 1[$LCS_igds_3,0]
+   96.             substr[gds,4:1] = character*1( $MR_igds_S49 )
+   97.             substr[gds,5:1] = character*1( $MR_igds_0 )
+   97.             $SW_MR_igds_V1 = $MR_igds_0
+  106.             switch( 1 + $SW_MR_igds_V1 )
+  106.             
+  109.                case 1 :
+  109.                   goto 30
+  109.                case 5 :
+  109.                   goto 30
+  109.                case 202 :
+  109.                   goto 30
+  109.                case 203 :
+  109.                   goto 30
+  109.                case 204 :
+  109.                   goto 30
+  109.                case 205 :
+  109.    30             continue
+  109.                   $LCS_igds_37 = loc( igds )
+  109.                   $MR_igds_S104 = 3[$LCS_igds_37,0]
+  109.                   $LCS_MR_igds_36 = $MR_igds_S104 + _rsh( _ash( $MR_igds_S104, 7 ), 24 )
+  109.                   $PRT_S105 = _ash( $LCS_MR_igds_36, 8 )
+  109.                   substr[gds,6:1] = character*1( $PRT_S105 - and( -256, $PRT_S105 + _rsh( _ash( $PRT_S105, 7 ), 24 ) ) )
+  110.                   substr[gds,7:1] = character*1( $MR_igds_S104 - and( -256, $LCS_MR_igds_36 ) )
+  111.                   $MR_igds_S106 = 4[$LCS_igds_37,0]
+  111.                   $LCS_MR_igds_38 = $MR_igds_S106 + _rsh( _ash( $MR_igds_S106, 7 ), 24 )
+  111.                   $PRT_S107 = _ash( $LCS_MR_igds_38, 8 )
+  111.                   substr[gds,8:1] = character*1( $PRT_S107 - and( -256, $PRT_S107 + _rsh( _ash( $PRT_S107, 7 ), 24 ) ) )
+  112.                   substr[gds,9:1] = character*1( $MR_igds_S106 - and( -256, $LCS_MR_igds_38 ) )
+  113.                   $MR_igds_S108 = 5[$LCS_igds_37,0]
+  113.                   $lato_S109 = $MR_igds_S108
+  114.                   if ( $MR_igds_S108 < 0 ) then
+  116.                      $lato_S109 = or( 0x800000, -$MR_igds_S108 )
+  116.                   endif
+  118.                   $PRT_P70 = _ash( $lato_S109 + _rsh( _ash( $lato_S109, 15 ), 16 ), 16 )
+  118.                   substr[gds,10:1] = character*1( $PRT_P70 - and( -256, $PRT_P70 + _rsh( _ash( $PRT_P70, 7 ), 24 ) ) )
+  119.                   $LCS_lato_39 = $lato_S109 + _rsh( _ash( $lato_S109, 7 ), 24 )
+  119.                   $PRT_P71 = _ash( $LCS_lato_39, 8 )
+  119.                   substr[gds,11:1] = character*1( $PRT_P71 - and( -256, $PRT_P71 + _rsh( _ash( $PRT_P71, 7 ), 24 ) ) )
+  120.                   substr[gds,12:1] = character*1( $lato_S109 - and( -256, $LCS_lato_39 ) )
+  121.                   $MR_igds_S110 = 6[loc( igds ),0]
+  121.                   $lono_S111 = $MR_igds_S110
+  122.                   if ( $MR_igds_S110 < 0 ) then
+  124.                      $lono_S111 = or( 0x800000, -$MR_igds_S110 )
+  124.                   endif
+  126.                   $PRT_P72 = _ash( $lono_S111 + _rsh( _ash( $lono_S111, 15 ), 16 ), 16 )
+  126.                   substr[gds,13:1] = character*1( $PRT_P72 - and( -256, $PRT_P72 + _rsh( _ash( $PRT_P72, 7 ), 24 ) ) )
+  127.                   $LCS_lono_40 = $lono_S111 + _rsh( _ash( $lono_S111, 7 ), 24 )
+  127.                   $PRT_P73 = _ash( $LCS_lono_40, 8 )
+  127.                   substr[gds,14:1] = character*1( $PRT_P73 - and( -256, $PRT_P73 + _rsh( _ash( $PRT_P73, 7 ), 24 ) ) )
+  128.                   substr[gds,15:1] = character*1( $lono_S111 - and( -256, $LCS_lono_40 ) )
+  129.                   $MR_igds_S112 = 8[loc( igds ),0]
+  129.                   $latext_S113 = $MR_igds_S112
+  130.                   if ( $MR_igds_S112 < 0 ) then
+  132.                      $latext_S113 = or( 0x800000, -$MR_igds_S112 )
+  132.                   endif
+  134.                   $PRT_P74 = _ash( $latext_S113 + _rsh( _ash( $latext_S113, 15 ), 16 ), 16 )
+  134.                   substr[gds,17:1] = character*1( $PRT_P74 - and( -256, $PRT_P74 + _rsh( _ash( $PRT_P74, 7 ), 24 ) ) )
+  135.                   $LCS_latext_41 = $latext_S113 + _rsh( _ash( $latext_S113, 7 ), 24 )
+  135.                   $PRT_P75 = _ash( $LCS_latext_41, 8 )
+  135.                   substr[gds,18:1] = character*1( $PRT_P75 - and( -256, $PRT_P75 + _rsh( _ash( $PRT_P75, 7 ), 24 ) ) )
+  136.                   substr[gds,19:1] = character*1( $latext_S113 - and( -256, $LCS_latext_41 ) )
+  137.                   $MR_igds_S114 = 9[loc( igds ),0]
+  137.                   $lonext_S115 = $MR_igds_S114
+  138.                   if ( $MR_igds_S114 < 0 ) then
+  140.                      $lonext_S115 = or( 0x800000, -$MR_igds_S114 )
+  140.                   endif
+  142.                   $PRT_P76 = _ash( $lonext_S115 + _rsh( _ash( $lonext_S115, 15 ), 16 ), 16 )
+  142.                   substr[gds,20:1] = character*1( $PRT_P76 - and( -256, $PRT_P76 + _rsh( _ash( $PRT_P76, 7 ), 24 ) ) )
+  143.                   $LCS_lonext_42 = $lonext_S115 + _rsh( _ash( $lonext_S115, 7 ), 24 )
+  143.                   $PRT_P77 = _ash( $LCS_lonext_42, 8 )
+  143.                   substr[gds,21:1] = character*1( $PRT_P77 - and( -256, $PRT_P77 + _rsh( _ash( $PRT_P77, 7 ), 24 ) ) )
+  144.                   substr[gds,22:1] = character*1( $lonext_S115 - and( -256, $LCS_lonext_42 ) )
+  145.                   $MR_igds_S116 = 7[loc( igds ),0]
+  145.                   $ires_S14 = and( 128, $MR_igds_S116 )
+  145.                   $SW_MR_igds_V2 = $MR_igds_0
+  146.                   switch( -201 + $SW_MR_igds_V2 + 1 )
+  146.                   
+  148.                      case 1 :
+  148.                         goto 40
+  148.                      case 2 :
+  148.                         goto 40
+  148.                      case 3 :
+  148.                         goto 40
+  148.                      case 4 :
+  148.    40                   continue
+  148.                         $MR_igds_S119 = 10[loc( igds ),0]
+  148.                         $LCS_MR_igds_44 = $MR_igds_S119 + _rsh( _ash( $MR_igds_S119, 7 ), 24 )
+  148.                         $PRT_S120 = _ash( $LCS_MR_igds_44, 8 )
+  148.                         substr[gds,23:1] = character*1( $PRT_S120 - and( -256, $PRT_S120 + _rsh( _ash( $PRT_S120, 7 ), 24 ) ) )
+  149.                         substr[gds,24:1] = character*1( $MR_igds_S119 - and( -256, $LCS_MR_igds_44 ) )
+  150.                      case 5 :
+  150.                      case 0 :
+  150.                         if ( $ires_S14 == 0 ) then
+  151.                            substr[gds,23:1] = 'ÿ'
+  152.                            substr[gds,24:1] = 'ÿ'
+  152.                         else
+  154.                            $MR_igds_S117 = 11[loc( igds ),0]
+  154.                            $LCS_MR_igds_43 = $MR_igds_S117 + _rsh( _ash( $MR_igds_S117, 7 ), 24 )
+  154.                            $PRT_S118 = _ash( $LCS_MR_igds_43, 8 )
+  154.                            substr[gds,23:1] = character*1( $PRT_S118 - and( -256, $PRT_S118 + _rsh( _ash( $PRT_S118, 7 ), 24 ) ) )
+  155.                            substr[gds,24:1] = character*1( $MR_igds_S117 - and( -256, $LCS_MR_igds_43 ) )
+  155.                         endif
+  155.                   $SW_MR_igds_V3 = $MR_igds_0
+  157.                   switch( -4 + $SW_MR_igds_V3 + 1 )
+  157.                   
+  158.                      case 1 :
+  158.                         $MR_igds_S121 = 10[loc( igds ),0]
+  158.                         $LCS_MR_igds_45 = $MR_igds_S121 + _rsh( _ash( $MR_igds_S121, 7 ), 24 )
+  158.                         $PRT_S122 = _ash( $LCS_MR_igds_45, 8 )
+  158.                         substr[gds,25:1] = character*1( $PRT_S122 - and( -256, $PRT_S122 + _rsh( _ash( $PRT_S122, 7 ), 24 ) ) )
+  159.                         substr[gds,26:1] = character*1( $MR_igds_S121 - and( -256, $LCS_MR_igds_45 ) )
+  162.                      case 198 :
+  162.                         goto 50
+  162.                      case 199 :
+  162.                         goto 50
+  162.                      case 200 :
+  162.                         goto 50
+  162.                      case 201 :
+  162.    50                   continue
+  162.                         $MR_igds_S125 = 11[loc( igds ),0]
+  162.                         $LCS_MR_igds_47 = $MR_igds_S125 + _rsh( _ash( $MR_igds_S125, 7 ), 24 )
+  162.                         $PRT_S126 = _ash( $LCS_MR_igds_47, 8 )
+  162.                         substr[gds,25:1] = character*1( $PRT_S126 - and( -256, $PRT_S126 + _rsh( _ash( $PRT_S126, 7 ), 24 ) ) )
+  163.                         substr[gds,26:1] = character*1( $MR_igds_S125 - and( -256, $LCS_MR_igds_47 ) )
+  164.                      case 202 :
+  164.                      case 2 : 197 :
+  164.                      case 0 :
+  164.                         if ( $ires_S14 == 0 ) then
+  165.                            substr[gds,25:1] = 'ÿ'
+  166.                            substr[gds,26:1] = 'ÿ'
+  166.                         else
+  168.                            $MR_igds_S123 = 10[loc( igds ),0]
+  168.                            $LCS_MR_igds_46 = $MR_igds_S123 + _rsh( _ash( $MR_igds_S123, 7 ), 24 )
+  168.                            $PRT_S124 = _ash( $LCS_MR_igds_46, 8 )
+  168.                            substr[gds,25:1] = character*1( $PRT_S124 - and( -256, $PRT_S124 + _rsh( _ash( $PRT_S124, 7 ), 24 ) ) )
+  169.                            substr[gds,26:1] = character*1( $MR_igds_S123 - and( -256, $LCS_MR_igds_46 ) )
+  169.                         endif
+  171.                   $LCS_igds_48 = loc( igds )
+  171.                   $MR_igds_S127 = 12[$LCS_igds_48,0]
+  171.                   substr[gds,27:1] = character*1( $MR_igds_S127 )
+  172.                   substr[gds,28:1] = ''
+  173.                   substr[gds,29:1] = ''
+  174.                   substr[gds,30:1] = ''
+  175.                   substr[gds,31:1] = ''
+  176.                   if ( $MR_lengds_S47 > 32 ) then
+  179.                      $I_L179_S128 = 0
+  182.                      $SR_S132 = 33
+  181.                      $SR_S131 = 32
+  184.                      $PRT_P78 = -31 + $MR_lengds_S47
+  184.                      $CS_7 = _ash( $PRT_P78 + _rsh( $PRT_P78, 31 ), 1 )
+  184.                      if ( 4 <= $CS_7 ) then
+  179.                         $LIS_E4 = $CS_7 - $CS_7 - and( -4, $CS_7 + _rsh( _ash( $CS_7, 1 ), 62 ) )
+  179.                         do
+  181.                            $MR_igds_S129 = 18[$LCS_igds_48,$I_L179_S128]
+  181.                            $LCS_MR_igds_49 = $MR_igds_S129 + _rsh( _ash( $MR_igds_S129, 7 ), 24 )
+  181.                            $PRT_S130 = _ash( $LCS_MR_igds_49, 8 )
+  181.                            substr[gds,$SR_S131:1] = character*1( $PRT_S130 - and( -256, $PRT_S130 + _rsh( _ash( $PRT_S130, 7 ), 24 ) ) )
+  182.                            substr[gds,$SR_S132:1] = character*1( $MR_igds_S129 - and( -256, $LCS_MR_igds_49 ) )
+  182.                            $SR_S36 = 2 + $SR_S132
+  181.                            $SR_S35 = 2 + $SR_S131
+  181.                            $MR_igds_20 = 19[$LCS_igds_48,$I_L179_S128]
+  181.                            $LCS_MR_igds_50 = $MR_igds_20 + _rsh( _ash( $MR_igds_20, 7 ), 24 )
+  181.                            $PRT_P80 = _ash( $LCS_MR_igds_50, 8 )
+  181.                            substr[gds,$SR_S35:1] = character*1( $PRT_P80 - and( -256, $PRT_P80 + _rsh( _ash( $PRT_P80, 7 ), 24 ) ) )
+  182.                            substr[gds,$SR_S36:1] = character*1( $MR_igds_20 - and( -256, $LCS_MR_igds_50 ) )
+  182.                            $SR_S38 = 2 + $SR_S36
+  181.                            $SR_S37 = 2 + $SR_S35
+  181.                            $MR_igds_21 = 20[$LCS_igds_48,$I_L179_S128]
+  181.                            $LCS_MR_igds_51 = $MR_igds_21 + _rsh( _ash( $MR_igds_21, 7 ), 24 )
+  181.                            $PRT_P81 = _ash( $LCS_MR_igds_51, 8 )
+  181.                            substr[gds,$SR_S37:1] = character*1( $PRT_P81 - and( -256, $PRT_P81 + _rsh( _ash( $PRT_P81, 7 ), 24 ) ) )
+  182.                            substr[gds,$SR_S38:1] = character*1( $MR_igds_21 - and( -256, $LCS_MR_igds_51 ) )
+  182.                            $SR_S40 = 2 + $SR_S38
+  181.                            $SR_S39 = 2 + $SR_S37
+  181.                            $MR_igds_22 = 21[$LCS_igds_48,$I_L179_S128]
+  181.                            $LCS_MR_igds_52 = $MR_igds_22 + _rsh( _ash( $MR_igds_22, 7 ), 24 )
+  181.                            $PRT_P82 = _ash( $LCS_MR_igds_52, 8 )
+  181.                            substr[gds,$SR_S39:1] = character*1( $PRT_P82 - and( -256, $PRT_P82 + _rsh( _ash( $PRT_P82, 7 ), 24 ) ) )
+  182.                            substr[gds,$SR_S40:1] = character*1( $MR_igds_22 - and( -256, $LCS_MR_igds_52 ) )
+  182.                            $SR_S132 = 2 + $SR_S40
+  181.                            $SR_S131 = 2 + $SR_S39
+  184.                            $I_L179_S128 = 4 + $I_L179_S128
+  184.                            if ( $I_L179_S128 >= $LIS_E4 ) exit
+  184.                         enddo
+  184.                      endif
+  179.                      if ( $I_L179_S128 < $CS_7 ) then
+  179.                         do
+  181.                            $MR_igds_S133 = 18[$LCS_igds_48,$I_L179_S128]
+  181.                            $LCS_MR_igds_53 = $MR_igds_S133 + _rsh( _ash( $MR_igds_S133, 7 ), 24 )
+  181.                            $PRT_S134 = _ash( $LCS_MR_igds_53, 8 )
+  181.                            substr[gds,$SR_S131:1] = character*1( $PRT_S134 - and( -256, $PRT_S134 + _rsh( _ash( $PRT_S134, 7 ), 24 ) ) )
+  182.                            substr[gds,$SR_S132:1] = character*1( $MR_igds_S133 - and( -256, $LCS_MR_igds_53 ) )
+  182.                            $SR_S132 = 2 + $SR_S132
+  181.                            $SR_S131 = 2 + $SR_S131
+  184.                            $I_L179_S128 = 1 + $I_L179_S128
+  179.                            if ( $I_L179_S128 >= $CS_7 ) exit
+  179.                         enddo
+  179.                      endif
+  179.                      $I_L179_S135 = 0
+  180.                      $SC_isum_I4 = 0
+  184.                      if ( 4 <= $CS_7 ) then
+  179.                         $LIS_E5 = $CS_7 - $CS_7 - and( -4, $CS_7 + _rsh( _ash( $CS_7, 1 ), 62 ) )
+  179.                         do
+  180.                            $MR_igds_S136 = 18[$LCS_igds_48,$I_L179_S135]
+  180.                            $SC_isum_I4 = $SC_isum_I4 + $MR_igds_S136 + 19[$LCS_igds_48,$I_L179_S135] + 20[$LCS_igds_48,$I_L179_S135] + 21[$LCS_igds_48,$I_L179_S135]
+  184.                            $I_L179_S135 = 4 + $I_L179_S135
+  184.                            if ( $I_L179_S135 >= $LIS_E5 ) exit
+  184.                         enddo
+  184.                      endif
+  179.                      if ( $I_L179_S135 < $CS_7 ) then
+  179.                         do
+  180.                            $MR_igds_S137 = 18[$LCS_igds_48,$I_L179_S135]
+  180.                            $SC_isum_I4 = $SC_isum_I4 + $MR_igds_S137
+  184.                            $I_L179_S135 = 1 + $I_L179_S135
+  179.                            if ( $I_L179_S135 >= $CS_7 ) exit
+  179.                         enddo
+  179.                      endif
+  180.                      isum = $SC_isum_I4
+  180.                   endif
+  190.                case 2 :
+  190.                   $MR_igds_S50 = 3[$LCS_igds_3,0]
+  190.                   $LCS_MR_igds_4 = $MR_igds_S50 + _rsh( _ash( $MR_igds_S50, 7 ), 24 )
+  190.                   $PRT_S51 = _ash( $LCS_MR_igds_4, 8 )
+  190.                   substr[gds,6:1] = character*1( $PRT_S51 - and( -256, $PRT_S51 + _rsh( _ash( $PRT_S51, 7 ), 24 ) ) )
+  191.                   substr[gds,7:1] = character*1( $MR_igds_S50 - and( -256, $LCS_MR_igds_4 ) )
+  192.                   $MR_igds_S52 = 4[$LCS_igds_3,0]
+  192.                   $LCS_MR_igds_5 = $MR_igds_S52 + _rsh( _ash( $MR_igds_S52, 7 ), 24 )
+  192.                   $PRT_S53 = _ash( $LCS_MR_igds_5, 8 )
+  192.                   substr[gds,8:1] = character*1( $PRT_S53 - and( -256, $PRT_S53 + _rsh( _ash( $PRT_S53, 7 ), 24 ) ) )
+  193.                   substr[gds,9:1] = character*1( $MR_igds_S52 - and( -256, $LCS_MR_igds_5 ) )
+  194.                   $MR_igds_S54 = 5[$LCS_igds_3,0]
+  194.                   $lato_S55 = $MR_igds_S54
+  195.                   if ( $MR_igds_S54 < 0 ) then
+  197.                      $lato_S55 = or( 0x800000, -$MR_igds_S54 )
+  197.                   endif
+  199.                   $PRT_P34 = _ash( $lato_S55 + _rsh( _ash( $lato_S55, 15 ), 16 ), 16 )
+  199.                   substr[gds,10:1] = character*1( $PRT_P34 - and( -256, $PRT_P34 + _rsh( _ash( $PRT_P34, 7 ), 24 ) ) )
+  200.                   $LCS_lato_6 = $lato_S55 + _rsh( _ash( $lato_S55, 7 ), 24 )
+  200.                   $PRT_P35 = _ash( $LCS_lato_6, 8 )
+  200.                   substr[gds,11:1] = character*1( $PRT_P35 - and( -256, $PRT_P35 + _rsh( _ash( $PRT_P35, 7 ), 24 ) ) )
+  201.                   substr[gds,12:1] = character*1( $lato_S55 - and( -256, $LCS_lato_6 ) )
+  202.                   $MR_igds_S56 = 6[loc( igds ),0]
+  202.                   $lono_S57 = $MR_igds_S56
+  203.                   if ( $MR_igds_S56 < 0 ) then
+  205.                      $lono_S57 = or( 0x800000, -$MR_igds_S56 )
+  205.                   endif
+  207.                   $PRT_P36 = _ash( $lono_S57 + _rsh( _ash( $lono_S57, 15 ), 16 ), 16 )
+  207.                   substr[gds,13:1] = character*1( $PRT_P36 - and( -256, $PRT_P36 + _rsh( _ash( $PRT_P36, 7 ), 24 ) ) )
+  208.                   $LCS_lono_7 = $lono_S57 + _rsh( _ash( $lono_S57, 7 ), 24 )
+  208.                   $PRT_P37 = _ash( $LCS_lono_7, 8 )
+  208.                   substr[gds,14:1] = character*1( $PRT_P37 - and( -256, $PRT_P37 + _rsh( _ash( $PRT_P37, 7 ), 24 ) ) )
+  209.                   substr[gds,15:1] = character*1( $lono_S57 - and( -256, $LCS_lono_7 ) )
+  210.                   $MR_igds_S58 = 8[loc( igds ),0]
+  210.                   $latext_S59 = $MR_igds_S58
+  211.                   if ( $MR_igds_S58 < 0 ) then
+  213.                      $latext_S59 = or( 0x800000, -$MR_igds_S58 )
+  213.                   endif
+  215.                   $PRT_P38 = _ash( $latext_S59 + _rsh( _ash( $latext_S59, 15 ), 16 ), 16 )
+  215.                   substr[gds,17:1] = character*1( $PRT_P38 - and( -256, $PRT_P38 + _rsh( _ash( $PRT_P38, 7 ), 24 ) ) )
+  216.                   $LCS_latext_8 = $latext_S59 + _rsh( _ash( $latext_S59, 7 ), 24 )
+  216.                   $PRT_P39 = _ash( $LCS_latext_8, 8 )
+  216.                   substr[gds,18:1] = character*1( $PRT_P39 - and( -256, $PRT_P39 + _rsh( _ash( $PRT_P39, 7 ), 24 ) ) )
+  217.                   substr[gds,19:1] = character*1( $latext_S59 - and( -256, $LCS_latext_8 ) )
+  218.                   $MR_igds_S60 = 9[loc( igds ),0]
+  218.                   $lonext_S61 = $MR_igds_S60
+  219.                   if ( $MR_igds_S60 < 0 ) then
+  221.                      $lonext_S61 = or( 0x800000, -$MR_igds_S60 )
+  221.                   endif
+  223.                   $PRT_P40 = _ash( $lonext_S61 + _rsh( _ash( $lonext_S61, 15 ), 16 ), 16 )
+  223.                   substr[gds,20:1] = character*1( $PRT_P40 - and( -256, $PRT_P40 + _rsh( _ash( $PRT_P40, 7 ), 24 ) ) )
+  224.                   $LCS_lonext_9 = $lonext_S61 + _rsh( _ash( $lonext_S61, 7 ), 24 )
+  224.                   $PRT_P41 = _ash( $LCS_lonext_9, 8 )
+  224.                   substr[gds,21:1] = character*1( $PRT_P41 - and( -256, $PRT_P41 + _rsh( _ash( $PRT_P41, 7 ), 24 ) ) )
+  225.                   substr[gds,22:1] = character*1( $lonext_S61 - and( -256, $LCS_lonext_9 ) )
+  226.                   $LCS_igds_11 = loc( igds )
+  226.                   $MR_igds_S62 = 12[$LCS_igds_11,0]
+  226.                   $PRT_P42 = _ash( $MR_igds_S62 + _rsh( _ash( $MR_igds_S62, 15 ), 16 ), 16 )
+  226.                   substr[gds,23:1] = character*1( $PRT_P42 - and( -256, $PRT_P42 + _rsh( _ash( $PRT_P42, 7 ), 24 ) ) )
+  227.                   $LCS_MR_igds_10 = $MR_igds_S62 + _rsh( _ash( $MR_igds_S62, 7 ), 24 )
+  227.                   $PRT_P43 = _ash( $LCS_MR_igds_10, 8 )
+  227.                   substr[gds,24:1] = character*1( $PRT_P43 - and( -256, $PRT_P43 + _rsh( _ash( $PRT_P43, 7 ), 24 ) ) )
+  228.                   substr[gds,25:1] = character*1( $MR_igds_S62 - and( -256, $LCS_MR_igds_10 ) )
+  229.                   substr[gds,26:1] = ''
+  230.                   substr[gds,27:1] = character*1( 13[$LCS_igds_11,0] )
+  231.                   $MR_igds_S63 = 11[$LCS_igds_11,0]
+  231.                   $PRT_P44 = _ash( $MR_igds_S63 + _rsh( _ash( $MR_igds_S63, 15 ), 16 ), 16 )
+  231.                   substr[gds,28:1] = character*1( $PRT_P44 - and( -256, $PRT_P44 + _rsh( _ash( $PRT_P44, 7 ), 24 ) ) )
+  232.                   $LCS_MR_igds_12 = $MR_igds_S63 + _rsh( _ash( $MR_igds_S63, 7 ), 24 )
+  232.                   $PRT_S64 = _ash( $LCS_MR_igds_12, 8 )
+  232.                   substr[gds,29:1] = character*1( $PRT_S64 - and( -256, $PRT_S64 + _rsh( _ash( $PRT_S64, 7 ), 24 ) ) )
+  233.                   substr[gds,30:1] = character*1( $MR_igds_S63 - and( -256, $LCS_MR_igds_12 ) )
+  234.                   $MR_igds_S65 = 10[$LCS_igds_11,0]
+  234.                   $PRT_S66 = _ash( $MR_igds_S65 + _rsh( _ash( $MR_igds_S65, 15 ), 16 ), 16 )
+  234.                   substr[gds,31:1] = character*1( $PRT_S66 - and( -256, $PRT_S66 + _rsh( _ash( $PRT_S66, 7 ), 24 ) ) )
+  235.                   $LCS_MR_igds_13 = $MR_igds_S65 + _rsh( _ash( $MR_igds_S65, 7 ), 24 )
+  235.                   $PRT_S67 = _ash( $LCS_MR_igds_13, 8 )
+  235.                   substr[gds,32:1] = character*1( $PRT_S67 - and( -256, $PRT_S67 + _rsh( _ash( $PRT_S67, 7 ), 24 ) ) )
+  236.                   substr[gds,33:1] = character*1( $MR_igds_S65 - and( -256, $LCS_MR_igds_13 ) )
+  237.                   substr[gds,34:1] = ''
+  238.                   substr[gds,35:1] = ''
+  239.                   substr[gds,36:1] = ''
+  240.                   substr[gds,37:1] = ''
+  241.                   substr[gds,38:1] = ''
+  242.                   substr[gds,39:1] = ''
+  243.                   substr[gds,40:1] = ''
+  244.                   substr[gds,41:1] = ''
+  247.                case 4 :
+  247.                   $LCS_igds_15 = loc( igds )
+  247.                   $MR_igds_S68 = 3[$LCS_igds_15,0]
+  247.                   $LCS_MR_igds_14 = $MR_igds_S68 + _rsh( _ash( $MR_igds_S68, 7 ), 24 )
+  247.                   $PRT_S69 = _ash( $LCS_MR_igds_14, 8 )
+  247.                   substr[gds,6:1] = character*1( $PRT_S69 - and( -256, $PRT_S69 + _rsh( _ash( $PRT_S69, 7 ), 24 ) ) )
+  248.                   substr[gds,7:1] = character*1( $MR_igds_S68 - and( -256, $LCS_MR_igds_14 ) )
+  249.                   $MR_igds_S70 = 4[$LCS_igds_15,0]
+  249.                   $LCS_MR_igds_16 = $MR_igds_S70 + _rsh( _ash( $MR_igds_S70, 7 ), 24 )
+  249.                   $PRT_S71 = _ash( $LCS_MR_igds_16, 8 )
+  249.                   substr[gds,8:1] = character*1( $PRT_S71 - and( -256, $PRT_S71 + _rsh( _ash( $PRT_S71, 7 ), 24 ) ) )
+  250.                   substr[gds,9:1] = character*1( $MR_igds_S70 - and( -256, $LCS_MR_igds_16 ) )
+  251.                   $MR_igds_S72 = 5[$LCS_igds_15,0]
+  251.                   $lato_S73 = $MR_igds_S72
+  252.                   if ( $MR_igds_S72 < 0 ) then
+  254.                      $lato_S73 = or( 0x800000, -$MR_igds_S72 )
+  254.                   endif
+  256.                   $PRT_P48 = _ash( $lato_S73 + _rsh( _ash( $lato_S73, 15 ), 16 ), 16 )
+  256.                   substr[gds,10:1] = character*1( $PRT_P48 - and( -256, $PRT_P48 + _rsh( _ash( $PRT_P48, 7 ), 24 ) ) )
+  257.                   $LCS_lato_17 = $lato_S73 + _rsh( _ash( $lato_S73, 7 ), 24 )
+  257.                   $PRT_P49 = _ash( $LCS_lato_17, 8 )
+  257.                   substr[gds,11:1] = character*1( $PRT_P49 - and( -256, $PRT_P49 + _rsh( _ash( $PRT_P49, 7 ), 24 ) ) )
+  258.                   substr[gds,12:1] = character*1( $lato_S73 - and( -256, $LCS_lato_17 ) )
+  259.                   $MR_igds_S74 = 6[loc( igds ),0]
+  259.                   $lono_S75 = $MR_igds_S74
+  260.                   if ( $MR_igds_S74 < 0 ) then
+  262.                      $lono_S75 = or( 0x800000, -$MR_igds_S74 )
+  262.                   endif
+  264.                   $PRT_P50 = _ash( $lono_S75 + _rsh( _ash( $lono_S75, 15 ), 16 ), 16 )
+  264.                   substr[gds,13:1] = character*1( $PRT_P50 - and( -256, $PRT_P50 + _rsh( _ash( $PRT_P50, 7 ), 24 ) ) )
+  265.                   $LCS_lono_18 = $lono_S75 + _rsh( _ash( $lono_S75, 7 ), 24 )
+  265.                   $PRT_P51 = _ash( $LCS_lono_18, 8 )
+  265.                   substr[gds,14:1] = character*1( $PRT_P51 - and( -256, $PRT_P51 + _rsh( _ash( $PRT_P51, 7 ), 24 ) ) )
+  266.                   substr[gds,15:1] = character*1( $lono_S75 - and( -256, $LCS_lono_18 ) )
+  267.                   $MR_igds_S76 = 8[loc( igds ),0]
+  267.                   $lonm_S77 = $MR_igds_S76
+  268.                   if ( $MR_igds_S76 < 0 ) then
+  270.                      $lonm_S77 = or( 0x800000, -$MR_igds_S76 )
+  270.                   endif
+  272.                   $PRT_P52 = _ash( $lonm_S77 + _rsh( _ash( $lonm_S77, 15 ), 16 ), 16 )
+  272.                   substr[gds,17:1] = character*1( $PRT_P52 - and( -256, $PRT_P52 + _rsh( _ash( $PRT_P52, 7 ), 24 ) ) )
+  273.                   $LCS_lonm_19 = $lonm_S77 + _rsh( _ash( $lonm_S77, 7 ), 24 )
+  273.                   $PRT_P53 = _ash( $LCS_lonm_19, 8 )
+  273.                   substr[gds,18:1] = character*1( $PRT_P53 - and( -256, $PRT_P53 + _rsh( _ash( $PRT_P53, 7 ), 24 ) ) )
+  274.                   substr[gds,19:1] = character*1( $lonm_S77 - and( -256, $LCS_lonm_19 ) )
+  275.                   $LCS_igds_21 = loc( igds )
+  275.                   $MR_igds_S78 = 9[$LCS_igds_21,0]
+  275.                   $PRT_S79 = _ash( $MR_igds_S78 + _rsh( _ash( $MR_igds_S78, 15 ), 16 ), 16 )
+  275.                   substr[gds,20:1] = character*1( $PRT_S79 - and( -256, $PRT_S79 + _rsh( _ash( $PRT_S79, 7 ), 24 ) ) )
+  276.                   $LCS_MR_igds_20 = $MR_igds_S78 + _rsh( _ash( $MR_igds_S78, 7 ), 24 )
+  276.                   $PRT_S80 = _ash( $LCS_MR_igds_20, 8 )
+  276.                   substr[gds,21:1] = character*1( $PRT_S80 - and( -256, $PRT_S80 + _rsh( _ash( $PRT_S80, 7 ), 24 ) ) )
+  277.                   substr[gds,22:1] = character*1( $MR_igds_S78 - and( -256, $LCS_MR_igds_20 ) )
+  278.                   $MR_igds_S81 = 10[$LCS_igds_21,0]
+  278.                   $PRT_S82 = _ash( $MR_igds_S81 + _rsh( _ash( $MR_igds_S81, 15 ), 16 ), 16 )
+  278.                   substr[gds,23:1] = character*1( $PRT_S82 - and( -256, $PRT_S82 + _rsh( _ash( $PRT_S82, 7 ), 24 ) ) )
+  279.                   $LCS_MR_igds_22 = $MR_igds_S81 + _rsh( _ash( $MR_igds_S81, 7 ), 24 )
+  279.                   $PRT_S83 = _ash( $LCS_MR_igds_22, 8 )
+  279.                   substr[gds,24:1] = character*1( $PRT_S83 - and( -256, $PRT_S83 + _rsh( _ash( $PRT_S83, 7 ), 24 ) ) )
+  280.                   substr[gds,25:1] = character*1( $MR_igds_S81 - and( -256, $LCS_MR_igds_22 ) )
+  281.                   $MR_igds_S84 = 11[$LCS_igds_21,0]
+  281.                   substr[gds,26:1] = character*1( $MR_igds_S84 )
+  282.                   $MR_igds_S85 = 12[$LCS_igds_21,0]
+  282.                   substr[gds,27:1] = character*1( $MR_igds_S85 )
+  283.                   $MR_igds_14 = 14[$LCS_igds_21,0]
+  283.                   $PRT_P56 = _ash( $MR_igds_14 + _rsh( _ash( $MR_igds_14, 15 ), 16 ), 16 )
+  283.                   substr[gds,28:1] = character*1( $PRT_P56 - and( -256, $PRT_P56 + _rsh( _ash( $PRT_P56, 7 ), 24 ) ) )
+  284.                   $LCS_MR_igds_23 = $MR_igds_14 + _rsh( _ash( $MR_igds_14, 7 ), 24 )
+  284.                   $PRT_P57 = _ash( $LCS_MR_igds_23, 8 )
+  284.                   substr[gds,29:1] = character*1( $PRT_P57 - and( -256, $PRT_P57 + _rsh( _ash( $PRT_P57, 7 ), 24 ) ) )
+  285.                   substr[gds,30:1] = character*1( $MR_igds_14 - and( -256, $LCS_MR_igds_23 ) )
+  286.                   $MR_igds_15 = 15[$LCS_igds_21,0]
+  286.                   $PRT_P58 = _ash( $MR_igds_15 + _rsh( _ash( $MR_igds_15, 15 ), 16 ), 16 )
+  286.                   substr[gds,31:1] = character*1( $PRT_P58 - and( -256, $PRT_P58 + _rsh( _ash( $PRT_P58, 7 ), 24 ) ) )
+  287.                   $LCS_MR_igds_24 = $MR_igds_15 + _rsh( _ash( $MR_igds_15, 7 ), 24 )
+  287.                   $PRT_P59 = _ash( $LCS_MR_igds_24, 8 )
+  287.                   substr[gds,32:1] = character*1( $PRT_P59 - and( -256, $PRT_P59 + _rsh( _ash( $PRT_P59, 7 ), 24 ) ) )
+  288.                   substr[gds,33:1] = character*1( $MR_igds_15 - and( -256, $LCS_MR_igds_24 ) )
+  289.                   $MR_igds_16 = 16[$LCS_igds_21,0]
+  289.                   $PRT_P60 = _ash( $MR_igds_16 + _rsh( _ash( $MR_igds_16, 15 ), 16 ), 16 )
+  289.                   substr[gds,34:1] = character*1( $PRT_P60 - and( -256, $PRT_P60 + _rsh( _ash( $PRT_P60, 7 ), 24 ) ) )
+  290.                   $LCS_MR_igds_25 = $MR_igds_16 + _rsh( _ash( $MR_igds_16, 7 ), 24 )
+  290.                   $PRT_P61 = _ash( $LCS_MR_igds_25, 8 )
+  290.                   substr[gds,35:1] = character*1( $PRT_P61 - and( -256, $PRT_P61 + _rsh( _ash( $PRT_P61, 7 ), 24 ) ) )
+  291.                   substr[gds,36:1] = character*1( $MR_igds_16 - and( -256, $LCS_MR_igds_25 ) )
+  292.                   $MR_igds_17 = 17[$LCS_igds_21,0]
+  292.                   $PRT_P62 = _ash( $MR_igds_17 + _rsh( _ash( $MR_igds_17, 15 ), 16 ), 16 )
+  292.                   substr[gds,37:1] = character*1( $PRT_P62 - and( -256, $PRT_P62 + _rsh( _ash( $PRT_P62, 7 ), 24 ) ) )
+  293.                   $LCS_MR_igds_26 = $MR_igds_17 + _rsh( _ash( $MR_igds_17, 7 ), 24 )
+  293.                   $PRT_P63 = _ash( $LCS_MR_igds_26, 8 )
+  293.                   substr[gds,38:1] = character*1( $PRT_P63 - and( -256, $PRT_P63 + _rsh( _ash( $PRT_P63, 7 ), 24 ) ) )
+  294.                   substr[gds,39:1] = character*1( $MR_igds_17 - and( -256, $LCS_MR_igds_26 ) )
+  295.                   substr[gds,40:1] = ''
+  296.                   substr[gds,41:1] = ''
+  299.                case 6 :
+  299.                   $LCS_igds_28 = loc( igds )
+  299.                   $MR_igds_S86 = 3[$LCS_igds_28,0]
+  299.                   $LCS_MR_igds_27 = $MR_igds_S86 + _rsh( _ash( $MR_igds_S86, 7 ), 24 )
+  299.                   $PRT_S87 = _ash( $LCS_MR_igds_27, 8 )
+  299.                   substr[gds,6:1] = character*1( $PRT_S87 - and( -256, $PRT_S87 + _rsh( _ash( $PRT_S87, 7 ), 24 ) ) )
+  300.                   substr[gds,7:1] = character*1( $MR_igds_S86 - and( -256, $LCS_MR_igds_27 ) )
+  301.                   $MR_igds_S88 = 4[$LCS_igds_28,0]
+  301.                   $LCS_MR_igds_29 = $MR_igds_S88 + _rsh( _ash( $MR_igds_S88, 7 ), 24 )
+  301.                   $PRT_S89 = _ash( $LCS_MR_igds_29, 8 )
+  301.                   substr[gds,8:1] = character*1( $PRT_S89 - and( -256, $PRT_S89 + _rsh( _ash( $PRT_S89, 7 ), 24 ) ) )
+  302.                   substr[gds,9:1] = character*1( $MR_igds_S88 - and( -256, $LCS_MR_igds_29 ) )
+  303.                   $MR_igds_S90 = 5[$LCS_igds_28,0]
+  303.                   $lato_S91 = $MR_igds_S90
+  304.                   if ( $MR_igds_S90 < 0 ) then
+  306.                      $lato_S91 = or( 0x800000, -$MR_igds_S90 )
+  306.                   endif
+  308.                   $PRT_P64 = _ash( $lato_S91 + _rsh( _ash( $lato_S91, 15 ), 16 ), 16 )
+  308.                   substr[gds,10:1] = character*1( $PRT_P64 - and( -256, $PRT_P64 + _rsh( _ash( $PRT_P64, 7 ), 24 ) ) )
+  309.                   $LCS_lato_30 = $lato_S91 + _rsh( _ash( $lato_S91, 7 ), 24 )
+  309.                   $PRT_P65 = _ash( $LCS_lato_30, 8 )
+  309.                   substr[gds,11:1] = character*1( $PRT_P65 - and( -256, $PRT_P65 + _rsh( _ash( $PRT_P65, 7 ), 24 ) ) )
+  310.                   substr[gds,12:1] = character*1( $lato_S91 - and( -256, $LCS_lato_30 ) )
+  311.                   $MR_igds_S92 = 6[loc( igds ),0]
+  311.                   $lono_S93 = $MR_igds_S92
+  312.                   if ( $MR_igds_S92 < 0 ) then
+  314.                      $lono_S93 = or( 0x800000, -$MR_igds_S92 )
+  314.                   endif
+  316.                   $PRT_P66 = _ash( $lono_S93 + _rsh( _ash( $lono_S93, 15 ), 16 ), 16 )
+  316.                   substr[gds,13:1] = character*1( $PRT_P66 - and( -256, $PRT_P66 + _rsh( _ash( $PRT_P66, 7 ), 24 ) ) )
+  317.                   $LCS_lono_31 = $lono_S93 + _rsh( _ash( $lono_S93, 7 ), 24 )
+  317.                   $PRT_P67 = _ash( $LCS_lono_31, 8 )
+  317.                   substr[gds,14:1] = character*1( $PRT_P67 - and( -256, $PRT_P67 + _rsh( _ash( $PRT_P67, 7 ), 24 ) ) )
+  318.                   substr[gds,15:1] = character*1( $lono_S93 - and( -256, $LCS_lono_31 ) )
+  319.                   $MR_igds_S94 = 8[loc( igds ),0]
+  319.                   $lonm_S95 = $MR_igds_S94
+  320.                   if ( $MR_igds_S94 < 0 ) then
+  322.                      $lonm_S95 = or( 0x800000, -$MR_igds_S94 )
+  322.                   endif
+  324.                   $PRT_P68 = _ash( $lonm_S95 + _rsh( _ash( $lonm_S95, 15 ), 16 ), 16 )
+  324.                   substr[gds,17:1] = character*1( $PRT_P68 - and( -256, $PRT_P68 + _rsh( _ash( $PRT_P68, 7 ), 24 ) ) )
+  325.                   $LCS_lonm_32 = $lonm_S95 + _rsh( _ash( $lonm_S95, 7 ), 24 )
+  325.                   $PRT_P69 = _ash( $LCS_lonm_32, 8 )
+  325.                   substr[gds,18:1] = character*1( $PRT_P69 - and( -256, $PRT_P69 + _rsh( _ash( $PRT_P69, 7 ), 24 ) ) )
+  326.                   substr[gds,19:1] = character*1( $lonm_S95 - and( -256, $LCS_lonm_32 ) )
+  327.                   $LCS_igds_34 = loc( igds )
+  327.                   $MR_igds_S96 = 9[$LCS_igds_34,0]
+  327.                   $PRT_S97 = _ash( $MR_igds_S96 + _rsh( _ash( $MR_igds_S96, 15 ), 16 ), 16 )
+  327.                   substr[gds,20:1] = character*1( $PRT_S97 - and( -256, $PRT_S97 + _rsh( _ash( $PRT_S97, 7 ), 24 ) ) )
+  328.                   $LCS_MR_igds_33 = $MR_igds_S96 + _rsh( _ash( $MR_igds_S96, 7 ), 24 )
+  328.                   $PRT_S98 = _ash( $LCS_MR_igds_33, 8 )
+  328.                   substr[gds,21:1] = character*1( $PRT_S98 - and( -256, $PRT_S98 + _rsh( _ash( $PRT_S98, 7 ), 24 ) ) )
+  329.                   substr[gds,22:1] = character*1( $MR_igds_S96 - and( -256, $LCS_MR_igds_33 ) )
+  330.                   $MR_igds_S99 = 10[$LCS_igds_34,0]
+  330.                   $PRT_S100 = _ash( $MR_igds_S99 + _rsh( _ash( $MR_igds_S99, 15 ), 16 ), 16 )
+  330.                   substr[gds,23:1] = character*1( $PRT_S100 - and( -256, $PRT_S100 + _rsh( _ash( $PRT_S100, 7 ), 24 ) ) )
+  331.                   $LCS_MR_igds_35 = $MR_igds_S99 + _rsh( _ash( $MR_igds_S99, 7 ), 24 )
+  331.                   $PRT_S101 = _ash( $LCS_MR_igds_35, 8 )
+  331.                   substr[gds,24:1] = character*1( $PRT_S101 - and( -256, $PRT_S101 + _rsh( _ash( $PRT_S101, 7 ), 24 ) ) )
+  332.                   substr[gds,25:1] = character*1( $MR_igds_S99 - and( -256, $LCS_MR_igds_35 ) )
+  333.                   $MR_igds_S102 = 11[$LCS_igds_34,0]
+  333.                   substr[gds,26:1] = character*1( $MR_igds_S102 )
+  334.                   $MR_igds_S103 = 12[$LCS_igds_34,0]
+  334.                   substr[gds,27:1] = character*1( $MR_igds_S103 )
+  335.                   substr[gds,28:1] = ''
+  336.                   substr[gds,29:1] = ''
+  337.                   substr[gds,30:1] = ''
+  338.                   substr[gds,31:1] = ''
+  106.                case 206 :
+  106.                case 7 : 201 :
+  106.                case 3 :
+  106.                case 0 :
+  346.             if ( $MR_igds_0 /= 0 ) then
+  339.                goto 60
+  346.             else if ( $MR_igds_S48 /= 0 ) then
+  346.                goto 60
+  346.             else if ( $MR_igds_S49 /= 255 ) then
+  348.                $MR_npts_S138 = isum
+  348.                0[loc( npts ),0] = $MR_npts_S138
+  348.             else
+  348.    60          continue
+  350.                $LCS_igds_54 = loc( igds )
+  350.                $MR_igds_S139 = 3[$LCS_igds_54,0]
+  350.                $MR_igds_S140 = 4[$LCS_igds_54,0]
+  350.                $MR_npts_S141 = $MR_igds_S139 * $MR_igds_S140
+  350.                0[loc( npts ),0] = $MR_npts_S141
+  350.             endif
+  362.             $MR_igds_S142 = 7[loc( igds ),0]
+  362.             substr[gds,16:1] = character*1( or( $MR_igds_S142, _lsh( 0[loc( icomp ),0], 3 ) ) )
+   81.          case 206 :
+   81.          case 52 : 201 :
+   81.          case 15 : 50 :
+   81.          case 7 : 13 :
+   81.          case 0 :
+   81.             0[loc( igerr ),0] = 1
+  365.       return
+  365.       end
+  365.       

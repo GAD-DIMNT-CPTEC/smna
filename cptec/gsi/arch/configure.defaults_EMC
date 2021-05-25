@@ -1,0 +1,121 @@
+###########################################################
+#ARCH	Linux i486 i586 i686, PGI compilers (pgf90 & pgcc) # distributed memory parallel (dmpar,optimized)
+###########################################################
+CORELIB          =  CONFIGURE_NCEPLIB_PATH
+COREINC          =  ${CORELIB}/incmod
+
+# ------------------------------------------------------------
+# LIBRARY Specifications (NCEPLIB , NetCDF, WRFIO, CRTM)
+# ------------------------------------------------------------
+#    NCEPLIB library names
+BACIO_LIB   =  bacio_4
+BUFR_LIB    =  bufr_v10.2.3_d_64
+SFCIO_LIB   =  sfcio_big_4
+SIGIO_LIB   =  sigio_4
+SP_LIB      =  sp_d
+NEMSIO_LIB  =  nemsio
+W3EMC_LIB   =  w3emc_d
+W3NCO_LIB   =  w3nco_d
+CRTM_LIB    =  crtm_v2.1.3
+ 
+#    NCEPLIB include paths
+INCsfcio    =  $(COREINC)/$(SFCIO_LIB)
+INCsigio    =  $(COREINC)/$(SIGIO_LIB)
+INCnemsio   =  $(COREINC)/$(NEMSIO_LIB)
+INCw3       =  $(COREINC)/$(W3EMC_LIB)
+INCcrtm     =  $(COREINC)/$(CRTM_LIB)
+
+LIBS_N      =  -L$(CORELIB) -l$(SFCIO_LIB) -l$(SIGIO_LIB) -l$(SP_LIB) -l$(BACIO_LIB) -l$(BUFR_LIB) -l$(CRTM_LIB) -l$(NEMSIO_LIB) -l$(W3EMC_LIB) -l$(W3NCO_LIB)
+                  -lcrtm_v2.1.3 
+                  $(WRFLIB) 
+                  -L$(NETCDF)/lib -lnetcdf
+
+# ------------------------------------------------------------
+# Fortran Compiler, Preprosessor & Compiler Options
+# ------------------------------------------------------------
+SFC            =  pgf90
+CF             =  mpif90 -free -f90=$(SFC)
+FC             =  $(CF)
+
+
+PROF= #-pg
+OMP = #-qsmp=noauto
+
+FFLAGS_F90    = -D_REAL8_ -DWRF -openmp
+
+FFLAGS_COM_N  = -I ./ -I $(INCcrtm) -I $(INCsfcio) -I $(INCsigio) -I $(INCnemsio) \
+                -I $(INCnetcdf) -I $(INCw3) -O3 -traceback -convert big_endian -assume byterecl \
+                -g -fp-model strict
+
+FFLAGS_COM_N_NOSWAP  = -I ./ -I $(INCcrtm) -I $(INCsfcio) -I $(INCsigio) \
+                  -I $(INCnemsio) -I $(INCnetcdf) -I $(INCw3) \
+                  -O3 -traceback -g -fp-model strict \
+                  -convert big_endian -assume byterecl
+
+FFLAGS_N  = $(FFLAGS_F90) $(FFLAGS_COM_N) $(PROF)
+FFLAGS_NOSWAP_N  = $(FFLAGS_F90) $(FFLAGS_COM_N_NOSWAP) $(PROF)
+FFLAGS_f  = $(FFLAGS_COM_N) $(PROF)
+FFLAGS    = $(FFLAGS_N) $(PROF)
+
+# ------------------------------------------------------------
+# C Compiler, Preprocessor & Compiler Options
+# ------------------------------------------------------------
+SCC            =  pgcc
+CC             =  ${SCC}
+
+# Normal Mode flags
+CFLAGS_N       =  -DLINUX -Dfunder -I ./ -DFortranByte=char -DFortranInt=int -DFortranLlong='long long' -O3 $(PROF)
+
+# Debug Mode flags
+CFLAGS_D       =  -DLINUX -Dfunder -I ./ -DFortranByte=char -DFortranInt=int -DFortranLlong='long long' -g
+
+# ------------------
+# Linker and options
+# ------------------
+  LD            = $(CF) -mkl -lmpi -Wl,-Map,loadmap.txt
+
+#--- Normal mode options
+  LDFLAGS_N     =
+
+  LDFLAGS       = $(LDFLAGS_N)
+
+#--- Debug mode options
+
+  LIBS_D        = $(LIBS_N)
+
+  LDFLAGS_D     =
+
+#--- Empty out mpi library definition: embedded in compiler
+ 
+LIBmpi        =
+
+
+
+
+
+###########################################################
+#ARCH	Linux x86_64, PGI compilers (pgf90 & pgcc) # distributed memory parallel (dmpar,optimize)
+#
+
+###########################################################
+#ARCH	Linux x86_64, PGI compilers (pgf90 & gcc) # distributed memory parallel (dmpar,optimize)
+#
+
+###########################################################
+#ARCH	Linux x86_64, GNU compilers (gfortran & gcc) # distributed memory parallel (dmpar,optimize)
+#
+
+###########################################################
+#ARCH	Linux i486 i586 i686, Intel compiler (ifort & icc) # (dmpar,optimize)
+#
+
+###########################################################
+#ARCH	Linux x86_64, Intel compiler (ifort & icc) # (dmpar,optimize)
+#
+
+###########################################################
+#ARCH	Linux x86_64, Intel/gnu compiler (ifort & gcc)	# (dmpar,optimize)
+#
+
+##################################################################
+#ARCH	NULL

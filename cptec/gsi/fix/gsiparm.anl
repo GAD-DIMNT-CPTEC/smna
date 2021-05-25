@@ -1,0 +1,77 @@
+ &SETUP
+   miter=1,niter(1)=100,niter(2)=1,
+   write_diag(1)=.true.,write_diag(2)=.false.,write_diag(3)=.true.,
+   center_name='#CENTER#',
+   gencode=78,qoption=2,
+   factqmin=0.005,factqmax=0.905,
+   iguess=-1,
+   oneobtest=.#ONEOBTEST#.,retrieval=.false.,
+   deltim=1200,l_foto=.false.,
+   use_pbl=.false.,use_compress=.false.,
+   lread_obs_save=.false.,lread_obs_skip=.false.,
+   print_diag_pcg=.true.,
+   lwrite_peakwt=.true.,
+ /
+ &GRIDOPTS
+   JCAP=#TRUNC#,JCAP_B=#TRUNCB#,NLAT=#JMAX#,NLON=#IMAX#,nsig=#KMAX#,
+   regional=.false.,nlayers(#NLVL#)=3,nlayers(#NLV#)=6,
+ /
+ &BKGERR
+   vs=0.7,
+   hzscl=1.7,0.8,0.5,
+   hswgt=0.45,0.3,0.25,
+   bw=0.0,norsp=4,
+   bkgv_flowdep=.true.,bkgv_rewgtfct=1.5,
+ /
+ &ANBKGERR
+ anisotropic=.false.
+ /
+ &JCOPTS
+ ljcpdry=.false.,bamp_jcpdry=2.5e7,
+ /
+ &STRONGOPTS
+ nstrong=0,nvmodes_keep=8,period_max=6.,period_width=1.5,
+ baldiag_full=.FALSE.,baldiag_inc=.FALSE.,
+ /
+ &OBSQC
+   dfact=0.75,dfact1=3.0,noiqc=.false.,c_varqc=0.02,vadfile='prepbufr',
+ /
+ &OBS_INPUT
+dmesh(1)=180.0,dmesh(2)=145.0,dmesh(3)=240.0,dmesh(4)=160.0,dmesh(5)=180.0,dmesh(6)=150.0,time_window_max=3.0,
+ /
+OBS_INPUT::
+!  dfile          dtype       dplat     dsis                 dval    dthin dsfcalc
+   prepbufr       ps          null      ps                   1.0     0     0
+   prepbufr       t           null      t                    1.0     0     0
+   prepbufr       q           null      q                    1.0     0     0
+   prepbufr       pw          null      pw                   1.0     0     0
+   prepbufr       uv          null      uv                   1.0     0     0
+   prepbufr       spd         null      spd                  1.0     0     0
+   prepbufr       dw          null      dw                   1.0     0     0
+   prepbufr       sst         null      sst                  1.0     0     0
+   satwnd         uv          null      uv                   1.0     0     0   
+   gpsrobufr      gps_ref     null      gps                  1.0     0     0
+   amsuabufr      amsua       n15       amsua_n15           10.0     2     0
+   amsuabufr      amsua       n18       amsua_n18           10.0     2     0
+   amsuabufr      amsua       n19       amsua_n19           10.0     2     0
+   amsuabufr      amsua       metop-a   amsua_metop-a       10.0     2     0
+   amsuabufr      amsua       metop-b   amsua_metop-b       10.0     2     0
+::
+ &SUPEROB_RADAR
+   del_azimuth=5.,del_elev=.25,del_range=5000.,del_time=.5,elev_angle_max=5.,minnum=50,range_max=100000.,
+   l2superob_only=.false.,
+ /
+ &LAG_DATA
+ /
+ &HYBRID_ENSEMBLE
+   l_hyb_ens=.false.,
+ /
+ &RAPIDREFRESH_CLDSURF
+ /
+ &CHEM
+ /
+ &SINGLEOB_TEST
+   maginnov=1.0,magoberr=0.8,oneob_type='t',
+   oblat=38.,oblon=279.,obpres=500.,obdattim=#LABELANL#,
+   obhourset=0.,
+ /

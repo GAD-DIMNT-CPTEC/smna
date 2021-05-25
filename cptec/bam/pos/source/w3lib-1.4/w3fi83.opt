@@ -1,0 +1,107 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi83.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi83.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi83( data, npts, fval1, fdiff1, iscal2, isc10, kpds, kgds )
+   50.       $dscal_S0 = 10.0 ** isc10
+   51.       if ( 10.0 ** isc10 == 0.0 ) then
+   52.          if ( npts > 0 ) then
+   52.             $I_L52_34 = 0
+   52. !dir$ ivdep
+   52.             do
+   53.                data(1 + $I_L52_34) = 1.0
+   54.                $I_L52_34 = 1 + $I_L52_34
+   52.                if ( $I_L52_34 >= npts ) exit
+   52.             enddo
+   52.          endif
+   74.          $scale_S5 = 0.0
+   74.       else
+   55.          if ( $dscal_S0 /= 1.0 ) then
+   57.             if ( npts > 0 ) then
+   57.                $I_L57_32 = 0
+   57. !dir$ ivdep
+   57.                do
+   58.                   data(1 + $I_L57_32) = data(1 + $I_L57_32) * $dscal_S0
+   59.                   $I_L57_32 = 1 + $I_L57_32
+   57.                   if ( $I_L57_32 >= npts ) exit
+   57.                enddo
+   57.             endif
+   57.          endif
+   76.          $scale_S5 = ( 2.0 ** iscal2 * 1.0/$dscal_S0 )
+   76.       endif
+   62.       data(1) = fval1
+   63.       data(2) = fdiff1
+   64.       $I_L64_44 = 0
+   68.       if ( 0 >= 3 + -npts ) then
+   60.          goto 10
+   60.       else
+   68.          $I_L64_44 = min( 2, 3 + -npts )
+   68.          if ( 1 + -npts < 0 ) then
+   68.    10       continue
+   64.             $I_L64_50 = 0
+   64.             do
+   65.                $I_L65_36 = 0
+   65. !dir$ unroll 4
+   65.                do
+   66.                   data($I_L65_36 + -$I_L64_44 + -$I_L64_50 + 3) = data($I_L65_36 + -$I_L64_44 + -$I_L64_50 + 3) + data($I_L65_36 + -$I_L64_44 + -$I_L64_50 + 2)
+   67.                   $I_L65_36 = 1 + $I_L65_36
+   65.                   if ( $I_L65_36 >= npts + $I_L64_44 + $I_L64_50 + -2 ) exit
+   65.                enddo
+   68.                $I_L64_50 = 1 + $I_L64_50
+   67.                if ( $I_L64_50 >= 2 + -$I_L64_44 ) exit
+   67.             enddo
+   67.          endif
+   67.       endif
+   78.       if ( npts > 0 ) then
+   78.          $I_L78_38 = 0
+   78. !dir$ ivdep
+   78.          do
+   79.             data(1 + $I_L78_38) = data(1 + $I_L78_38) * $scale_S5
+   80.             $I_L78_38 = 1 + $I_L78_38
+   78.             if ( $I_L78_38 >= npts ) exit
+   78.          enddo
+   78.       endif
+   82.       if ( and( 128, kpds(4) ) /= 0 ) then
+   83.          $nrow_S7 = kgds(3)
+   84.          $ncol_S8 = kgds(2)
+   90.          if ( -2 + $nrow_S7 >= 0 ) then
+   94.             if ( $ncol_S8 > 0 ) then
+   90.                $I_L90_46 = 0
+   90.                do
+   94.                   $I_L94_40 = 0
+   94. !dir$ ivdep
+   94.                   do
+   96.                      boust(1 + $I_L94_40) = data(-$I_L94_40 + 2 * $ncol_S8 + $ncol_S8 * $I_L90_46 * 2)
+   97.                      $I_L94_40 = 1 + $I_L94_40
+   94.                      if ( $I_L94_40 >= $ncol_S8 ) exit
+   94.                   enddo
+   98.                   $I_L98_42 = 0
+   98. !dir$ ivdep
+   98.                   do
+  100.                      data($ncol_S8 + $I_L98_42 + $ncol_S8 * $I_L90_46 * 2 + 1) = boust(1 + $I_L98_42)
+  101.                      $I_L98_42 = 1 + $I_L98_42
+   98.                      if ( $I_L98_42 >= $ncol_S8 ) exit
+   98.                   enddo
+  102.                   $I_L90_46 = 1 + $I_L90_46
+  101.                   if ( $I_L90_46 >= $nrow_S7 / 2 ) exit
+  101.                enddo
+  101.             endif
+  101.          endif
+  101.       endif
+  108.       return
+  108.       end
+  108.       

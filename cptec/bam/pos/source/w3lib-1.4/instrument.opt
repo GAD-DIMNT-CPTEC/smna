@@ -1,0 +1,113 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  instrument.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/instrument.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+   60.       
+   60.       subroutine instrument( k, kall, ttot, tmin, tmax )
+   61.       ttots%header%d_type_idx = cvmg( ttots%header%d_type_idx, 12, ttots%header%d_type_idx /= 0 )
+   61.       tmins%header%d_type_idx = cvmg( tmins%header%d_type_idx, 12, tmins%header%d_type_idx /= 0 )
+   61.       tmaxs%header%d_type_idx = cvmg( tmaxs%header%d_type_idx, 12, tmaxs%header%d_type_idx /= 0 )
+   60.       kalls%header%d_type_idx = cvmg( kalls%header%d_type_idx, 10, kalls%header%d_type_idx /= 0 )
+   67.       $ka_S0 = abs( k )
+   69.       if ( kmax == 0 ) then
+   70.          kmax = k
+   71.          kalls%header%a_contig = 1
+   71.          kalls%dim_1%LB = 1
+   71.          kalls%dim_1%EX = _zla( 0, k )
+   71.          kalls%dim_1%SM = 1
+   71.          $_allo_P0(0) = 0x1000000000001L
+   71.          $_allo_P0(1) = loc( kalls )
+   71.          call __allocate( $_allo_P0, 0, 0, _fcd( 0, 0 ) )
+   72.          ttots%header%a_contig = 1
+   72.          ttots%dim_1%LB = 1
+   72.          ttots%dim_1%EX = _zla( 0, k )
+   72.          ttots%dim_1%SM = 1
+   72.          $_allo_P1(0) = 0x1000000000001L
+   72.          $_allo_P1(1) = loc( ttots )
+   72.          call __allocate( $_allo_P1, 0, 0, _fcd( 0, 0 ) )
+   73.          tmins%header%a_contig = 1
+   73.          tmins%dim_1%LB = 1
+   73.          tmins%dim_1%EX = _zla( 0, k )
+   73.          tmins%dim_1%SM = 1
+   73.          $_allo_P2(0) = 0x1000000000001L
+   73.          $_allo_P2(1) = loc( tmins )
+   73.          call __allocate( $_allo_P2, 0, 0, _fcd( 0, 0 ) )
+   74.          tmaxs%header%a_contig = 1
+   74.          tmaxs%dim_1%LB = 1
+   74.          tmaxs%dim_1%EX = _zla( 0, k )
+   74.          tmaxs%dim_1%SM = 1
+   74.          $_allo_P3(0) = 0x1000000000001L
+   74.          $_allo_P3(1) = loc( tmaxs )
+   74.          call __allocate( $_allo_P3, 0, 0, _fcd( 0, 0 ) )
+   75.          $F_A33 = _zla( 0, k )
+   75.          if ( k > 0 ) then
+   75.             $I_L75_2 = 0
+   75. !dir$ ivdep
+   75.             do
+   75.                (kalls%base_addr)(1 + $I_L75_2, 0) = 0
+   75.                $I_L75_2 = 1 + $I_L75_2
+   75.                if ( $I_L75_2 >= $F_A33 ) exit
+   75.             enddo
+   75.          endif
+   76.          $ka_S0 = 0
+   78.       else if ( k == 0 ) then
+   79.          $F_A34 = kalls%dim_1%EX
+   79.          if ( kalls%dim_1%EX > 0 ) then
+   79.             $SC_kalls_I1 = kalls%dim_1%LB
+   79.             $I_L79_4 = 0
+   79. !dir$ ivdep
+   79.             do
+   79.                (kalls%base_addr)($SC_kalls_I1 + $I_L79_4, 0) = 0
+   79.                $I_L79_4 = 1 + $I_L79_4
+   79.                if ( $I_L79_4 >= $F_A34 ) exit
+   79.             enddo
+   79.          endif
+   79.       else if ( k > 0 ) then
+   82.          call w3utcdat( jdat(1) )
+   83.          call w3difdat( jdat(1), idat(1), 4, rinc(1) )
+   84.          (kalls%base_addr)(k, 0) = 1 + (kalls%base_addr)(k, 0)
+   85.          if ( (kalls%base_addr)(k, 0) == 1 ) then
+   86.             (ttots%base_addr)(k, 0) = rinc(4)
+   87.             (tmins%base_addr)(k, 0) = rinc(4)
+   88.             (tmaxs%base_addr)(k, 0) = rinc(4)
+   88.          else
+   90.             (ttots%base_addr)(k, 0) = (ttots%base_addr)(k, 0) + rinc(4)
+   91.             (tmins%base_addr)(k, 0) = min( rinc(4), (tmins%base_addr)(k, 0) )
+   92.             (tmaxs%base_addr)(k, 0) = max( rinc(4), (tmaxs%base_addr)(k, 0) )
+   92.          endif
+   92.       endif
+   97.       if ( $ka_S0 <= 0 ) then
+   94.          goto 10
+   97.       else if ( $ka_S0 > kmax ) then
+   97.          goto 10
+   97.       else if ( (kalls%base_addr)($ka_S0, 0) > 0 ) then
+   98.          kall = (kalls%base_addr)($ka_S0, 0)
+   99.          ttot = (ttots%base_addr)($ka_S0, 0)
+  100.          tmin = (tmins%base_addr)($ka_S0, 0)
+  101.          tmax = (tmaxs%base_addr)($ka_S0, 0)
+  101.       else
+  101.    10    continue
+  103.          kall = 0
+  104.          ttot = 0.0
+  105.          tmin = 0.0
+  106.          tmax = 0.0
+  106.       endif
+  110.       if ( k >= 0 ) then
+  110.          call w3utcdat( idat(1) )
+  110.       endif
+  111.       return
+  111.       end
+  111.       

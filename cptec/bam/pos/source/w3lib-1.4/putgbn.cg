@@ -1,0 +1,139 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  putgbn.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/putgbn.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine putgbn( lugb, kf, kpds, kgds, ibs, nbits, lb, f, iret )
+    2.       $PRT_P8 = 17 * 0[loc( kf ),0]
+    2.       t$8 = int( _alloc( max( 0, ( 1000 + _ash( $PRT_P8 + _rsh( _ash( $PRT_P8, 2 ), 29 ), 3 ) ) ) ), 8 )
+    2.       t$4 = int( _alloc( _lsh( max( 0, 0[loc( kf ),0] ), 3 ) ), 8 )
+  162.       t$5 = t$4
+  161.       $MR_kf_0 = 0[loc( kf ),0]
+  161.       t$9 = t$4 + _lsh( max( 0, $MR_kf_0 ), 2 )
+  166.       call r63w72( 0[loc( kpds ),0], 0[loc( kgds ),0], ipds[0], igds[0] )
+  167.       $LC_S16 = -50
+  167.       $SI_S15 = 0
+  167.       $LIS_0[0:4:1] = _bcst( 0, 4 )
+  167.       do
+  167.          ibds[$SI_S15:4:1] = $LIS_0[0:4:1]
+  167.          $SI_S15 = 16 + $SI_S15
+  167.          $LC_S16 = 1 + $LC_S16
+  167.          if ( $LC_S16 >= 0 ) exit
+  167.       enddo
+  170.       $kbm_S18 = $MR_kf_0
+  171.       if ( (6,ipds)[0] /= 0 ) then
+  172.          $kbm_S18 = 0
+  173.          if ( $MR_kf_0 > 0 ) then
+  173.             $I_L173_S17 = 0
+  175.             $LIS_S8 = $MR_kf_0
+  175.             $LIS_E1 = -1 + $MR_kf_0
+  173.             do
+  174.                if ( int( 0[$I_L173_S17 + loc( lb )].B ) /= 0 ) then
+  175.                   if ( $LIS_E1 - $I_L173_S17 < 0 ) then
+  175.                      $LB_Y0 = 1
+  175.                      $UB_Y1 = $LIS_S8
+  175.                      $Subscript_Y5 = 1 + $I_L173_S17
+  175.                      _bounds_error( $_File_Y40, $Line_Y45, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y46 )
+  175.                   endif
+  175.                   0[t$9,$I_L173_S17] = 1
+  176.                   $kbm_S18 = 1 + $kbm_S18
+  176.                else
+  178.                   if ( $LIS_E1 - $I_L173_S17 < 0 ) then
+  178.                      $LB_Y0 = 1
+  178.                      $UB_Y1 = $LIS_S8
+  178.                      $Subscript_Y5 = 1 + $I_L173_S17
+  178.                      _bounds_error( $_File_Y40, $Line_Y47, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y48 )
+  178.                   endif
+  178.                   0[t$9,$I_L173_S17] = 0
+  178.                endif
+  180.                $I_L173_S17 = 1 + $I_L173_S17
+  179.                if ( $I_L173_S17 >= $LIS_S8 ) exit
+  179.             enddo
+  179.          endif
+  181.          if ( $kbm_S18 - $MR_kf_0 == 0 ) then
+  181.             (6,ipds)[0] = 0
+  181.          endif
+  181.       endif
+  185.       $MR_nbits_3 = 0[loc( nbits ),0]
+  185.       if ( $MR_nbits_3 > 0 ) then
+  186.          if ( $MR_kf_0 > 0 ) then
+  186.             $I_L186_S21 = 0
+  186.             $LCS_0 = $MR_kf_0
+  186.             if ( $LCS_0 >= 4 ) then !  99.50%
+  186.                $TC_2 = and( -4, $LCS_0 )
+  186.                $LC_S19 = -$TC_2
+  186.                $SI_S20 = 0
+  186.                if ( $LC_S19 < -15 ) then
+  186.                   do
+  187.                      $LCS_1 = $SI_S20 + loc( f )
+  187.                      $LCS_2 = t$5 + $SI_S20
+  187.                      0[$LCS_2:4:1] = 0[$LCS_1:4:1]
+  187.                      4[$LCS_2:4:1] = 4[$LCS_1:4:1]
+  187.                      8[$LCS_2:4:1] = 8[$LCS_1:4:1]
+  187.                      12[$LCS_2:4:1] = 12[$LCS_1:4:1]
+  186.                      $SI_S20 = 64 + $SI_S20
+  186.                      $LC_S19 = 16 + $LC_S19
+  186.                      if ( $LC_S19 >= -15 ) exit
+  186.                   enddo
+  186.                endif
+  186.                if ( $LC_S19 < 0 ) then
+  186.                   do
+  187.                      0[t$5 + $SI_S20:4:1] = 0[$SI_S20 + loc( f ):4:1]
+  186.                      $SI_S20 = 16 + $SI_S20
+  186.                      $LC_S19 = 4 + $LC_S19
+  186.                      if ( $LC_S19 >= 0 ) exit
+  186.                   enddo
+  186.                endif
+  186.                $I_L186_S21 = $TC_2
+  186.             endif
+  186.             $LCS_MR_kf_3 = $MR_kf_0
+  186.             if ( $LCS_MR_kf_3 > $I_L186_S21 ) then !  99.50%
+  186.                do
+  187.                   0[t$5,$I_L186_S21] = 0[loc( f ),$I_L186_S21]
+  188.                   $I_L186_S21 = 1 + $I_L186_S21
+  186.                   if ( $I_L186_S21 >= $LCS_MR_kf_3 ) exit
+  186.                enddo
+  186.             endif
+  186.          endif
+  189.          nbit = $MR_nbits_3
+  190.       else if ( $kbm_S18 == 0 ) then
+  192.          if ( $MR_kf_0 > 0 ) then
+  193.             $W0 = 0.0
+  193.             __sset_cce( 0[t$5,0], $W0, 0[loc( kf ),0] )
+  193.          endif
+  195.          nbit = 0
+  195.       else
+  197.          call getbit( (6,ipds)[0], 0[loc( ibs ),0], (24,ipds)[0], 0[loc( kf ),0], 0[t$9,0], 0[loc( f ),0], 0[t$5,0], fmin, fmax, nbit )
+  198.          $nbit_S22 = nbit
+  198.          $nbit_S23 = min( 16, $nbit_S22 )
+  198.          nbit = $nbit_S23
+  198.       endif
+  203.       $Con_P9 = 0
+  203.       $Con_P10 = 0
+  203.       $Con_P11 = 0
+  203.       $Con_P12 = 1
+  203.       $Con_P13 = 255
+  203.       $Con_P14 = 0
+  203.       $Con_P15 = 0
+  203.       call w3fi72( $Con_P9, 0[t$5,0], $Con_P10, nbit, $Con_P11, ipds[0], substr[pds,0:1], $Con_P12, $Con_P13, igds[0], $Con_P14, $Con_P15, 0[t$9,0], 0[loc( kf ),0], ibds[0], kfo, substr[0,t$8:1], lgrib, 0[loc( iret ),0] )
+  206.       if ( 0[loc( iret ),0] == 0 ) then
+  206.          call wryte( 0[loc( lugb ),0], lgrib, substr[0,t$8:1] )
+  206.       endif
+    2.       _free( t$8 )
+    2.       _free( t$4 )
+  209.       return
+  209.       end
+  209.       

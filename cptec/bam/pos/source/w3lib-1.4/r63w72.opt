@@ -1,0 +1,106 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  r63w72.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/r63w72.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine r63w72( kpds, kgds, ipds, igds )
+   39.       ipds(1) = cvmg( 45, 28, kpds(23) == 2 )
+   44.       ipds(2) = kpds(19)
+   45.       ipds(3) = kpds(1)
+   46.       ipds(4) = kpds(2)
+   47.       ipds(5) = kpds(3)
+   48.       ipds(6) = mod( kpds(4) / 128, 2 )
+   49.       ipds(7) = mod( kpds(4) / 64, 2 )
+   50.       ipds(8) = kpds(5)
+   51.       ipds(9) = kpds(6)
+   52.       if ( kpds(6) == 101 .orelse. kpds(6) == 104 .orelse. kpds(6) == 106 .orelse. kpds(6) == 108 .orelse. kpds(6) == 110 .orelse. kpds(6) == 112 .orelse. kpds(6) == 114 .orelse. kpds(6) == 116 .orelse. kpds(6) == 121 .orelse. kpds(6) == 128 .orelse. kpds(6) == 141 .orelse. kpds(6) == 236 ) then
+   56.          ipds(10) = mod( kpds(7) / 256, 256 )
+   57.          ipds(11) = mod( kpds(7), 256 )
+   57.       else
+   59.          ipds(10) = 0
+   60.          ipds(11) = kpds(7)
+   60.       endif
+   62.       ipds(12) = kpds(8)
+   63.       ipds(13) = kpds(9)
+   64.       ipds(14) = kpds(10)
+   65.       ipds(15) = kpds(11)
+   66.       ipds(16) = kpds(12)
+   67.       ipds(17) = kpds(13)
+   68.       ipds(18) = kpds(14)
+   69.       ipds(19) = kpds(15)
+   70.       ipds(20) = kpds(16)
+   71.       ipds(21) = kpds(17)
+   72.       ipds(22) = kpds(20)
+   73.       ipds(23) = kpds(21)
+   74.       ipds(24) = kpds(23)
+   75.       ipds(25) = kpds(22)
+   76.       if ( ipds(1) > 28 ) then
+   77.          ipds(26) = 0
+   78.          ipds(27) = 0
+   78.       endif
+   82.       igds(1) = kgds(19)
+   83.       igds(2) = kgds(20)
+   84.       igds(3) = kgds(1)
+   85.       igds(4) = kgds(2)
+   86.       igds(5) = kgds(3)
+   87.       igds(6) = kgds(4)
+   88.       igds(7) = kgds(5)
+   89.       igds(8) = kgds(6)
+   90.       igds(9) = kgds(7)
+   91.       igds(10) = kgds(8)
+   92.       igds(11) = kgds(9)
+   93.       igds(12) = kgds(10)
+   94.       igds(13) = kgds(11)
+   95.       igds(14) = kgds(12)
+   96.       igds(15) = kgds(13)
+   97.       igds(16) = kgds(14)
+   98.       igds(17) = kgds(15)
+   99.       igds(18) = kgds(16)
+  101.       if ( kgds(1) == 0 .orelse. kgds(1) == 4 ) then
+  102.          igds(11) = kgds(10)
+  103.          igds(12) = kgds(9)
+  103.       else
+  105.          if ( kgds(1) == 1 ) then
+  106.             igds(11) = kgds(13)
+  107.             igds(12) = kgds(12)
+  108.             igds(13) = kgds(9)
+  109.             igds(14) = kgds(11)
+  111.          else if ( kgds(1) == 3 ) then
+  112.             igds(15) = kgds(12)
+  113.             igds(16) = kgds(13)
+  114.             igds(17) = kgds(14)
+  115.             igds(18) = kgds(15)
+  115.          endif
+  115.       endif
+  118.       if ( kgds(1) == 0 ) then
+  118.          if ( kgds(19) == 0 ) then
+  118.             if ( kgds(20) /= 255 ) then
+  119.                $t_S0 = kgds(3)
+  119.                if ( $t_S0 > 0 ) then
+  119.                   $I_L119_6 = 0
+  119. !dir$ ivdep
+  119.                   do
+  120.                      igds(19 + $I_L119_6) = kgds(22 + $I_L119_6)
+  121.                      $I_L119_6 = 1 + $I_L119_6
+  119.                      if ( $I_L119_6 >= $t_S0 ) exit
+  119.                   enddo
+  119.                endif
+  119.             endif
+  119.          endif
+  119.       endif
+  125.       return
+  125.       end
+  125.       

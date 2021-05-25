@@ -1,0 +1,118 @@
+#! /bin/bash
+
+#help#
+#-------------------------------------------------------------------------------------------------#
+#                         Brazilian global Atmospheric Model - BAM_V1.2.1                         #
+#-------------------------------------------------------------------------------------------------#
+# Descrição:                                                                                      #
+#     Script para ajustar as variáveis de ambiente do BAM                                         #
+#                                                                                                 #
+# Uso:                                                                                            #
+#     ./EnvironmentalVariablesMCGA RESOL PREFIX                                                   #
+#                                                                                                 #
+# Exemplo:                                                                                        #
+#     ./EnvironmentalVariablesMCGA TQ00126L028 NMC                                                #
+#                                                                                                 #
+# Opções:                                                                                         #
+#     * RESOL.: resolução completa do modelo no formato TQXXXXLXXX                                #  
+#               (eg., TQ0062L028, TQ00126L028, TQ00213L042, etc)                                  #
+#     * PREFIX: prefixo da análise (eg., NMC, CPT, AVN)                                           #
+#                                                                                                 #
+# Notas:                                                                                          #
+#     Este script auxiliar é chamado pelos scripts principais do modelo                           #
+#                                                                                                 #
+# DMD/CPTEC/INPE, 2019                                                                            #
+#-------------------------------------------------------------------------------------------------#
+#help#
+
+#
+# Função para imprimir o cabeçalho do script
+#
+function usageprincipal()
+{
+  cat < ${0} | sed '1,/^#help#/d;/^#help#/,$d'
+}
+
+if [ -z "${1}" ]
+then
+  echo "TRCLV is not set"  
+else
+  export TRCLV=${1}
+fi
+
+if [ -z "${2}" ]
+then
+  echo "PREFIX is not set"  
+else
+  export PREFIX=${2}
+fi
+
+#
+# Caminhos
+#
+
+# Caminho do BAM no HOME
+export PATHBASE=pathbase_dir
+
+# Caminho do BAM no scratchin (SUBMIT_HOME)
+export DK=dk_dir
+
+# Caminho do BAM no scratchout (SUBMIT_WORK)
+export DK2=dk2_dir
+
+export HOME_suite=${PATHBASE} ; mkdir -p ${HOME_suite}
+export DK_suite=${DK}         ; mkdir -p ${DK_suite}
+export DK_suite2=${DK2}       ; mkdir -p ${DK_suite2}
+
+export GRHDATAOUT=${DK_suite}/grh/dataout #; if [ ! -e ${GRHDATAOUT} ]; then mkdir -p ${GRHDATAOUT}; fi
+
+export NDFCT0012=180h # Tempo de integracao para as rodadas das 00 e 12 (usa o script caldate)
+export NDFCT0618=12h  # Tempo de integracao para as rodadas das 06 e 18 (usa o script caldate)
+
+export tmstp=$(date +'%s')
+
+#
+# Variáveis do PBS
+#
+export PBS_TUPA=eslogin13
+export PBS_AUX=aux20-eth4
+export HSTMAQ=$(uname -n)
+export MAQUI=$(uname -s)
+export QUOTA=CPTEC
+export pbs_server2=aux20-eth4
+export pbs_server1=eslogin13
+export QSUB=/opt/pbs/default/bin/qsub
+export QUEUE=pesq
+export QUEUEM=pesq
+export QUEUEP=pesq
+export AUX_QUEUE=pesq.q
+export WALLTIME="00:30:00"
+export WALLTIME6="00:30:00"
+export AUX_WALLTIME="00:30:00"
+
+export PREFXI="${PREFIX}"     # preffix for name of input files
+export PREFXO="${PREFIX}"     # preffix for name of output files
+
+#
+# Escolha do tipo de análise
+#
+# Se a análise for espectral (eg., gdas1.THHZ.SAnl.YYYYMMDDHH; gblav.THHZ.SAnl.YYYYMMDDHH), até 2017071912:
+# --> DataGDAS="Spec"
+# --> AnlPref="gdas1" ou AnlPref="gblav"
+#
+# Se a análise for em ponto de grade (eg., gdas.THHZ.atmanl.nemsio.YYYYMMDDHH), a partir de 2017071912:
+# --> DataGDAS="Grid"
+# --> AnlPref="gdas"
+#
+export DataGDAS="Grid"         # Spec == Anl. Spec. NCEP; Grid == Anl. Grid NCEP 
+export AnlPref="gblav"        # gdas1/gblav == Anl. Spec. NCEP; gdas/gblav == Anl. Grid. NCEP 
+
+export tmstp=`date +'%s'`
+
+export GSSTEP=0
+
+#
+# Utilitários
+#
+export DIRGRADS=/opt/grads/2.0.a9/bin
+export caldate=${HOME_suite}/utils/bin/caldate.3.0.1

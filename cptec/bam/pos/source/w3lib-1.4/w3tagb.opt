@@ -1,0 +1,85 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3tagb.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3tagb.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3tagb( prog, kyr, jd, lf, org )
+    1.       t$13 = _len( prog )
+    1.       t$14 = _len( org )
+   79.       call start
+   82.       dyr = 1000.0 * real( kyr )
+   83.       djd = real( jd )
+   85.       dlf = 9.9999998e-3 * real( lf )
+   86.       ddate = ( 1000.0 * real( kyr ) ) + real( jd ) + ( 9.9999998e-3 * real( lf ) )
+   87.       _fwrite( _clist( 0, 0, 3, Null_Arg, Null_Arg, Null_Arg, t$2,  _substr(t$1,1,22), Null_Arg, Null_Arg, Null_Arg, Null_Arg, 0, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg ), Null_Arg )
+   89.       _fwrite( _clist( 0, 0, 3, Null_Arg, Null_Arg, Null_Arg, t$4,  _substr(t$3,1,67), Null_Arg, Null_Arg, Null_Arg, Null_Arg, 0, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg ), _iolist( _iotype(  _substr(prog,1,_len( prog )), 0x800600000000L ), _iotype( ddate, 0x2000300000000L ), _iotype(  _substr(org,1,_len( org )), 0x800600000000L ) ) )
+   93.       call w3locdat( idat(1) )
+   94.       call w3doxdat( idat(1), jdow, jdoy, jday )
+   95.       if ( idat(2) <= 0 .or. idat(2) > 12 ) then
+   95.           _substr(t$16,1,9) = 'w3tagb.f'
+   95.           _substr(t$17,1,5) = 'JMON'
+   95.          t$18 = idat(2)
+   95.          call _bounds_error(  _substr(t$16,1,9), 95,  _substr(t$17,1,5), 1, 1, 12, t$18, t$15 )
+   95.       endif
+   96.       if ( jdow <= 0 .or. jdow > 7 ) then
+   96.           _substr(t$20,1,9) = 'w3tagb.f'
+   96.           _substr(t$21,1,5) = 'DAYW'
+   96.          t$22 = jdow
+   96.          call _bounds_error(  _substr(t$20,1,9), 96,  _substr(t$21,1,5), 1, 1, 7, t$22, t$19 )
+   96.       endif
+   95.       $_IOitem_P0(0) = idat(3)
+   95.       $_IOitem_P0(1) = idat(1)
+   95.       $_IOitem_P0(2) = idat(5)
+   95.       $_IOitem_P0(3) = idat(6)
+   95.       $_IOitem_P0(4) = idat(7)
+   95.       $_IOitem_P0(5) = idat(8)
+   95.       $_IOitem_P0(6) = jdoy
+   95.       _fwrite( _clist( 0, 0, 3, Null_Arg, Null_Arg, Null_Arg, t$6,  _substr(t$5,1,103), Null_Arg, Null_Arg, Null_Arg, Null_Arg, 0, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg ), _iolist( _iotype(  _substr(jmon(idat(2)),1,3), 0x800600000000L ), _iotype( $_IOitem_P0(:( 0, 6, 1 )), 0x2000200000000L ), _iotype(  _substr(dayw(jdow),1,3), 0x800600000000L ), _iotype( jday, 0x2000200000000L ) ) )
+  119.       return
+  119.       end
+  119.       
+    1.       
+    1.       subroutine w3tage( prog )
+  101.       t$14 = 0
+    1.       t$13 = _len( prog )
+  103.       call w3locdat( idat(1) )
+  104.       call w3doxdat( idat(1), jdow, jdoy, jday )
+  105.       if ( idat(2) <= 0 .or. idat(2) > 12 ) then
+  105.           _substr(t$24,1,9) = 'w3tagb.f'
+  105.           _substr(t$25,1,5) = 'JMON'
+  105.          t$18 = idat(2)
+  105.          call _bounds_error(  _substr(t$24,1,9), 105,  _substr(t$25,1,5), 1, 1, 12, t$18, t$23 )
+  105.       endif
+  106.       if ( jdow <= 0 .or. jdow > 7 ) then
+  106.           _substr(t$27,1,9) = 'w3tagb.f'
+  106.           _substr(t$28,1,5) = 'DAYW'
+  106.          t$22 = jdow
+  106.          call _bounds_error(  _substr(t$27,1,9), 106,  _substr(t$28,1,5), 1, 1, 7, t$22, t$26 )
+  106.       endif
+  105.       $_IOitem_P0(0) = idat(3)
+  105.       $_IOitem_P0(1) = idat(1)
+  105.       $_IOitem_P0(2) = idat(5)
+  105.       $_IOitem_P0(3) = idat(6)
+  105.       $_IOitem_P0(4) = idat(7)
+  105.       $_IOitem_P0(5) = idat(8)
+  105.       $_IOitem_P0(6) = jdoy
+  105.       _fwrite( _clist( 0, 0, 3, Null_Arg, Null_Arg, Null_Arg, t$8,  _substr(t$7,1,103), Null_Arg, Null_Arg, Null_Arg, Null_Arg, 0, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg ), _iolist( _iotype(  _substr(jmon(idat(2)),1,3), 0x800600000000L ), _iotype( $_IOitem_P0(:( 0, 6, 1 )), 0x2000200000000L ), _iotype(  _substr(dayw(jdow),1,3), 0x800600000000L ), _iotype( jday, 0x2000200000000L ) ) )
+  109.       _fwrite( _clist( 0, 0, 3, Null_Arg, Null_Arg, Null_Arg, t$10,  _substr(t$9,1,50), Null_Arg, Null_Arg, Null_Arg, Null_Arg, 0, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg ), _iolist( _iotype(  _substr(prog,1,_len( prog )), 0x800600000000L ) ) )
+  113.       _fwrite( _clist( 0, 0, 3, Null_Arg, Null_Arg, Null_Arg, t$12,  _substr(t$11,1,19), Null_Arg, Null_Arg, Null_Arg, Null_Arg, 0, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg ), Null_Arg )
+  116.       call summary
+  119.       return
+  119.       end
+  119.       

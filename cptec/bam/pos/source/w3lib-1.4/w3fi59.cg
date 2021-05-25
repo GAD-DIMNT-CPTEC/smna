@@ -1,0 +1,142 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi59.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi59.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi59( field, npts, nbits, nwork, npfld, iscale, len, rmin )
+   70.       0[loc( len ),0] = 0
+   71.       0[loc( iscale ),0] = 0
+   72.       $MR_nbits_S15 = 0[loc( nbits ),0]
+   72.       if ( $MR_nbits_S15 > 0 ) then
+   72.          if ( $MR_nbits_S15 <= 32 ) then
+   73.             $MR_npts_S16 = 0[loc( npts ),0]
+   73.             if ( $MR_npts_S16 > 0 ) then
+   77.                $rmax_S17 = 0[loc( field ),0]
+   78.                0[loc( rmin ),0] = $rmax_S17
+   79.                if ( -2 + $MR_npts_S16 >= 0 ) then
+   79.                   $I_L79_S20 = 0
+   81.                   $rmin_S6 = $rmax_S17
+   79.                   $LCS_0 = $MR_npts_S16
+   79.                   if ( -5 + $LCS_0 >= 0 ) then !  99.50%
+   79.                      $TC_0 = and( -4, -1 + $LCS_0 )
+   80.                      $LCS_1[0:4:1] = _bcst( $rmax_S17, 4 )
+   80.                      $VR_rmax_3[0:4:1] = $LCS_1[0:4:1]
+   81.                      $VR_rmin_4[0:4:1] = $LCS_1[0:4:1]
+   79.                      $LC_S18 = -$TC_0
+   79.                      $SI_S19 = 0
+   79.                      if ( $LC_S18 < -15 ) then
+   79.                         do
+   80.                            $LCS_2 = $SI_S19 + loc( field )
+   80.                            $LCS_field_3[0:4:1] = 13[$LCS_2:4:1]
+   80.                            $LCS_field_4[0:4:1] = 9[$LCS_2:4:1]
+   80.                            $LCS_field_5[0:4:1] = 5[$LCS_2:4:1]
+   80.                            $LCS_field_6[0:4:1] = 1[$LCS_2:4:1]
+   80.                            $VR_rmax_3[0:4:1] = max( $VR_rmax_3[0:4:1], max( $LCS_field_3[0:4:1], max( $LCS_field_4[0:4:1], max( $LCS_field_5[0:4:1], $LCS_field_6[0:4:1] ) ) ) )
+   81.                            $VR_rmin_4[0:4:1] = min( $VR_rmin_4[0:4:1], min( $LCS_field_3[0:4:1], min( $LCS_field_4[0:4:1], min( $LCS_field_5[0:4:1], $LCS_field_6[0:4:1] ) ) ) )
+   79.                            $SI_S19 = 64 + $SI_S19
+   79.                            $LC_S18 = 16 + $LC_S18
+   79.                            if ( $LC_S18 >= -15 ) exit
+   79.                         enddo
+   79.                      endif
+   79.                      if ( $LC_S18 < 0 ) then
+   79.                         do
+   80.                            $LCS_field_7[0:4:1] = 1[$SI_S19 + loc( field ):4:1]
+   80.                            $VR_rmax_3[0:4:1] = max( $VR_rmax_3[0:4:1], $LCS_field_7[0:4:1] )
+   81.                            $VR_rmin_4[0:4:1] = min( $VR_rmin_4[0:4:1], $LCS_field_7[0:4:1] )
+   79.                            $SI_S19 = 16 + $SI_S19
+   79.                            $LC_S18 = 4 + $LC_S18
+   79.                            if ( $LC_S18 >= 0 ) exit
+   79.                         enddo
+   79.                      endif
+   80.                      $rmax_S17 = _rmax( $VR_rmax_3[0:4:1], 4, 1 )
+   81.                      $rmin_S6 = _rmin( $VR_rmin_4[0:4:1], 4, 1 )
+   79.                      $I_L79_S20 = $TC_0
+   79.                   endif
+   79.                   $LCS_1_8 = -1 + $MR_npts_S16
+   79.                   if ( $LCS_1_8 > $I_L79_S20 ) then !  99.50%
+   79.                      do
+   80.                         $MR_field_3 = 1[loc( field ),$I_L79_S20]
+   80.                         $rmax_S17 = max( $MR_field_3, $rmax_S17 )
+   81.                         $rmin_S6 = min( $rmin_S6, $MR_field_3 )
+   82.                         $I_L79_S20 = 1 + $I_L79_S20
+   79.                         if ( $I_L79_S20 >= $LCS_1_8 ) exit
+   79.                      enddo
+   79.                   endif
+   81.                   0[loc( rmin ),0] = $rmin_S6
+   81.                endif
+   86.                $MR_rmin_4 = 0[loc( rmin ),0]
+   86.                if ( $rmax_S17 /= $MR_rmin_4 ) then
+   98.                   $MR_iscale_5 = _anint( 5.0000101e-1 + 1.442695 * log( ( $rmax_S17 - $MR_rmin_4 ) / ( -5.0e-1 + 2.0 ** $MR_nbits_S15 ) ) )
+   98.                   0[loc( iscale ),0] = $MR_iscale_5
+  102.                   $twon_S2 = 2.0 ** -$MR_iscale_5
+  103.                   $I_L103_S23 = 0
+  103.                   $LCS_9 = $MR_npts_S16
+  103.                   if ( $LCS_9 >= 4 ) then !  99.50%
+  103.                      $TC_5 = and( -4, $LCS_9 )
+  103.                      $LC_S21 = -$TC_5
+  103.                      $SI_S22 = 0
+  104.                      $LIS_2[0:4:1] = _bcst( $twon_S2, 4 )
+  104.                      $LIS_1[0:4:1] = _bcst( -$MR_rmin_4, 4 )
+  103.                      if ( $LC_S21 < -15 ) then
+  103.                         do
+  104.                            $LCS_10 = $SI_S22 + loc( field )
+  104.                            $LCS_11 = $SI_S22 + loc( nwork )
+  104.                            0[$LCS_11:4:1] = _anint( ( 0[$LCS_10:4:1] + $LIS_1[0:4:1] ) * $LIS_2[0:4:1] )
+  104.                            4[$LCS_11:4:1] = _anint( ( 4[$LCS_10:4:1] + $LIS_1[0:4:1] ) * $LIS_2[0:4:1] )
+  104.                            8[$LCS_11:4:1] = _anint( ( 8[$LCS_10:4:1] + $LIS_1[0:4:1] ) * $LIS_2[0:4:1] )
+  104.                            12[$LCS_11:4:1] = _anint( ( 12[$LCS_10:4:1] + $LIS_1[0:4:1] ) * $LIS_2[0:4:1] )
+  103.                            $SI_S22 = 64 + $SI_S22
+  103.                            $LC_S21 = 16 + $LC_S21
+  103.                            if ( $LC_S21 >= -15 ) exit
+  103.                         enddo
+  103.                      endif
+  103.                      if ( $LC_S21 < 0 ) then
+  103.                         do
+  104.                            0[$SI_S22 + loc( nwork ):4:1] = _anint( ( 0[$SI_S22 + loc( field ):4:1] + $LIS_1[0:4:1] ) * $LIS_2[0:4:1] )
+  103.                            $SI_S22 = 16 + $SI_S22
+  103.                            $LC_S21 = 4 + $LC_S21
+  103.                            if ( $LC_S21 >= 0 ) exit
+  103.                         enddo
+  103.                      endif
+  103.                      $I_L103_S23 = $TC_5
+  103.                   endif
+  103.                   $LCS_MR_npts_12 = $MR_npts_S16
+  103.                   if ( $LCS_MR_npts_12 > $I_L103_S23 ) then !  99.50%
+  103.                      do
+  104.                         0[loc( nwork ),$I_L103_S23] = _anint( ( 0[loc( field ),$I_L103_S23] - $MR_rmin_4 ) * $twon_S2 )
+  105.                         $I_L103_S23 = 1 + $I_L103_S23
+  103.                         if ( $I_L103_S23 >= $LCS_MR_npts_12 ) exit
+  103.                      enddo
+  103.                   endif
+  109.                   koff = 0
+  110.                   iskip = 0
+  114.                   call sbytesc( substr[npfld,0:1], 0[loc( nwork ),0], koff, 0[loc( nbits ),0], iskip, 0[loc( npts ),0] )
+  119.                   $MR_npts_S24 = 0[loc( npts ),0]
+  119.                   $MR_nbits_S25 = 0[loc( nbits ),0]
+  119.                   $noff_S26 = $MR_npts_S24 * $MR_nbits_S25
+  119.                   noff = $noff_S26
+  120.                   $Con_P11 = 7
+  120.                   call sbytec( substr[npfld,0:1], kzero, noff, $Con_P11 )
+  124.                   $noff_S27 = noff
+  124.                   $PRT_P10 = 7 + $noff_S27
+  124.                   0[loc( len ),0] = _ash( $PRT_P10 + _rsh( _ash( $PRT_P10, 2 ), 29 ), 3 )
+  124.                endif
+  124.             endif
+  124.          endif
+  124.       endif
+  129.       return
+  129.       end
+  129.       

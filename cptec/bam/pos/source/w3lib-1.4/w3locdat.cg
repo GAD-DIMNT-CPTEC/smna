@@ -1,0 +1,40 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3locdat.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3locdat.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine w3locdat( idat )
+   40. !dir$ suppress 0[loc( idat ),0]
+   40.       t$3[0].L = pointer to array[1] of integer( cri_pointer( idat ) )
+   40.       (1,t$3)[0].L = 32
+   40.       (2,t$3)[0].L = 0x100000000010051UL
+   40.       (6,t$3)[0] = 10
+   40.       (7,t$3)[0] = 131074
+   40.       (4,t$3)[0].L = 0
+   40.       (5,t$3)[0].L = 0
+   40.       (6,t$3)[0].L = 1
+   40.       (7,t$3)[0].L = 8
+   40.       (8,t$3)[0].L = 1
+   40.       call _f90_date_and_time( substr[cdate,0:8], substr[ctime,0:10], substr[czone,0:5], t$3 )
+   41.       $_StackCntrl_O2 = $_StaticCntrl_O1
+   41.       (1,$_StackCntrl_O2)[0].L = loc( substr[czone,0:5] )
+   41.       $_StackIolist_O4 = $_StaticIolist_O3
+   41.       0[int( pointer to c_union Pointer_union( loc( (3,$_StackIolist_O4)[0].L ) ), 8 ),0].L = loc( $IOitem_O0 )
+   41.       _frf( pointer to integer (kind=8)( loc( $_StackCntrl_O2 ) ), pointer to integer (kind=8)( loc( $_StackIolist_O4[0].L ) ), pointer to integer (kind=8)( loc( $_IO_Lib_Stack_O5 ) ) )
+   41.       3[loc( idat ),0] = $IOitem_O0
+   43.       return
+   43.       end
+   43.       

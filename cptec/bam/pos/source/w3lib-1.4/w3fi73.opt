@@ -1,0 +1,51 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi73.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi73.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi73( ibflag, ibmap, iblen, bms, lenbms, ier )
+   43.       ier = 0
+   45.       $iz_S1 = 0
+   46.       if ( iblen > 0 ) then
+   46.          $I_L46_4 = 0
+   46. !dir$ ivdep
+   46.          do
+   47.             if ( ibmap(1 + $I_L46_4) == 0 ) then
+   47.                $iz_S1 = 1 + $iz_S1
+   47.             endif
+   48.             $I_L46_4 = 1 + $I_L46_4
+   47.             if ( $I_L46_4 >= iblen ) exit
+   47.          enddo
+   47.       endif
+   49.       if ( iblen + -$iz_S1 == 0 ) then
+   53.          ier = 8
+   53.       else
+   62.          call sbytesc(  _substr(bms(1),1,1), ibmap(1), 48, 1, 0, iblen )
+   64.          nleft = cvmg( 0, 16 + -mod( iblen, 16 ), mod( iblen, 16 ) == 0 )
+   70.          num = 6 + ( iblen + cvmg( 0, 16 + -mod( iblen, 16 ), mod( iblen, 16 ) == 0 ) ) / 8
+   76.          call sbytec(  _substr(bms(1),1,1), num, 0, 24 )
+   78.          call sbytec(  _substr(bms(1),1,1), nleft, 24, 8 )
+   80.          call sbytec(  _substr(bms(1),1,1), ibflag, 32, 16 )
+   88.          if ( nleft /= 0 ) then
+   89.             nleft = 16 + -nleft
+   91.             t$4 = 48 + iblen
+   91.             call sbytec(  _substr(bms(1),1,1), 0, t$4, nleft )
+   91.          endif
+   96.          lenbms = num
+   96.       endif
+  100.       return
+  100.       end
+  100.       

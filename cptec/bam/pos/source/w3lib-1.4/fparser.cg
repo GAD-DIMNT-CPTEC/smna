@@ -1,0 +1,50 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  fparser.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/fparser.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine fparser( carg, marg, rarg )
+   37.       $_StackCntrl_O2 = $_StaticCntrl_O1
+   37.       (1,$_StackCntrl_O2)[0].L = loc( substr[carg,0:_len( carg )] )
+   37.       (3,$_StackCntrl_O2)[0].L = loc( ios )
+   37.       $LCS_rarg_0 = loc( 0[loc( rarg ),0] )
+   37.       $_StackDv_P0[0].L = pointer to array[1] of real( $LCS_rarg_0 )
+   37.       (1,$_StackDv_P0)[0].L = 32
+   37.       (2,$_StackDv_P0)[0].L = and( 0xfffffffffffffffeUL, (2,$_StackDv_P0)[0].L )
+   37.       (2,$_StackDv_P0)[0].L = and( 0xfffffffffffffffdUL, (2,$_StackDv_P0)[0].L )
+   37.       (2,$_StackDv_P0)[0].L = and( 0xfffffffffffffff3UL, (2,$_StackDv_P0)[0].L )
+   37.       (2,$_StackDv_P0)[0].L = and( 0xffffffffffffffefUL, (2,$_StackDv_P0)[0].L )
+   37.       (2,$_StackDv_P0)[0].L = or( 64, notand( 2016, (2,$_StackDv_P0)[0].L ) )
+   37.       (2,$_StackDv_P0)[0].L = or( 65536, notand( 522240, (2,$_StackDv_P0)[0].L ) )
+   37.       (2,$_StackDv_P0)[0].L = and( -524289UL, (2,$_StackDv_P0)[0].L )
+   37.       (2,$_StackDv_P0)[0].L = and( -4293918721UL, (2,$_StackDv_P0)[0].L )
+   37.       (2,$_StackDv_P0)[0].L = and( 0xffffff00ffffffffUL, (2,$_StackDv_P0)[0].L )
+   37.       (2,$_StackDv_P0)[0].L = and( 0xffff00ffffffffffUL, (2,$_StackDv_P0)[0].L )
+   37.       (2,$_StackDv_P0)[0].L = and( 0xff00ffffffffffffUL, (2,$_StackDv_P0)[0].L )
+   37.       (2,$_StackDv_P0)[0].L = or( 0x100000000000000UL, notand( 0xff00000000000000UL, (2,$_StackDv_P0)[0].L ) )
+   37.       (6,$_StackDv_P0)[0] = 0
+   37.       (7,$_StackDv_P0)[0] = 131075
+   37.       (4,$_StackDv_P0)[0].L = int( $LCS_rarg_0, 8 )
+   37.       (5,$_StackDv_P0)[0].L = 32
+   37.       (6,$_StackDv_P0)[0].L = 1
+   37.       (7,$_StackDv_P0)[0].L = ( max( 0, 0[loc( marg ),0] ) )
+   37.       (8,$_StackDv_P0)[0].L = 1
+   37.       $_StackIolist_O4 = $_StaticIolist_O3
+   37.       (2,$_StackIolist_O4)[0].L = int( loc( $_StackDv_P0 ), 8 )
+   37.       t$4 = _frf( pointer to integer (kind=8)( loc( $_StackCntrl_O2 ) ), pointer to integer (kind=8)( loc( $_StackIolist_O4[0].L ) ), pointer to integer (kind=8)( loc( $_IO_Lib_Stack_O5 ) ) )
+   39.       return
+   39.       end
+   39.       

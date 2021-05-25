@@ -1,0 +1,46 @@
+#!/bin/ksh
+#help#
+#************************************************************************************#
+#                                                                                    #
+# script to run CPTEC OPERATION                                                      #
+# EnvironmentalVariablesMCGA.ksh    TQZZZZLXXX                                       #
+#                                                                                    #
+#                    ZZZZ   => 4 digits spectral resolution                          #
+#                     XXX   => 3 digits vertical resolution                          #
+#                                                                                    #
+#************************************************************************************#
+#help#
+
+#
+# Caminhos
+#
+
+# Caminho do BAM no HOME
+export HOMEBASE=homebase_dir
+
+# Caminho do BAM no scratchin (SUBMIT_HOME)
+export SUBTBASE=subtbase_dir
+
+# Caminho do BAM no scratchout (SUBMIT_WORK)
+export WORKBASE=workbase_dir
+
+
+#
+# Utilitarios
+#
+
+export caldate=${HOMEBASE}/utils/bin/caldate.3.0.1
+export DIRGRADS=/opt/grads/2.0.a9/bin
+
+#
+# Variáveis do PBS
+#
+
+export QUOTA=CPTEC
+export PBS_TUPA=eslogin13
+export PBS_AUX=aux20-eth4
+export HSTMAQ=$(uname -n)
+export MAQUI=$(uname -s)
+export pbs_server1=eslogin13
+
+export tmstp=$(date +'%s')

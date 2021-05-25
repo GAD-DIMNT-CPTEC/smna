@@ -1,0 +1,42 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fs26.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fs26.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fs26( jldayn, iyear, month, iday, idaywk, idayyr )
+   74.       $MR_jldayn_2 = 0[loc( jldayn ),0]
+   74.       $n_S0 = ( 274276 + _lsh( $MR_jldayn_2, 2 ) ) / 146097
+   76.       $PRT_P8 = 3 + 146097 * $n_S0
+   76.       $LCS_2 = _ash( $PRT_P8 + _rsh( _ash( $PRT_P8, 1 ), 30 ), 2 )
+   76.       $LCS_MR_jldayn_0 = $MR_jldayn_2 - $LCS_2
+   76.       $i_S1 = ( 274280000 + 4000 * $LCS_MR_jldayn_0 ) / 1461001
+   78.       $PRT_P9 = 1461 * $i_S1
+   78.       $LCS_1 = _ash( $PRT_P9 + _rsh( _ash( $PRT_P9, 1 ), 30 ), 2 )
+   78.       $j_S2 = ( 5488000 + 80 * ( $LCS_MR_jldayn_0 - $LCS_1 ) ) / 2447
+   79.       0[loc( iday ),0] = 68600 + ( $MR_jldayn_2 + 2447 * $j_S2 / -80 - ( $LCS_1 + $LCS_2 ) )
+   80.       $l_S3 = $j_S2 / 11
+   81.       0[loc( month ),0] = $j_S2 + -12 * $l_S3 + 2
+   82.       $LCS_3 = $i_S1 + $l_S3
+   82.       $LCS_4 = $LCS_3 + 100 * $n_S0
+   82.       0[loc( iyear ),0] = -4900 + $LCS_4
+   83.       $PRT_P0 = 1 + $MR_jldayn_2
+   83.       0[loc( idaywk ),0] = $PRT_P0 + -7 * ( $PRT_P0 / 7 ) + 1
+   84.       $PRT_P10 = 146100 * $n_S0 + 1461 * $LCS_3 + -147561
+   84.       $PRT_P11 = 3 * ( ( -1 + $LCS_4 ) / 100 )
+   84.       0[loc( idayyr ),0] = 31739 + ( $MR_jldayn_2 + _ash( $PRT_P11 + _rsh( _ash( $PRT_P11, 1 ), 30 ), 2 ) - _ash( $PRT_P10 + _rsh( _ash( $PRT_P10, 1 ), 30 ), 2 ) )
+   87.       return
+   87.       end
+   87.       

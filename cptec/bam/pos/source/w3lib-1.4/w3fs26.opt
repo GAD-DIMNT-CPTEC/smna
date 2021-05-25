@@ -1,0 +1,31 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fs26.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fs26.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fs26( jldayn, iyear, month, iday, idaywk, idayyr )
+   74.       $n_S0 = ( 274276 + 4 * jldayn ) / 146097
+   76.       $i_S1 = ( 4000 * jldayn + 4000 * ( ( 3 + 146097 * $n_S0 ) / -4 ) + 274280000 ) / 1461001
+   78.       $j_S2 = ( 80 * jldayn + 80 * ( ( 3 + 146097 * $n_S0 ) / -4 ) + 80 * ( 1461 * $i_S1 / -4 ) + 5488000 ) / 2447
+   79.       iday = jldayn + ( 3 + 146097 * $n_S0 ) / -4 + 1461 * $i_S1 / -4 + 2447 * $j_S2 / -80 + 68600
+   80.       $l_S3 = $j_S2 / 11
+   81.       month = $j_S2 + -12 * $l_S3 + 2
+   82.       iyear = $i_S1 + $l_S3 + 100 * $n_S0 + -4900
+   83.       idaywk = 1 + mod( 1 + jldayn, 7 )
+   84.       idayyr = jldayn + 3 * ( ( $i_S1 + $l_S3 + 100 * $n_S0 + -1 ) / 100 ) / 4 + ( 146100 * $n_S0 + 1461 * $i_S1 + 1461 * $l_S3 + -147561 ) / -4 + 31739
+   87.       return
+   87.       end
+   87.       

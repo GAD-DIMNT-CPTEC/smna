@@ -1,0 +1,55 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi58.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi58.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi58( ifield, npts, nwork, npfld, nbits, len, kmin )
+   68.       len = 0
+   69.       nbits = 0
+   70.       if ( npts > 0 ) then
+   74.          $kmax_S0 = ifield(1)
+   75.          kmin = $kmax_S0
+   76.          if ( -2 + npts >= 0 ) then
+   76.             $I_L76_8 = 0
+   76. !dir$ ivdep
+   76.             do
+   77.                $kmax_S0 = max( $kmax_S0, ifield(2 + $I_L76_8) )
+   78.                kmin = min( kmin, ifield(2 + $I_L76_8) )
+   79.                $I_L76_8 = 1 + $I_L76_8
+   76.                if ( $I_L76_8 >= -1 + npts ) exit
+   76.             enddo
+   76.          endif
+   84.          if ( kmin + -$kmax_S0 /= 0 ) then
+   93.             nbits = int( 1.0 + 1.442695 * log( 5.0e-1 + real( $kmax_S0 + -kmin ) ) )
+   97.             $I_L97_10 = 0
+   97. !dir$ ivdep
+   97.             do
+   98.                nwork(1 + $I_L97_10) = ifield(1 + $I_L97_10) + -kmin
+   99.                $I_L97_10 = 1 + $I_L97_10
+   97.                if ( $I_L97_10 >= npts ) exit
+   97.             enddo
+  103.             len = 1 + ( -1 + nbits * npts ) / 8
+  104.             call sbytesc(  _substr(npfld(1),1,1), nwork(1), 0, nbits, 0, npts )
+  108.             noff = nbits * npts
+  109.             nzero = -( nbits * npts ) + 8 * len
+  110.             if ( -( nbits * npts ) + 8 * len > 0 ) then
+  110.                call sbytec(  _substr(npfld(1),1,1), kzero, noff, nzero )
+  110.             endif
+  110.          endif
+  110.       endif
+  115.       return
+  115.       end
+  115.       

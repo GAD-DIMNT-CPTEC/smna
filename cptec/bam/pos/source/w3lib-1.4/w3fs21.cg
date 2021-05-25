@@ -1,0 +1,28 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fs21.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fs21.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fs21( idate, nmin )
+   53.       $LCS_idate_0 = loc( idate )
+   53.       $iyear_S0 = 0[$LCS_idate_0,0]
+   55.       iyear = cvmg( $iyear_S0, $iyear_S0 + cvmg( 1900, 2000, $iyear_S0 >= 78 ), $iyear_S0 > 99 )
+   65.       $ijdn_S1 = iw3jdn( iyear, 1[$LCS_idate_0,0], 2[$LCS_idate_0,0] )
+   74.       $LCS_idate_1 = loc( idate )
+   74.       0[loc( nmin ),0] = 4[$LCS_idate_1,0] + 1440 * $ijdn_S1 + 60 * 3[$LCS_idate_1,0] + 776312896
+   77.       return
+   77.       end
+   77.       

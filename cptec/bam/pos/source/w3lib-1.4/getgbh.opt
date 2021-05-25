@@ -1,0 +1,47 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgbh.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgbh.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgbh( lugb, lugi, j, jpds, jgds, kg, kf, k, kpds, kgds, iret )
+  189.       if ( lugi <= 0 ) then
+    2.          goto 10
+  189.       else if ( j < 0 ) then
+  189.          goto 40
+  189.       else if ( lux + -lugi /= 0 ) then
+  189.    40    continue
+  190.          lux = lugi
+  191.          jj = min( j, -1 + -j )
+  191.       else
+  191.    10    continue
+  192.          if ( lugi > 0 ) then
+  192.             goto 20
+  192.          else if ( j < 0 ) then
+  192.             goto 30
+  192.          else if ( lugb + -lux /= 0 ) then
+  192.    30       continue
+  193.             lux = lugb
+  194.             jj = min( j, -1 + -j )
+  194.          else
+  194.    20       continue
+  196.             jj = j
+  196.          endif
+  196.       endif
+  200.       call getgbmh( lugb, lugi, jj, jpds(1), jgds(1), 262144,  _substr(cbuf(1),1,1), nlen, nnum, mnum, kg, kf, k, kpds(1), kgds(1), iret )
+  203.       lux = cvmg( lux, 0, iret /= 96 )
+  206.       return
+  206.       end
+  206.       

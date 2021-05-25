@@ -1,0 +1,42 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgb1r.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgb1r.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgb1r( lugb, lskip, lgrib, kf, kpds, kgds, kens, lb, f, iret )
+    2.       t$1 = lgrib
+   49.       t$2 = _zla( 0, lgrib )
+    2.       t$3 = int( _alloc( _zla( 0, lgrib ) ), 8 )
+   52.       call baread( lugb, lskip, lgrib, lread,  _substr(grib(1),1,1) )
+   55.       if ( lread + -lgrib == 0 ) then
+   56.          call w3fi63(  _substr(grib(1),1,1), kpds(1), kgds(1), lb(1), f(1), kptr(1), iret )
+   57.          if ( iret == 0 ) then
+   57.             if ( kpds(23) == 2 ) then
+   58.                call pdseup( kens(1), kprob, xprob, kclust, kmembr, 45,  _substr(grib(9),1,1) )
+   58.             endif
+   58.          endif
+   58.       else
+   61.          iret = 97
+   61.       endif
+   65.       if ( iret == 0 ) then
+   66.          kf = kptr(10)
+   66.       else
+   68.          kf = 0
+   68.       endif
+    2.       _free( t$3 )
+   72.       return
+   72.       end
+   72.       

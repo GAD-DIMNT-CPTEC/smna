@@ -1,0 +1,103 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgbmp.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgbmp.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgbmp( lugb, lugi, jg, j, jpds, jgds, mbuf, cbuf, nlen, nnum, mnum, kg, k, kpds, kgds, g, iret )
+    2.       t$1 = mbuf
+  201.       t$3 = _zla( 0, mbuf )
+    2.       t$2 = jg
+  202.       t$4 = _zla( 0, jg )
+  207.       $I_A1 = 0
+  207. !dir$ ivdep
+  207.       do
+  207.          jens(1 + $I_A1) = -1
+  207.          $I_A1 = 1 + $I_A1
+  207.          if ( $I_A1 >= 200 ) exit
+  207.       enddo
+  208.       if ( j >= 0 ) then
+  209.          if ( mnum >= 0 ) then
+  210.             irgi = 0
+  210.          else
+  212.             mnum = -1 + -mnum
+  213.             irgi = 1
+  213.          endif
+  215.          jr = j + -mnum
+  216.          if ( j + -mnum < 0 ) then
+  214.             goto 10
+  216.          else if ( j + -mnum < nnum ) then
+  216.             goto 20
+  216.          else if ( irgi == 0 ) then
+  216.    20       continue
+  217.             call getgb1s(  _substr(cbuf(1),1,1), nlen, nnum, jr, jpds(1), jgds(1), jens(1), kr, kpds(1), kgds(1), kens(1), lskip, lgrib, irgs )
+  219.             k = cvmg( k, mnum + kr, irgs /= 0 )
+  220.             if ( irgi == 1 ) then
+  220.                if ( irgs == 0 ) then
+  220.                   mnum = -1 + -mnum
+  220.                endif
+  221.                if ( irgs > 0 ) then
+  221.                   mnum = mnum + nnum
+  221.                endif
+  221.             endif
+  221.          else
+  221.    10       continue
+  223.             mnum = j
+  224.             irgi = 1
+  225.             irgs = 1
+  225.          endif
+  225.       else
+  228.          mnum = -1 + -j
+  229.          irgi = 1
+  230.          irgs = 1
+  230.       endif
+  234.       jr = 0
+  235.       if ( irgi == 1 .and. irgs == 1 ) then
+  235.          do
+  236.             if ( lugi > 0 ) then
+  237.                call getgi( lugi, mnum, mbuf,  _substr(cbuf(1),1,1), nlen, nnum, irgi )
+  237.             else
+  239.                call getgir( lugb, 32000, 4000, mnum, mbuf,  _substr(cbuf(1),1,1), nlen, nnum, irgi )
+  239.             endif
+  241.             if ( irgi <= 1 ) then
+  242.                call getgb1s(  _substr(cbuf(1),1,1), nlen, nnum, jr, jpds(1), jgds(1), jens(1), kr, kpds(1), kgds(1), kens(1), lskip, lgrib, irgs )
+  244.                if ( irgs == 0 ) then
+  244.                   k = mnum + kr
+  244.                endif
+  245.                if ( irgi == 1 ) then
+  245.                   if ( irgs == 0 ) then
+  245.                      mnum = -1 + -mnum
+  245.                   endif
+  246.                   if ( irgs > 0 ) then
+  246.                      mnum = mnum + nnum
+  246.                   endif
+  246.                endif
+  246.             endif
+  247.             if ( ( irgi == 1 .and. irgs == 1 ) == 0 ) exit
+  247.          enddo
+  247.       endif
+  251.       if ( irgi > 1 ) then
+  252.          iret = 96
+  253.       else if ( irgs /= 0 ) then
+  254.          iret = 99
+  254.       else if ( lgrib > jg ) then
+  256.          iret = 98
+  256.       else
+  259.          call baread( lugb, lskip, lgrib, kg,  _substr(g(1),1,1) )
+  260.          iret = cvmg( 97, 0, kg + -lgrib /= 0 )
+  260.       endif
+  264.       return
+  264.       end
+  264.       
