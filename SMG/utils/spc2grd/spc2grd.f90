@@ -47,8 +47,8 @@
 
 
 program spc2grd
-   use sigio_BAMMod, only : BAMFile, & 
-                            r8,      & ! Kind for 64-bits Real Numbers
+   use sigio_BAMMod, only : BAMFile
+   use ModConstants, only : r8,      & ! Kind for 64-bits Real Numbers
                             r4         ! Kind for 64-bits Real Numbers
 
 
