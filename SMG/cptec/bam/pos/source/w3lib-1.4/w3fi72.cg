@@ -1,0 +1,588 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi72.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi72.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+  190.       
+  190.       subroutine w3fi72( itype, fld, ifld, ibitl, ipflag, id, pds, igflag, igrid, igds, icomp, ibflag, ibmap, iblen, ibdsfl, npts, kbuf, itot, jerr )
+  192.       (1,bms)[0].L = 1
+  192.       $MR_bms_S76 = (2,bms)[0].L
+  192.       $MR_bms_S77 = or( 0x100000000004058UL, and( 16, $MR_bms_S76 ) )
+  192.       (2,bms)[0].L = $MR_bms_S77
+  192.       (6,bms)[0] = 23
+  192.       (7,bms)[0] = 32774
+  192.       (4,bms)[0].L = 0
+  192.       (5,bms)[0].L = 0
+  192.       (6,bms)[0].L = 1
+  192.       (7,bms)[0].L = 0
+  192.       (8,bms)[0].L = 1
+  191.       (1,ipfld)[0].L = 1
+  191.       $MR_ipfld_S78 = (2,ipfld)[0].L
+  191.       $MR_ipfld_S79 = or( 0x100000000004058UL, and( 16, $MR_ipfld_S78 ) )
+  191.       (2,ipfld)[0].L = $MR_ipfld_S79
+  191.       (6,ipfld)[0] = 23
+  191.       (7,ipfld)[0] = 32774
+  191.       (4,ipfld)[0].L = 0
+  191.       (5,ipfld)[0].L = 0
+  191.       (6,ipfld)[0].L = 1
+  191.       (7,ipfld)[0].L = 0
+  191.       (8,ipfld)[0].L = 1
+    1.       (1,pfld)[0].L = 1
+    1.       $MR_pfld_S80 = (2,pfld)[0].L
+    1.       $MR_pfld_S81 = or( 0x100000000004058UL, and( 16, $MR_pfld_S80 ) )
+    1.       (2,pfld)[0].L = $MR_pfld_S81
+    1.       (6,pfld)[0] = 23
+    1.       (7,pfld)[0] = 32774
+    1.       (4,pfld)[0].L = 0
+    1.       (5,pfld)[0].L = 0
+    1.       (6,pfld)[0].L = 1
+    1.       (7,pfld)[0].L = 0
+    1.       (8,pfld)[0].L = 1
+  201.       ier = 0
+  202.       iberr = 0
+  203.       0[loc( jerr ),0] = 0
+  206.       lengds = 0
+  207.       lenbms = 0
+  208.       lenbds = 0
+  209.       itoss = 0
+  217.       $MR_ipflag_11 = 0[loc( ipflag ),0]
+  217.       if ( $MR_ipflag_11 == 0 ) then
+  218.          $LCS_id_0 = loc( id )
+  218.          5[$LCS_id_0,0] = 1
+  219.          call w3fi68( 0[$LCS_id_0,0], substr[pds,0:1] )
+  219.          goto 10
+  220.       else if ( $MR_ipflag_11 == 1 ) then
+  221.          $t_S0 = mova2i( substr[pds,7:1] )
+  221.          if ( and( 64, $t_S0 ) == 64 ) then
+  223.             substr[pds,7:1] = 'À'
+  223.          else
+  224.             $t_S1 = mova2i( substr[pds,7:1] )
+  224.             if ( $t_S1 == 0 ) then
+  226.                substr[pds,7:1] = '€'
+  226.             endif
+  226.          endif
+  226.    10    continue
+  237.          $t_S2 = mova2i( substr[pds,0:1] )
+  237.          $t_S4 = mova2i( substr[pds,1:1] )
+  238.          $t_S3 = mova2i( substr[pds,2:1] )
+  244.          $MR_igflag_12 = 0[loc( igflag ),0]
+  244.          if ( $MR_igflag_12 == 0 ) then
+  245.             call w3fi71( 0[loc( igrid ),0], 0[loc( igds ),0], igerr )
+  246.             $igerr_S82 = igerr
+  246.             if ( $igerr_S82 == 1 ) then
+  248.                0[loc( jerr ),0] = 4
+  248.             else
+  248.                goto 20
+  248.             endif
+  248.          else
+  248.    20       continue
+  252.             if ( $MR_igflag_12 == 0 .orelse. $MR_igflag_12 == 1 ) then
+  253.                call w3fi74( 0[loc( igds ),0], 0[loc( icomp ),0], substr[gds,0:1], lengds, 0[loc( npts ),0], igerr )
+  254.                $igerr_S83 = igerr
+  254.                if ( $igerr_S83 == 1 ) then
+  256.                   0[loc( jerr ),0] = 5
+  256.                else
+  272.                   $t_S5 = mova2i( substr[pds,7:1] )
+  272.                   if ( $t_S5 /= 64 ) then
+  273.                      $t_S6 = mova2i( substr[pds,7:1] )
+  272.                      if ( $t_S6 == 192 ) then
+  273.                         goto 30
+  273.                      else
+  273.                         goto 40
+  273.                      endif
+  273.                   else
+  273.    30                continue
+  274.                      itoss = 1
+  275.                      if ( 0[loc( ibflag ),0] == 0 ) then
+  276.                         $MR_npts_S84 = 0[loc( npts ),0]
+  276.                         if ( 0[loc( iblen ),0] - $MR_npts_S84 /= 0 ) then
+  278.                            0[loc( jerr ),0] = 7
+  278.                         else
+  281.                            $MR_bms_S85 = (2,bms)[0].L
+  281.                            $MR_bms_S86 = or( 16, $MR_bms_S85 )
+  281.                            (2,bms)[0].L = $MR_bms_S86
+  281.                            (6,bms)[0].L = 1
+  281.                            (7,bms)[0].L = ( max( 0, 8 + _ash( $MR_npts_S84 + _rsh( _ash( $MR_npts_S84, 2 ), 29 ), 3 ) ) )
+  281.                            (8,bms)[0].L = 1
+  281.                            $_allo_P0[0].L = 0x1000000000001L
+  281.                            (1,$_allo_P0)[0].L = loc( bms )
+  281.                            call __allocate( $_allo_P0, 0, 0, _fcd( 0, 0 ) )
+  282.                            call w3fi73( 0[loc( ibflag ),0], 0[loc( ibmap ),0], 0[loc( iblen ),0], substr[bms[0].L,0:1], lenbms, ier )
+  283.                            if ( ier /= 0 ) then
+  285.                               0[loc( jerr ),0] = 8
+  285.                            else
+  285.                               goto 40
+  285.                            endif
+  285.                         endif
+  285.                      else
+  285.    40                   continue
+  297.                         $t_S7 = mova2i( substr[pds,26:1] )
+  297.                         $t_S8 = mova2i( substr[pds,27:1] )
+  301.                         $LCS_t_1 = $t_S8 + _lsh( $t_S7, 8 )
+  301.                         $scale_S9 = 10.0 ** cvmg( $LCS_t_1, -and( 32767, $LCS_t_1 ), and( 32768, $LCS_t_1 ) == 0 )
+  302.                         $MR_itype_S87 = 0[loc( itype ),0]
+  302.                         if ( $MR_itype_S87 == 0 ) then
+  303.                            $MR_npts_S88 = 0[loc( npts ),0]
+  303.                            if ( $MR_npts_S88 > 0 ) then
+  303.                               $I_L303_S91 = 0
+  303.                               $LCS_2 = $MR_npts_S88
+  303.                               if ( $LCS_2 >= 4 ) then !  99.50%
+  303.                                  $TC_0 = and( -4, $LCS_2 )
+  303.                                  $LC_S89 = -$TC_0
+  303.                                  $SI_S90 = 0
+  304.                                  $LIS_1[0:4:1] = _bcst( $scale_S9, 4 )
+  304.                                  $LIS_S26 = loc( fld )
+  303.                                  if ( $LC_S89 < -15 ) then
+  303.                                     do
+  304.                                        $LCS_3 = $LIS_S26 + $SI_S90
+  304.                                        0[$LCS_3:4:1] = 0[$LCS_3:4:1] * $LIS_1[0:4:1]
+  304.                                        4[$LCS_3:4:1] = 4[$LCS_3:4:1] * $LIS_1[0:4:1]
+  304.                                        8[$LCS_3:4:1] = 8[$LCS_3:4:1] * $LIS_1[0:4:1]
+  304.                                        12[$LCS_3:4:1] = 12[$LCS_3:4:1] * $LIS_1[0:4:1]
+  303.                                        $SI_S90 = 64 + $SI_S90
+  303.                                        $LC_S89 = 16 + $LC_S89
+  303.                                        if ( $LC_S89 >= -15 ) exit
+  303.                                     enddo
+  303.                                  endif
+  303.                                  if ( $LC_S89 < 0 ) then
+  303.                                     do
+  304.                                        $LCS_4 = $LIS_S26 + $SI_S90
+  304.                                        0[$LCS_4:4:1] = 0[$LCS_4:4:1] * $LIS_1[0:4:1]
+  303.                                        $SI_S90 = 16 + $SI_S90
+  303.                                        $LC_S89 = 4 + $LC_S89
+  303.                                        if ( $LC_S89 >= 0 ) exit
+  303.                                     enddo
+  303.                                  endif
+  303.                                  $I_L303_S91 = $TC_0
+  303.                               endif
+  303.                               $LCS_MR_npts_5 = $MR_npts_S88
+  303.                               if ( $LCS_MR_npts_5 > $I_L303_S91 ) then !  99.50%
+  304.                                  $LIS_S29 = loc( fld )
+  303.                                  do
+  304.                                     $MR_fld_S92 = 0[$LIS_S29,$I_L303_S91]
+  304.                                     $MR_fld_S93 = $MR_fld_S92 * $scale_S9
+  304.                                     0[$LIS_S29,$I_L303_S91] = $MR_fld_S93
+  305.                                     $I_L303_S91 = 1 + $I_L303_S91
+  303.                                     if ( $I_L303_S91 >= $LCS_MR_npts_5 ) exit
+  303.                                  enddo
+  303.                               endif
+  303.                            endif
+  303.                         else
+  307.                            $MR_npts_S88 = 0[loc( npts ),0]
+  307.                            if ( $MR_npts_S88 > 0 ) then
+  307.                               $I_L307_S96 = 0
+  307.                               $LCS_6 = $MR_npts_S88
+  307.                               if ( $LCS_6 >= 4 ) then !  99.50%
+  307.                                  $TC_3 = and( -4, $LCS_6 )
+  307.                                  $LC_S94 = -$TC_3
+  307.                                  $SI_S95 = 0
+  308.                                  $LIS_4[0:4:1] = _bcst( $scale_S9, 4 )
+  308.                                  $LIS_S33 = loc( ifld )
+  307.                                  if ( $LC_S94 < -15 ) then
+  307.                                     do
+  308.                                        $LCS_7 = $LIS_S33 + $SI_S95
+  308.                                        0[$LCS_7:4:1] = _anint( real( 0[$LCS_7:4:1] ) * $LIS_4[0:4:1] )
+  308.                                        4[$LCS_7:4:1] = _anint( real( 4[$LCS_7:4:1] ) * $LIS_4[0:4:1] )
+  308.                                        8[$LCS_7:4:1] = _anint( real( 8[$LCS_7:4:1] ) * $LIS_4[0:4:1] )
+  308.                                        12[$LCS_7:4:1] = _anint( real( 12[$LCS_7:4:1] ) * $LIS_4[0:4:1] )
+  307.                                        $SI_S95 = 64 + $SI_S95
+  307.                                        $LC_S94 = 16 + $LC_S94
+  307.                                        if ( $LC_S94 >= -15 ) exit
+  307.                                     enddo
+  307.                                  endif
+  307.                                  if ( $LC_S94 < 0 ) then
+  307.                                     do
+  308.                                        $LCS_8 = $LIS_S33 + $SI_S95
+  308.                                        0[$LCS_8:4:1] = _anint( real( 0[$LCS_8:4:1] ) * $LIS_4[0:4:1] )
+  307.                                        $SI_S95 = 16 + $SI_S95
+  307.                                        $LC_S94 = 4 + $LC_S94
+  307.                                        if ( $LC_S94 >= 0 ) exit
+  307.                                     enddo
+  307.                                  endif
+  307.                                  $I_L307_S96 = $TC_3
+  307.                               endif
+  307.                               $LCS_MR_npts_9 = $MR_npts_S88
+  307.                               if ( $LCS_MR_npts_9 > $I_L307_S96 ) then !  99.50%
+  308.                                  $LIS_S36 = loc( ifld )
+  307.                                  do
+  308.                                     $MR_ifld_S97 = 0[$LIS_S36,$I_L307_S96]
+  308.                                     $MR_ifld_S98 = _anint( real( $MR_ifld_S97 ) * $scale_S9 )
+  308.                                     0[$LIS_S36,$I_L307_S96] = $MR_ifld_S98
+  309.                                     $I_L307_S96 = 1 + $I_L307_S96
+  307.                                     if ( $I_L307_S96 >= $LCS_MR_npts_9 ) exit
+  307.                                  enddo
+  307.                               endif
+  307.                            endif
+  307.                         endif
+  314.                         $MR_pfld_S99 = (2,pfld)[0].L
+  314.                         $MR_pfld_S100 = or( 16, $MR_pfld_S99 )
+  314.                         (2,pfld)[0].L = $MR_pfld_S100
+  314.                         (6,pfld)[0].L = 1
+  314.                         $CS_0 = ( max( 0, _lsh( $MR_npts_S88, 2 ) ) )
+  314.                         (7,pfld)[0].L = $CS_0
+  314.                         (8,pfld)[0].L = 1
+  314.                         $_allo_P1[0].L = 0x1000000000001L
+  314.                         (1,$_allo_P1)[0].L = loc( pfld )
+  314.                         call __allocate( $_allo_P1, 0, 0, _fcd( 0, 0 ) )
+  316.                         $MR_ibdsfl_S101 = 1[loc( ibdsfl ),0]
+  316.                         if ( $MR_ibdsfl_S101 /= 0 ) then
+  317.                            $MR_ipfld_S102 = (2,ipfld)[0].L
+  317.                            $MR_ipfld_S103 = or( 16, $MR_ipfld_S102 )
+  317.                            (2,ipfld)[0].L = $MR_ipfld_S103
+  317.                            (6,ipfld)[0].L = 1
+  317.                            (7,ipfld)[0].L = $CS_0
+  317.                            (8,ipfld)[0].L = 1
+  317.                            $_allo_P2[0].L = 0x1000000000001L
+  317.                            (1,$_allo_P2)[0].L = loc( ipfld )
+  317.                            call __allocate( $_allo_P2, 0, 0, _fcd( 0, 0 ) )
+  318.                            $MR_ipfld_S104 = (7,ipfld)[0].L
+  318.                            $F_A33 = $MR_ipfld_S104
+  318.                            if ( $MR_ipfld_S104 > 0 ) then !  99.50%
+  318.                               $I_S106 = 0
+  318.                               $MR_ipfld_S105 = (6,ipfld)[0].L
+  318.                               $LCS_1_10 = $MR_ipfld_S104 + $MR_ipfld_S105 + -1
+  318.                               $LCS_1_11 = $F_A33 + $MR_ipfld_S105 + -1
+  318.                               if ( $LCS_1_11 > $LCS_1_10 ) then
+  318.                                  $LB_Y0 = $MR_ipfld_S105
+  318.                                  $UB_Y1 = $LCS_1_10
+  318.                                  $Subscript_Y2 = $MR_ipfld_S105
+  318.                                  $Subscript_Y3 = $LCS_1_11
+  318.                                  $Subscript_Y4 = 1
+  318.                                  _rbounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y43 )
+  318.                               endif
+  318.                               $ipfld_S39 = ipfld[0].L
+  318.                               do
+  318.                                  substr[$ipfld_S39,$I_S106:1] = ''
+  318.                                  $I_S106 = 1 + $I_S106
+  318.                                  if ( $I_S106 >= $F_A33 ) exit
+  318.                               enddo
+  318.                            endif
+  318.                         else
+  320.                            $MR_ipfld_S107 = (2,ipfld)[0].L
+  320.                            $MR_ipfld_S108 = or( 16, $MR_ipfld_S107 )
+  320.                            (2,ipfld)[0].L = $MR_ipfld_S108
+  320.                            (6,ipfld)[0].L = 1
+  320.                            (7,ipfld)[0].L = 1
+  320.                            (8,ipfld)[0].L = 1
+  320.                            $_allo_P3[0].L = 0x1000000000001L
+  320.                            (1,$_allo_P3)[0].L = loc( ipfld )
+  320.                            call __allocate( $_allo_P3, 0, 0, _fcd( 0, 0 ) )
+  320.                         endif
+  323.                         call w3fi75( 0[loc( ibitl ),0], 0[loc( itype ),0], itoss, 0[loc( fld ),0], 0[loc( ifld ),0], 0[loc( ibmap ),0], 0[loc( ibdsfl ),0], 0[loc( npts ),0], substr[bds11,0:1], substr[ipfld[0].L,0:1], substr[pfld[0].L,0:1], len, lenbds, iberr, substr[pds,0:1], 0[loc( igds ),0] )
+  326.                         $MR_ibdsfl_S109 = 1[loc( ibdsfl ),0]
+  326.                         if ( $MR_ibdsfl_S109 /= 0 ) then
+  328.                            $MR_npts_S110 = 0[loc( npts ),0]
+  328.                            $LCS_12 = _lsh( $MR_npts_S110, 2 )
+  328.                            if ( $LCS_12 > 0 ) then
+  328.                               $I_L328_S115 = 0
+  329.                               $MR_ipfld_S111 = (6,ipfld)[0].L
+  329.                               $MR_ipfld_S112 = (7,ipfld)[0].L
+  329.                               $LCS_1_13 = $MR_ipfld_S111 + $MR_ipfld_S112 + -1
+  329.                               if ( int( 1 >= $MR_ipfld_S111 .and. $LCS_12 <= $LCS_1_13 ) == 0 ) then
+  329.                                  $LB_Y0 = $MR_ipfld_S111
+  329.                                  $UB_Y1 = $LCS_1_13
+  329.                                  $Subscript_Y2 = 1
+  329.                                  $Subscript_Y3 = $LCS_12
+  329.                                  $Subscript_Y4 = 1
+  329.                                  _rbounds_error( $_File_Y40, $Line_Y44, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y45 )
+  329.                               endif
+  329.                               $MR_pfld_S114 = (7,pfld)[0].L
+  329.                               $MR_pfld_S113 = (6,pfld)[0].L
+  329.                               $LCS_1_14 = $MR_pfld_S113 + $MR_pfld_S114 + -1
+  329.                               $LCS_15 = _lsh( $MR_npts_S110, 2 )
+  329.                               if ( int( 1 >= $MR_pfld_S113 .and. $LCS_15 <= $LCS_1_14 ) == 0 ) then
+  329.                                  $LB_Y0 = $MR_pfld_S113
+  329.                                  $UB_Y1 = $LCS_1_14
+  329.                                  $Subscript_Y2 = 1
+  329.                                  $Subscript_Y3 = $LCS_15
+  329.                                  $Subscript_Y4 = 1
+  329.                                  _rbounds_error( $_File_Y40, $Line_Y44, $_Name_Y46, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y47 )
+  329.                               endif
+  329.                               $pfld_S45 = pfld[0].L
+  329.                               $ipfld_S43 = ipfld[0].L
+  330.                               $LIS_E7 = _lsh( $MR_npts_S110, 2 )
+  329.                               $LIS_E6 = 1 - $MR_ipfld_S111
+  329.                               $LIS_S44 = 1 - $MR_pfld_S113
+  328.                               do
+  329.                                  substr[$pfld_S45,$LIS_S44 + $I_L328_S115:1] = substr[$ipfld_S43,$LIS_E6 + $I_L328_S115:1]
+  330.                                  $I_L328_S115 = 1 + $I_L328_S115
+  328.                                  if ( $I_L328_S115 >= $LIS_E7 ) exit
+  328.                               enddo
+  328.                            endif
+  328.                         endif
+  332.                         $_allo_P4[0].L = 0x1000000000001L
+  332.                         (1,$_allo_P4)[0].L = loc( ipfld )
+  332.                         call __deallocate( $_allo_P4, 0, 0, _fcd( 0, 0 ) )
+  332.                         $MR_ipfld_S116 = (2,ipfld)[0].L
+  332.                         $MR_ipfld_S117 = and( 0xfffffffffffffffeUL, $MR_ipfld_S116 )
+  332.                         (2,ipfld)[0].L = $MR_ipfld_S117
+  334.                         if ( iberr == 1 ) then
+  335.                            0[loc( jerr ),0] = 3
+  335.                         else
+  341.                            $LCS_t_16 = $t_S8 + _lsh( $t_S7, 8 )
+  341.                            if ( cvmg( $LCS_t_16, -and( 32767, $LCS_t_16 ), and( 32768, $LCS_t_16 ) == 0 ) /= 0 ) then
+  342.                               $dscale_S13 = 1.0 / $scale_S9
+  343.                               $MR_itype_S118 = 0[loc( itype ),0]
+  343.                               if ( $MR_itype_S118 == 0 ) then
+  344.                                  $MR_npts_S119 = 0[loc( npts ),0]
+  344.                                  if ( $MR_npts_S119 > 0 ) then
+  344.                                     $I_L344_S122 = 0
+  344.                                     $LCS_17 = $MR_npts_S119
+  344.                                     if ( $LCS_17 >= 4 ) then !  99.50%
+  344.                                        $TC_6 = and( -4, $LCS_17 )
+  344.                                        $LC_S120 = -$TC_6
+  344.                                        $SI_S121 = 0
+  345.                                        $LIS_8[0:4:1] = _bcst( $dscale_S13, 4 )
+  345.                                        $LIS_S48 = loc( fld )
+  344.                                        if ( $LC_S120 < -15 ) then
+  344.                                           do
+  345.                                              $LCS_18 = $LIS_S48 + $SI_S121
+  345.                                              0[$LCS_18:4:1] = 0[$LCS_18:4:1] * $LIS_8[0:4:1]
+  345.                                              4[$LCS_18:4:1] = 4[$LCS_18:4:1] * $LIS_8[0:4:1]
+  345.                                              8[$LCS_18:4:1] = 8[$LCS_18:4:1] * $LIS_8[0:4:1]
+  345.                                              12[$LCS_18:4:1] = 12[$LCS_18:4:1] * $LIS_8[0:4:1]
+  344.                                              $SI_S121 = 64 + $SI_S121
+  344.                                              $LC_S120 = 16 + $LC_S120
+  344.                                              if ( $LC_S120 >= -15 ) exit
+  344.                                           enddo
+  344.                                        endif
+  344.                                        if ( $LC_S120 < 0 ) then
+  344.                                           do
+  345.                                              $LCS_19 = $LIS_S48 + $SI_S121
+  345.                                              0[$LCS_19:4:1] = 0[$LCS_19:4:1] * $LIS_8[0:4:1]
+  344.                                              $SI_S121 = 16 + $SI_S121
+  344.                                              $LC_S120 = 4 + $LC_S120
+  344.                                              if ( $LC_S120 >= 0 ) exit
+  344.                                           enddo
+  344.                                        endif
+  344.                                        $I_L344_S122 = $TC_6
+  344.                                     endif
+  344.                                     $LCS_MR_npts_20 = $MR_npts_S119
+  344.                                     if ( $LCS_MR_npts_20 > $I_L344_S122 ) then !  99.50%
+  345.                                        $LIS_S51 = loc( fld )
+  344.                                        do
+  345.                                           $MR_fld_S123 = 0[$LIS_S51,$I_L344_S122]
+  345.                                           $MR_fld_S124 = $MR_fld_S123 * $dscale_S13
+  345.                                           0[$LIS_S51,$I_L344_S122] = $MR_fld_S124
+  346.                                           $I_L344_S122 = 1 + $I_L344_S122
+  344.                                           if ( $I_L344_S122 >= $LCS_MR_npts_20 ) exit
+  344.                                        enddo
+  344.                                     endif
+  344.                                  endif
+  344.                               else
+  348.                                  $MR_npts_S125 = 0[loc( npts ),0]
+  348.                                  if ( $MR_npts_S125 > 0 ) then
+  348.                                     $I_L348_S128 = 0
+  348.                                     $LCS_21 = $MR_npts_S125
+  348.                                     if ( $LCS_21 >= 4 ) then !  99.50%
+  348.                                        $TC_9 = and( -4, $LCS_21 )
+  348.                                        $LC_S126 = -$TC_9
+  348.                                        $SI_S127 = 0
+  349.                                        $LIS_9[0:4:1] = _bcst( $dscale_S13, 4 )
+  349.                                        $LIS_S55 = loc( ifld )
+  349.                                        $LIS_S57 = loc( fld )
+  348.                                        if ( $LC_S126 < -15 ) then
+  348.                                           do
+  349.                                              $LCS_22 = $LIS_S55 + $SI_S127
+  349.                                              $LCS_23 = $LIS_S57 + $SI_S127
+  349.                                              0[$LCS_23:4:1] = _anint( real( 0[$LCS_22:4:1] ) * $LIS_9[0:4:1] )
+  349.                                              4[$LCS_23:4:1] = _anint( real( 4[$LCS_22:4:1] ) * $LIS_9[0:4:1] )
+  349.                                              8[$LCS_23:4:1] = _anint( real( 8[$LCS_22:4:1] ) * $LIS_9[0:4:1] )
+  349.                                              12[$LCS_23:4:1] = _anint( real( 12[$LCS_22:4:1] ) * $LIS_9[0:4:1] )
+  348.                                              $SI_S127 = 64 + $SI_S127
+  348.                                              $LC_S126 = 16 + $LC_S126
+  348.                                              if ( $LC_S126 >= -15 ) exit
+  348.                                           enddo
+  348.                                        endif
+  348.                                        if ( $LC_S126 < 0 ) then
+  348.                                           do
+  349.                                              0[$LIS_S57 + $SI_S127:4:1] = _anint( real( 0[$LIS_S55 + $SI_S127:4:1] ) * $LIS_9[0:4:1] )
+  348.                                              $SI_S127 = 16 + $SI_S127
+  348.                                              $LC_S126 = 4 + $LC_S126
+  348.                                              if ( $LC_S126 >= 0 ) exit
+  348.                                           enddo
+  348.                                        endif
+  348.                                        $I_L348_S128 = $TC_9
+  348.                                     endif
+  348.                                     $LCS_MR_npts_24 = $MR_npts_S125
+  348.                                     if ( $LCS_MR_npts_24 > $I_L348_S128 ) then !  99.50%
+  349.                                        $LIS_S59 = loc( ifld )
+  349.                                        $LIS_S60 = loc( fld )
+  348.                                        do
+  349.                                           0[$LIS_S60,$I_L348_S128] = _anint( real( 0[$LIS_S59,$I_L348_S128] ) * $dscale_S13 )
+  350.                                           $I_L348_S128 = 1 + $I_L348_S128
+  348.                                           if ( $I_L348_S128 >= $LCS_MR_npts_24 ) exit
+  348.                                        enddo
+  348.                                     endif
+  348.                                  endif
+  348.                               endif
+  348.                            endif
+  358.                            substr[zero,0:1] = ''
+  359.                            $MR_lenbms_38 = lenbms
+  359.                            $MR_lengds_39 = lengds
+  359.                            $MR_lenbds_40 = lenbds
+  359.                            $CS_lenbds_1 = $t_S3 + $MR_lenbms_38 + $MR_lengds_39 + $MR_lenbds_40
+  359.                            $CS_2 = $CS_lenbds_1 + _lsh( $t_S4, 8 ) + _lsh( $t_S2, 16 )
+  359.                            $LCS_12_25 = 12 + $CS_2
+  359.                            0[loc( itot ),0] = $LCS_12_25
+  366.                            $F_A34 = $LCS_12_25
+  366.                            if ( $LCS_12_25 > 0 ) then !  99.50%
+  366.                               $I_S129 = 0
+  366.                               do
+  366.                                  substr[kbuf,$I_S129:1] = substr[zero,0:1]
+  366.                                  $I_S129 = 1 + $I_S129
+  366.                                  if ( $I_S129 >= $F_A34 ) exit
+  366.                               enddo
+  366.                            endif
+  372.                            substr[kbuf,0:1] = character*1( ib[0] )
+  372.                            substr[kbuf,1:1] = character*1( (1,ib)[0] )
+  372.                            substr[kbuf,2:1] = character*1( (2,ib)[0] )
+  372.                            substr[kbuf,3:1] = character*1( (3,ib)[0] )
+  375.                            $LCS_27 = _lsh( $t_S2, 16 )
+  375.                            $LCS_28 = _lsh( $t_S4, 8 )
+  375.                            $PRT_P54 = $LCS_27 + $LCS_28 + $CS_lenbds_1 + 12
+  375.                            $PRT_P55 = _ash( $PRT_P54 + _rsh( _ash( $PRT_P54, 15 ), 16 ), 16 )
+  375.                            substr[kbuf,4:1] = character*1( $PRT_P55 - and( -256, $PRT_P55 + _rsh( _ash( $PRT_P55, 7 ), 24 ) ) )
+  376.                            $LCS_PRT_26 = $PRT_P54 + _rsh( _ash( $PRT_P54, 7 ), 24 )
+  376.                            $PRT_P56 = _ash( $LCS_PRT_26, 8 )
+  376.                            substr[kbuf,5:1] = character*1( $PRT_P56 - and( -256, $PRT_P56 + _rsh( _ash( $PRT_P56, 7 ), 24 ) ) )
+  377.                            substr[kbuf,6:1] = character*1( $PRT_P54 - and( -256, $LCS_PRT_26 ) )
+  378.                            substr[kbuf,7:1] = ''
+  383.                            $LCS_29 = $t_S3 + $LCS_27 + $LCS_28
+  383.                            if ( $LCS_29 > 0 ) then
+  385.                               $I_L385_S130 = 0
+  387.                               $LIS_E10 = $LCS_29
+  385.                               do
+  386.                                  substr[kbuf,8 + $I_L385_S130:1] = substr[pds,$I_L385_S130:1]
+  387.                                  $I_L385_S130 = 1 + $I_L385_S130
+  385.                                  if ( $I_L385_S130 >= $LIS_E10 ) exit
+  385.                               enddo
+  385.                            endif
+  395.                            if ( $MR_lengds_39 > 0 ) then
+  397.                               $I_L397_S131 = 0
+  398.                               if ( $MR_lengds_39 > 200 ) then
+  398.                                  $LB_Y0 = 1
+  398.                                  $UB_Y1 = 200
+  398.                                  $Subscript_Y2 = 1
+  398.                                  $Subscript_Y3 = $MR_lengds_39
+  398.                                  $Subscript_Y4 = 1
+  398.                                  _rbounds_error( $_File_Y40, $Line_Y49, $_Name_Y48, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y50 )
+  398.                               endif
+  399.                               $LIS_E12 = $MR_lengds_39
+  398.                               $LIS_E11 = 8 + ( $t_S3 + _lsh( $t_S4, 8 ) + _lsh( $t_S2, 16 ) )
+  397.                               do
+  398.                                  substr[kbuf,$LIS_E11 + $I_L397_S131:1] = substr[gds,$I_L397_S131:1]
+  399.                                  $I_L397_S131 = 1 + $I_L397_S131
+  397.                                  if ( $I_L397_S131 >= $LIS_E12 ) exit
+  397.                               enddo
+  397.                            endif
+  405.                            if ( $MR_lenbms_38 > 0 ) then
+  407.                               $I_L407_S132 = 0
+  408.                               $MR_bms_46 = (7,bms)[0].L
+  408.                               $MR_bms_47 = (6,bms)[0].L
+  408.                               $LCS_1_30 = $MR_bms_46 + $MR_bms_47 + -1
+  408.                               if ( int( 1 >= $MR_bms_47 .and. $MR_lenbms_38 <= $LCS_1_30 ) == 0 ) then
+  408.                                  $LB_Y0 = $MR_bms_47
+  408.                                  $UB_Y1 = $LCS_1_30
+  408.                                  $Subscript_Y2 = 1
+  408.                                  $Subscript_Y3 = $MR_lenbms_38
+  408.                                  $Subscript_Y4 = 1
+  408.                                  _rbounds_error( $_File_Y40, $Line_Y52, $_Name_Y51, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y53 )
+  408.                               endif
+  408.                               $SC_bms_I12 = bms[0].L
+  409.                               $LIS_E15 = $MR_lenbms_38
+  408.                               $LIS_E14 = 1 - $MR_bms_47
+  408.                               $LIS_E13 = 8 + ( $t_S3 + $MR_lengds_39 + _lsh( $t_S4, 8 ) + _lsh( $t_S2, 16 ) )
+  407.                               do
+  408.                                  substr[kbuf,$LIS_E13 + $I_L407_S132:1] = substr[$SC_bms_I12,$LIS_E14 + $I_L407_S132:1]
+  409.                                  $I_L407_S132 = 1 + $I_L407_S132
+  407.                                  if ( $I_L407_S132 >= $LIS_E15 ) exit
+  407.                               enddo
+  407.                            endif
+  418.                            $I_L418_S133 = 0
+  419.                            $CS_3 = $t_S3 + $MR_lenbms_38 + $MR_lengds_39 + _lsh( $t_S4, 8 ) + _lsh( $t_S2, 16 )
+  419.                            $LIS_E16 = 8 + $CS_3
+  418.                            do
+  419.                               substr[kbuf,$LIS_E16 + $I_L418_S133:1] = substr[bds11,$I_L418_S133:1]
+  420.                               $I_L418_S133 = 1 + $I_L418_S133
+  418.                               if ( $I_L418_S133 >= 11 ) exit
+  418.                            enddo
+  425.                            $MR_len_48 = len
+  425.                            if ( $MR_len_48 > 0 ) then
+  427.                               $I_L427_S136 = 0
+  428.                               $MR_pfld_S135 = (7,pfld)[0].L
+  428.                               $MR_pfld_S134 = (6,pfld)[0].L
+  428.                               $LCS_1_31 = $MR_pfld_S134 + $MR_pfld_S135 + -1
+  428.                               if ( int( 1 >= $MR_pfld_S134 .and. $MR_len_48 <= $LCS_1_31 ) == 0 ) then
+  428.                                  $LB_Y0 = $MR_pfld_S134
+  428.                                  $UB_Y1 = $LCS_1_31
+  428.                                  $Subscript_Y2 = 1
+  428.                                  $Subscript_Y3 = $MR_len_48
+  428.                                  $Subscript_Y4 = 1
+  428.                                  _rbounds_error( $_File_Y40, $Line_Y54, $_Name_Y46, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y55 )
+  428.                               endif
+  428.                               $pfld_S75 = pfld[0].L
+  429.                               $LIS_E18 = $MR_len_48
+  428.                               $LIS_S73 = 1 - $MR_pfld_S134
+  428.                               $LIS_E17 = 19 + $CS_3
+  427.                               do
+  428.                                  substr[kbuf,$LIS_E17 + $I_L427_S136:1] = substr[$pfld_S75,$LIS_S73 + $I_L427_S136:1]
+  429.                                  $I_L427_S136 = 1 + $I_L427_S136
+  427.                                  if ( $I_L427_S136 >= $LIS_E18 ) exit
+  427.                               enddo
+  427.                            endif
+  435.                            substr[seven,0:1] = '7'
+  438.                            $LCS_32 = $CS_2
+  438.                            substr[kbuf,8 + $LCS_32:1] = substr[seven,0:1]
+  438.                            substr[kbuf,9 + $LCS_32:1] = substr[seven,0:1]
+  438.                            substr[kbuf,10 + $LCS_32:1] = substr[seven,0:1]
+  438.                            substr[kbuf,11 + $LCS_32:1] = substr[seven,0:1]
+  438.                         endif
+  438.                      endif
+  438.                   endif
+  438.                endif
+  438.             else
+  262.                0[loc( jerr ),0] = 2
+  262.             endif
+  262.          endif
+  262.       else
+  231.          0[loc( jerr ),0] = 1
+  231.       endif
+  442.       $MR_bms_S137 = (2,bms)[0].L
+  442.       if ( _lsh( $MR_bms_S137, 63 ) < 0 ) then
+  442.          $_allo_P5[0].L = 0x1000000000001L
+  442.          (1,$_allo_P5)[0].L = loc( bms )
+  442.          call __deallocate( $_allo_P5, 0, 0, _fcd( 0, 0 ) )
+  442.          $MR_bms_S138 = (2,bms)[0].L
+  442.          $MR_bms_S139 = and( 0xfffffffffffffffeUL, $MR_bms_S138 )
+  442.          (2,bms)[0].L = $MR_bms_S139
+  442.       endif
+  443.       $MR_pfld_S140 = (2,pfld)[0].L
+  443.       if ( _lsh( $MR_pfld_S140, 63 ) < 0 ) then
+  443.          $_allo_P6[0].L = 0x1000000000001L
+  443.          (1,$_allo_P6)[0].L = loc( pfld )
+  443.          call __deallocate( $_allo_P6, 0, 0, _fcd( 0, 0 ) )
+  443.          $MR_pfld_S141 = (2,pfld)[0].L
+  443.          $MR_pfld_S142 = and( 0xfffffffffffffffeUL, $MR_pfld_S141 )
+  443.          (2,pfld)[0].L = $MR_pfld_S142
+  443.       endif
+  190.       $_allo_P7[0].L = 0x3000000000001L
+  190.       (1,$_allo_P7)[0].L = loc( pfld )
+  190.       (2,$_allo_P7)[0].L = loc( ipfld )
+  190.       (3,$_allo_P7)[0].L = loc( bms )
+  190.       call _dealloc( $_allo_P7, 0, 0, _fcd( 0, 0 ) )
+  445.       return
+  445.       end
+  445.       

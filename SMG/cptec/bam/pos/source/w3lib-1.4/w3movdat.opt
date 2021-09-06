@@ -1,0 +1,42 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3movdat.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3movdat.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine w3movdat( rinc, idat, jdat )
+   45.       rinc1(1) = rinc(1)
+   46.       $I_A1 = 0
+   46. !dir$ ivdep
+   46.       do
+   46.          rinc1(2 + $I_A1) = rinc(2 + $I_A1) + idat(5 + $I_A1)
+   46.          $I_A1 = 1 + $I_A1
+   46.          if ( $I_A1 >= 4 ) exit
+   46.       enddo
+   47.       call w3reddat( -1, rinc1(1), rinc2(1) )
+   48.       $t_S0 = iw3jdn( idat(1), idat(2), idat(3) )
+   48.       jldayn = $t_S0 + _anint( rinc2(1) )
+   49.       call w3fs26( jldayn, jdat(1), jdat(2), jdat(3), jdow, jdoy )
+   50.       jdat(4) = idat(4)
+   51.       $I_A1 = 0
+   51. !dir$ ivdep
+   51.       do
+   51.          jdat(5 + $I_A1) = _anint( rinc2(2 + $I_A1) )
+   51.          $I_A1 = 1 + $I_A1
+   51.          if ( $I_A1 >= 4 ) exit
+   51.       enddo
+   53.       return
+   53.       end
+   53.       

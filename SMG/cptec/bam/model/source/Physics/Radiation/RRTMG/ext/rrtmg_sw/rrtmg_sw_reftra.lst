@@ -1,0 +1,855 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrtmg_sw_reftra.f90
+Compiled : 12/12/20  00:22:22
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps rrtmg_sw_reftra.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrtmg_sw_reftra.f90
+Date     : 12/12/2020  00:22:22
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_8844/rrtmg_sw_reftra_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     A - Pattern matched      a - atomic memory operation
+                              b - blocked
+     C - Collapsed            c - conditional and/or computed
+     D - Deleted               
+     E - Cloned               f - fused
+     G - Accelerated          g - partitioned
+     I - Inlined              i - interchanged
+     M - Multithreaded        m - partitioned
+                              n - non-blocking remote transfer
+                              p - partial
+                              r - unrolled
+                              s - shortloop
+     V - Vectorized           w - unwound
+
+
+    1.       !     path:      $Source: /storm/rc1/cvsroot/rc/rrtmg_sw/src/rrtmg_sw_reftra.f90,v $
+    2.       !     author:    $Author: mike $
+    3.       !     revision:  $Revision: 1.2 $
+    4.       !     created:   $Date: 2007/08/23 20:40:14 $
+    5.       
+    6.             module rrtmg_sw_reftra
+    7.       
+    8.       !  --------------------------------------------------------------------------
+    9.       ! |                                                                          |
+   10.       ! |  Copyright 2002-2007, Atmospheric & Environmental Research, Inc. (AER).  |
+   11.       ! |  This software may be used, copied, or redistributed as long as it is    |
+   12.       ! |  not sold and this copyright notice is reproduced on each copy made.     |
+   13.       ! |  This model is provided as is without any express or implied warranties. |
+   14.       ! |                       (http://www.rtweb.aer.com/)                        |
+   15.       ! |                                                                          |
+   16.       !  --------------------------------------------------------------------------
+   17.       
+   18.       ! ------- Modules -------
+   19.       
+   20.             use shr_kind_mod, only: r8 => shr_kind_r8
+   21.       
+   22.       !      use parkind, only : jpim, jprb
+   23.             use rrsw_tbl, only : tblint, bpade, od_lo, exp_tbl
+   24.             use rrsw_vsn, only : hvrrft, hnamrft
+   25.       
+   26.             implicit none
+   27.       
+   28.             contains
+   29.       
+   30.       ! --------------------------------------------------------------------
+   31.             subroutine reftra_sw(               & !       reftra_sw ( &
+   32.                                  nlayers      , & !              nlayers               , &
+   33.                                  lrtchk       , & !              lrtchkclr(1:nlayers)  , &
+   34.                                  pgg          , & !              zgcc     (1:nlayers)  , &
+   35.                                  prmuz        , & !              prmu0                 , &
+   36.                                  ptau         , & !              ztauc    (1:nlayers)  , &
+   37.                                  pw           , & !              zomcc    (1:nlayers)  , &
+   38.                                  pref         , & !              zrefc    (1:nlayers+1), &
+   39.                                  prefd        , & !              zrefdc   (1:nlayers+1), &
+   40.                                  ptra         , & !              ztrac    (1:nlayers+1), &
+   41.                                  ptrad          ) !              ztradc   (1:nlayers+1)  )
+   42.       ! --------------------------------------------------------------------
+   43.         
+   44.       ! Purpose: computes the reflectivity and transmissivity of a clear or 
+   45.       !   cloudy layer using a choice of various approximations.
+   46.       !
+   47.       ! Interface:  *rrtmg_sw_reftra* is called by *rrtmg_sw_spcvrt*
+   48.       !
+   49.       ! Description:
+   50.       ! explicit arguments :
+   51.       ! --------------------
+   52.       ! inputs
+   53.       ! ------ 
+   54.       !      lrtchk  = .t. for all layers in clear profile
+   55.       !      lrtchk  = .t. for cloudy layers in cloud profile 
+   56.       !              = .f. for clear layers in cloud profile
+   57.       !      pgg     = assymetry factor
+   58.       !      prmuz   = cosine solar zenith angle
+   59.       !      ptau    = optical thickness
+   60.       !      pw      = single scattering albedo
+   61.       !
+   62.       ! outputs
+   63.       ! -------
+   64.       !      pref    : collimated beam reflectivity
+   65.       !      prefd   : diffuse beam reflectivity 
+   66.       !      ptra    : collimated beam transmissivity
+   67.       !      ptrad   : diffuse beam transmissivity
+   68.       !
+   69.       !
+   70.       ! Method:
+   71.       ! -------
+   72.       !      standard delta-eddington, p.i.f.m., or d.o.m. layer calculations.
+   73.       !      kmodts  = 1 eddington (joseph et al., 1976)
+   74.       !              = 2 pifm (zdunkowski et al., 1980)
+   75.       !              = 3 discrete ordinates (liou, 1973)
+   76.       !
+   77.       !
+   78.       ! Modifications:
+   79.       ! --------------
+   80.       ! Original: J-JMorcrette, ECMWF, Feb 2003
+   81.       ! Revised for F90 reformatting: MJIacono, AER, Jul 2006
+   82.       ! Revised to add exponential lookup table: MJIacono, AER, Aug 2007
+   83.       !
+   84.       ! ------------------------------------------------------------------
+   85.       
+   86.       ! ------- Declarations ------
+   87.       
+   88.       ! ------- Input -------
+   89.       
+   90.             integer, intent(in) :: nlayers
+   91.       
+   92.             logical, intent(in) :: lrtchk(1:nlayers)                           ! Logical flag for reflectivity and
+   93.                                                                        ! and transmissivity calculation; 
+   94.                                                                        !   Dimensions: (nlayers)
+   95.       
+   96.             real(kind=r8), intent(in) :: pgg(1:nlayers)                      ! asymmetry parameter
+   97.                                                                        !   Dimensions: (nlayers)
+   98.             real(kind=r8), intent(in) :: ptau(1:nlayers)                 ! optical depth
+   99.                                                                        !   Dimensions: (nlayers)
+  100.             real(kind=r8), intent(in) :: pw(1:nlayers)                     ! single scattering albedo 
+  101.                                                                        !   Dimensions: (nlayers)
+  102.             real(kind=r8), intent(in) :: prmuz                       ! cosine of solar zenith angle
+  103.       
+  104.       ! ------- Output -------
+  105.       
+  106.             real(kind=r8), intent(inout) :: pref(1:nlayers+1)                    ! direct beam reflectivity
+  107.                                                                        !   Dimensions: (nlayers+1)
+  108.             real(kind=r8), intent(inout) :: prefd(1:nlayers+1)                ! diffuse beam reflectivity
+  109.                                                                        !   Dimensions: (nlayers+1)
+  110.             real(kind=r8), intent(inout) :: ptra(1:nlayers+1)                    ! direct beam transmissivity
+  111.                                                                        !   Dimensions: (nlayers+1)
+  112.             real(kind=r8), intent(inout) :: ptrad(1:nlayers+1)                  ! diffuse beam transmissivity
+  113.                                                                        !   Dimensions: (nlayers+1)
+  114.       
+  115.       ! ------- Local ------- 
+  116.       
+  117.             integer :: jk, jl, kmodts
+  118.             integer :: itind
+  119.       
+  120.             real(kind=r8) :: tblind
+  121.             real(kind=r8) :: za, za1, za2
+  122.             real(kind=r8) :: zbeta, zdend, zdenr, zdent
+  123.             real(kind=r8) :: ze1, ze2, zem1, zem2, zemm, zep1, zep2
+  124.             real(kind=r8) :: zg, zg3, zgamma1, zgamma2, zgamma3, zgamma4, zgt
+  125.             real(kind=r8) :: zr1, zr2, zr3, zr4, zr5
+  126.             real(kind=r8) :: zrk, zrk2, zrkg, zrm1, zrp, zrp1, zrpp
+  127.             real(kind=r8) :: zsr3, zt1, zt2, zt3, zt4, zt5, zto1
+  128.             real(kind=r8) :: zw, zwcrit, zwo
+  129.       
+  130.             real(kind=r8), parameter :: eps = 1.e-08_r8
+  131.       
+  132.       !     ------------------------------------------------------------------
+  133.       
+  134.       ! Initialize
+  135.       
+  136.             hvrrft = '$Revision: 1.2 $'
+  137.       
+  138.             zsr3=sqrt(3._r8)
+  139.             zwcrit=0.9999995_r8
+  140.             kmodts=2
+  141.       
+  142.  1--<       do jk=1, nlayers
+  143.  1             if (.not.lrtchk(jk)) then
+  144.  1                pref(jk) =0._r8
+  145.  1                ptra(jk) =1._r8
+  146.  1                prefd(jk)=0._r8
+  147.  1                ptrad(jk)=1._r8
+  148.  1             else
+  149.  1                zto1=ptau(jk)
+  150.  1                zw  =pw(jk)
+  151.  1                zg  =pgg(jk)  
+  152.  1    
+  153.  1    ! General two-stream expressions
+  154.  1    
+  155.  1                zg3= 3._r8 * zg
+  156.  1                if (kmodts == 1) then
+  157.  1                   zgamma1= (7._r8 - zw * (4._r8 + zg3)) * 0.25_r8
+  158.  1                   zgamma2=-(1._r8 - zw * (4._r8 - zg3)) * 0.25_r8
+  159.  1                   zgamma3= (2._r8 - zg3 * prmuz ) * 0.25_r8
+  160.  1                else if (kmodts == 2) then  
+  161.  1                   zgamma1= (8._r8 - zw * (5._r8 + zg3)) * 0.25_r8
+  162.  1                   zgamma2=  3._r8 *(zw * (1._r8 - zg )) * 0.25_r8
+  163.  1                   zgamma3= (2._r8 - zg3 * prmuz ) * 0.25_r8
+  164.  1                else if (kmodts == 3) then  
+  165.  1                   zgamma1= zsr3 * (2._r8 - zw * (1._r8 + zg)) * 0.5_r8
+  166.  1                   zgamma2= zsr3 * zw * (1._r8 - zg ) * 0.5_r8
+  167.  1                   zgamma3= (1._r8 - zsr3 * zg * prmuz ) * 0.5_r8
+  168.  1                end if
+  169.  1                zgamma4= 1._r8 - zgamma3
+  170.  1        
+  171.  1    ! Recompute original s.s.a. to test for conservative solution
+  172.  1    
+  173.  1                zwo= zw / (1._r8 - (1._r8 - zw) * (zg / (1._r8 - zg))**2)
+  174.  1        
+  175.  1                if (zwo >= zwcrit) then
+  176.  1    ! Conservative scattering
+  177.  1    
+  178.  1                   za  = zgamma1 * prmuz 
+  179.  1                   za1 = za - zgamma3
+  180.  1                   zgt = zgamma1 * zto1
+  181.  1            
+  182.  1    ! Homogeneous reflectance and transmittance,
+  183.  1    ! collimated beam
+  184.  1    
+  185.  1                   ze1 = min ( zto1 / prmuz , 500._r8)
+  186.  1    !               ze2 = exp( -ze1 )
+  187.  1    
+  188.  1    ! Use exponential lookup table for transmittance, or expansion of 
+  189.  1    ! exponential for low tau
+  190.  1                   if (ze1 .le. od_lo) then 
+  191.  1                      ze2 = 1._r8 - ze1 + 0.5_r8 * ze1 * ze1
+  192.  1                   else
+  193.  1                      tblind = ze1 / (bpade + ze1)
+  194.  1                      itind = tblint * tblind + 0.5_r8
+  195.  1                      ze2 = exp_tbl(itind)
+  196.  1                   endif
+  197.  1    !
+  198.  1    
+  199.  1                   pref(jk) = (zgt - za1 * (1._r8 - ze2)) / (1._r8 + zgt)
+  200.  1                   ptra(jk) = 1._r8 - pref(jk)
+  201.  1    
+  202.  1    ! isotropic incidence
+  203.  1    
+  204.  1                   prefd(jk) = zgt / (1._r8 + zgt)
+  205.  1                   ptrad(jk) = 1._r8 - prefd(jk)        
+  206.  1    
+  207.  1    ! This is applied for consistency between total (delta-scaled) and direct (unscaled) 
+  208.  1    ! calculations at very low optical depths (tau < 1.e-4) when the exponential lookup
+  209.  1    ! table returns a transmittance of 1.0.
+  210.  1                   if (ze2 .eq. 1.0_r8) then 
+  211.  1                      pref(jk) = 0.0_r8
+  212.  1                      ptra(jk) = 1.0_r8
+  213.  1                      prefd(jk) = 0.0_r8
+  214.  1                      ptrad(jk) = 1.0_r8
+  215.  1                   endif
+  216.  1    
+  217.  1                else
+  218.  1    ! Non-conservative scattering
+  219.  1    
+  220.  1                   za1 = zgamma1 * zgamma4 + zgamma2 * zgamma3
+  221.  1                   za2 = zgamma1 * zgamma3 + zgamma2 * zgamma4
+  222.  1                   zrk = sqrt ( zgamma1**2 - zgamma2**2)
+  223.  1                   zrp = zrk * prmuz               
+  224.  1                   zrp1 = 1._r8 + zrp
+  225.  1                   zrm1 = 1._r8 - zrp
+  226.  1                   zrk2 = 2._r8 * zrk
+  227.  1                   zrpp = 1._r8 - zrp*zrp
+  228.  1                   zrkg = zrk + zgamma1
+  229.  1                   zr1  = zrm1 * (za2 + zrk * zgamma3)
+  230.  1                   zr2  = zrp1 * (za2 - zrk * zgamma3)
+  231.  1                   zr3  = zrk2 * (zgamma3 - za2 * prmuz )
+  232.  1                   zr4  = zrpp * zrkg
+  233.  1                   zr5  = zrpp * (zrk - zgamma1)
+  234.  1                   zt1  = zrp1 * (za1 + zrk * zgamma4)
+  235.  1                   zt2  = zrm1 * (za1 - zrk * zgamma4)
+  236.  1                   zt3  = zrk2 * (zgamma4 + za1 * prmuz )
+  237.  1                   zt4  = zr4
+  238.  1                   zt5  = zr5
+  239.  1                   zbeta = (zgamma1 - zrk) / zrkg !- zr5 / zr4
+  240.  1            
+  241.  1    ! Homogeneous reflectance and transmittance
+  242.  1    
+  243.  1                   ze1 = min ( zrk * zto1, 500._r8)
+  244.  1                   ze2 = min ( zto1 / prmuz , 500._r8)
+  245.  1    !
+  246.  1    ! Original
+  247.  1    !              zep1 = exp( ze1 )
+  248.  1    !              zem1 = exp(-ze1 )
+  249.  1    !              zep2 = exp( ze2 )
+  250.  1    !              zem2 = exp(-ze2 )
+  251.  1    !
+  252.  1    ! Revised original, to reduce exponentials
+  253.  1    !              zep1 = exp( ze1 )
+  254.  1    !              zem1 = 1._r8 / zep1
+  255.  1    !              zep2 = exp( ze2 )
+  256.  1    !              zem2 = 1._r8 / zep2
+  257.  1    !
+  258.  1    ! Use exponential lookup table for transmittance, or expansion of 
+  259.  1    ! exponential for low tau
+  260.  1                   if (ze1 .le. od_lo) then 
+  261.  1                      zem1 = 1._r8 - ze1 + 0.5_r8 * ze1 * ze1
+  262.  1                      zep1 = 1._r8 / zem1
+  263.  1                   else
+  264.  1                      tblind = ze1 / (bpade + ze1)
+  265.  1                      itind = tblint * tblind + 0.5_r8
+  266.  1                      zem1 = exp_tbl(itind)
+  267.  1                      zep1 = 1._r8 / zem1
+  268.  1                   endif
+  269.  1    
+  270.  1                   if (ze2 .le. od_lo) then 
+  271.  1                      zem2 = 1._r8 - ze2 + 0.5_r8 * ze2 * ze2
+  272.  1                      zep2 = 1._r8 / zem2
+  273.  1                   else
+  274.  1                      tblind = ze2 / (bpade + ze2)
+  275.  1                      itind = tblint * tblind + 0.5_r8
+  276.  1                      zem2 = exp_tbl(itind)
+  277.  1                      zep2 = 1._r8 / zem2
+  278.  1                   endif
+  279.  1    
+  280.  1    ! collimated beam
+  281.  1    
+  282.  1                   zdenr = zr4*zep1 + zr5*zem1
+  283.  1                   zdent = zt4*zep1 + zt5*zem1
+  284.  1                   if (zdenr .ge. -eps .and. zdenr .le. eps) then
+  285.  1                      pref(jk) = eps
+  286.  1                      ptra(jk) = zem2
+  287.  1                   else
+  288.  1                      pref(jk) = zw * (zr1*zep1 - zr2*zem1 - zr3*zem2) / zdenr
+  289.  1                      ptra(jk) = zem2 - zem2 * zw * (zt1*zep1 - zt2*zem1 - zt3*zep2) / zdent
+  290.  1                   endif 
+  291.  1    
+  292.  1    ! diffuse beam
+  293.  1    
+  294.  1                   zemm = zem1*zem1
+  295.  1                   zdend = 1._r8 / ( (1._r8 - zbeta*zemm ) * zrkg)
+  296.  1                   prefd(jk) =  zgamma2 * (1._r8 - zemm) * zdend
+  297.  1                   ptrad(jk) =  zrk2*zem1*zdend
+  298.  1    
+  299.  1                endif
+  300.  1    
+  301.  1             endif         
+  302.  1    
+  303.  1-->       enddo    
+  304.       
+  305.             end subroutine reftra_sw
+ftn-5002 ftn: NOTE File = rrtmg_sw_reftra.f90, Line = 305 
+  Local variable "JL" is declared but neither defined nor used.
+
+  306.       
+  307.             end module rrtmg_sw_reftra
+
+  308.       
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+             C r o s s   R e f e r e n c e   for   RRTMG_SW_REFTRA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+BPADE                           Use assoc                         REAL(KIND=8), From module RRSW_TBL, SAVE
+  Decl
+  Set 
+  Used     193     264     274
+
+EPS                                                               REAL(KIND=8), PARAMETER
+  Decl     130
+  Set 
+  Used     284     285
+
+EXP_TBL                         Use assoc                         REAL(KIND=8), From module RRSW_TBL, DIMENSION(0:10000), SAVE
+  Decl
+  Set 
+  Used     195     266     276
+
+HVRRFT                          Use assoc                         CHARACTER(18), From module RRSW_VSN, SAVE
+  Decl
+  Set      136
+  Used
+
+ITIND                           Stack                             INTEGER
+  Decl     118
+  Set      194     265     275
+  Used     195     266     276
+
+JK                              Stack                             INTEGER
+  Decl     117
+  Set 
+  Used     143     144     145     146     147     149     150     151     199     200     204     205     211     212     213
+           214     285     286     288     289     296     297
+
+JL                              Stack                             INTEGER
+  Decl     117
+  Set 
+  Used
+
+KMODTS                          Stack                             INTEGER
+  Decl     117
+  Set      140
+  Used     156     160     164
+
+LRTCHK                          Dummy Arg                         LOGICAL, DIMENSION(<exp>), INTENT(IN)
+  Decl      33      92
+  Set 
+  Used     143
+
+MIN                                                               Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     243     244
+
+NLAYERS                         Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      32      90
+  Set 
+  Used      92      96      98     100     106     108     110     112     142
+
+OD_LO                           Use assoc                         REAL(KIND=8), PARAMETER, From module RRSW_TBL
+  Decl
+  Set 
+  Used     190     260     270
+
+PGG                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      34      96
+  Set 
+  Used     151
+
+PREF                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(INOUT)
+  Decl      38     106
+  Set      144     199     211     285     288
+  Used     200
+
+PREFD                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(INOUT)
+  Decl      39     108
+  Set      146     204     213     296
+  Used     205
+
+PRMUZ                           Dummy Arg                         REAL(KIND=8), INTENT(IN)
+  Decl      35     102
+  Set 
+  Used     159     163     167     178     185     223     231     236     244
+
+PTAU                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      36      98
+  Set 
+  Used     149
+
+PTRA                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(INOUT)
+  Decl      40     110
+  Set      145     200     212     286     289
+  Used
+
+PTRAD                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(INOUT)
+  Decl      41     112
+  Set      147     205     214     297
+  Used
+
+PW                              Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      37     100
+  Set 
+  Used     150
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD
+  Decl      20
+  Set 
+  Used      96      98     100     102     106     108     110     112     120     121     122     123     124     125     126
+           127     128     130
+
+REFTRA_SW                                                         Subroutine, Module procedure
+  Decl      31
+  Set 
+  Used
+
+RRSW_TBL                                                          Module
+  Decl
+  Set 
+  Used      23
+
+RRSW_VSN                                                          Module
+  Decl
+  Set 
+  Used      24
+
+RRTMG_SW_REFTRA                                                   Module
+  Decl       6
+  Set 
+  Used
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used      20
+
+SQRT                                                              Function, REAL, INTRINSIC
+  Decl
+  Set 
+  Used       0     222
+
+TBLIND                          Stack                             REAL(KIND=8)
+  Decl     120
+  Set      193     264     274
+  Used     194     265     275
+
+TBLINT                          Use assoc                         REAL(KIND=8), PARAMETER, From module RRSW_TBL
+  Decl
+  Set 
+  Used     194     265     275
+
+ZA                              Stack                             REAL(KIND=8)
+  Decl     121
+  Set      178
+  Used     179
+
+ZA1                             Stack                             REAL(KIND=8)
+  Decl     121
+  Set      179     220
+  Used     199     234     235     236
+
+ZA2                             Stack                             REAL(KIND=8)
+  Decl     121
+  Set      221
+  Used     229     230     231
+
+ZBETA                           Stack                             REAL(KIND=8)
+  Decl     122
+  Set      239
+  Used     295
+
+ZDEND                           Stack                             REAL(KIND=8)
+  Decl     122
+  Set      295
+  Used     296     297
+
+ZDENR                           Stack                             REAL(KIND=8)
+  Decl     122
+  Set      282
+  Used     284     288
+
+ZDENT                           Stack                             REAL(KIND=8)
+  Decl     122
+  Set      283
+  Used     289
+
+ZE1                             Stack                             REAL(KIND=8)
+  Decl     123
+  Set      185     243
+  Used     190     191     193     260     261     264
+
+ZE2                             Stack                             REAL(KIND=8)
+  Decl     123
+  Set      191     195     244
+  Used     199     210     270     271     274
+
+ZEM1                            Stack                             REAL(KIND=8)
+  Decl     123
+  Set      261     266
+  Used     262     267     282     283     288     289     294     297
+
+ZEM2                            Stack                             REAL(KIND=8)
+  Decl     123
+  Set      271     276
+  Used     272     277     286     288     289
+
+ZEMM                            Stack                             REAL(KIND=8)
+  Decl     123
+  Set      294
+  Used     295     296
+
+ZEP1                            Stack                             REAL(KIND=8)
+  Decl     123
+  Set      262     267
+  Used     282     283     288     289
+
+ZEP2                            Stack                             REAL(KIND=8)
+  Decl     123
+  Set      272     277
+  Used     289
+
+ZG                              Stack                             REAL(KIND=8)
+  Decl     124
+  Set      151
+  Used     155     162     165     166     167     173
+
+ZG3                             Stack                             REAL(KIND=8)
+  Decl     124
+  Set      155
+  Used     157     158     159     161     163
+
+ZGAMMA1                         Stack                             REAL(KIND=8)
+  Decl     124
+  Set      157     161     165
+  Used     178     180     220     221     222     228     233     239
+
+ZGAMMA2                         Stack                             REAL(KIND=8)
+  Decl     124
+  Set      158     162     166
+  Used     220     221     222     296
+
+ZGAMMA3                         Stack                             REAL(KIND=8)
+  Decl     124
+  Set      159     163     167
+  Used     169     179     220     221     229     230     231
+
+ZGAMMA4                         Stack                             REAL(KIND=8)
+  Decl     124
+  Set      169
+  Used     220     221     234     235     236
+
+ZGT                             Stack                             REAL(KIND=8)
+  Decl     124
+  Set      180
+  Used     199     204
+
+ZR1                             Stack                             REAL(KIND=8)
+  Decl     125
+  Set      229
+  Used     288
+
+ZR2                             Stack                             REAL(KIND=8)
+  Decl     125
+  Set      230
+  Used     288
+
+ZR3                             Stack                             REAL(KIND=8)
+  Decl     125
+  Set      231
+  Used     288
+
+ZR4                             Stack                             REAL(KIND=8)
+  Decl     125
+  Set      232
+  Used     237     282
+
+ZR5                             Stack                             REAL(KIND=8)
+  Decl     125
+  Set      233
+  Used     238     282
+
+ZRK                             Stack                             REAL(KIND=8)
+  Decl     126
+  Set      222
+  Used     223     226     228     229     230     233     234     235     239     243
+
+ZRK2                            Stack                             REAL(KIND=8)
+  Decl     126
+  Set      226
+  Used     231     236     297
+
+ZRKG                            Stack                             REAL(KIND=8)
+  Decl     126
+  Set      228
+  Used     232     239     295
+
+ZRM1                            Stack                             REAL(KIND=8)
+  Decl     126
+  Set      225
+  Used     229     235
+
+ZRP                             Stack                             REAL(KIND=8)
+  Decl     126
+  Set      223
+  Used     224     225     227
+
+ZRP1                            Stack                             REAL(KIND=8)
+  Decl     126
+  Set      224
+  Used     230     234
+
+ZRPP                            Stack                             REAL(KIND=8)
+  Decl     126
+  Set      227
+  Used     232     233
+
+ZSR3                            Stack                             REAL(KIND=8)
+  Decl     127
+  Set      138
+  Used     165     166     167
+
+ZT1                             Stack                             REAL(KIND=8)
+  Decl     127
+  Set      234
+  Used     289
+
+ZT2                             Stack                             REAL(KIND=8)
+  Decl     127
+  Set      235
+  Used     289
+
+ZT3                             Stack                             REAL(KIND=8)
+  Decl     127
+  Set      236
+  Used     289
+
+ZT4                             Stack                             REAL(KIND=8)
+  Decl     127
+  Set      237
+  Used     283
+
+ZT5                             Stack                             REAL(KIND=8)
+  Decl     127
+  Set      238
+  Used     283
+
+ZTO1                            Stack                             REAL(KIND=8)
+  Decl     127
+  Set      149
+  Used     180     185     243     244
+
+ZW                              Stack                             REAL(KIND=8)
+  Decl     128
+  Set      150
+  Used     157     158     161     162     165     166     173     288     289
+
+ZWCRIT                          Stack                             REAL(KIND=8)
+  Decl     128
+  Set      139
+  Used     175
+
+ZWO                             Stack                             REAL(KIND=8)
+  Decl     128
+  Set      173
+  Used     175
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+MIN(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   REFTRA_SW in RRTMG_SW_REFTRA (Line 185, file rrtmg_sw_reftra.f90)
+                   REFTRA_SW in RRTMG_SW_REFTRA (Line 243, file rrtmg_sw_reftra.f90)
+                   REFTRA_SW in RRTMG_SW_REFTRA (Line 244, file rrtmg_sw_reftra.f90)
+
+Name  Messages
+----  --------
+REFTRA_SW in RRTMG_SW_REFTRA
+      Defined as:  Subroutine (line 31, file rrtmg_sw_reftra.f90)
+
+      Interface:   None
+
+      Calls:       SQRT(Intrinsic) (Line 138, file rrtmg_sw_reftra.f90)
+                   SQRT(Intrinsic) (Line 222, file rrtmg_sw_reftra.f90)
+                   MIN(Intrinsic) (Line 185, file rrtmg_sw_reftra.f90)
+                   MIN(Intrinsic) (Line 243, file rrtmg_sw_reftra.f90)
+                   MIN(Intrinsic) (Line 244, file rrtmg_sw_reftra.f90)
+
+Name  Messages
+----  --------
+RRSW_TBL
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_REFTRA
+
+Name  Messages
+----  --------
+RRSW_VSN
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_REFTRA
+
+Name  Messages
+----  --------
+RRTMG_SW_REFTRA
+      Defined as:  Module (line 6, file rrtmg_sw_reftra.f90)
+
+        Uses:      SHR_KIND_MOD
+                   RRSW_TBL
+                   RRSW_VSN
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_REFTRA
+
+Name  Messages
+----  --------
+SQRT(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   REFTRA_SW in RRTMG_SW_REFTRA (Line 138, file rrtmg_sw_reftra.f90)
+                   REFTRA_SW in RRTMG_SW_REFTRA (Line 222, file rrtmg_sw_reftra.f90)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,126 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  sbytes.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/sbytes.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine sbytes( iout, in, iskip, nbyte, nskip, n )
+   41.       $MR_nbyte_6 = 0[loc( nbyte ),0]
+   41.       $LCS_32_0 = 32 - $MR_nbyte_6
+   41.       icon = $LCS_32_0
+   42.       if ( $LCS_32_0 >= 0 ) then
+   43.          if ( or( 32 - $MR_nbyte_6, -1 + $MR_nbyte_6 ) < 0 ) then
+   43.             $LB_Y0 = 1
+   43.             $UB_Y1 = 32
+   43.             $Subscript_Y5 = $MR_nbyte_6
+   43.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+   43.          endif
+   43.          $mask_S1 = (-1,masks)[$MR_nbyte_6]
+   43.          mask = $mask_S1
+   47.          $MR_iskip_10 = 0[loc( iskip ),0]
+   47.          $index_S2 = _rsh( $MR_iskip_10, 5 )
+   47.          index = $index_S2
+   51.          $ii_S3 = $MR_iskip_10 - and( -32, $MR_iskip_10 + _rsh( _ash( $MR_iskip_10, 4 ), 27 ) )
+   51.          ii = $ii_S3
+   55.          $MR_nskip_13 = 0[loc( nskip ),0]
+   55.          $LCS_1 = $MR_nbyte_6 + $MR_nskip_13
+   55.          istep = $LCS_1
+   59.          $LCS_PRT_2 = $LCS_1 + _rsh( _ash( $LCS_1, 4 ), 27 )
+   59.          $LCS_4 = _ash( $LCS_PRT_2, 5 )
+   59.          iwords = $LCS_4
+   63.          $LCS_PRT_5 = $LCS_1 - and( -32, $LCS_PRT_2 )
+   63.          ibits = $LCS_PRT_5
+   65.          i = 1
+   65.          $MR_n_17 = 0[loc( n ),0]
+   65.          if ( $MR_n_17 > 0 ) then
+   65.             $I_L65_S4 = 0
+   82.             $MR_nbitsw_18 = nbitsw
+   82.             $LIS_E7 = $MR_nbyte_6 - $MR_nbitsw_18
+   82.             $LCS_nbitsw_3 = $MR_nbitsw_18 - $MR_nbyte_6
+   82.             $LIS_E6 = 32 + $LCS_nbitsw_3
+   83.             $LIS_E5 = 64 - $MR_nbyte_6
+   67.             $LIS_E1 = 32 - $MR_nbyte_6
+   98.             $LIS_E0 = $MR_n_17
+   65.             do
+   66.                $MR_in_19 = 0[loc( in ),$I_L65_S4]
+   66.                $mask_S5 = mask
+   66.                $MR_j_20 = and( $MR_in_19, $mask_S5 )
+   66.                j = $MR_j_20
+   67.                $LCS_6 = $LIS_E1 - $ii_S3
+   67.                movel = $LCS_6
+   71.                if ( $LCS_6 > 0 ) then
+   72.                   $LCS_7 = abs( $LCS_6 )
+   72.                   $LCS_9 = $LCS_6 > 0
+   72.                   $LCS_8 = cvmg( lshift_ec( $mask_S5, $LCS_7 ), rshift_ec( $mask_S5, $LCS_7 ), $LCS_9 )
+   72.                   msk = $LCS_8
+   73.                   $LCS_iout_10 = loc( iout )
+   73.                   $MR_iout_S6 = 0[$LCS_iout_10,$index_S2]
+   73.                   $MR_iout_S7 = or( notand( $LCS_8, $MR_iout_S6 ), cvmg( lshift_ec( $MR_j_20, $LCS_7 ), rshift_ec( $MR_j_20, $LCS_7 ), $LCS_9 ) )
+   73.                   0[$LCS_iout_10,$index_S2] = $MR_iout_S7
+   78.                else if ( $LIS_E1 - $ii_S3 < 0 ) then
+   79.                   if ( or( $ii_S3, 31 - $ii_S3 ) < 0 ) then
+   79.                      $LB_Y0 = 1
+   79.                      $UB_Y1 = 32
+   79.                      $Subscript_Y5 = 32 - $ii_S3
+   79.                      _bounds_error( $_File_Y40, $Line_Y45, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y46 )
+   79.                   endif
+   79.                   $MR_msk_22 = (31,masks)[-$ii_S3]
+   79.                   msk = $MR_msk_22
+   80.                   $LCS_iout_13 = loc( iout )
+   80.                   $MR_iout_S8 = 0[$LCS_iout_13,$index_S2]
+   80.                   $LCS_12 = $LIS_E1 - $ii_S3
+   80.                   $LCS_11 = abs( $LCS_12 )
+   80.                   $MR_iout_S9 = or( notand( $MR_msk_22, $MR_iout_S8 ), cvmg( lshift_ec( $MR_j_20, $LCS_11 ), rshift_ec( $MR_j_20, $LCS_11 ), $LCS_12 > 0 ) )
+   80.                   0[$LCS_iout_13,$index_S2] = $MR_iout_S9
+   82.                   if ( or( ( $LIS_E7 + $ii_S3 ), 31 + $LCS_nbitsw_3 - $ii_S3 ) < 0 ) then
+   82.                      $LB_Y0 = 1
+   82.                      $UB_Y1 = 32
+   82.                      $Subscript_Y5 = $LIS_E6 - $ii_S3
+   82.                      _bounds_error( $_File_Y40, $Line_Y48, $_Name_Y47, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y49 )
+   82.                   endif
+   82.                   $MR_masks_25 = (31,masks)[$LCS_nbitsw_3 - $ii_S3]
+   82.                   $LCS_iout_16 = loc( iout )
+   82.                   $MR_iout_S10 = 1[$LCS_iout_16,$index_S2]
+   82.                   $MR_itemp_27 = and( $MR_masks_25, $MR_iout_S10 )
+   82.                   itemp = $MR_itemp_27
+   83.                   $LCS_15 = $LIS_E5 - $ii_S3
+   83.                   $LCS_14 = abs( $LCS_15 )
+   83.                   $MR_iout_S11 = or( $MR_itemp_27, cvmg( lshift_ec( $MR_j_20, $LCS_14 ), rshift_ec( $MR_j_20, $LCS_14 ), $LCS_15 > 0 ) )
+   83.                   1[$LCS_iout_16,$index_S2] = $MR_iout_S11
+   83.                else
+   88.                   $LCS_iout_17 = loc( iout )
+   88.                   $MR_iout_S12 = 0[$LCS_iout_17,$index_S2]
+   88.                   $MR_iout_S13 = or( $MR_j_20, notand( $mask_S5, $MR_iout_S12 ) )
+   88.                   0[$LCS_iout_17,$index_S2] = $MR_iout_S13
+   88.                endif
+   91.                $ii_S3 = $LCS_PRT_5 + $ii_S3
+   91.                ii = $ii_S3
+   92.                $index_S2 = $LCS_4 + $index_S2
+   92.                index = $index_S2
+   93.                if ( $ii_S3 >= 32 ) then
+   94.                   $ii_S3 = -32 + $ii_S3
+   94.                   ii = $ii_S3
+   95.                   $index_S2 = 1 + $index_S2
+   95.                   index = $index_S2
+   95.                endif
+   98.                $I_L65_S4 = 1 + $I_L65_S4
+   96.                if ( $I_L65_S4 >= $LIS_E0 ) exit
+   96.             enddo
+   98.             i = ( 1 + $MR_n_17 )
+   98.          endif
+   98.       endif
+  101.       return
+  101.       end
+  101.       

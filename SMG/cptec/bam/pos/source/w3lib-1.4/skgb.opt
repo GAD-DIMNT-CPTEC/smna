@@ -1,0 +1,69 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  skgb.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/skgb.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine skgb( lugb, iseek, mseek, lskip, lgrib )
+   42.       lgrib = 0
+   43.       ks = iseek
+   44.       kn = min( 128, mseek )
+   45.       kz = 128
+   48.       if ( mseek >= 8 ) then
+   48.          do
+   50.             call baread( lugb, ks, kn, kz,  _substr(z(1),1,1) )
+   52.             $k_S0 = 0
+   54.             if ( lgrib == 0 .and. 0 < -7 + kz ) then
+   54.                do
+   55.                   t$2 = 8 * $k_S0
+   55.                   call gbytec(  _substr(z(1),1,1), i4, t$2, 32 )
+   56.                   t$2 = 56 + 8 * $k_S0
+   56.                   call gbytec(  _substr(z(1),1,1), i1, t$2, 8 )
+   57.                   if ( i4 == 1196575042 ) then
+   57.                      if ( i1 == 1 ) then
+   57.                         goto 10
+   57.                      else if ( i1 == 2 ) then
+   57.    10                   continue
+   59.                         if ( i1 == 1 ) then
+   59.                            t$2 = 32 + 8 * $k_S0
+   59.                            call gbytec(  _substr(z(1),1,1), kg, t$2, 24 )
+   59.                         endif
+   60.                         if ( i1 == 2 ) then
+   60.                            t$2 = 96 + 8 * $k_S0
+   60.                            call gbytec(  _substr(z(1),1,1), kg, t$2, 32 )
+   60.                         endif
+   61.                         t$2 = ks + kg + $k_S0 + -4
+   61.                         call baread( lugb, t$2, 4, k4,  _substr(z4(1),1,1) )
+   62.                         if ( k4 == 4 ) then
+   63.                            call gbytec(  _substr(z4(1),1,1), i4, 0, 32 )
+   64.                            if ( i4 == 926365495 ) then
+   66.                               lskip = ks + $k_S0
+   67.                               lgrib = kg
+   67.                            endif
+   67.                         endif
+   67.                      endif
+   67.                   endif
+   71.                   $k_S0 = 1 + $k_S0
+   71.                   if ( ( lgrib == 0 .and. $k_S0 < -7 + kz ) == 0 ) exit
+   71.                enddo
+   71.             endif
+   73.             ks = ks + kz + -7
+   74.             kn = min( 128, iseek + mseek + -ks )
+   74.             if ( ( lgrib == 0 .and. iseek + mseek + -ks >= 8 .and. kz == 128 ) == 0 ) exit
+   74.          enddo
+   74.       endif
+   78.       return
+   78.       end
+   78.       

@@ -1,0 +1,1780 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/../../ext/rrtmg_mcica/mcica_subcol_gen_sw.f90
+Compiled : 12/12/20  00:22:29
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps ../../ext/rrtmg_mcica/mcica_subcol_gen_sw.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/../../ext/rrtmg_mcica/mcica_subcol_gen_sw.f90
+Date     : 12/12/2020  00:22:30
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_9501/mcica_subcol_gen_sw_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     A - Pattern matched      a - atomic memory operation
+                              b - blocked
+     C - Collapsed            c - conditional and/or computed
+     D - Deleted               
+     E - Cloned               f - fused
+     G - Accelerated          g - partitioned
+     I - Inlined              i - interchanged
+     M - Multithreaded        m - partitioned
+                              n - non-blocking remote transfer
+                              p - partial
+                              r - unrolled
+                              s - shortloop
+     V - Vectorized           w - unwound
+
+
+    1.            !     path:      $Source: /storm/rc1/cvsroot/rc/rrtmg_sw/src/mcica_subcol_gen_sw.f90,v $
+    2.            !     author:    $Author: mike $
+    3.            !     revision:  $Revision: 1.4 $
+    4.            !     created:   $Date: 2008/01/03 21:35:35 $
+    5.            !
+    6.            
+    7.                  module mcica_subcol_gen_sw
+    8.            
+    9.            !  --------------------------------------------------------------------------
+   10.            ! |                                                                          |
+   11.            ! |  Copyright 2006-2007, Atmospheric & Environmental Research, Inc. (AER).  |
+   12.            ! |  This software may be used, copied, or redistributed as long as it is    |
+   13.            ! |  not sold and this copyright notice is reproduced on each copy made.     |
+   14.            ! |  This model is provided as is without any express or implied warranties. |
+   15.            ! |                       (http://www.rtweb.aer.com/)                        |
+   16.            ! |                                                                          |
+   17.            !  --------------------------------------------------------------------------
+   18.            
+   19.            ! Purpose: Create McICA stochastic arrays for cloud physical or optical properties.   
+   20.            ! Two options are possible:
+   21.            ! 1) Input cloud physical properties: cloud fraction, ice and liquid water
+   22.            !    paths, ice fraction, and particle sizes.  Output will be stochastic
+   23.            !    arrays of these variables.  (inflag = 1)
+   24.            ! 2) Input cloud optical properties directly: cloud optical depth, single
+   25.            !    scattering albedo and asymmetry parameter.  Output will be stochastic
+   26.            !    arrays of these variables.  (inflag = 0)
+   27.            
+   28.            ! --------- Modules ----------
+   29.            
+   30.                  use shr_kind_mod, only: r8 => shr_kind_r8
+   31.                  use abortutils,   only: endrun
+   32.            
+   33.            !      use parkind, only : jpim, jprb 
+   34.                  use parrrsw, only : nbndsw, ngptsw
+   35.                  use rrsw_con, only: grav
+   36.                  use rrsw_wvn, only: ngb
+   37.                  use rrsw_vsn
+   38.            
+   39.                  implicit none
+   40.                  private
+   41.            
+   42.            ! public interfaces/functions/subroutines
+   43.                  public :: mcica_subcol_sw, generate_stochastic_clouds_sw
+   44.            
+   45.                  contains
+   46.            
+   47.            !------------------------------------------------------------------
+   48.            ! Public subroutines
+   49.            !------------------------------------------------------------------
+   50.            
+   51.                  subroutine mcica_subcol_sw(&
+   52.                                   pcols      , &! number of columns
+   53.                                   ncol       , &! number of columns
+   54.                                   nlay       , &! number of model layers
+   55.                                   icld       , &! clear/cloud, cloud overlap flag
+   56.                                   permuteseed, &! if the cloud generator is called multiple times,
+   57.                                   play       , &
+   58.                                   cldfrac    , &
+   59.                                   ciwp       , &
+   60.                                   clwp       , &
+   61.                                   rei        , &
+   62.                                   rel        , &
+   63.                                   tauc       , &
+   64.                                   ssac       , &
+   65.                                   asmc       , &
+   66.                                   fsfc       , &
+   67.                                   cldfmcl    , &
+   68.                                   ciwpmcl    , &
+   69.                                   clwpmcl    , &
+   70.                                   reicmcl    , &
+   71.                                   relqmcl    , &
+   72.                                   taucmcl    , &
+   73.                                   ssacmcl    , &
+   74.                                   asmcmcl    , &
+   75.                                   fsfcmcl      )
+   76.            
+   77.            ! ----- Input -----
+   78.            ! Control
+   79.                  integer, intent(in) :: pcols                     ! total number of columns
+   80.                  integer, intent(in) :: ncol                      ! number of columns
+   81.                  integer, intent(in) :: nlay                      ! number of model layers
+   82.                  integer, intent(in) :: icld                      ! clear/cloud, cloud overlap flag
+   83.                  integer, intent(in) :: permuteseed               ! if the cloud generator is called multiple times,
+   84.                                                                   ! permute the seed between each call;
+   85.                                                                   ! between calls for LW and SW, recommended
+   86.                                                                   ! permuteseed differs by 'ngpt'
+   87.                    
+   88.            ! Atmosphere
+   89.                  real(kind=r8), intent(in) :: play(pcols,nlay)    ! layer pressures (mb) 
+   90.                                                                   ! Dimensions: (ncol,nlay)
+   91.            
+   92.            ! Atmosphere/clouds - cldprop
+   93.                  real(kind=r8), intent(in) :: cldfrac(pcols,nlay)    ! layer cloud fraction
+   94.                                                                      !    Dimensions: (ncol,nlay)
+   95.                  real(kind=r8), intent(in) :: tauc(nbndsw,pcols,nlay)! cloud optical depth
+   96.                                                                      !    Dimensions: (nbndsw,ncol,nlay)
+   97.                  real(kind=r8), intent(in) :: ssac(nbndsw,pcols,nlay)! cloud single scattering albedo (non-delta scaled)
+   98.                                                                      !    Dimensions: (nbndsw,ncol,nlay)
+   99.                  real(kind=r8), intent(in) :: asmc(nbndsw,pcols,nlay)! cloud asymmetry parameter (non-delta scaled)
+  100.                                                                      !    Dimensions: (nbndsw,ncol,nlay)
+  101.                  real(kind=r8), intent(in) :: fsfc(nbndsw,pcols,nlay)! cloud forward scattering fraction (non-delta scaled)
+  102.                                                                      !    Dimensions: (nbndsw,ncol,nlay)
+  103.                  real(kind=r8), intent(in) :: ciwp(pcols,nlay)       ! cloud ice water path
+  104.                                                                      !    Dimensions: (ncol,nlay)
+  105.                  real(kind=r8), intent(in) :: clwp(pcols,nlay)       ! cloud liquid water path
+  106.                                                                      !    Dimensions: (ncol,nlay)
+  107.                  real(kind=r8), intent(in) :: rei(pcols,nlay)        ! cloud ice particle size
+  108.                                                                      !    Dimensions: (ncol,nlay)
+  109.                  real(kind=r8), intent(in) :: rel(pcols,nlay)        ! cloud liquid particle size
+  110.                                                                      !    Dimensions: (ncol,nlay)
+  111.            
+  112.            ! ----- Output -----
+  113.            ! Atmosphere/clouds - cldprmc [mcica]
+  114.                  real(kind=r8), intent(out) :: cldfmcl(ngptsw,pcols,nlay)    ! cloud fraction [mcica]
+  115.                                                                              !    Dimensions: (ngptsw,ncol,nlay)
+  116.                  real(kind=r8), intent(out) :: ciwpmcl(ngptsw,pcols,nlay)    ! cloud ice water path [mcica]
+  117.                                                                              !    Dimensions: (ngptsw,ncol,nlay)
+  118.                  real(kind=r8), intent(out) :: clwpmcl(ngptsw,pcols,nlay)    ! cloud liquid water path [mcica]
+  119.                                                                              !    Dimensions: (ngptsw,ncol,nlay)
+  120.                  real(kind=r8), intent(out) :: relqmcl(pcols,nlay)           ! liquid particle size (microns)
+  121.                                                                              !    Dimensions: (ncol,nlay)
+  122.                  real(kind=r8), intent(out) :: reicmcl(pcols,nlay)           ! ice partcle size (microns)
+  123.                                                                              !    Dimensions: (ncol,nlay)
+  124.                  real(kind=r8), intent(out) :: taucmcl(ngptsw,pcols,nlay)    ! cloud optical depth [mcica]
+  125.                                                                              !    Dimensions: (ngptsw,ncol,nlay)
+  126.                  real(kind=r8), intent(out) :: ssacmcl(ngptsw,pcols,nlay)    ! cloud single scattering albedo [mcica]
+  127.                                                                              !    Dimensions: (ngptsw,ncol,nlay)
+  128.                  real(kind=r8), intent(out) :: asmcmcl(ngptsw,pcols,nlay)    ! cloud asymmetry parameter [mcica]
+  129.                                                                              !    Dimensions: (ngptsw,ncol,nlay)
+  130.                  real(kind=r8), intent(out) :: fsfcmcl(ngptsw,pcols,nlay)    ! cloud forward scattering fraction [mcica]
+  131.                                                                              !    Dimensions: (ngptsw,ncol,nlay)
+  132.            
+  133.            ! ----- Local -----
+  134.            
+  135.            ! Stochastic cloud generator variables [mcica]
+  136.                  integer, parameter :: nsubcsw = ngptsw ! number of sub-columns (g-point intervals)
+  137.                  integer :: km, im, nm ,i,k                 ! loop indices
+  138.            
+  139.                  real(kind=r8) :: pmid(pcols,nlay)                ! layer pressures (Pa) 
+  140.            !      real(kind=r8) :: pdel(ncol,nlay)               ! layer pressure thickness (Pa) 
+  141.            !      real(kind=r8) :: qi(ncol,nlay)                 ! ice water (specific humidity)
+  142.            !      real(kind=r8) :: ql(ncol,nlay)                 ! liq water (specific humidity)
+  143.            
+  144.            
+  145.            ! Return if clear sky; or stop if icld out of range
+  146.                  if (icld.eq.0) return
+  147.                  if (icld.lt.0.or.icld.gt.3) then 
+  148.                     call endrun('MCICA_SUBCOL: INVALID ICLD')
+  149.                  endif 
+  150.            
+  151.            ! NOTE: For GCM mode, permuteseed must be offset between LW and SW by at least number of subcolumns
+  152.            
+  153.            
+  154.            ! Pass particle sizes to new arrays, no subcolumns for these properties yet
+  155.            ! Convert pressures from mb to Pa
+  156.  1-------<       DO k=1,nlay
+  157.  1 2-----<          DO i=1,ncol
+  158.  1 2                   reicmcl(i,k) = rei(i,k)
+  159.  1 2                   relqmcl(i,k) = rel(i,k)
+  160.  1 2                   pmid   (i,k)= play(i,k)*1.e2_r8
+  161.  1 2----->          END DO
+  162.  1------->       END DO 
+  163.            ! Convert input ice and liquid cloud water paths to specific humidity ice and liquid components 
+  164.            
+  165.            !      cwp =  (q * pdel * 1000.) / gravit)
+  166.            !           = (kg/kg * kg m-1 s-2 *1000.) / m s-2
+  167.            !           = (g m-2)
+  168.            !
+  169.            !      q  = (cwp * gravit) / (pdel *1000.)
+  170.            !         = (g m-2 * m s-2) / (kg m-1 s-2 * 1000.)
+  171.            !         =  kg/kg
+  172.            
+  173.            !      do km = 1, nlay
+  174.            !         qi(km) = (ciwp(km) * grav) / (pdel(km) * 1000._r8)
+  175.            !         ql(km) = (clwp(km) * grav) / (pdel(km) * 1000._r8)
+  176.            !      enddo
+  177.            
+  178.            !  Generate the stochastic subcolumns of cloud optical properties for the shortwave;
+  179.                  call generate_stochastic_clouds_sw ( &
+  180.                                           pcols                                   , &!integer      , intent(in) :: pcols     ! total number of columns
+  181.                                           ncol                                    , &!integer      , intent(in) :: ncol    ! number of layers
+  182.                                           nlay                                    , &!integer      , intent(in) :: nlay    ! number of layers
+  183.                                           nsubcsw                                 , &!integer      , intent(in) :: nsubcol  ! number of sub-columns (g-point intervals)
+  184.                                           icld                                    , &!integer      , intent(in) :: icld    ! clear/cloud, cloud overlap flag
+  185.                                           pmid           (1:pcols,1:nlay)         , &!real(kind=r8), intent(in) :: pmid (pcols,nlay)       !  layer pressure (Pa)
+  186.                                           cldfrac        (1:pcols,1:nlay)         , &!real(kind=r8), intent(in) :: cld  (pcols,nlay)       ! cloud fraction 
+  187.                                           clwp           (1:pcols,1:nlay)         , &!real(kind=r8), intent(in) :: clwp (pcols,nlay)       ! cloud liquid water path (g/m2)
+  188.                                           ciwp           (1:pcols,1:nlay)         , &!real(kind=r8), intent(in) :: ciwp (pcols,nlay)       ! cloud ice water path (g/m2)
+  189.                                           tauc           (1:nbndsw,1:pcols,1:nlay), &!real(kind=r8), intent(in) :: tauc (nbndsw,pcols,nlay)    ! cloud optical depth (non-delta scaled)
+  190.                                           ssac           (1:nbndsw,1:pcols,1:nlay), &!real(kind=r8), intent(in) :: ssac (nbndsw,pcols,nlay)   ! cloud single scattering albedo (non-delta scaled)
+  191.                                           asmc           (1:nbndsw,1:pcols,1:nlay), &!real(kind=r8), intent(in) :: asmc (nbndsw,pcols,nlay)  ! cloud asymmetry parameter (non-delta scaled)
+  192.                                           fsfc           (1:nbndsw,1:pcols,1:nlay), &!real(kind=r8), intent(in) :: fsfc (nbndsw,pcols,nlay)    ! cloud forward scattering fraction (non-delta scaled)
+  193.                                           cldfmcl        (1:ngptsw,1:pcols,1:nlay), &!real(kind=r8), intent(out) :: cld_stoch  (ngptsw,pcols,nlay) ! subcolumn cloud fraction 
+  194.                                           clwpmcl        (1:ngptsw,1:pcols,1:nlay), &!real(kind=r8), intent(out) :: clwp_stoch (ngptsw,pcols,nlay) ! subcolumn cloud liquid water path
+  195.                                           ciwpmcl        (1:ngptsw,1:pcols,1:nlay), &!real(kind=r8), intent(out) :: ciwp_stoch (ngptsw,pcols,nlay) ! subcolumn cloud ice water path
+  196.                                           taucmcl        (1:ngptsw,1:pcols,1:nlay), &!real(kind=r8), intent(out) :: tauc_stoch (ngptsw,pcols,nlay) ! subcolumn cloud optical depth
+  197.                                           ssacmcl        (1:ngptsw,1:pcols,1:nlay), &!real(kind=r8), intent(out) :: ssac_stoch (ngptsw,pcols,nlay) ! subcolumn cloud single scattering albedo
+  198.                                           asmcmcl        (1:ngptsw,1:pcols,1:nlay), &!real(kind=r8), intent(out) :: asmc_stoch (ngptsw,pcols,nlay) ! subcolumn cloud asymmetry parameter
+  199.                                           fsfcmcl        (1:ngptsw,1:pcols,1:nlay), &!real(kind=r8), intent(out) :: fsfc_stoch (ngptsw,pcols,nlay) ! subcolumn cloud forward scattering fraction
+  200.                                           permuteseed                               )!integer, optional, intent(in) :: changeSeed     ! allows permuting seed
+  201.            
+  202.                  end subroutine mcica_subcol_sw
+ftn-5002 ftn: NOTE File = mcica_subcol_gen_sw.f90, Line = 202 
+  Local variable "NM" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = mcica_subcol_gen_sw.f90, Line = 202 
+  Local variable "KM" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = mcica_subcol_gen_sw.f90, Line = 202 
+  Local variable "IM" is declared but neither defined nor used.
+
+  203.            
+  204.            
+  205.            !-------------------------------------------------------------------------------------------------
+  206.                  subroutine generate_stochastic_clouds_sw(&
+  207.                                           pcols          , &! integer, intent(in) :: pcols                     ! total number of columns
+  208.                                           ncol           , &!integer, intent(in) :: ncol            ! number of layers
+  209.                                           nlay           , &!integer, intent(in) :: nlay            ! number of layers
+  210.                                           nsubcol        , &!integer, intent(in) :: nsubcol         ! number of sub-columns (g-point intervals)
+  211.                                           icld           , &!integer, intent(in) :: icld            ! clear/cloud, cloud overlap flag
+  212.                                           pmid           , &!real(kind=r8), intent(in) :: pmid(pcols,nlay)         ! layer pressure (Pa)
+  213.                                           cld            , &!real(kind=r8), intent(in) :: cld(pcols,nlay)           ! cloud fraction 
+  214.                                           clwp           , &!real(kind=r8), intent(in) :: clwp(pcols,nlay)          ! cloud liquid water path (g/m2)
+  215.                                           ciwp           , &!real(kind=r8), intent(in) :: ciwp(pcols,nlay)          ! cloud ice water path (g/m2)
+  216.                                           tauc           , &!real(kind=r8), intent(in) :: tauc(nbndsw,pcols,nlay)        ! cloud optical depth (non-delta scaled)
+  217.                                           ssac           , &!real(kind=r8), intent(in) :: ssac(nbndsw,pcols,nlay)       ! cloud single scattering albedo (non-delta scaled)
+  218.                                           asmc           , &!real(kind=r8), intent(in) :: asmc(nbndsw,pcols,nlay)      ! cloud asymmetry parameter (non-delta scaled)
+  219.                                           fsfc           , &!real(kind=r8), intent(in) :: fsfc(nbndsw,pcols,nlay)        ! cloud forward scattering fraction (non-delta scaled)
+  220.                                           cld_stoch      , &!real(kind=r8), intent(out) :: cld_stoch(ngptsw,pcols,nlay)  ! subcolumn cloud fraction 
+  221.                                           clwp_stoch     , &!real(kind=r8), intent(out) :: clwp_stoch(ngptsw,pcols,nlay) ! subcolumn cloud liquid water path
+  222.                                           ciwp_stoch     , &!real(kind=r8), intent(out) :: ciwp_stoch(ngptsw,pcols,nlay) ! subcolumn cloud ice water path
+  223.                                           tauc_stoch     , &!real(kind=r8), intent(out) :: tauc_stoch(ngptsw,pcols,nlay) ! subcolumn cloud optical depth
+  224.                                           ssac_stoch     , &!real(kind=r8), intent(out) :: ssac_stoch(ngptsw,pcols,nlay) ! subcolumn cloud single scattering albedo
+  225.                                           asmc_stoch     , &!real(kind=r8), intent(out) :: asmc_stoch(ngptsw,pcols,nlay) ! subcolumn cloud asymmetry parameter
+  226.                                           fsfc_stoch     , &!real(kind=r8), intent(out) :: fsfc_stoch(ngptsw,pcols,nlay) ! subcolumn cloud forward scattering fraction
+  227.                                           changeSeed       )!integer, optional, intent(in) :: changeSeed     ! allows permuting seed
+  228.            !-------------------------------------------------------------------------------------------------
+  229.            
+  230.              !----------------------------------------------------------------------------------------------------------------
+  231.              ! ---------------------
+  232.              ! Contact: Cecile Hannay (hannay@ucar.edu)
+  233.              ! 
+  234.              ! Original code: Based on Raisanen et al., QJRMS, 2004.
+  235.              !
+  236.              ! Modifications: Generalized for use with RRTMG and added Mersenne Twister as the default
+  237.              !   random number generator, which can be changed to the optional kissvec random number generator
+  238.              !   with flag 'irnd' below . Some extra functionality has been commented or removed.  
+  239.              !   Michael J. Iacono, AER, Inc., February 2007
+  240.              !
+  241.              ! Given a profile of cloud fraction, cloud water and cloud ice, we produce a set of subcolumns.
+  242.              ! Each layer within each subcolumn is homogeneous, with cloud fraction equal to zero or one 
+  243.              ! and uniform cloud liquid and cloud ice concentration.
+  244.              ! The ensemble as a whole reproduces the probability function of cloud liquid and ice within each layer 
+  245.              ! and obeys an overlap assumption in the vertical.   
+  246.              ! 
+  247.              ! Overlap assumption:
+  248.              !  The cloud are consistent with 4 overlap assumptions: random, maximum, maximum-random and exponential. 
+  249.              !  The default option is maximum-random (option 3)
+  250.              !  The options are: 1=random overlap, 2=max/random, 3=maximum overlap, 4=exponential overlap
+  251.              !  This is set with the variable "overlap" 
+  252.              !mji - Exponential overlap option (overlap=4) has been deactivated in this version
+  253.              !  The exponential overlap uses also a length scale, Zo. (real,    parameter  :: Zo = 2500. ) 
+  254.              ! 
+  255.              ! Seed:
+  256.              !  If the stochastic cloud generator is called several times during the same timestep, 
+  257.              !  one should change the seed between the call to insure that the subcolumns are different.
+  258.              !  This is done by changing the argument 'changeSeed'
+  259.              !  For example, if one wants to create a set of columns for the shortwave and another set for the longwave ,
+  260.              !  use 'changeSeed = 1' for the first call and'changeSeed = 2' for the second call 
+  261.              !
+  262.              ! PDF assumption:
+  263.              !  We can use arbitrary complicated PDFS. 
+  264.              !  In the present version, we produce homogeneuous clouds (the simplest case).  
+  265.              !  Future developments include using the PDF scheme of Ben Johnson. 
+  266.              !
+  267.              ! History file:
+  268.              !  Option to add diagnostics variables in the history file. (using FINCL in the namelist)
+  269.              !  nsubcol = number of subcolumns
+  270.              !  overlap = overlap type (1-3)
+  271.              !  Zo = length scale 
+  272.              !  CLOUD_S = mean of the subcolumn cloud fraction ('_S" means Stochastic)
+  273.              !  CLDLIQ_S = mean of the subcolumn cloud water
+  274.              !  CLDICE_S = mean of the subcolumn cloud ice 
+  275.              !
+  276.              ! Note:
+  277.              !   Here: we force that the cloud condensate to be consistent with the cloud fraction 
+  278.              !   i.e we only have cloud condensate when the cell is cloudy. 
+  279.              !   In CAM: The cloud condensate and the cloud fraction are obtained from 2 different equations 
+  280.              !   and the 2 quantities can be inconsistent (i.e. CAM can produce cloud fraction 
+  281.              !   without cloud condensate or the opposite).
+  282.              !---------------------------------------------------------------------------------------------------------------
+  283.            
+  284.                  use mcica_random_numbers
+  285.            ! The Mersenne Twister random number engine
+  286.                  use MersenneTwister, only: randomNumberSequence, &   
+  287.                                             new_RandomNumberSequence, getRandomReal
+  288.            
+  289.                  type(randomNumberSequence) :: randomNumbers
+  290.            
+  291.            ! -- Arguments
+  292.                  integer, intent(in) :: pcols                     ! total number of columns
+  293.                  integer, intent(in) :: ncol            ! number of layers
+  294.                  integer, intent(in) :: nlay            ! number of layers
+  295.                  integer, intent(in) :: icld            ! clear/cloud, cloud overlap flag
+  296.                  integer, intent(in) :: nsubcol         ! number of sub-columns (g-point intervals)
+  297.                  integer, optional, intent(in) :: changeSeed     ! allows permuting seed
+  298.            
+  299.            ! Column state (cloud fraction, cloud water, cloud ice) + variables needed to read physics state 
+  300.                  real(kind=r8), intent(in) :: pmid(pcols,nlay)         ! layer pressure (Pa)
+  301.                                                                    !    Dimensions: (ncol,nlay)
+  302.                  real(kind=r8), intent(in) :: cld(pcols,nlay)           ! cloud fraction 
+  303.                                                                    !    Dimensions: (ncol,nlay)
+  304.                  real(kind=r8), intent(in) :: clwp(pcols,nlay)          ! cloud liquid water path (g/m2)
+  305.                                                                    !    Dimensions: (ncol,nlay)
+  306.                  real(kind=r8), intent(in) :: ciwp(pcols,nlay)          ! cloud ice water path (g/m2)
+  307.                                                                    !    Dimensions: (ncol,nlay)
+  308.                  real(kind=r8), intent(in) :: tauc(nbndsw,pcols,nlay)        ! cloud optical depth (non-delta scaled)
+  309.                                                                    !    Dimensions: (nbndsw,ncol,nlay)
+  310.                  real(kind=r8), intent(in) :: ssac(nbndsw,pcols,nlay)       ! cloud single scattering albedo (non-delta scaled)
+  311.                                                                    !    Dimensions: (nbndsw,ncol,nlay)
+  312.                  real(kind=r8), intent(in) :: asmc(nbndsw,pcols,nlay)      ! cloud asymmetry parameter (non-delta scaled)
+  313.                                                                    !    Dimensions: (nbndsw,ncol,nlay)
+  314.                  real(kind=r8), intent(in) :: fsfc(nbndsw,pcols,nlay)        ! cloud forward scattering fraction (non-delta scaled)
+  315.                                                                    !    Dimensions: (nbndsw,ncol,nlay)
+  316.            
+  317.                  real(kind=r8), intent(out) :: cld_stoch(ngptsw,pcols,nlay)  ! subcolumn cloud fraction 
+  318.                                                                    !    Dimensions: (ngptsw,ncol,nlay)
+  319.                  real(kind=r8), intent(out) :: clwp_stoch(ngptsw,pcols,nlay) ! subcolumn cloud liquid water path
+  320.                                                                    !    Dimensions: (ngptsw,ncol,nlay)
+  321.                  real(kind=r8), intent(out) :: ciwp_stoch(ngptsw,pcols,nlay) ! subcolumn cloud ice water path
+  322.                                                                    !    Dimensions: (ngptsw,ncol,nlay)
+  323.                  real(kind=r8), intent(out) :: tauc_stoch(ngptsw,pcols,nlay) ! subcolumn cloud optical depth
+  324.                                                                    !    Dimensions: (ngptsw,ncol,nlay)
+  325.                  real(kind=r8), intent(out) :: ssac_stoch(ngptsw,pcols,nlay) ! subcolumn cloud single scattering albedo
+  326.                                                                    !    Dimensions: (ngptsw,ncol,nlay)
+  327.                  real(kind=r8), intent(out) :: asmc_stoch(ngptsw,pcols,nlay) ! subcolumn cloud asymmetry parameter
+  328.                                                                    !    Dimensions: (ngptsw,ncol,nlay)
+  329.                  real(kind=r8), intent(out) :: fsfc_stoch(ngptsw,pcols,nlay) ! subcolumn cloud forward scattering fraction
+  330.                                                                    !    Dimensions: (ngptsw,ncol,nlay)
+  331.            
+  332.            ! -- Local variables
+  333.                  real(kind=r8) :: cldf(ncol,nlay)                ! cloud fraction 
+  334.                                                                    !    Dimensions: (ncol,nlay)
+  335.            
+  336.            ! Mean over the subcolumns (cloud fraction, cloud water , cloud ice) - inactive
+  337.            !      real(kind=r8) :: mean_cld_stoch(ncol,nlay)     ! cloud fraction 
+  338.            !      real(kind=r8) :: mean_clwp_stoch(ncol,nlay)    ! cloud water
+  339.            !      real(kind=r8) :: mean_ciwp_stoch(ncol,nlay)    ! cloud ice
+  340.            !      real(kind=r8) :: mean_tauc_stoch(ncol,nlay)    ! cloud optical depth
+  341.            !      real(kind=r8) :: mean_ssac_stoch(ncol,nlay)    ! cloud single scattering albedo
+  342.            !      real(kind=r8) :: mean_asmc_stoch(ncol,nlay)    ! cloud asymmetry parameter
+  343.            !      real(kind=r8) :: mean_fsfc_stoch(ncol,nlay)    ! cloud forward scattering fraction
+  344.            
+  345.            ! Set overlap
+  346.                  integer :: overlap                     ! 1 = random overlap, 2 = maximum/random,
+  347.                                                                    ! 3 = maximum overlap, 
+  348.            !      real(kind=r8), parameter  :: Zo = 2500._r8   ! length scale (m) 
+  349.            !      real(kind=r8) :: zm(ncon,nlay)                 ! Height of midpoints (above surface)
+  350.            !      real(kind=r8), dimension(nlay) :: alpha=0.0_r8    ! overlap parameter  
+  351.            
+  352.            ! Constants (min value for cloud fraction and cloud water and ice)
+  353.                  real(kind=r8), parameter :: cldmin = 1.0e-80_r8     ! min cloud fraction
+  354.            !      real(kind=r8), parameter :: qmin   = 1.0e-10_r8   ! min cloud water and cloud ice (not used)
+  355.            
+  356.            ! Variables related to random number and seed 
+  357.                  integer :: irnd                         ! flag for random number generator
+  358.                                                                     !  0 = kissvec
+  359.                                                                     !  1 = Mersenne Twister
+  360.            
+  361.                  real(kind=r8), dimension(nsubcol, ncol, nlay) :: CDF, CDF2       ! random numbers
+  362.                  integer, dimension(ncol) :: seed1, seed2, seed3, seed4  ! seed to create random number
+  363.                  real(kind=r8), dimension(ncol) :: rand_num       ! random number (kissvec)
+  364.                  integer :: iseed                        ! seed to create random number (Mersenne Twister)
+  365.                  real(kind=r8) :: rand_num_mt                     ! random number (Mersenne Twister)
+  366.            
+  367.            ! Flag to identify cloud fraction in subcolumns
+  368.                  logical,  dimension(nsubcol, ncol, nlay) :: isCloudy   ! flag that says whether a gridbox is cloudy
+  369.            
+  370.            ! Indices
+  371.                  integer :: ilev, isubcol, i, n, ngbm             ! indices
+  372.            
+  373.            !------------------------------------------------------------------------------------------ 
+  374.            
+  375.            ! Set randum number generator to use (0 = kissvec; 1 = mersennetwister)
+  376.                  irnd = 0
+  377.            !      irnd = 1
+  378.            
+  379.            ! Pass input cloud overlap setting to local variable
+  380.                  overlap = icld
+  381.            
+  382.            ! ensure that cloud fractions are in bounds 
+  383.  Vc-----<>       cldf(:,:) = cld(:ncol,:nlay)
+  384.                  where (cldf(:,:) < cldmin)
+  385.  C------<>           cldf(:,:) = 0._r8
+  386.                  end where
+  387.            
+  388.            ! ----- Create seed  --------
+  389.               
+  390.            ! Advance randum number generator by changeseed values
+  391.                  if (irnd.eq.0) then   
+  392.            ! For kissvec, create a seed that depends on the state of the columns. Maybe not the best way, but it works.  
+  393.            ! Must use pmid from bottom four layers. 
+  394.  1-------<          do i=1,ncol
+  395.  1                     if (pmid(i,nlay).lt.pmid(i,nlay-1)) then
+  396.  1                        call endrun('MCICA_SUBCOL: KISSVEC SEED GENERATOR REQUIRES PMID FROM BOTTOM FOUR LAYERS.')
+  397.  1                     endif
+  398.  1                     seed1(i) = (pmid(i,nlay) - int(pmid(i,nlay)))  * 1000000000
+  399.  1                     seed2(i) = (pmid(i,nlay-1) - int(pmid(i,nlay-1)))  * 1000000000
+  400.  1                     seed3(i) = (pmid(i,nlay-2) - int(pmid(i,nlay-2)))  * 1000000000
+  401.  1                     seed4(i) = (pmid(i,nlay-3) - int(pmid(i,nlay-3)))  * 1000000000
+  402.  1------->           enddo
+  403.  1-------<          do i=1,changeSeed
+  404.  1                     call kissvec(seed1, seed2, seed3, seed4, rand_num)
+  405.  1------->          enddo
+  406.                  elseif (irnd.eq.1) then
+  407.                     randomNumbers = new_RandomNumberSequence(seed = changeSeed)
+  408.                  endif 
+  409.            
+  410.            
+  411.            ! ------ Apply overlap assumption --------
+  412.            
+  413.            ! generate the random numbers  
+  414.            
+  415.                  select case (overlap)
+  416.            
+  417.                  case(1) 
+  418.            ! Random overlap
+  419.            ! i) pick a random value at every level
+  420.              
+  421.                     if (irnd.eq.0) then 
+  422.  1-------<             do isubcol = 1,nsubcol
+  423.  1 2-----<                do ilev = 1,nlay
+  424.  1 2                         call kissvec(seed1, seed2, seed3, seed4, rand_num)
+  425.  1 2                         CDF(isubcol,:,ilev) = rand_num
+  426.  1 2----->                enddo
+  427.  1------->             enddo
+  428.                     elseif (irnd.eq.1) then
+  429.  D-------<             do isubcol = 1, nsubcol
+  430.  D 2-----<                do i = 1, ncol
+  431.  D 2 3---<                   do ilev = 1, nlay
+  432.  D 2 3                          rand_num_mt = getRandomReal(randomNumbers)
+  433.  D 2 3                          CDF(isubcol,i,ilev) = rand_num_mt
+  434.  D 2 3--->                   enddo
+  435.  D 2----->                enddo
+  436.  D------->              enddo
+  437.                     endif
+  438.            
+  439.                  case(2) 
+  440.            ! Maximum-Random overlap
+  441.            ! i) pick  a random number for top layer.
+  442.            ! ii) walk down the column: 
+  443.            !    - if the layer above is cloudy, we use the same random number than in the layer above
+  444.            !    - if the layer above is clear, we use a new random number 
+  445.            
+  446.                     if (irnd.eq.0) then 
+  447.  1-------<             do isubcol = 1,nsubcol
+  448.  1 2-----<                do ilev = 1,nlay
+  449.  1 2                         call kissvec(seed1, seed2, seed3, seed4, rand_num)
+  450.  1 2                         CDF(isubcol,:,ilev) = rand_num
+  451.  1 2----->                enddo
+  452.  1------->             enddo
+  453.                     elseif (irnd.eq.1) then
+  454.  D-------<             do isubcol = 1, nsubcol
+  455.  D 2-----<                do i = 1, ncol
+  456.  D 2 3---<                   do ilev = 1, nlay
+  457.  D 2 3                          rand_num_mt = getRandomReal(randomNumbers)
+  458.  D 2 3                          CDF(isubcol,i,ilev) = rand_num_mt
+  459.  D 2 3--->                   enddo
+  460.  D 2----->                enddo
+  461.  D------->              enddo
+  462.                     endif
+  463.            
+  464.  C-------<          do ilev = 2,nlay
+  465.  C Cb----<             do i = 1, ncol
+  466.  C Cb b--<                do isubcol = 1, nsubcol
+  467.  C Cb b                      if (CDF(isubcol, i, ilev-1) > 1._r8 - cldf(i,ilev-1) ) then
+  468.  C Cb b                         CDF(isubcol,i,ilev) = CDF(isubcol,i,ilev-1) 
+  469.  C Cb b                      else
+  470.  C Cb b                         CDF(isubcol,i,ilev) = CDF(isubcol,i,ilev) * (1._r8 - cldf(i,ilev-1))
+  471.  C Cb b                      end if
+  472.  C Cb b-->                end do
+  473.  C Cb---->             end do
+  474.  C------->          enddo
+  475.            
+  476.                  case(3) 
+  477.            ! Maximum overlap
+  478.            ! i) pick same random numebr at every level  
+  479.            
+  480.                     if (irnd.eq.0) then 
+  481.  1-------<             do isubcol = 1,nsubcol
+  482.  1                        call kissvec(seed1, seed2, seed3, seed4, rand_num)
+  483.  1 2-----<                do ilev = 1,nlay
+  484.  1 2                         CDF(isubcol,:,ilev) = rand_num
+  485.  1 2----->                enddo
+  486.  1------->             enddo
+  487.                     elseif (irnd.eq.1) then
+  488.  D-------<             do isubcol = 1, nsubcol
+  489.  D 2-----<                do i = 1, ncol
+  490.  D 2                         rand_num_mt = getRandomReal(randomNumbers)
+  491.  D 2 3---<                   do ilev = 1, nlay
+  492.  D 2 3                          CDF(isubcol,i,ilev) = rand_num_mt
+  493.  D 2 3--->                   enddo
+  494.  D 2----->                enddo
+  495.  D------->              enddo
+  496.                     endif
+  497.            
+  498.            !    case(4)  - inactive
+  499.            !       ! Exponential overlap: weighting between maximum and random overlap increases with the distance. 
+  500.            !       ! The random numbers for exponential overlap verify:
+  501.            !       ! j=1   RAN(j)=RND1
+  502.            !       ! j>1   if RND1 < alpha(j,j-1) => RAN(j) = RAN(j-1)
+  503.            !       !                                 RAN(j) = RND2
+  504.            !       ! alpha is obtained from the equation
+  505.            !       ! alpha = exp(- (Zi-Zj-1)/Zo) where Zo is a characteristic length scale    
+  506.            
+  507.            
+  508.            !       ! compute alpha
+  509.            !       zm    = state%zm     
+  510.            !       alpha(:, 1) = 0._r8
+  511.            !       do ilev = 2,nlay
+  512.            !          alpha(:, ilev) = exp( -( zm (:, ilev-1) -  zm (:, ilev)) / Zo)
+  513.            !       end do
+  514.                   
+  515.            !       ! generate 2 streams of random numbers
+  516.            !       do isubcol = 1,nsubcol
+  517.            !          do ilev = 1,nlay
+  518.            !             call kissvec(seed1, seed2, seed3, seed4, rand_num)
+  519.            !             CDF(isubcol, :, ilev) = rand_num
+  520.            !             call kissvec(seed1, seed2, seed3, seed4, rand_num)
+  521.            !             CDF2(isubcol, :, ilev) = rand_num
+  522.            !          end do
+  523.            !       end do
+  524.            
+  525.            !       ! generate random numbers
+  526.            !       do ilev = 2,nlay
+  527.            !          where (CDF2(:, :, ilev) < spread(alpha (:,ilev), dim=1, nCopies=nsubcol) )
+  528.            !             CDF(:,:,ilev) = CDF(:,:,ilev-1) 
+  529.            !          end where
+  530.            !       end do
+  531.            
+  532.                  end select
+  533.            
+  534.             
+  535.            ! -- generate subcolumns for homogeneous clouds -----
+  536.  C-------<       do ilev = 1, nlay
+  537.  C C----<>          isCloudy(:,:,ilev) = (CDF(:,:,ilev) >= 1._r8 - spread(cldf(:,ilev), dim=1, nCopies=nsubcol) )
+  538.  C------->       enddo
+  539.            
+  540.            ! where the subcolumn is cloudy, the subcolumn cloud fraction is 1;
+  541.            ! where the subcolumn is not cloudy, the subcolumn cloud fraction is 0
+  542.            
+  543.  1-------<       do ilev = 1, nlay
+  544.  1 2-----<          do i = 1, ncol
+  545.  1 2 3---<             do isubcol = 1, nsubcol
+  546.  1 2 3                    if (iscloudy(isubcol,i,ilev) ) then
+  547.  1 2 3                       cld_stoch(isubcol,i,ilev) = 1._r8
+  548.  1 2 3                    else
+  549.  1 2 3                       cld_stoch(isubcol,i,ilev) = 0._r8
+  550.  1 2 3                    endif
+  551.  1 2 3--->             end do
+  552.  1 2----->          end do
+  553.  1------->       enddo
+  554.            
+  555.            ! where there is a cloud, set the subcolumn cloud properties;
+  556.            ! Incoming clwp, ciwp and tauc should be in-cloud quantites and not grid-averaged quantities
+  557.            
+  558.  b-------<       do ilev = 1, nlay
+  559.  b b-----<          do i = 1, ncol
+  560.  b b b---<             do isubcol = 1, nsubcol
+  561.  b b b                    if ( iscloudy(isubcol,i,ilev) .and. (cldf(i,ilev) > 0._r8) ) then
+  562.  b b b                       clwp_stoch(isubcol,i,ilev) = clwp(i,ilev)
+  563.  b b b                       ciwp_stoch(isubcol,i,ilev) = ciwp(i,ilev)
+  564.  b b b                    else
+  565.  b b b                       clwp_stoch(isubcol,i,ilev) = 0._r8
+  566.  b b b                       ciwp_stoch(isubcol,i,ilev) = 0._r8
+  567.  b b b                    end if
+  568.  b b b--->             end do
+  569.  b b----->          end do
+  570.  b------->       enddo
+  571.                  ngbm = ngb(1) - 1
+  572.  b-------<       do ilev = 1,nlay
+  573.  b b-----<          do i = 1, ncol
+  574.  b b b---<             do isubcol = 1, nsubcol
+  575.  b b b                    if ( iscloudy(isubcol,i,ilev) .and. (cldf(i,ilev) > 0._r8) ) then
+  576.  b b b                       n = ngb(isubcol) - ngbm
+  577.  b b b                       tauc_stoch(isubcol,i,ilev) = tauc(n,i,ilev)
+  578.  b b b                       ssac_stoch(isubcol,i,ilev) = ssac(n,i,ilev)
+  579.  b b b                       asmc_stoch(isubcol,i,ilev) = asmc(n,i,ilev)
+  580.  b b b                       fsfc_stoch(isubcol,i,ilev) = fsfc(n,i,ilev)
+  581.  b b b                    else
+  582.  b b b                       tauc_stoch(isubcol,i,ilev) = 0._r8
+  583.  b b b                       ssac_stoch(isubcol,i,ilev) = 1._r8
+  584.  b b b                       asmc_stoch(isubcol,i,ilev) = 0._r8
+  585.  b b b                       fsfc_stoch(isubcol,i,ilev) = 0._r8
+  586.  b b b                    endif
+  587.  b b b--->             enddo
+  588.  b b----->          enddo
+  589.  b------->       enddo
+  590.            
+  591.            ! -- compute the means of the subcolumns ---
+  592.            !      mean_cld_stoch(:,:) = 0._r8
+  593.            !      mean_clwp_stoch(:,:) = 0._r8
+  594.            !      mean_ciwp_stoch(:,:) = 0._r8
+  595.            !      mean_tauc_stoch(:,:) = 0._r8
+  596.            !      mean_ssac_stoch(:,:) = 0._r8
+  597.            !      mean_asmc_stoch(:,:) = 0._r8
+  598.            !      mean_fsfc_stoch(:,:) = 0._r8
+  599.            !      do i = 1, nsubcol
+  600.            !         mean_cld_stoch(:,:) =  cld_stoch(i,:,:) + mean_cld_stoch(:,:) 
+  601.            !         mean_clwp_stoch(:,:) =  clwp_stoch( i,:,:) + mean_clwp_stoch(:,:) 
+  602.            !         mean_ciwp_stoch(:,:) =  ciwp_stoch( i,:,:) + mean_ciwp_stoch(:,:) 
+  603.            !         mean_tauc_stoch(:,:) =  tauc_stoch( i,:,:) + mean_tauc_stoch(:,:) 
+  604.            !         mean_ssac_stoch(:,:) =  ssac_stoch( i,:,:) + mean_ssac_stoch(:,:) 
+  605.            !         mean_asmc_stoch(:,:) =  asmc_stoch( i,:,:) + mean_asmc_stoch(:,:) 
+  606.            !         mean_fsfc_stoch(:,:) =  fsfc_stoch( i,:,:) + mean_fsfc_stoch(:,:) 
+  607.            !      end do
+  608.            !      mean_cld_stoch(:,:) = mean_cld_stoch(:,:) / nsubcol
+  609.            !      mean_clwp_stoch(:,:) = mean_clwp_stoch(:,:) / nsubcol
+  610.            !      mean_ciwp_stoch(:,:) = mean_ciwp_stoch(:,:) / nsubcol
+  611.            !      mean_tauc_stoch(:,:) = mean_tauc_stoch(:,:) / nsubcol
+  612.            !      mean_ssac_stoch(:,:) = mean_ssac_stoch(:,:) / nsubcol
+  613.            !      mean_asmc_stoch(:,:) = mean_asmc_stoch(:,:) / nsubcol
+  614.            !      mean_fsfc_stoch(:,:) = mean_fsfc_stoch(:,:) / nsubcol
+  615.            
+  616.                  end subroutine generate_stochastic_clouds_sw
+ftn-5002 ftn: NOTE File = mcica_subcol_gen_sw.f90, Line = 616 
+  Local variable "ISEED" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = mcica_subcol_gen_sw.f90, Line = 616 
+  Local variable "CDF2" is declared but neither defined nor used.
+
+  617.            
+  618.            
+  619.            !------------------------------------------------------------------
+  620.            ! Private subroutines
+  621.            !------------------------------------------------------------------
+  622.            
+  623.            !-------------------------------------------------------------------------------------------------- 
+  624.                  subroutine kissvec(seed1,seed2,seed3,seed4,ran_arr)
+  625.            !-------------------------------------------------------------------------------------------------- 
+  626.            
+  627.            ! public domain code
+  628.            ! made available from http://www.fortran.com/
+  629.            ! downloaded by pjr on 03/16/04 for NCAR CAM
+  630.            ! converted to vector form, functions inlined by pjr,mvr on 05/10/2004
+  631.            
+  632.            ! safeguard against integer overflow, statement function changed to
+  633.            ! internal function by santos, Nov. 2012
+  634.            
+  635.            ! The  KISS (Keep It Simple Stupid) random number generator. Combines:
+  636.            ! (1) The congruential generator x(n)=69069*x(n-1)+1327217885, period 2^32.
+  637.            ! (2) A 3-shift shift-register generator, period 2^32-1,
+  638.            ! (3) Two 16-bit multiply-with-carry generators, period 597273182964842497>2^59
+  639.            !  Overall period>2^123; 
+  640.            !
+  641.                  use shr_kind_mod, only: i8 => shr_kind_i8
+  642.            
+  643.                  real(kind=r8), dimension(:), intent(inout)  :: ran_arr
+  644.                  integer, dimension(:), intent(inout) :: seed1,seed2,seed3,seed4
+  645.                  integer(i8) :: kiss
+  646.                  integer :: i
+  647.            
+  648.  1-------<       do i = 1, size(ran_arr)
+  649.  1                  kiss = 69069_i8 * seed1(i) + 1327217885
+  650.  1                  seed1(i) = transfer(kiss,1)
+  651.  1                  seed2(i) = m (m (m (seed2(i), 13), - 17), 5)
+  652.  1                  seed3(i) = 18000 * iand (seed3(i), 65535) + ishft (seed3(i), - 16)
+  653.  1                  seed4(i) = 30903 * iand (seed4(i), 65535) + ishft (seed4(i), - 16)
+  654.  1                  kiss = int(seed1(i), i8) + seed2(i) + ishft (seed3(i), 16) + seed4(i)
+  655.  1                  ran_arr(i) = transfer(kiss,1)*2.328306e-10_r8 + 0.5_r8
+  656.  1------->       end do
+  657.                
+  658.                  contains
+  659.            
+  660.                    pure integer function m(k, n)
+  661.                      integer, intent(in) :: k
+  662.                      integer, intent(in) :: n
+  663.            
+  664.                      m = ieor (k, ishft (k, n) )
+  665.            
+  666.                    end function m
+  667.            
+  668.                  end subroutine kissvec
+  669.            
+  670.                  end module mcica_subcol_gen_sw
+
+ftn-6213 ftn: VECTOR File = mcica_subcol_gen_sw.f90, Line = 383 
+  A loop starting at line 383 was conditionally vectorized.
+
+ftn-6066 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 385 
+   A loop nest at line 385 collapsed to a single loop.
+
+ftn-6338 ftn: VECTOR File = mcica_subcol_gen_sw.f90, Line = 385 
+  A loop starting at line 385 was not vectorized because -Othread1 was specified and a potential shared memory hazard exists with
+  the store to "cldf" on line 385.
+
+ftn-6332 ftn: VECTOR File = mcica_subcol_gen_sw.f90, Line = 425 
+  A loop starting at line 425 was not vectorized because it does not map well onto the target architecture.
+
+ftn-6002 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 429 
+  A loop starting at line 429 was eliminated by optimization.
+
+ftn-6002 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 430 
+  A loop starting at line 430 was eliminated by optimization.
+
+ftn-6002 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 431 
+  A loop starting at line 431 was eliminated by optimization.
+
+ftn-6332 ftn: VECTOR File = mcica_subcol_gen_sw.f90, Line = 450 
+  A loop starting at line 450 was not vectorized because it does not map well onto the target architecture.
+
+ftn-6002 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 454 
+  A loop starting at line 454 was eliminated by optimization.
+
+ftn-6002 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 455 
+  A loop starting at line 455 was eliminated by optimization.
+
+ftn-6002 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 456 
+  A loop starting at line 456 was eliminated by optimization.
+
+ftn-6003 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 464 
+  A loop starting at line 464 was collapsed into the loop starting at line 465.
+
+ftn-6049 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 465 
+  A loop starting at line 465 was blocked with block size 8.
+
+ftn-6049 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 466 
+  A loop starting at line 466 was blocked with block size 1024.
+
+ftn-6332 ftn: VECTOR File = mcica_subcol_gen_sw.f90, Line = 484 
+  A loop starting at line 484 was not vectorized because it does not map well onto the target architecture.
+
+ftn-6002 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 488 
+  A loop starting at line 488 was eliminated by optimization.
+
+ftn-6002 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 489 
+  A loop starting at line 489 was eliminated by optimization.
+
+ftn-6002 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 491 
+  A loop starting at line 491 was eliminated by optimization.
+
+ftn-6003 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 536 
+  A loop starting at line 536 was collapsed into the loop starting at line 537.
+
+ftn-6340 ftn: VECTOR File = mcica_subcol_gen_sw.f90, Line = 537 
+  A loop starting at line 537 was not vectorized because of a potential reassociation issue on line 537.
+
+ftn-6049 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 558 
+  A loop starting at line 558 was blocked with block size 64.
+
+ftn-6049 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 559 
+  A loop starting at line 559 was blocked with block size 64.
+
+ftn-6049 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 560 
+  A loop starting at line 560 was blocked with block size 256.
+
+ftn-6049 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 572 
+  A loop starting at line 572 was blocked with block size 8.
+
+ftn-6049 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 573 
+  A loop starting at line 573 was blocked with block size 8.
+
+ftn-6049 ftn: SCALAR File = mcica_subcol_gen_sw.f90, Line = 574 
+  A loop starting at line 574 was blocked with block size 256.
+
+  671.            
+  672.            
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+           C r o s s   R e f e r e n c e   for   MCICA_SUBCOL_GEN_SW
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+ABORTUTILS                                                        Module
+  Decl
+  Set 
+  Used      31
+
+ASMC                            Dummy Arg                         REAL(KIND=8), DIMENSION(14, <exp>, <exp>), INTENT(IN)
+  Decl      65      99
+  Set 
+  Used
+
+ASMC                            Dummy Arg                         REAL(KIND=8), DIMENSION(14, <exp>, <exp>), INTENT(IN)
+  Decl     218     312
+  Set 
+  Used     579
+
+ASMCMCL                         Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl      74     128
+  Set 
+  Used
+
+ASMC_STOCH                      Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl     225     327
+  Set      579     584
+  Used
+
+CDF                             Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>, <exp>)
+  Decl     361
+  Set      425     433     450     458     468     470     484     492
+  Used     467     537
+
+CDF2                            Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>, <exp>)
+  Decl     361
+  Set 
+  Used
+
+CHANGESEED                      Dummy Arg                         INTEGER, INTENT(IN), OPTIONAL
+  Decl     227     297
+  Set 
+  Used     403
+
+CIWP                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl      59     103
+  Set 
+  Used
+
+CIWP                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     215     306
+  Set 
+  Used     563
+
+CIWPMCL                         Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl      68     116
+  Set 
+  Used
+
+CIWP_STOCH                      Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl     222     321
+  Set      563     566
+  Used
+
+CLD                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     213     302
+  Set 
+  Used     383
+
+CLDF                            Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     333
+  Set      383
+  Used     385     467     470     537     561     575
+
+CLDFMCL                         Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl      67     114
+  Set 
+  Used
+
+CLDFRAC                         Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl      58      93
+  Set 
+  Used
+
+CLDMIN                                                            REAL(KIND=8), PARAMETER
+  Decl     353
+  Set 
+  Used     384
+
+CLD_STOCH                       Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl     220     317
+  Set      547     549
+  Used
+
+CLWP                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl      60     105
+  Set 
+  Used
+
+CLWP                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     214     304
+  Set 
+  Used     562
+
+CLWPMCL                         Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl      69     118
+  Set 
+  Used
+
+CLWP_STOCH                      Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl     221     319
+  Set      562     565
+  Used
+
+ENDRUN                          Use assoc                         Subroutine, From module ABORTUTILS, Module procedure, PRIVATE
+  Decl
+  Set 
+  Used       0     396
+
+ENDRUN                          Use assoc                         Subroutine, From module ABORTUTILS, Module procedure, PRIVATE
+  Decl
+  Set 
+  Used       0     396
+
+FSFC                            Dummy Arg                         REAL(KIND=8), DIMENSION(14, <exp>, <exp>), INTENT(IN)
+  Decl      66     101
+  Set 
+  Used
+
+FSFC                            Dummy Arg                         REAL(KIND=8), DIMENSION(14, <exp>, <exp>), INTENT(IN)
+  Decl     219     314
+  Set 
+  Used     580
+
+FSFCMCL                         Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl      75     130
+  Set 
+  Used
+
+FSFC_STOCH                      Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl     226     329
+  Set      580     585
+  Used
+
+GENERATE_STOCHASTIC_CLOUDS_SW                                     Subroutine, Module procedure
+  Decl      43     206
+  Set 
+  Used     179
+
+I                               Stack                             INTEGER
+  Decl     137
+  Set 
+  Used     158     159     160
+
+I                               Stack                             INTEGER
+  Decl     371
+  Set 
+  Used     395     398     399     400     401     433     458     467     468     470     492     546     547     549     561
+           562     563     565     566     575     577     578     579     580     582     583     584     585
+
+I                               Stack                             INTEGER
+  Decl     646
+  Set 
+  Used     649     650     651     652     653     654     655
+
+I8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD
+  Decl     641
+  Set 
+  Used     645     654
+
+IAND                                                              Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     653
+
+ICLD                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      55      82
+  Set 
+  Used     146     147     184
+
+ICLD                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     211     295
+  Set 
+  Used     380
+
+IEOR                                                              Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used     664
+
+ILEV                            Stack                             INTEGER
+  Decl     371
+  Set 
+  Used     425     433     450     458     467     468     470     484     492     537     546     547     549     561     562
+           563     565     566     575     577     578     579     580     582     583     584     585
+
+IM                              Stack                             INTEGER
+  Decl     137
+  Set 
+  Used
+
+INITIALIZE_SCALAR               Use assoc                         Function, TYPE(RANDOMNUMBERSEQUENCE), RESULT(TWISTER), From module
+                                                        MERSENNETWISTER, Module procedure, PRIVATE
+  Decl
+  Set 
+  Used     407
+
+INITIALIZE_SCALAR               Use assoc                         Function, TYPE(RANDOMNUMBERSEQUENCE), RESULT(TWISTER), From module
+                                                        MERSENNETWISTER, Module procedure, PRIVATE
+  Decl
+  Set 
+  Used     407
+
+INT                                                               Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     398     400     401     654
+
+IRND                            Stack                             INTEGER
+  Decl     357
+  Set      376
+  Used     391     406     421     428     446     453     480     487
+
+ISCLOUDY                        Stack                             LOGICAL, DIMENSION(<exp>, <exp>, <exp>)
+  Decl     368
+  Set      537
+  Used     546
+
+ISEED                           Stack                             INTEGER
+  Decl     364
+  Set 
+  Used
+
+ISHFT                                                             Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     652     654     664
+
+ISUBCOL                         Stack                             INTEGER
+  Decl     371
+  Set 
+  Used     425     433     450     458     467     468     470     484     492     546     547     549     562     563     565
+           566     576     577     578     579     580     582     583     584     585
+
+K                               Stack                             INTEGER
+  Decl     137
+  Set 
+  Used     158     159     160
+
+K                               Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     660     661
+  Set 
+  Used     664
+
+KISS                            Stack                             INTEGER(KIND=8)
+  Decl     645
+  Set      649     654
+  Used
+
+KISSVEC                                                           Subroutine, Module procedure, PRIVATE
+  Decl     624
+  Set 
+  Used       0     404     449     482
+
+KM                              Stack                             INTEGER
+  Decl     137
+  Set 
+  Used
+
+M                                                                 Function, INTEGER, RESULT(M), Internal procedure
+  Decl     660
+  Set 
+  Used
+
+M                               Register                          INTEGER, Function result
+  Decl
+  Set      664
+  Used
+
+MCICA_RANDOM_NUMBERS                                              Module
+  Decl
+  Set 
+  Used     284
+
+MCICA_SUBCOL_GEN_SW                                               Module
+  Decl       7
+  Set 
+  Used
+
+MCICA_SUBCOL_SW                                                   Subroutine, Module procedure
+  Decl      43      51
+  Set 
+  Used
+
+MERSENNETWISTER                 Use assoc                         Module, Used indirectly (from module MCICA_RANDOM_NUMBERS)
+  Decl
+  Set 
+  Used     286
+
+MERSENNETWISTER                                                   Module
+  Decl
+  Set 
+  Used     286
+
+N                               Stack                             INTEGER
+  Decl     371
+  Set      576
+  Used     577     578     579     580
+
+N                               Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     660     662
+  Set 
+  Used     664
+
+NBNDSW                          Use assoc                         INTEGER, PARAMETER, From module PARRRSW, PRIVATE
+  Decl
+  Set 
+  Used      95      97      99     101     189     190     191     192     308     310     312     314
+
+NCOL                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      53      80
+  Set 
+  Used     157     181
+
+NCOL                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     208     293
+  Set 
+  Used     333     361     362     363     368     383     394     430     455     465     489     544     559     573
+
+NGB                             Use assoc                         INTEGER, From module RRSW_WVN, DIMENSION(112), PRIVATE, SAVE
+  Decl
+  Set 
+  Used     571     576
+
+NGBM                            Stack                             INTEGER
+  Decl     371
+  Set      571
+  Used     576
+
+NGPTSW                          Use assoc                         INTEGER, PARAMETER, From module PARRRSW, PRIVATE
+  Decl
+  Set 
+  Used     114     116     118     124     126     128     130     136     193     194     195     196     197     198     199
+           317     319     321     323     325     327     329
+
+NLAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      54      81
+  Set 
+  Used      89      93      95      97      99     101     103     105     107     109     114     116     118     120     122
+           124     126     128     130     139     156     182
+
+NLAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     209     294
+  Set 
+  Used     300     302     304     306     308     310     312     314     317     319     321     323     325     327     329
+           333     361     368     383     395     398     399     400     401     423     431     448     456     464     483
+           491     536     543     558     572
+
+NM                              Stack                             INTEGER
+  Decl     137
+  Set 
+  Used
+
+NSUBCOL                         Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     210     296
+  Set 
+  Used     361     368     422     429     447     454     466     481     488     537     545     560     574
+
+NSUBCSW                                                           INTEGER, PARAMETER
+  Decl     136
+  Set 
+  Used     183
+
+OVERLAP                         Stack                             INTEGER
+  Decl     346
+  Set      380
+  Used     415
+
+PARRRSW                                                           Module
+  Decl
+  Set 
+  Used      34
+
+PCOLS                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      52      79
+  Set 
+  Used      89      93      95      97      99     101     103     105     107     109     114     116     118     120     122
+           124     126     128     130     139     180
+
+PCOLS                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     207     292
+  Set 
+  Used     300     302     304     306     308     310     312     314     317     319     321     323     325     327     329
+
+PERMUTESEED                     Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      56      83
+  Set 
+  Used     200
+
+PLAY                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl      57      89
+  Set 
+  Used     160
+
+PMID                            Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     139
+  Set      160
+  Used
+
+PMID                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     212     300
+  Set 
+  Used     395     398     399     400     401
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD, PRIVATE
+  Decl      30
+  Set 
+  Used      89      93      95      97      99     101     103     105     107     109     114     116     118     120     122
+           124     126     128     130     139     300     302     304     306     308     310     312     314     317     319
+           321     323     325     327     329     333     353     361     363     365     643
+
+RANDOMNUMBERS                   Stack                             TYPE(RANDOMNUMBERSEQUENCE)
+  Decl     289
+  Set 
+  Used
+
+RANDOMNUMBERSEQUENCE                                              Derived type, PRIVATE
+  Decl
+  Set 
+  Used     289
+
+RAND_NUM                        Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     363
+  Set 
+  Used     425     450     484
+
+RAND_NUM_MT                     Stack                             REAL(KIND=8)
+  Decl     365
+  Set      432     457     490
+  Used     433     458     492
+
+RAN_ARR                         Dummy Arg                         REAL(KIND=8), DIMENSION(:), INTENT(INOUT)
+  Decl     624     643
+  Set      655
+  Used     648
+
+REI                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl      61     107
+  Set 
+  Used     158
+
+REICMCL                         Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(OUT)
+  Decl      70     122
+  Set      158
+  Used
+
+REL                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl      62     109
+  Set 
+  Used     159
+
+RELQMCL                         Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(OUT)
+  Decl      71     120
+  Set      159
+  Used
+
+RRSW_CON                                                          Module
+  Decl
+  Set 
+  Used      35
+
+RRSW_VSN                                                          Module
+  Decl
+  Set 
+  Used      37
+
+RRSW_WVN                                                          Module
+  Decl
+  Set 
+  Used      36
+
+SEED1                           Stack                             INTEGER, DIMENSION(<exp>)
+  Decl     362
+  Set      398
+  Used
+
+SEED1                           Dummy Arg                         INTEGER, DIMENSION(:), INTENT(INOUT)
+  Decl     624     644
+  Set      650
+  Used     649     654
+
+SEED2                           Stack                             INTEGER, DIMENSION(<exp>)
+  Decl     362
+  Set      399
+  Used
+
+SEED2                           Dummy Arg                         INTEGER, DIMENSION(:), INTENT(INOUT)
+  Decl     624     644
+  Set      651
+  Used     654
+
+SEED3                           Stack                             INTEGER, DIMENSION(<exp>)
+  Decl     362
+  Set      400
+  Used
+
+SEED3                           Dummy Arg                         INTEGER, DIMENSION(:), INTENT(INOUT)
+  Decl     624     644
+  Set      652
+  Used     654
+
+SEED4                           Stack                             INTEGER, DIMENSION(<exp>)
+  Decl     362
+  Set      401
+  Used
+
+SEED4                           Dummy Arg                         INTEGER, DIMENSION(:), INTENT(INOUT)
+  Decl     624     644
+  Set      653
+  Used     654
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used      30
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used     641
+
+SIZE                                                              Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used     648
+
+SPREAD                                                            Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used     537
+
+SSAC                            Dummy Arg                         REAL(KIND=8), DIMENSION(14, <exp>, <exp>), INTENT(IN)
+  Decl      64      97
+  Set 
+  Used
+
+SSAC                            Dummy Arg                         REAL(KIND=8), DIMENSION(14, <exp>, <exp>), INTENT(IN)
+  Decl     217     310
+  Set 
+  Used     578
+
+SSACMCL                         Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl      73     126
+  Set 
+  Used
+
+SSAC_STOCH                      Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl     224     325
+  Set      578     583
+  Used
+
+TAUC                            Dummy Arg                         REAL(KIND=8), DIMENSION(14, <exp>, <exp>), INTENT(IN)
+  Decl      63      95
+  Set 
+  Used
+
+TAUC                            Dummy Arg                         REAL(KIND=8), DIMENSION(14, <exp>, <exp>), INTENT(IN)
+  Decl     216     308
+  Set 
+  Used     577
+
+TAUCMCL                         Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl      72     124
+  Set 
+  Used
+
+TAUC_STOCH                      Dummy Arg                         REAL(KIND=8), DIMENSION(112, <exp>, <exp>), INTENT(OUT)
+  Decl     223     323
+  Set      577     582
+  Used
+
+TRANSFER                                                          Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     655
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+ABORTUTILS
+      Defined as:  No definitions.
+
+      Used By:     MCICA_SUBCOL_GEN_SW
+
+Name  Messages
+----  --------
+ENDRUN in ABORTUTILS
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   MCICA_SUBCOL_GEN_SW (Line 148, file mcica_subcol_gen_sw.f90)
+                   MCICA_SUBCOL_GEN_SW (Line 396, file mcica_subcol_gen_sw.f90)
+
+Name  Messages
+----  --------
+GENERATE_STOCHASTIC_CLOUDS_SW in MCICA_SUBCOL_GEN_SW
+      Defined as:  Subroutine (line 43, file mcica_subcol_gen_sw.f90)
+
+      Interface:   None
+
+      Called By:   GENERATE_STOCHASTIC_CLOUDS_SW in MCICA_SUBCOL_GEN_SW (Line 179, file mcica_subcol_gen_sw.f90)
+
+      Calls:       GENERATE_STOCHASTIC_CLOUDS_SW in MCICA_SUBCOL_GEN_SW (Line 179, file mcica_subcol_gen_sw.f90)
+                   INITIALIZE_SCALAR in MERSENNETWISTER (Line 407, file mcica_subcol_gen_sw.f90)
+                   GETRANDOMREAL in MERSENNETWISTER (Line 432, file mcica_subcol_gen_sw.f90)
+                   GETRANDOMREAL in MERSENNETWISTER (Line 457, file mcica_subcol_gen_sw.f90)
+                   GETRANDOMREAL in MERSENNETWISTER (Line 490, file mcica_subcol_gen_sw.f90)
+
+Name  Messages
+----  --------
+GETRANDOMNUMBER_1D in MCICA_RANDOM_NUMBERS
+      Defined as:  No definitions.
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+GETRANDOMNUMBER_2D in MCICA_RANDOM_NUMBERS
+      Defined as:  No definitions.
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+GETRANDOMNUMBER_SCALAR in MCICA_RANDOM_NUMBERS
+      Defined as:  No definitions.
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+GETRANDOMREAL in MERSENNETWISTER
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   GENERATE_STOCHASTIC_CLOUDS_SW in MCICA_SUBCOL_GEN_SW (Line 432, file mcica_subcol_gen_sw.f90)
+                   GENERATE_STOCHASTIC_CLOUDS_SW in MCICA_SUBCOL_GEN_SW (Line 457, file mcica_subcol_gen_sw.f90)
+                   GENERATE_STOCHASTIC_CLOUDS_SW in MCICA_SUBCOL_GEN_SW (Line 490, file mcica_subcol_gen_sw.f90)
+
+Name  Messages
+----  --------
+IAND(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 652, file mcica_subcol_gen_sw.f90)
+                   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 653, file mcica_subcol_gen_sw.f90)
+
+Name  Messages
+----  --------
+IEOR(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 664, file mcica_subcol_gen_sw.f90)
+
+Name  Messages
+----  --------
+INITIALIZERANDOMNUMBERSTREAM_S in MCICA_RANDOM_NUMBERS
+      Defined as:  No definitions.
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+INITIALIZERANDOMNUMBERSTREAM_V in MCICA_RANDOM_NUMBERS
+      Defined as:  No definitions.
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+INITIALIZE_SCALAR in MERSENNETWISTER
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   GENERATE_STOCHASTIC_CLOUDS_SW in MCICA_SUBCOL_GEN_SW (Line 407, file mcica_subcol_gen_sw.f90)
+
+Name  Messages
+----  --------
+INITIALIZE_VECTOR in MERSENNETWISTER
+      Defined as:  No definitions.
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+INT(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 398, file mcica_subcol_gen_sw.f90)
+                   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 399, file mcica_subcol_gen_sw.f90)
+                   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 400, file mcica_subcol_gen_sw.f90)
+                   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 401, file mcica_subcol_gen_sw.f90)
+                   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 654, file mcica_subcol_gen_sw.f90)
+
+Name  Messages
+----  --------
+ISHFT(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 652, file mcica_subcol_gen_sw.f90)
+                   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 653, file mcica_subcol_gen_sw.f90)
+                   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 654, file mcica_subcol_gen_sw.f90)
+                   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 664, file mcica_subcol_gen_sw.f90)
+
+Name  Messages
+----  --------
+KISSVEC in MCICA_SUBCOL_GEN_SW
+      Defined as:  Subroutine (line 624, file mcica_subcol_gen_sw.f90)
+
+      Interface:   None
+
+      Called By:   KISSVEC in MCICA_SUBCOL_GEN_SW (Line 404, file mcica_subcol_gen_sw.f90)
+                   KISSVEC in MCICA_SUBCOL_GEN_SW (Line 424, file mcica_subcol_gen_sw.f90)
+                   KISSVEC in MCICA_SUBCOL_GEN_SW (Line 449, file mcica_subcol_gen_sw.f90)
+                   KISSVEC in MCICA_SUBCOL_GEN_SW (Line 482, file mcica_subcol_gen_sw.f90)
+
+      Calls:       KISSVEC in MCICA_SUBCOL_GEN_SW (Line 404, file mcica_subcol_gen_sw.f90)
+                   KISSVEC in MCICA_SUBCOL_GEN_SW (Line 424, file mcica_subcol_gen_sw.f90)
+                   KISSVEC in MCICA_SUBCOL_GEN_SW (Line 449, file mcica_subcol_gen_sw.f90)
+                   KISSVEC in MCICA_SUBCOL_GEN_SW (Line 482, file mcica_subcol_gen_sw.f90)
+
+Name  Messages
+----  --------
+M in KISSVEC in MCICA_SUBCOL_GEN_SW
+      Defined as:  Function (line 660, file mcica_subcol_gen_sw.f90)
+
+      Interface:   None
+
+      Called By:   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 651, file mcica_subcol_gen_sw.f90)
+                   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 651, file mcica_subcol_gen_sw.f90)
+                   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 651, file mcica_subcol_gen_sw.f90)
+
+      Calls:       M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 651, file mcica_subcol_gen_sw.f90)
+                   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 651, file mcica_subcol_gen_sw.f90)
+                   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 651, file mcica_subcol_gen_sw.f90)
+                   INT(Intrinsic) (Line 398, file mcica_subcol_gen_sw.f90)
+                   INT(Intrinsic) (Line 399, file mcica_subcol_gen_sw.f90)
+                   INT(Intrinsic) (Line 400, file mcica_subcol_gen_sw.f90)
+                   INT(Intrinsic) (Line 401, file mcica_subcol_gen_sw.f90)
+                   SPREAD(Intrinsic) (Line 537, file mcica_subcol_gen_sw.f90)
+                   SIZE(Intrinsic) (Line 648, file mcica_subcol_gen_sw.f90)
+                   TRANSFER(Intrinsic) (Line 650, file mcica_subcol_gen_sw.f90)
+                   TRANSFER(Intrinsic) (Line 655, file mcica_subcol_gen_sw.f90)
+                   IAND(Intrinsic) (Line 652, file mcica_subcol_gen_sw.f90)
+                   IAND(Intrinsic) (Line 653, file mcica_subcol_gen_sw.f90)
+                   ISHFT(Intrinsic) (Line 652, file mcica_subcol_gen_sw.f90)
+                   ISHFT(Intrinsic) (Line 653, file mcica_subcol_gen_sw.f90)
+                   ISHFT(Intrinsic) (Line 654, file mcica_subcol_gen_sw.f90)
+                   ISHFT(Intrinsic) (Line 664, file mcica_subcol_gen_sw.f90)
+                   INT(Intrinsic) (Line 654, file mcica_subcol_gen_sw.f90)
+                   IEOR(Intrinsic) (Line 664, file mcica_subcol_gen_sw.f90)
+
+Name  Messages
+----  --------
+M in MCICA_SUBCOL_GEN_SW
+      Defined as:  No definitions.
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+MCICA_RANDOM_NUMBERS
+      Defined as:  No definitions.
+
+      Used By:     MCICA_SUBCOL_GEN_SW
+
+Name  Messages
+----  --------
+MCICA_SUBCOL_GEN_SW
+      Defined as:  Module (line 7, file mcica_subcol_gen_sw.f90)
+
+      Calls:       ENDRUN in ABORTUTILS (Line 148, file mcica_subcol_gen_sw.f90)
+                   ENDRUN in ABORTUTILS (Line 396, file mcica_subcol_gen_sw.f90)
+
+        Uses:      SHR_KIND_MOD
+                   ABORTUTILS
+                   PARRRSW
+                   RRSW_CON
+                   RRSW_WVN
+                   RRSW_VSN
+                   MCICA_RANDOM_NUMBERS
+                   MERSENNETWISTER  (indirectly)
+                   MERSENNETWISTER
+                   SHR_KIND_MOD
+
+Name  Messages
+----  --------
+MCICA_SUBCOL_SW in MCICA_SUBCOL_GEN_SW
+      Defined as:  Subroutine (line 43, file mcica_subcol_gen_sw.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+MERSENNETWISTER
+      Defined as:  No definitions.
+
+      Used By:     MCICA_SUBCOL_GEN_SW  (indirectly)
+                   MCICA_SUBCOL_GEN_SW
+
+Name  Messages
+----  --------
+PARRRSW
+      Defined as:  No definitions.
+
+      Used By:     MCICA_SUBCOL_GEN_SW
+
+Name  Messages
+----  --------
+RRSW_CON
+      Defined as:  No definitions.
+
+      Used By:     MCICA_SUBCOL_GEN_SW
+
+Name  Messages
+----  --------
+RRSW_VSN
+      Defined as:  No definitions.
+
+      Used By:     MCICA_SUBCOL_GEN_SW
+
+Name  Messages
+----  --------
+RRSW_WVN
+      Defined as:  No definitions.
+
+      Used By:     MCICA_SUBCOL_GEN_SW
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     MCICA_SUBCOL_GEN_SW
+                   MCICA_SUBCOL_GEN_SW
+
+Name  Messages
+----  --------
+SIZE(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 648, file mcica_subcol_gen_sw.f90)
+
+Name  Messages
+----  --------
+SPREAD(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 537, file mcica_subcol_gen_sw.f90)
+
+Name  Messages
+----  --------
+TRANSFER(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 650, file mcica_subcol_gen_sw.f90)
+                   M in KISSVEC in MCICA_SUBCOL_GEN_SW (Line 655, file mcica_subcol_gen_sw.f90)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

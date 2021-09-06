@@ -1,0 +1,23 @@
+makefile:29: warning: overriding commands for target `.f90.o'
+../../configure.gsi:120: warning: ignoring old commands for target `.f90.o'
+makefile:32: warning: overriding commands for target `.F90.o'
+../../configure.gsi:114: warning: ignoring old commands for target `.F90.o'
+mpif90 -free -f90=ifort         -O3 -fp-model precise -assume byterecl -convert big_endian -Wl,-rpath,/glade/apps/opt/netcdf/4.3.0/intel/12.1.5/lib -openmp -DLINUX -I./  -I/glade/p/ral/jnt/DAtask/chunhua/comGSI_v3.3/include -c determine_time_levels.f90
+ifort: warning #10315: specifying -lm before files may supercede the Intel(R) math library and affect performance
+/bin/rm -f kinds.o kinds.mod
+cpp  -C -P -D_REAL8_ -DWRF -DLINUX  kinds.F90 > kinds.f90
+kinds.F90:8:65: warning: missing terminating ' character
+mpif90 -free -f90=ifort  -O3 -fp-model precise -assume byterecl -convert big_endian -Wl,-rpath,/glade/apps/opt/netcdf/4.3.0/intel/12.1.5/lib -openmp -DLINUX -I./  -I/glade/p/ral/jnt/DAtask/chunhua/comGSI_v3.3/include -c kinds.f90
+ifort: warning #10315: specifying -lm before files may supercede the Intel(R) math library and affect performance
+/bin/rm -f kinds.f90
+mpif90 -free -f90=ifort         -O3 -fp-model precise -assume byterecl -convert big_endian -Wl,-rpath,/glade/apps/opt/netcdf/4.3.0/intel/12.1.5/lib -openmp -DLINUX -I./  -I/glade/p/ral/jnt/DAtask/chunhua/comGSI_v3.3/include -c read_diag.f90
+ifort: warning #10315: specifying -lm before files may supercede the Intel(R) math library and affect performance
+/bin/rm -f main.o main.mod
+cpp  -C -P -D_REAL8_ -DWRF -DLINUX  main.F90 > main.f90
+mpif90 -free -f90=ifort  -O3 -fp-model precise -assume byterecl -convert big_endian -Wl,-rpath,/glade/apps/opt/netcdf/4.3.0/intel/12.1.5/lib -openmp -DLINUX -I./  -I/glade/p/ral/jnt/DAtask/chunhua/comGSI_v3.3/include -c main.f90
+ifort: warning #10315: specifying -lm before files may supercede the Intel(R) math library and affect performance
+/bin/rm -f main.f90
+mpif90 -free -f90=ifort         -o gsi_angupdate.exe -O3 -fp-model precise -assume byterecl -convert big_endian -Wl,-rpath,/glade/apps/opt/netcdf/4.3.0/intel/12.1.5/lib -openmp -DLINUX main.o determine_time_levels.o kinds.o read_diag.o -L../../lib -lw3_i4r8 -L/ncar/opt/intel/ics-2013-sp1/mkl -mkl=sequential -L../../src/main -lgsi 
+ifort: warning #10315: specifying -lm before files may supercede the Intel(R) math library and affect performance
+ld: cannot find -lw3_i4r8
+make: [gsi_angupdate] Error 1 (ignored)

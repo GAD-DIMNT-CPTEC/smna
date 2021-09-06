@@ -1,0 +1,425 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrtmg_sw_vrtqdr.f90
+Compiled : 12/12/20  00:22:25
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps rrtmg_sw_vrtqdr.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrtmg_sw_vrtqdr.f90
+Date     : 12/12/2020  00:22:25
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_9107/rrtmg_sw_vrtqdr_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     A - Pattern matched      a - atomic memory operation
+                              b - blocked
+     C - Collapsed            c - conditional and/or computed
+     D - Deleted               
+     E - Cloned               f - fused
+     G - Accelerated          g - partitioned
+     I - Inlined              i - interchanged
+     M - Multithreaded        m - partitioned
+                              n - non-blocking remote transfer
+                              p - partial
+                              r - unrolled
+                              s - shortloop
+     V - Vectorized           w - unwound
+
+
+    1.       !     path:      $Source: /storm/rc1/cvsroot/rc/rrtmg_sw/src/rrtmg_sw_vrtqdr.f90,v $
+    2.       !     author:    $Author: mike $
+    3.       !     revision:  $Revision: 1.2 $
+    4.       !     created:   $Date: 2007/08/23 20:40:15 $
+    5.       !
+    6.             module rrtmg_sw_vrtqdr
+    7.       
+    8.       !  --------------------------------------------------------------------------
+    9.       ! |                                                                          |
+   10.       ! |  Copyright 2002-2007, Atmospheric & Environmental Research, Inc. (AER).  |
+   11.       ! |  This software may be used, copied, or redistributed as long as it is    |
+   12.       ! |  not sold and this copyright notice is reproduced on each copy made.     |
+   13.       ! |  This model is provided as is without any express or implied warranties. |
+   14.       ! |                       (http://www.rtweb.aer.com/)                        |
+   15.       ! |                                                                          |
+   16.       !  --------------------------------------------------------------------------
+   17.       
+   18.       ! ------- Modules -------
+   19.       
+   20.             use shr_kind_mod, only: r8 => shr_kind_r8
+   21.       
+   22.       !      use parkind, only: jpim, jprb
+   23.       !      use parrrsw, only: ngptsw
+   24.       
+   25.             implicit none
+   26.       
+   27.             contains
+   28.       
+   29.       ! --------------------------------------------------------------------------
+   30.             subroutine vrtqdr_sw(          &
+   31.                                  ngptsw  , &!            ngptsw                              , &
+   32.                                  klev    , &!            klev                              , &
+   33.                                  kw      , &!            iw                                   , &
+   34.                                  pref    , &!            zrefc      (1:klev+1)             , &
+   35.                                  prefd   , &!            zrefdc     (1:klev+1)             , &
+   36.                                  ptra    , &!            ztrac      (1:klev+1)             , &
+   37.                                  ptrad   , &!            ztradc     (1:klev+1)             , &
+   38.                                  pdbt    , &!            zdbtc      (1:klev+1)             , &
+   39.                                  prdnd   , &!            zrdndc     (1:klev+1)             , &
+   40.                                  prup    , &!            zrupc      (1:klev+1)             , &
+   41.                                  prupd   , &!            zrupdc     (1:klev+1)             , &
+   42.                                  ptdbt   , &!            ztdbtc     (1:klev+1)             , &
+   43.                                  pfd     , &!            zcd        (1:klev+1,1:ngptsw)    , &
+   44.                                  pfu       )!            zcu        (1:klev+1,1:ngptsw)      )
+   45.       ! --------------------------------------------------------------------------
+   46.        
+   47.       ! Purpose: This routine performs the vertical quadrature integration
+   48.       !
+   49.       ! Interface:  *vrtqdr_sw* is called from *spcvrt_sw* and *spcvmc_sw*
+   50.       !
+   51.       ! Modifications.
+   52.       ! 
+   53.       ! Original: H. Barker
+   54.       ! Revision: Integrated with rrtmg_sw, J.-J. Morcrette, ECMWF, Oct 2002
+   55.       ! Revision: Reformatted for consistency with rrtmg_lw: MJIacono, AER, Jul 2006
+   56.       !
+   57.       !-----------------------------------------------------------------------
+   58.       
+   59.       ! ------- Declarations -------
+   60.       
+   61.       ! Input
+   62.       
+   63.             integer, intent (in) :: ngptsw
+   64.             integer, intent (in) :: klev                   ! number of model layers
+   65.             integer, intent (in) :: kw                     ! g-point index
+   66.       
+   67.             real(kind=r8), intent(in) :: pref  (1:klev+1)                     ! direct beam reflectivity
+   68.                                                                        !   Dimensions: (nlayers+1)
+   69.             real(kind=r8), intent(in) :: prefd (1:klev+1)                    ! diffuse beam reflectivity
+   70.                                                                        !   Dimensions: (nlayers+1)
+   71.             real(kind=r8), intent(in) :: ptra  (1:klev+1)                     ! direct beam transmissivity
+   72.                                                                        !   Dimensions: (nlayers+1)
+   73.             real(kind=r8), intent(in) :: ptrad (1:klev+1)                    ! diffuse beam transmissivity
+   74.                                                                        !   Dimensions: (nlayers+1)
+   75.       
+   76.             real(kind=r8), intent(in) :: pdbt  (1:klev+1) 
+   77.                                                                        !   Dimensions: (nlayers+1)
+   78.             real(kind=r8), intent(in) :: ptdbt (1:klev+1) 
+   79.                                                                        !   Dimensions: (nlayers+1)
+   80.       
+   81.             real(kind=r8), intent(inout) :: prdnd (1:klev+1) 
+   82.                                                                        !   Dimensions: (nlayers+1)
+   83.             real(kind=r8), intent(inout) :: prup  (1:klev+1) 
+   84.                                                                        !   Dimensions: (nlayers+1)
+   85.             real(kind=r8), intent(inout) :: prupd (1:klev+1) 
+   86.                                                                        !   Dimensions: (nlayers+1)
+   87.       
+   88.       ! Output
+   89.             real(kind=r8), intent(out) :: pfd(1:klev+1,1:ngptsw)                   ! downwelling flux (W/m2)
+   90.                                                                        !   Dimensions: (nlayers+1,ngptsw)
+   91.                                                                        ! unadjusted for earth/sun distance or zenith angle
+   92.             real(kind=r8), intent(out) :: pfu(1:klev+1,1:ngptsw)                   ! upwelling flux (W/m2)
+   93.                                                                        !   Dimensions: (nlayers+1,ngptsw)
+   94.                                                                        ! unadjusted for earth/sun distance or zenith angle
+   95.       
+   96.       ! Local
+   97.       
+   98.             integer :: ikp, ikx, jk
+   99.       
+  100.             real(kind=r8) :: zreflect
+  101.             real(kind=r8) :: ztdn(klev+1)  
+  102.       
+  103.       ! Definitions
+  104.       !
+  105.       ! pref(jk)   direct reflectance
+  106.       ! prefd(jk)  diffuse reflectance
+  107.       ! ptra(jk)   direct transmittance
+  108.       ! ptrad(jk)  diffuse transmittance
+  109.       !
+  110.       ! pdbt(jk)   layer mean direct beam transmittance
+  111.       ! ptdbt(jk)  total direct beam transmittance at levels
+  112.       !
+  113.       !-----------------------------------------------------------------------------
+  114.                          
+  115.       ! Link lowest layer with surface
+  116.                    
+  117.             zreflect = 1._r8 / (1._r8 - prefd(klev+1) * prefd(klev))
+  118.             prup(klev) = pref(klev) + (ptrad(klev) * &
+  119.                        ((ptra(klev) - pdbt(klev)) * prefd(klev+1) + &
+  120.                          pdbt(klev) * pref(klev+1))) * zreflect
+  121.             prupd(klev) = prefd(klev) + ptrad(klev) * ptrad(klev) * &
+  122.                           prefd(klev+1) * zreflect
+  123.       
+  124.       ! Pass from bottom to top 
+  125.       
+  126.  1--<       do jk = 1,klev-1
+  127.  1             ikp = klev+1-jk                       
+  128.  1             ikx = ikp-1
+  129.  1             zreflect = 1._r8 / (1._r8 -prupd(ikp) * prefd(ikx))
+  130.  1             prup(ikx) = pref(ikx) + (ptrad(ikx) * &
+  131.  1                       ((ptra(ikx) - pdbt(ikx)) * prupd(ikp) + &
+  132.  1                         pdbt(ikx) * prup(ikp))) * zreflect
+  133.  1             prupd(ikx) = prefd(ikx) + ptrad(ikx) * ptrad(ikx) * &
+  134.  1                          prupd(ikp) * zreflect
+  135.  1-->       enddo
+  136.           
+  137.       ! Upper boundary conditions
+  138.       
+  139.             ztdn(1) = 1._r8
+  140.             prdnd(1) = 0._r8
+  141.             ztdn(2) = ptra(1)
+  142.             prdnd(2) = prefd(1)
+  143.       
+  144.       ! Pass from top to bottom
+  145.       
+  146.  1--<       do jk = 2,klev
+  147.  1             ikp = jk+1
+  148.  1             zreflect = 1._r8 / (1._r8 - prefd(jk) * prdnd(jk))
+  149.  1             ztdn(ikp) = ptdbt(jk) * ptra(jk) + &
+  150.  1                        (ptrad(jk) * ((ztdn(jk) - ptdbt(jk)) + &
+  151.  1                         ptdbt(jk) * pref(jk) * prdnd(jk))) * zreflect
+  152.  1             prdnd(ikp) = prefd(jk) + ptrad(jk) * ptrad(jk) * &
+  153.  1                          prdnd(jk) * zreflect
+  154.  1-->       enddo
+  155.           
+  156.       ! Up and down-welling fluxes at levels
+  157.       
+  158.  1--<       do jk = 1,klev+1
+  159.  1             zreflect = 1._r8 / (1._r8 - prdnd(jk) * prupd(jk))
+  160.  1             pfu(jk,kw) = (ptdbt(jk) * prup(jk) + &
+  161.  1                          (ztdn(jk) - ptdbt(jk)) * prupd(jk)) * zreflect
+  162.  1             pfd(jk,kw) = ptdbt(jk) + (ztdn(jk) - ptdbt(jk)+ &
+  163.  1                          ptdbt(jk) * prup(jk) * prdnd(jk)) * zreflect
+  164.  1-->       enddo
+  165.       
+  166.             end subroutine vrtqdr_sw
+  167.       
+  168.             end module rrtmg_sw_vrtqdr
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+             C r o s s   R e f e r e n c e   for   RRTMG_SW_VRTQDR
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+IKP                             Stack                             INTEGER
+  Decl      98
+  Set      127     147
+  Used     128     129     131     132     134     149     152
+
+IKX                             Stack                             INTEGER
+  Decl      98
+  Set      128
+  Used     129     130     131     132     133
+
+JK                              Stack                             INTEGER
+  Decl      98
+  Set 
+  Used     127     147     148     149     150     151     152     153     159     160     161     162     163
+
+KLEV                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      32      64
+  Set 
+  Used      67      69      71      73      76      78      81      83      85      89      92     101     117     118     119
+           120     121     122     126     127     146     158
+
+KW                              Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      33      65
+  Set 
+  Used     160     162
+
+NGPTSW                          Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      31      63
+  Set 
+  Used      89      92
+
+PDBT                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      38      76
+  Set 
+  Used     119     120     131     132
+
+PFD                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(OUT)
+  Decl      43      89
+  Set      162
+  Used
+
+PFU                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(OUT)
+  Decl      44      92
+  Set      160
+  Used
+
+PRDND                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(INOUT)
+  Decl      39      81
+  Set      140     142     152
+  Used     148     151     159     163
+
+PREF                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      34      67
+  Set 
+  Used     118     120     130     151
+
+PREFD                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      35      69
+  Set 
+  Used     117     119     121     122     129     133     142     148     152
+
+PRUP                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(INOUT)
+  Decl      40      83
+  Set      118     130
+  Used     160     163
+
+PRUPD                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(INOUT)
+  Decl      41      85
+  Set      121     133
+  Used     129     131     159     161
+
+PTDBT                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      42      78
+  Set 
+  Used     149     150     151     160     161     162     163
+
+PTRA                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      36      71
+  Set 
+  Used     119     131     141     149
+
+PTRAD                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      37      73
+  Set 
+  Used     118     121     130     133     150     152
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD
+  Decl      20
+  Set 
+  Used      67      69      71      73      76      78      81      83      85      89      92     100     101
+
+RRTMG_SW_VRTQDR                                                   Module
+  Decl       6
+  Set 
+  Used
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used      20
+
+VRTQDR_SW                                                         Subroutine, Module procedure
+  Decl      30
+  Set 
+  Used
+
+ZREFLECT                        Stack                             REAL(KIND=8)
+  Decl     100
+  Set      117     129     148     159
+  Used     120     122     132     134     151     153     161     163
+
+ZTDN                            Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     101
+  Set      139     141     149
+  Used     161     162
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+RRTMG_SW_VRTQDR
+      Defined as:  Module (line 6, file rrtmg_sw_vrtqdr.f90)
+
+        Uses:      SHR_KIND_MOD
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_VRTQDR
+
+Name  Messages
+----  --------
+VRTQDR_SW in RRTMG_SW_VRTQDR
+      Defined as:  Subroutine (line 30, file rrtmg_sw_vrtqdr.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

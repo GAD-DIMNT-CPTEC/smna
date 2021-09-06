@@ -1,0 +1,12 @@
+# Automatically generated objects. Sáb Set 13 21:25:58 BRT 2014
+# fgen v0.3 (C) 1997,98 Beroud Jean-Marc
+
+OBJS = \
+	$(srcdir)/sigio_BAMMod.o \
+	$(srcdir)/Fourier.o \
+	$(srcdir)/LegendreTransform.o \
+	$(srcdir)/TransformTools.o \
+	$(srcdir)/ModConstants.o \
+	$(srcdir)/MiscMod.o
+
+

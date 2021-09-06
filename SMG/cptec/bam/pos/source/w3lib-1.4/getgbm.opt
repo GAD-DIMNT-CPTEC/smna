@@ -1,0 +1,105 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgbm.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgbm.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgbm( lugb, lugi, jf, j, jpds, jgds, mbuf, cbuf, nlen, nnum, mnum, kf, k, kpds, kgds, lb, f, iret )
+    2.       t$1 = mbuf
+  205.       t$3 = _zla( 0, mbuf )
+    2.       t$2 = jf
+  206.       t$4 = _zla( 0, jf )
+  212.       $I_A1 = 0
+  212. !dir$ ivdep
+  212.       do
+  212.          jens(1 + $I_A1) = -1
+  212.          $I_A1 = 1 + $I_A1
+  212.          if ( $I_A1 >= 200 ) exit
+  212.       enddo
+  213.       if ( j >= 0 ) then
+  214.          if ( mnum >= 0 ) then
+  215.             irgi = 0
+  215.          else
+  217.             mnum = -1 + -mnum
+  218.             irgi = 1
+  218.          endif
+  220.          jr = j + -mnum
+  221.          if ( j + -mnum < 0 ) then
+  219.             goto 10
+  221.          else if ( j + -mnum < nnum ) then
+  221.             goto 20
+  221.          else if ( irgi == 0 ) then
+  221.    20       continue
+  222.             call getgb1s(  _substr(cbuf(1),1,1), nlen, nnum, jr, jpds(1), jgds(1), jens(1), kr, kpds(1), kgds(1), kens(1), lskip, lgrib, irgs )
+  224.             k = cvmg( k, mnum + kr, irgs /= 0 )
+  225.             if ( irgi == 1 ) then
+  225.                if ( irgs == 0 ) then
+  225.                   mnum = -1 + -mnum
+  225.                endif
+  226.                if ( irgs > 0 ) then
+  226.                   mnum = mnum + nnum
+  226.                endif
+  226.             endif
+  226.          else
+  226.    10       continue
+  228.             mnum = j
+  229.             irgi = 1
+  230.             irgs = 1
+  230.          endif
+  230.       else
+  233.          mnum = -1 + -j
+  234.          irgi = 1
+  235.          irgs = 1
+  235.       endif
+  239.       jr = 0
+  240.       if ( irgi == 1 .and. irgs == 1 ) then
+  240.          do
+  241.             if ( lugi > 0 ) then
+  242.                call getgi( lugi, mnum, mbuf,  _substr(cbuf(1),1,1), nlen, nnum, irgi )
+  242.             else
+  244.                call getgir( lugb, 32000, 4000, mnum, mbuf,  _substr(cbuf(1),1,1), nlen, nnum, irgi )
+  244.             endif
+  246.             if ( irgi <= 1 ) then
+  247.                call getgb1s(  _substr(cbuf(1),1,1), nlen, nnum, jr, jpds(1), jgds(1), jens(1), kr, kpds(1), kgds(1), kens(1), lskip, lgrib, irgs )
+  249.                if ( irgs == 0 ) then
+  249.                   k = mnum + kr
+  249.                endif
+  250.                if ( irgi == 1 ) then
+  250.                   if ( irgs == 0 ) then
+  250.                      mnum = -1 + -mnum
+  250.                   endif
+  251.                   if ( irgs > 0 ) then
+  251.                      mnum = mnum + nnum
+  251.                   endif
+  251.                endif
+  251.             endif
+  252.             if ( ( irgi == 1 .and. irgs == 1 ) == 0 ) exit
+  252.          enddo
+  252.       endif
+  256.       if ( irgi > 1 ) then
+  257.          iret = 96
+  258.       else if ( irgs /= 0 ) then
+  259.          iret = 99
+  259.       else
+  260.          $t_S0 = lengds( kgds(1) )
+  260.          if ( $t_S0 > jf ) then
+  261.             iret = 98
+  261.          else
+  263.             call getgb1r( lugb, lskip, lgrib, kf, kpds(1), kgds(1), kens(1), lb(1), f(1), iret )
+  263.          endif
+  263.       endif
+  267.       return
+  267.       end
+  267.       

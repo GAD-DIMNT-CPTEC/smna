@@ -1,0 +1,423 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_lw/parrrtm.f90
+Compiled : 12/12/20  00:22:52
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps parrrtm.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_lw/parrrtm.f90
+Date     : 12/12/2020  00:22:52
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_10828/parrrtm_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     There are no optimizations or loops to mark
+
+
+    1.    
+    2.          module parrrtm
+    3.    
+    4.    !      use parkind ,only : jpim, jprb
+    5.    
+    6.          implicit none
+    7.          save
+    8.    
+    9.    !------------------------------------------------------------------
+   10.    ! rrtmg_lw main parameters
+   11.    !
+   12.    ! Initial version:  JJMorcrette, ECMWF, Jul 1998
+   13.    ! Revised: MJIacono, AER, Jun 2006
+   14.    ! Revised: MJIacono, AER, Aug 2007
+   15.    !------------------------------------------------------------------
+   16.    
+   17.    !  name     type     purpose
+   18.    ! -----  :  ----   : ----------------------------------------------
+   19.    ! mxlay  :  integer: maximum number of layers
+   20.    ! mg     :  integer: number of original g-intervals per spectral band
+   21.    ! nbndlw :  integer: number of spectral bands
+   22.    ! maxxsec:  integer: maximum number of cross-section molecules
+   23.    !                    (e.g. cfcs)
+   24.    ! maxinpx:  integer: 
+   25.    ! ngptlw :  integer: total number of reduced g-intervals for rrtmg_lw
+   26.    ! ngNN   :  integer: number of reduced g-intervals per spectral band
+   27.    ! ngsNN  :  integer: cumulative number of g-intervals per band
+   28.    !------------------------------------------------------------------
+   29.    
+   30.          integer, parameter :: mxlay  = 203
+   31.          integer, parameter :: mg     = 16
+   32.          integer, parameter :: nbndlw = 16
+   33.          integer, parameter :: maxxsec= 4
+   34.          integer, parameter :: mxmol  = 38
+   35.          integer, parameter :: maxinpx= 38
+   36.          integer, parameter :: nmol   = 7
+   37.    ! Use for 140 g-point model 
+   38.          integer, parameter :: ngptlw = 140
+   39.    ! Use for 256 g-point model 
+   40.    !      integer, parameter :: ngptlw = 256
+   41.    
+   42.    ! Use for 140 g-point model
+   43.          integer, parameter :: ng1  = 10
+   44.          integer, parameter :: ng2  = 12
+   45.          integer, parameter :: ng3  = 16
+   46.          integer, parameter :: ng4  = 14
+   47.          integer, parameter :: ng5  = 16
+   48.          integer, parameter :: ng6  = 8
+   49.          integer, parameter :: ng7  = 12
+   50.          integer, parameter :: ng8  = 8
+   51.          integer, parameter :: ng9  = 12
+   52.          integer, parameter :: ng10 = 6
+   53.          integer, parameter :: ng11 = 8
+   54.          integer, parameter :: ng12 = 8
+   55.          integer, parameter :: ng13 = 4
+   56.          integer, parameter :: ng14 = 2
+   57.          integer, parameter :: ng15 = 2
+   58.          integer, parameter :: ng16 = 2
+   59.    
+   60.          integer, parameter :: ngs1  = 10
+   61.          integer, parameter :: ngs2  = 22
+   62.          integer, parameter :: ngs3  = 38
+   63.          integer, parameter :: ngs4  = 52
+   64.          integer, parameter :: ngs5  = 68
+   65.          integer, parameter :: ngs6  = 76
+   66.          integer, parameter :: ngs7  = 88
+   67.          integer, parameter :: ngs8  = 96
+   68.          integer, parameter :: ngs9  = 108
+   69.          integer, parameter :: ngs10 = 114
+   70.          integer, parameter :: ngs11 = 122
+   71.          integer, parameter :: ngs12 = 130
+   72.          integer, parameter :: ngs13 = 134
+   73.          integer, parameter :: ngs14 = 136
+   74.          integer, parameter :: ngs15 = 138
+   75.    
+   76.    ! Use for 256 g-point model
+   77.    !      integer, parameter :: ng1  = 16
+   78.    !      integer, parameter :: ng2  = 16
+   79.    !      integer, parameter :: ng3  = 16
+   80.    !      integer, parameter :: ng4  = 16
+   81.    !      integer, parameter :: ng5  = 16
+   82.    !      integer, parameter :: ng6  = 16
+   83.    !      integer, parameter :: ng7  = 16
+   84.    !      integer, parameter :: ng8  = 16
+   85.    !      integer, parameter :: ng9  = 16
+   86.    !      integer, parameter :: ng10 = 16
+   87.    !      integer, parameter :: ng11 = 16
+   88.    !      integer, parameter :: ng12 = 16
+   89.    !      integer, parameter :: ng13 = 16
+   90.    !      integer, parameter :: ng14 = 16
+   91.    !      integer, parameter :: ng15 = 16
+   92.    !      integer, parameter :: ng16 = 16
+   93.    
+   94.    !      integer, parameter :: ngs1  = 16
+   95.    !      integer, parameter :: ngs2  = 32
+   96.    !      integer, parameter :: ngs3  = 48
+   97.    !      integer, parameter :: ngs4  = 64
+   98.    !      integer, parameter :: ngs5  = 80
+   99.    !      integer, parameter :: ngs6  = 96
+  100.    !      integer, parameter :: ngs7  = 112
+  101.    !      integer, parameter :: ngs8  = 128
+  102.    !      integer, parameter :: ngs9  = 144
+  103.    !      integer, parameter :: ngs10 = 160
+  104.    !      integer, parameter :: ngs11 = 176
+  105.    !      integer, parameter :: ngs12 = 192
+  106.    !      integer, parameter :: ngs13 = 208
+  107.    !      integer, parameter :: ngs14 = 224
+  108.    !      integer, parameter :: ngs15 = 240
+  109.    !      integer, parameter :: ngs16 = 256
+  110.    
+  111.          end module parrrtm
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                 C r o s s   R e f e r e n c e   for   PARRRTM
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+MAXINPX                                                           INTEGER, PARAMETER
+  Decl      35
+  Set 
+  Used
+
+MAXXSEC                                                           INTEGER, PARAMETER
+  Decl      33
+  Set 
+  Used
+
+MG                                                                INTEGER, PARAMETER
+  Decl      31
+  Set 
+  Used
+
+MXLAY                                                             INTEGER, PARAMETER
+  Decl      30
+  Set 
+  Used
+
+MXMOL                                                             INTEGER, PARAMETER
+  Decl      34
+  Set 
+  Used
+
+NBNDLW                                                            INTEGER, PARAMETER
+  Decl      32
+  Set 
+  Used
+
+NG1                                                               INTEGER, PARAMETER
+  Decl      43
+  Set 
+  Used
+
+NG10                                                              INTEGER, PARAMETER
+  Decl      52
+  Set 
+  Used
+
+NG11                                                              INTEGER, PARAMETER
+  Decl      53
+  Set 
+  Used
+
+NG12                                                              INTEGER, PARAMETER
+  Decl      54
+  Set 
+  Used
+
+NG13                                                              INTEGER, PARAMETER
+  Decl      55
+  Set 
+  Used
+
+NG14                                                              INTEGER, PARAMETER
+  Decl      56
+  Set 
+  Used
+
+NG15                                                              INTEGER, PARAMETER
+  Decl      57
+  Set 
+  Used
+
+NG16                                                              INTEGER, PARAMETER
+  Decl      58
+  Set 
+  Used
+
+NG2                                                               INTEGER, PARAMETER
+  Decl      44
+  Set 
+  Used
+
+NG3                                                               INTEGER, PARAMETER
+  Decl      45
+  Set 
+  Used
+
+NG4                                                               INTEGER, PARAMETER
+  Decl      46
+  Set 
+  Used
+
+NG5                                                               INTEGER, PARAMETER
+  Decl      47
+  Set 
+  Used
+
+NG6                                                               INTEGER, PARAMETER
+  Decl      48
+  Set 
+  Used
+
+NG7                                                               INTEGER, PARAMETER
+  Decl      49
+  Set 
+  Used
+
+NG8                                                               INTEGER, PARAMETER
+  Decl      50
+  Set 
+  Used
+
+NG9                                                               INTEGER, PARAMETER
+  Decl      51
+  Set 
+  Used
+
+NGPTLW                                                            INTEGER, PARAMETER
+  Decl      38
+  Set 
+  Used
+
+NGS1                                                              INTEGER, PARAMETER
+  Decl      60
+  Set 
+  Used
+
+NGS10                                                             INTEGER, PARAMETER
+  Decl      69
+  Set 
+  Used
+
+NGS11                                                             INTEGER, PARAMETER
+  Decl      70
+  Set 
+  Used
+
+NGS12                                                             INTEGER, PARAMETER
+  Decl      71
+  Set 
+  Used
+
+NGS13                                                             INTEGER, PARAMETER
+  Decl      72
+  Set 
+  Used
+
+NGS14                                                             INTEGER, PARAMETER
+  Decl      73
+  Set 
+  Used
+
+NGS15                                                             INTEGER, PARAMETER
+  Decl      74
+  Set 
+  Used
+
+NGS2                                                              INTEGER, PARAMETER
+  Decl      61
+  Set 
+  Used
+
+NGS3                                                              INTEGER, PARAMETER
+  Decl      62
+  Set 
+  Used
+
+NGS4                                                              INTEGER, PARAMETER
+  Decl      63
+  Set 
+  Used
+
+NGS5                                                              INTEGER, PARAMETER
+  Decl      64
+  Set 
+  Used
+
+NGS6                                                              INTEGER, PARAMETER
+  Decl      65
+  Set 
+  Used
+
+NGS7                                                              INTEGER, PARAMETER
+  Decl      66
+  Set 
+  Used
+
+NGS8                                                              INTEGER, PARAMETER
+  Decl      67
+  Set 
+  Used
+
+NGS9                                                              INTEGER, PARAMETER
+  Decl      68
+  Set 
+  Used
+
+NMOL                                                              INTEGER, PARAMETER
+  Decl      36
+  Set 
+  Used
+
+PARRRTM                                                           Module
+  Decl       2
+  Set 
+  Used
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+PARRRTM
+      Defined as:  Module (line 2, file parrrtm.f90)
+
+                   Does not use any module and is not used by any procedure.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

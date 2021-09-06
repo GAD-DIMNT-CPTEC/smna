@@ -1,0 +1,237 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi82.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi82.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi82( ifld, fval1, fdiff1, npts, pds, igds )
+   51.       $Con_P17 = 56
+   51.       $Con_P18 = 1
+   51.       call gbytec( substr[pds,0:1], iqq, $Con_P17, $Con_P18 )
+   52.       if ( iqq /= 0 ) then
+   53.          $LCS_igds_0 = loc( igds )
+   53.          $nrow_S0 = 4[$LCS_igds_0,0]
+   54.          $ncol_S1 = 3[$LCS_igds_0,0]
+   60.          if ( -2 + $nrow_S0 >= 0 ) then
+   64.             if ( $ncol_S1 > 0 ) then
+   70.                $LCS_ncol_1 = $ncol_S1
+   70.                $SR_S41 = $LCS_ncol_1
+   70.                $SR_S37 = _lsh( $LCS_ncol_1, 2 )
+   66.                $LCS_3 = _lsh( $LCS_ncol_1, 1 )
+   66.                $SR_S36 = $LCS_3
+   66.                $LCS_2 = _lsh( $LCS_ncol_1, 3 )
+   66.                $SR_S32 = $LCS_2
+   64.                $LIS_E5 = and( -4, $ncol_S1 )
+   60.                $Induc02_S42 = -1 + $nrow_S0
+   64.                $LIS_E14 = -$LIS_E5
+   60.                do
+   64.                   $I_L64_S35 = 0
+   66.                   if ( $ncol_S1 > 300 ) then
+   66.                      $LB_Y0 = 1
+   66.                      $UB_Y1 = 300
+   66.                      $Subscript_Y2 = 1
+   66.                      $Subscript_Y3 = $LCS_ncol_1
+   66.                      $Subscript_Y4 = 1
+   66.                      _rbounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y43 )
+   66.                   endif
+   64.                   if ( $ncol_S1 >= 4 ) then !  99.50%
+   64.                      $LC_S34 = $LIS_E14
+   64.                      $SI_S33 = 0
+   64.                      if ( $LIS_E14 < -15 ) then
+   64.                         do
+   66.                            $LCS_4 = $SR_S32 + loc( ifld ) - $SI_S33
+   66.                            nboust[$SI_S33:4:1] = _reverse( -4[$LCS_4:4:1] )
+   66.                            (4,nboust)[$SI_S33:4:1] = _reverse( -8[$LCS_4:4:1] )
+   66.                            (8,nboust)[$SI_S33:4:1] = _reverse( -12[$LCS_4:4:1] )
+   66.                            (12,nboust)[$SI_S33:4:1] = _reverse( -16[$LCS_4:4:1] )
+   64.                            $SI_S33 = 64 + $SI_S33
+   64.                            $LC_S34 = 16 + $LC_S34
+   64.                            if ( $LC_S34 >= -15 ) exit
+   64.                         enddo
+   64.                      endif
+   64.                      if ( $LC_S34 < 0 ) then
+   64.                         do
+   66.                            nboust[$SI_S33:4:1] = _reverse( -4[$SR_S32 + loc( ifld ) - $SI_S33:4:1] )
+   64.                            $SI_S33 = 16 + $SI_S33
+   64.                            $LC_S34 = 4 + $LC_S34
+   64.                            if ( $LC_S34 >= 0 ) exit
+   64.                         enddo
+   64.                      endif
+   64.                      $I_L64_S35 = $LIS_E5
+   64.                   endif
+   64.                   if ( $LCS_ncol_1 > $I_L64_S35 ) then !  99.50%
+   64.                      do
+   66.                         nboust[$I_L64_S35] = -1[loc( ifld ),$SR_S36 - $I_L64_S35]
+   67.                         $I_L64_S35 = 1 + $I_L64_S35
+   64.                         if ( $I_L64_S35 >= $LCS_ncol_1 ) exit
+   64.                      enddo
+   64.                   endif
+   68.                   $I_L68_S40 = 0
+   70.                   if ( $ncol_S1 > 300 ) then
+   70.                      $LB_Y0 = 1
+   70.                      $UB_Y1 = 300
+   70.                      $Subscript_Y2 = 1
+   70.                      $Subscript_Y3 = $LCS_ncol_1
+   70.                      $Subscript_Y4 = 1
+   70.                      _rbounds_error( $_File_Y40, $Line_Y45, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y46 )
+   70.                   endif
+   68.                   if ( $ncol_S1 >= 4 ) then !  99.50%
+   68.                      $LC_S39 = $LIS_E14
+   68.                      $SI_S38 = 0
+   68.                      if ( $LIS_E14 < -15 ) then
+   68.                         do
+   70.                            $LCS_ifld_5 = $SR_S37 + $SI_S38 + loc( ifld )
+   70.                            0[$LCS_ifld_5:4:1] = nboust[$SI_S38:4:1]
+   70.                            4[$LCS_ifld_5:4:1] = (4,nboust)[$SI_S38:4:1]
+   70.                            8[$LCS_ifld_5:4:1] = (8,nboust)[$SI_S38:4:1]
+   70.                            12[$LCS_ifld_5:4:1] = (12,nboust)[$SI_S38:4:1]
+   68.                            $SI_S38 = 64 + $SI_S38
+   68.                            $LC_S39 = 16 + $LC_S39
+   68.                            if ( $LC_S39 >= -15 ) exit
+   68.                         enddo
+   68.                      endif
+   68.                      if ( $LC_S39 < 0 ) then
+   70.                         $LIS_E15 = $SR_S37 + loc( ifld )
+   68.                         do
+   70.                            0[$LIS_E15 + $SI_S38:4:1] = nboust[$SI_S38:4:1]
+   68.                            $SI_S38 = 16 + $SI_S38
+   68.                            $LC_S39 = 4 + $LC_S39
+   68.                            if ( $LC_S39 >= 0 ) exit
+   68.                         enddo
+   68.                      endif
+   68.                      $I_L68_S40 = $LIS_E5
+   68.                   endif
+   68.                   if ( $LCS_ncol_1 > $I_L68_S40 ) then !  99.50%
+   70.                      $LIS_E16 = loc( ifld )
+   68.                      do
+   70.                         0[$LIS_E16,$I_L68_S40 + $SR_S41] = nboust[$I_L68_S40]
+   71.                         $I_L68_S40 = 1 + $I_L68_S40
+   68.                         if ( $I_L68_S40 >= $LCS_ncol_1 ) exit
+   68.                      enddo
+   68.                   endif
+   70.                   $SR_S41 = $LCS_3 + $SR_S41
+   70.                   $SR_S37 = $LCS_2 + $SR_S37
+   66.                   $SR_S36 = $LCS_3 + $SR_S36
+   66.                   $SR_S32 = $LCS_2 + $SR_S32
+   60.                   $Induc02_S42 = -2 + $Induc02_S42
+   71.                   if ( $Induc02_S42 <= 0 ) exit
+   71.                enddo
+   71.             endif
+   71.          endif
+   71.       endif
+   77.       $MR_npts_7 = 0[loc( npts ),0]
+   77.       if ( 2 - $MR_npts_7 <= 0 ) then
+   77.          $I_L77_S45 = 0
+   77.          $LCS_6 = $MR_npts_7
+   77.          if ( -5 + $LCS_6 >= 0 ) then !  99.50%
+   77.             $TC_6 = and( -4, -1 + $LCS_6 )
+   77.             $LC_S43 = -$TC_6
+   77.             $SI_S44 = 0
+   78.             $LIS_S20 = _lsh( $MR_npts_7, 2 ) + loc( ifld )
+   77.             if ( $LC_S43 < -15 ) then
+   77.                do
+   78.                   $LCS_7 = $LIS_S20 + $SI_S44
+   78.                   -4[$LCS_7:4:1] = -4[$LCS_7:4:1] - -5[$LCS_7:4:1]
+   78.                   -8[$LCS_7:4:1] = -8[$LCS_7:4:1] - -9[$LCS_7:4:1]
+   78.                   -12[$LCS_7:4:1] = -12[$LCS_7:4:1] - -13[$LCS_7:4:1]
+   78.                   -16[$LCS_7:4:1] = -16[$LCS_7:4:1] - -17[$LCS_7:4:1]
+   77.                   $SI_S44 = -64 + $SI_S44
+   77.                   $LC_S43 = 16 + $LC_S43
+   77.                   if ( $LC_S43 >= -15 ) exit
+   77.                enddo
+   77.             endif
+   77.             if ( $LC_S43 < 0 ) then
+   77.                do
+   78.                   $LCS_8 = $LIS_S20 + $SI_S44
+   78.                   -4[$LCS_8:4:1] = -4[$LCS_8:4:1] - -5[$LCS_8:4:1]
+   77.                   $SI_S44 = -16 + $SI_S44
+   77.                   $LC_S43 = 4 + $LC_S43
+   77.                   if ( $LC_S43 >= 0 ) exit
+   77.                enddo
+   77.             endif
+   77.             $I_L77_S45 = $TC_6
+   77.          endif
+   77.          $LCS_1_9 = -1 + $MR_npts_7
+   77.          if ( $LCS_1_9 > $I_L77_S45 ) then !  99.50%
+   78.             $LIS_S23 = loc( ifld )
+   78.             $LIS_S24 = $MR_npts_7
+   77.             do
+   78.                $LCS_10 = $LIS_S24 - $I_L77_S45
+   78.                $MR_ifld_8 = -2[$LIS_S23,$LCS_10]
+   78.                $MR_ifld_S46 = -1[$LIS_S23,$LCS_10]
+   78.                $MR_ifld_S47 = $MR_ifld_S46 - $MR_ifld_8
+   78.                -1[$LIS_S23,$LCS_10] = $MR_ifld_S47
+   79.                $I_L77_S45 = 1 + $I_L77_S45
+   77.                if ( $I_L77_S45 >= $LCS_1_9 ) exit
+   77.             enddo
+   77.          endif
+   77.       endif
+   80.       if ( 3 - $MR_npts_7 <= 0 ) then
+   80.          $I_L80_S50 = 0
+   80.          $LCS_11 = $MR_npts_7
+   80.          if ( -6 + $LCS_11 >= 0 ) then !  99.50%
+   80.             $TC_9 = and( -4, -2 + $LCS_11 )
+   80.             $LC_S48 = -$TC_9
+   80.             $SI_S49 = 0
+   81.             $LIS_S27 = _lsh( $MR_npts_7, 2 ) + loc( ifld )
+   80.             if ( $LC_S48 < -15 ) then
+   80.                do
+   81.                   $LCS_12 = $LIS_S27 + $SI_S49
+   81.                   -4[$LCS_12:4:1] = -4[$LCS_12:4:1] - -5[$LCS_12:4:1]
+   81.                   -8[$LCS_12:4:1] = -8[$LCS_12:4:1] - -9[$LCS_12:4:1]
+   81.                   -12[$LCS_12:4:1] = -12[$LCS_12:4:1] - -13[$LCS_12:4:1]
+   81.                   -16[$LCS_12:4:1] = -16[$LCS_12:4:1] - -17[$LCS_12:4:1]
+   80.                   $SI_S49 = -64 + $SI_S49
+   80.                   $LC_S48 = 16 + $LC_S48
+   80.                   if ( $LC_S48 >= -15 ) exit
+   80.                enddo
+   80.             endif
+   80.             if ( $LC_S48 < 0 ) then
+   80.                do
+   81.                   $LCS_13 = $LIS_S27 + $SI_S49
+   81.                   -4[$LCS_13:4:1] = -4[$LCS_13:4:1] - -5[$LCS_13:4:1]
+   80.                   $SI_S49 = -16 + $SI_S49
+   80.                   $LC_S48 = 4 + $LC_S48
+   80.                   if ( $LC_S48 >= 0 ) exit
+   80.                enddo
+   80.             endif
+   80.             $I_L80_S50 = $TC_9
+   80.          endif
+   80.          $LCS_2_14 = -2 + $MR_npts_7
+   80.          if ( $LCS_2_14 > $I_L80_S50 ) then !  99.50%
+   81.             $LIS_S30 = loc( ifld )
+   81.             $LIS_S31 = $MR_npts_7
+   80.             do
+   81.                $LCS_15 = $LIS_S31 - $I_L80_S50
+   81.                $MR_ifld_10 = -2[$LIS_S30,$LCS_15]
+   81.                $MR_ifld_S51 = -1[$LIS_S30,$LCS_15]
+   81.                $MR_ifld_S52 = $MR_ifld_S51 - $MR_ifld_10
+   81.                -1[$LIS_S30,$LCS_15] = $MR_ifld_S52
+   82.                $I_L80_S50 = 1 + $I_L80_S50
+   80.                if ( $I_L80_S50 >= $LCS_2_14 ) exit
+   80.             enddo
+   80.          endif
+   80.       endif
+   88.       $LCS_ifld_16 = loc( ifld )
+   88.       $MR_ifld_12 = 0[$LCS_ifld_16,0]
+   88.       0[loc( fval1 ),0] = real( $MR_ifld_12 )
+   89.       $MR_ifld_14 = 1[$LCS_ifld_16,0]
+   89.       0[loc( fdiff1 ),0] = real( $MR_ifld_14 )
+   93.       $MR_ifld_16 = 2[$LCS_ifld_16,0]
+   93.       0[$LCS_ifld_16,0] = $MR_ifld_16
+   94.       1[$LCS_ifld_16,0] = $MR_ifld_16
+   97.       return
+   97.       end
+   97.       

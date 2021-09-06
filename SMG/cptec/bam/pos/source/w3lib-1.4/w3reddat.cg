@@ -1,0 +1,122 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3reddat.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3reddat.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3reddat( it, rinc, dinc )
+  109.       $Dotp_A35 = 0.0
+  106.       $I_L106_S2 = 0
+  106.       do
+  106.          $LCS_rinc_0 = loc( rinc )
+  106.          $MR_rinc_4 = 0[$LCS_rinc_0,$I_L106_S2]
+  106.          $iinc_WR0_R0 = floor( $MR_rinc_4 )
+  106.          iinc[$I_L106_S2] = $iinc_WR0_R0
+  109.          $Dotp_A35 = t$5[$I_L106_S2] * ( $MR_rinc_4 - real( $iinc_WR0_R0 ) ) + $Dotp_A35
+  106.          $I_L106_S2 = 1 + $I_L106_S2
+  106.          if ( $I_L106_S2 >= 4 ) exit
+  106.       enddo
+  109.       $MR_jinc_7 = _anint( 4[$LCS_rinc_0,0] + $Dotp_A35 )
+  110.       $MR_kinc_8 = modulo( $MR_jinc_7, 1000 )
+  110.       (4,kinc)[0] = $MR_kinc_8
+  112.       $MR_jinc_10 = ( $MR_jinc_7 - $MR_kinc_8 ) / 1000 + (3,iinc)[0]
+  113.       $MR_kinc_11 = modulo( $MR_jinc_10, 60 )
+  113.       (3,kinc)[0] = $MR_kinc_11
+  115.       $MR_jinc_13 = ( $MR_jinc_10 - $MR_kinc_11 ) / 60 + (2,iinc)[0]
+  116.       $MR_kinc_14 = modulo( $MR_jinc_13, 60 )
+  116.       (2,kinc)[0] = $MR_kinc_14
+  118.       $MR_jinc_16 = ( $MR_jinc_13 - $MR_kinc_14 ) / 60 + (1,iinc)[0]
+  119.       $MR_kinc_17 = modulo( $MR_jinc_16, 24 )
+  119.       (1,kinc)[0] = $MR_kinc_17
+  121.       $MR_kinc_19 = ( $MR_jinc_16 - $MR_kinc_17 ) / 24 + iinc[0]
+  121.       kinc[0] = $MR_kinc_19
+  122.       $Dotp_A37 = 0
+  122.       $I_L122_S3 = 0
+  122.       do
+  122.          $Dotp_A37 = $Dotp_A37 + (1,kinc)[$I_L122_S3] * t$6[$I_L122_S3]
+  122.          $I_L122_S3 = 1 + $I_L122_S3
+  122.          if ( $I_L122_S3 >= 4 ) exit
+  122.       enddo
+  126.       $MR_it_22 = 0[loc( it ),0]
+  126.       if ( $MR_it_22 <= 0 ) then
+  126.          goto 10
+  126.       else if ( $MR_it_22 <= 5 ) then
+  129.          $CS_0 = or( 5 - $MR_it_22, -1 + $MR_it_22 ) >= 0
+  129.          if ( int( $CS_0 ) == 0 ) then
+  129.             $LB_Y0 = 1
+  129.             $UB_Y1 = 5
+  129.             $Subscript_Y5 = $MR_it_22
+  129.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+  129.          endif
+  129.          if ( int( $CS_0 ) == 0 ) then
+  129.             $LB_Y0 = 1
+  129.             $UB_Y1 = 5
+  129.             $Subscript_Y5 = $MR_it_22
+  129.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+  129.          endif
+  129.          if ( int( $CS_0 ) == 0 ) then
+  129.             $LB_Y0 = 1
+  129.             $UB_Y1 = 5
+  129.             $Subscript_Y5 = $MR_it_22
+  129.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+  129.          endif
+  129.          $LCS_1 = _lsh( $Dotp_A37, 4 )
+  129.          $MR_itm_23 = (-1,itm)[$MR_it_22]
+  129.          $LCS_4 = $LCS_1 / $MR_itm_23
+  129.          $rp_S1 = real( $LCS_1 - $MR_itm_23 * $LCS_4 ) / real( $MR_itm_23 ) + real( $LCS_4 )
+  130.          $LCS_dinc_2 = loc( dinc )
+  130.          0[$LCS_dinc_2:4:1] = _bcst( 0.0, 4 )
+  130.          $I_L130_4 = 4
+  130.          0[$LCS_dinc_2,$I_L130_4] = 0.0
+  131.          if ( int( $CS_0 ) == 0 ) then
+  131.             $LB_Y0 = 1
+  131.             $UB_Y1 = 5
+  131.             $Subscript_Y5 = $MR_it_22
+  131.             _bounds_error( $_File_Y40, $Line_Y47, $_Name_Y46, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y48 )
+  131.          endif
+  131.          if ( int( $CS_0 ) == 0 ) then
+  131.             $LB_Y0 = 1
+  131.             $UB_Y1 = 5
+  131.             $Subscript_Y5 = $MR_it_22
+  131.             _bounds_error( $_File_Y40, $Line_Y47, $_Name_Y49, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y50 )
+  131.          endif
+  131.          -1[loc( dinc ),$MR_it_22] = real( (-1,itd)[$MR_it_22] ) * real( $MR_kinc_19 ) + ( 6.25e-2 * $rp_S1 )
+  131.       else
+  131.    10    continue
+  135.          $LCS_dinc_3 = loc( dinc )
+  135.          0[$LCS_dinc_3:4:1] = real( kinc[0:4:1] )
+  135.          $I_L135_6 = 4
+  135.          0[$LCS_dinc_3,$I_L135_6] = real( kinc[$I_L135_6] )
+  136.          if ( $MR_it_22 == 0 ) then
+  136.             if ( $MR_kinc_19 < 0 ) then
+  136.                if ( $Dotp_A37 > 0 ) then
+  137.                   $MR_dinc_S4 = 0[$LCS_dinc_3,0]
+  137.                   $MR_dinc_S5 = 1.0 + $MR_dinc_S4
+  137.                   0[$LCS_dinc_3,0] = $MR_dinc_S5
+  138.                   $I_L138_S6 = 0
+  138.                   $PRT_P2 = -86400000 + $Dotp_A37
+  138.                   do
+  138.                      $PRT_P3 = t$7[$I_L138_S6]
+  138.                      1[$LCS_dinc_3,$I_L138_S6] = real( ( $PRT_P2 - $PRT_P3 * ( $PRT_P2 / $PRT_P3 ) ) / (1,itm)[$I_L138_S6] )
+  138.                      $I_L138_S6 = 1 + $I_L138_S6
+  138.                      if ( $I_L138_S6 >= 4 ) exit
+  138.                   enddo
+  138.                endif
+  138.             endif
+  138.          endif
+  138.       endif
+  142.       return
+  142.       end
+  142.       

@@ -1,0 +1,25 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  errmsg.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/errmsg.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine errmsg( cmsg )
+   26.       $_StackIolist_O3 = $_StaticIolist_O2
+   26.       0[int( pointer to c_union Pointer_union( loc( (3,$_StackIolist_O3)[0].L ) ), 8 ),0].L = loc( substr[cmsg,0:_len( cmsg )] )
+   26.       _fwf( pointer to integer (kind=8)( loc( $_StaticCntrl_O0 ) ), pointer to integer (kind=8)( loc( $_StackIolist_O3[0].L ) ), pointer to integer (kind=8)( loc( $_IO_Lib_Stack_O4 ) ) )
+   29.       return
+   29.       end
+   29.       

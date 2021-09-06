@@ -1,0 +1,1958 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi63.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi63.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi63( msga, kpds, kgds, kbms, data, kptr, kret )
+  632.       kptr(10) = 0
+  637.       call fi631(  _substr(msga(1),1,1), kptr(1), kpds(1), kret )
+  638.       if ( kret == 0 ) then
+  645.          call fi632(  _substr(msga(1),1,1), kptr(1), kpds(1), kret )
+  646.          if ( kret == 0 ) then
+  653.             if ( and( 128, kpds(4) ) /= 0 ) then
+  654.                call fi633(  _substr(msga(1),1,1), kptr(1), kgds(1), kret )
+  655.                if ( kret == 0 ) then
+  655.                   goto 10
+  655.                endif
+  655.             else
+  655.    10          continue
+  663.                call fi634(  _substr(msga(1),1,1), kptr(1), kpds(1), kgds(1), kbms(1), kret )
+  664.                if ( kret == 0 ) then
+  664.                   goto 20
+  665.                else if ( kret == 9 ) then
+  665.    20             continue
+  674.                   if ( kpds(18) == 1 ) then
+  675.                      call fi635(  _substr(msga(1),1,1), kptr(1), kpds(1), kgds(1), kbms(1), data(1), kret )
+  676.                      if ( kptr(3) == 50 ) then
+  710.                         t$1 = 384 + kptr(9)
+  710.                         call gbytec(  _substr(msga(1),1,1), jsgn, t$1, 1 )
+  711.                         t$1 = 385 + kptr(9)
+  711.                         call gbytec(  _substr(msga(1),1,1), jexp, t$1, 7 )
+  712.                         t$1 = 392 + kptr(9)
+  712.                         call gbytec(  _substr(msga(1),1,1), ifr, t$1, 24 )
+  714.                         if ( ifr == 0 ) then
+  715.                            $realkk_S0 = 0.0
+  715.                         else
+  719.                            $realkk_S0 = real( ifr ) * 16.0 ** ( -70 + jexp )
+  720.                            if ( jsgn /= 0 ) then
+  720.                               $realkk_S0 = -$realkk_S0
+  720.                            endif
+  720.                         endif
+  722.                         fval1 = $realkk_S0
+  730.                         t$1 = 416 + kptr(9)
+  730.                         call gbytec(  _substr(msga(1),1,1), jsgn, t$1, 1 )
+  731.                         t$1 = 417 + kptr(9)
+  731.                         call gbytec(  _substr(msga(1),1,1), jexp, t$1, 7 )
+  732.                         t$1 = 424 + kptr(9)
+  732.                         call gbytec(  _substr(msga(1),1,1), ifr, t$1, 24 )
+  734.                         if ( ifr == 0 ) then
+  735.                            $realkk_S1 = 0.0
+  735.                         else
+  739.                            $realkk_S1 = real( ifr ) * 16.0 ** ( -70 + jexp )
+  740.                            if ( jsgn /= 0 ) then
+  740.                               $realkk_S1 = -$realkk_S1
+  740.                            endif
+  740.                         endif
+  742.                         fdiff1 = $realkk_S1
+  744.                         t$1 = 448 + kptr(9)
+  744.                         call gbytec(  _substr(msga(1),1,1), isign, t$1, 1 )
+  745.                         t$1 = 449 + kptr(9)
+  745.                         call gbytec(  _substr(msga(1),1,1), iscal2, t$1, 15 )
+  746.                         if ( isign > 0 ) then
+  747.                            iscal2 = -iscal2
+  747.                         endif
+  752.                         npts = kptr(10)
+  756.                         call w3fi83( data(1), npts, fval1, fdiff1, iscal2, kpds(22), kpds(1), kgds(1) )
+  756.                      endif
+  756.                   else
+  765.                      kret = 7
+  765.                   endif
+  765.                endif
+  765.             endif
+  765.          endif
+  765.       endif
+  769.       return
+  769.       end
+  769.       
+  770.       
+  770.       subroutine fi631( msga, kptr, kpds, kret )
+  850.       kret = 0
+  852.       $I_L852_4 = 0
+  852.       do
+  853.          t$3 = ( 8 * $I_L852_4 )
+  853.          call gbytec(  _substr(msga(1),1,1), mgrib, t$3, 32 )
+  854.          if ( mgrib == 1196575042 ) then
+  855.             kptr(9) = ( 8 * $I_L852_4 )
+  865.             kptr(8) = ( 32 + 8 * $I_L852_4 )
+  866.             call gbytec(  _substr(msga(1),1,1), itotal, kptr(8), 24 )
+  868.             ipoint = kptr(9) + 8 * itotal + -32
+  869.             call gbytec(  _substr(msga(1),1,1), i7777, ipoint, 32 )
+  870.             if ( i7777 == 926365495 ) then
+  874.                kptr(8) = 24 + kptr(8)
+  875.                kptr(1) = itotal
+  876.                kptr(2) = 8
+  877.                call gbytec(  _substr(msga(1),1,1), kpds(18), kptr(8), 8 )
+  878.                kptr(8) = 8 + kptr(8)
+  887.                call gbytec(  _substr(msga(1),1,1), kptr(3), kptr(8), 24 )
+  888.                look = 56 + kptr(8)
+  890.                call gbytec(  _substr(msga(1),1,1), kpds(4), look, 8 )
+  891.                kptr(8) = kptr(8) + 8 * kptr(3)
+  893.                if ( and( 128, kpds(4) ) /= 0 ) then
+  895.                   call gbytec(  _substr(msga(1),1,1), kptr(4), kptr(8), 24 )
+  896.                   kptr(8) = kptr(8) + 8 * kptr(4)
+  896.                else
+  898.                   kptr(4) = 0
+  898.                endif
+  901.                if ( and( 64, kpds(4) ) /= 0 ) then
+  903.                   call gbytec(  _substr(msga(1),1,1), kptr(5), kptr(8), 24 )
+  903.                else
+  905.                   kptr(5) = 0
+  905.                endif
+  907.                kptr(8) = kptr(8) + 8 * kptr(5)
+  910.                call gbytec(  _substr(msga(1),1,1), kptr(6), kptr(8), 24 )
+  913.                kptr(8) = kptr(8) + 8 * kptr(6)
+  916.                call gbytec(  _substr(msga(1),1,1), k7777, kptr(8), 32 )
+  917.                $match_S1 = kptr(2) + kptr(3) + kptr(4) + kptr(5) + kptr(6) + 4
+  918.                if ( k7777 /= 926365495 .orelse. $match_S1 + -kptr(1) /= 0 ) then
+  919.                   kret = 2
+  919.                else
+  922.                   if ( kpds(18) == 0 ) then
+  923.                      kptr(1) = kptr(2) + kptr(3) + kptr(4) + kptr(5) + kptr(6) + 4
+  923.                   endif
+  923.                endif
+  923.             else
+  881.                kret = 2
+  881.             endif
+  881.             goto 10
+  881.          endif
+  858.          $I_L852_4 = 1 + $I_L852_4
+  857.          if ( $I_L852_4 >= 105 ) exit
+  857.       enddo
+  859.       kret = 1
+  859.    10 continue
+  929.       return
+  929.       end
+  929.       
+  930.       
+  930.       subroutine fi632( msga, kptr, kpds, kret )
+ 1017.       kret = 0
+ 1019.       kptr(8) = kptr(9) + 8 * kptr(2) + 24
+ 1022.       call gbytec(  _substr(msga(1),1,1), kpds(19), kptr(8), 8 )
+ 1023.       kptr(8) = 8 + kptr(8)
+ 1025.       call gbytec(  _substr(msga(1),1,1), kpds(1), kptr(8), 8 )
+ 1026.       kptr(8) = 8 + kptr(8)
+ 1029.       call gbytec(  _substr(msga(1),1,1), kpds(2), kptr(8), 8 )
+ 1030.       kptr(8) = 8 + kptr(8)
+ 1033.       call gbytec(  _substr(msga(1),1,1), kpds(3), kptr(8), 8 )
+ 1038.       kptr(8) = 16 + kptr(8)
+ 1041.       call gbytec(  _substr(msga(1),1,1), kpds(5), kptr(8), 8 )
+ 1042.       kptr(8) = 8 + kptr(8)
+ 1045.       call gbytec(  _substr(msga(1),1,1), kpds(6), kptr(8), 8 )
+ 1046.       kptr(8) = 8 + kptr(8)
+ 1049.       call gbytec(  _substr(msga(1),1,1), kpds(7), kptr(8), 16 )
+ 1050.       kptr(8) = 16 + kptr(8)
+ 1053.       call gbytec(  _substr(msga(1),1,1), kpds(8), kptr(8), 8 )
+ 1054.       kptr(8) = 8 + kptr(8)
+ 1057.       call gbytec(  _substr(msga(1),1,1), kpds(9), kptr(8), 8 )
+ 1058.       kptr(8) = 8 + kptr(8)
+ 1061.       call gbytec(  _substr(msga(1),1,1), kpds(10), kptr(8), 8 )
+ 1062.       kptr(8) = 8 + kptr(8)
+ 1065.       call gbytec(  _substr(msga(1),1,1), kpds(11), kptr(8), 8 )
+ 1066.       kptr(8) = 8 + kptr(8)
+ 1069.       call gbytec(  _substr(msga(1),1,1), kpds(12), kptr(8), 8 )
+ 1070.       kptr(8) = 8 + kptr(8)
+ 1073.       call gbytec(  _substr(msga(1),1,1), kpds(13), kptr(8), 8 )
+ 1074.       kptr(8) = 8 + kptr(8)
+ 1077.       call gbytec(  _substr(msga(1),1,1), kpds(14), kptr(8), 8 )
+ 1078.       kptr(8) = 8 + kptr(8)
+ 1081.       call gbytec(  _substr(msga(1),1,1), kpds(15), kptr(8), 8 )
+ 1082.       kptr(8) = 8 + kptr(8)
+ 1085.       call gbytec(  _substr(msga(1),1,1), kpds(16), kptr(8), 8 )
+ 1086.       kptr(8) = 8 + kptr(8)
+ 1091.       if ( kpds(16) == 10 ) then
+ 1092.          kpds(14) = kpds(15) + 256 * kpds(14)
+ 1093.          kpds(15) = 0
+ 1093.       endif
+ 1097.       call gbytec(  _substr(msga(1),1,1), kpds(17), kptr(8), 16 )
+ 1098.       kptr(8) = 16 + kptr(8)
+ 1101.       call gbytec(  _substr(msga(1),1,1), kpds(20), kptr(8), 8 )
+ 1102.       kptr(8) = 8 + kptr(8)
+ 1105.       call gbytec(  _substr(msga(1),1,1), kpds(21), kptr(8), 8 )
+ 1106.       kptr(8) = 8 + kptr(8)
+ 1107.       if ( kptr(3) > 25 ) then
+ 1109.          call gbytec(  _substr(msga(1),1,1), kpds(23), kptr(8), 8 )
+ 1110.          kptr(8) = 8 + kptr(8)
+ 1111.          if ( kptr(3) >= 28 ) then
+ 1114.             call gbytec(  _substr(msga(1),1,1), isign, kptr(8), 1 )
+ 1115.             kptr(8) = 1 + kptr(8)
+ 1116.             call gbytec(  _substr(msga(1),1,1), idec, kptr(8), 15 )
+ 1117.             kptr(8) = 15 + kptr(8)
+ 1118.             kpds(22) = cvmg( idec, -idec, isign <= 0 )
+ 1123.             $isiz_S0 = -28 + kptr(3)
+ 1124.             if ( $isiz_S0 <= 12 ) then
+ 1126.                t$4 = 8 + kptr(8)
+ 1126.                call gbytec(  _substr(msga(1),1,1), kpds(24), t$4, 8 )
+ 1128.                t$4 = 16 + kptr(8)
+ 1128.                call gbytec(  _substr(msga(1),1,1), kpds(25), t$4, 8 )
+ 1130.                kptr(8) = kptr(8) + 8 * $isiz_S0
+ 1130.             else
+ 1133.                t$4 = 8 + kptr(8)
+ 1133.                call gbytec(  _substr(msga(1),1,1), kpds(24), t$4, 8 )
+ 1135.                t$4 = 16 + kptr(8)
+ 1135.                call gbytec(  _substr(msga(1),1,1), kpds(25), t$4, 8 )
+ 1137.                kptr(8) = 96 + kptr(8)
+ 1139.                call w3fi01( lw )
+ 1141.                mwdbit = 32
+ 1142.                $isiz_S1 = -40 + kptr(3)
+ 1143.                iter = $isiz_S1 / lw
+ 1144.                if ( mod( $isiz_S1, lw ) /= 0 ) then
+ 1144.                   iter = 1 + iter
+ 1144.                endif
+ 1145.                call gbytesc(  _substr(msga(1),1,1), kpds(36), kptr(8), mwdbit, 0, iter )
+ 1146.                kptr(8) = kptr(8) + 8 * $isiz_S1
+ 1146.             endif
+ 1146.          endif
+ 1146.       endif
+ 1217.       return
+ 1217.       end
+ 1217.       
+ 1218.       
+ 1218.       subroutine fi633( msga, kptr, kgds, kret )
+ 1360.       kret = 0
+ 1363.       kptr(8) = kptr(9) + 8 * kptr(2) + 8 * kptr(3) + 24
+ 1364.       $nsave_S0 = -24 + kptr(8)
+ 1367.       call gbytec(  _substr(msga(1),1,1), kgds(19), kptr(8), 8 )
+ 1368.       kptr(8) = 8 + kptr(8)
+ 1371.       call gbytec(  _substr(msga(1),1,1), kgds(20), kptr(8), 8 )
+ 1372.       kptr(8) = 8 + kptr(8)
+ 1375.       call gbytec(  _substr(msga(1),1,1), kgds(1), kptr(8), 8 )
+ 1376.       kptr(8) = 8 + kptr(8)
+ 1379.       if ( kgds(1) == 0 ) then
+ 1368.          goto 10
+ 1368.          goto 20
+ 1381.       else if ( kgds(1) == 1 ) then
+ 1562.          call gbytec(  _substr(msga(1),1,1), kgds(2), kptr(8), 16 )
+ 1563.          kptr(8) = 16 + kptr(8)
+ 1565.          call gbytec(  _substr(msga(1),1,1), kgds(3), kptr(8), 16 )
+ 1566.          kptr(8) = 16 + kptr(8)
+ 1568.          call gbytec(  _substr(msga(1),1,1), kgds(4), kptr(8), 24 )
+ 1569.          kptr(8) = 24 + kptr(8)
+ 1570.          if ( and( 0x800000, kgds(4) ) /= 0 ) then
+ 1571.             kgds(4) = -and( 0x7fffff, kgds(4) )
+ 1571.          endif
+ 1574.          call gbytec(  _substr(msga(1),1,1), kgds(5), kptr(8), 24 )
+ 1575.          kptr(8) = 24 + kptr(8)
+ 1576.          if ( and( 0x800000, kgds(5) ) /= 0 ) then
+ 1577.             kgds(5) = -and( 0x7fffff, kgds(5) )
+ 1577.          endif
+ 1580.          call gbytec(  _substr(msga(1),1,1), kgds(6), kptr(8), 8 )
+ 1581.          kptr(8) = 8 + kptr(8)
+ 1583.          call gbytec(  _substr(msga(1),1,1), kgds(7), kptr(8), 24 )
+ 1584.          kptr(8) = 24 + kptr(8)
+ 1585.          if ( and( 0x800000, kgds(7) ) /= 0 ) then
+ 1586.             kgds(7) = -and( 0x7fffff, kgds(7) )
+ 1586.          endif
+ 1589.          call gbytec(  _substr(msga(1),1,1), kgds(8), kptr(8), 24 )
+ 1590.          kptr(8) = 24 + kptr(8)
+ 1591.          if ( and( 0x800000, kgds(8) ) /= 0 ) then
+ 1592.             kgds(8) = -and( 0x7fffff, kgds(8) )
+ 1592.          endif
+ 1595.          call gbytec(  _substr(msga(1),1,1), kgds(9), kptr(8), 24 )
+ 1596.          kptr(8) = 24 + kptr(8)
+ 1597.          if ( and( 0x800000, kgds(9) ) /= 0 ) then
+ 1598.             kgds(9) = -and( 0x7fffff, kgds(9) )
+ 1598.          endif
+ 1601.          call gbytec(  _substr(msga(1),1,1), kgds(10), kptr(8), 8 )
+ 1602.          kptr(8) = 8 + kptr(8)
+ 1604.          call gbytec(  _substr(msga(1),1,1), kgds(11), kptr(8), 8 )
+ 1605.          kptr(8) = 8 + kptr(8)
+ 1607.          call gbytec(  _substr(msga(1),1,1), kgds(12), kptr(8), 24 )
+ 1608.          kptr(8) = 24 + kptr(8)
+ 1609.          if ( and( 0x800000, kgds(12) ) /= 0 ) then
+ 1610.             kgds(12) = -and( 0x7fffff, kgds(12) )
+ 1610.          endif
+ 1613.          call gbytec(  _substr(msga(1),1,1), kgds(13), kptr(8), 24 )
+ 1614.          kptr(8) = 24 + kptr(8)
+ 1615.          if ( and( 0x800000, kgds(13) ) /= 0 ) then
+ 1616.             kgds(13) = -and( 0x7fffff, kgds(13) )
+ 1616.          endif
+ 1620.          kptr(8) = 64 + kptr(8)
+ 1620.          goto 20
+ 1620.       else if ( kgds(1) == 2 ) then
+ 1620.          goto 40
+ 1620.          goto 20
+ 1620.       else if ( kgds(1) == 5 ) then
+ 1620.    40    continue
+ 1482.          call gbytec(  _substr(msga(1),1,1), kgds(2), kptr(8), 16 )
+ 1483.          kptr(8) = 16 + kptr(8)
+ 1485.          call gbytec(  _substr(msga(1),1,1), kgds(3), kptr(8), 16 )
+ 1486.          kptr(8) = 16 + kptr(8)
+ 1488.          call gbytec(  _substr(msga(1),1,1), kgds(4), kptr(8), 24 )
+ 1489.          kptr(8) = 24 + kptr(8)
+ 1490.          if ( and( 0x800000, kgds(4) ) /= 0 ) then
+ 1491.             kgds(4) = -and( 0x7fffff, kgds(4) )
+ 1491.          endif
+ 1494.          call gbytec(  _substr(msga(1),1,1), kgds(5), kptr(8), 24 )
+ 1495.          kptr(8) = 24 + kptr(8)
+ 1496.          if ( and( 0x800000, kgds(5) ) /= 0 ) then
+ 1497.             kgds(5) = -and( 0x7fffff, kgds(5) )
+ 1497.          endif
+ 1500.          call gbytec(  _substr(msga(1),1,1), kgds(6), kptr(8), 8 )
+ 1501.          kptr(8) = 8 + kptr(8)
+ 1503.          call gbytec(  _substr(msga(1),1,1), kgds(7), kptr(8), 24 )
+ 1504.          kptr(8) = 24 + kptr(8)
+ 1505.          if ( and( 0x800000, kgds(7) ) /= 0 ) then
+ 1506.             kgds(7) = -and( 0x7fffff, kgds(7) )
+ 1506.          endif
+ 1509.          call gbytec(  _substr(msga(1),1,1), kgds(8), kptr(8), 24 )
+ 1510.          kptr(8) = 24 + kptr(8)
+ 1511.          if ( and( 0x800000, kgds(8) ) /= 0 ) then
+ 1512.             kgds(8) = -and( 0x7fffff, kgds(8) )
+ 1512.          endif
+ 1515.          call gbytec(  _substr(msga(1),1,1), kgds(9), kptr(8), 24 )
+ 1516.          kptr(8) = 24 + kptr(8)
+ 1517.          if ( and( 0x800000, kgds(9) ) /= 0 ) then
+ 1518.             kgds(9) = -and( 0x7fffff, kgds(9) )
+ 1518.          endif
+ 1521.          call gbytec(  _substr(msga(1),1,1), kgds(10), kptr(8), 8 )
+ 1522.          kptr(8) = 8 + kptr(8)
+ 1524.          call gbytec(  _substr(msga(1),1,1), kgds(11), kptr(8), 8 )
+ 1525.          kptr(8) = 8 + kptr(8)
+ 1528.          call gbytec(  _substr(msga(1),1,1), kgds(12), kptr(8), 32 )
+ 1529.          kptr(8) = 32 + kptr(8)
+ 1529.          goto 20
+ 1529.       else if ( kgds(1) == 3 ) then
+ 1628.          call gbytec(  _substr(msga(1),1,1), kgds(2), kptr(8), 16 )
+ 1629.          kptr(8) = 16 + kptr(8)
+ 1631.          call gbytec(  _substr(msga(1),1,1), kgds(3), kptr(8), 16 )
+ 1632.          kptr(8) = 16 + kptr(8)
+ 1634.          call gbytec(  _substr(msga(1),1,1), kgds(4), kptr(8), 24 )
+ 1635.          kptr(8) = 24 + kptr(8)
+ 1636.          if ( and( 0x800000, kgds(4) ) /= 0 ) then
+ 1637.             kgds(4) = -and( 0x7fffff, kgds(4) )
+ 1637.          endif
+ 1640.          call gbytec(  _substr(msga(1),1,1), kgds(5), kptr(8), 24 )
+ 1641.          kptr(8) = 24 + kptr(8)
+ 1642.          if ( and( 0x800000, kgds(5) ) /= 0 ) then
+ 1643.             kgds(5) = -and( 0x7fffff, kgds(5) )
+ 1643.          endif
+ 1646.          call gbytec(  _substr(msga(1),1,1), kgds(6), kptr(8), 8 )
+ 1647.          kptr(8) = 8 + kptr(8)
+ 1649.          call gbytec(  _substr(msga(1),1,1), kgds(7), kptr(8), 24 )
+ 1650.          kptr(8) = 24 + kptr(8)
+ 1651.          if ( and( 0x800000, kgds(7) ) /= 0 ) then
+ 1652.             kgds(7) = -and( 0x7fffff, kgds(7) )
+ 1652.          endif
+ 1655.          call gbytec(  _substr(msga(1),1,1), kgds(8), kptr(8), 24 )
+ 1656.          kptr(8) = 24 + kptr(8)
+ 1658.          call gbytec(  _substr(msga(1),1,1), kgds(9), kptr(8), 24 )
+ 1659.          kptr(8) = 24 + kptr(8)
+ 1661.          call gbytec(  _substr(msga(1),1,1), kgds(10), kptr(8), 8 )
+ 1662.          kptr(8) = 8 + kptr(8)
+ 1664.          call gbytec(  _substr(msga(1),1,1), kgds(11), kptr(8), 8 )
+ 1665.          kptr(8) = 8 + kptr(8)
+ 1667.          call gbytec(  _substr(msga(1),1,1), kgds(12), kptr(8), 24 )
+ 1668.          kptr(8) = 24 + kptr(8)
+ 1669.          if ( and( 0x800000, kgds(12) ) /= 0 ) then
+ 1670.             kgds(12) = -and( 0x7fffff, kgds(12) )
+ 1670.          endif
+ 1673.          call gbytec(  _substr(msga(1),1,1), kgds(13), kptr(8), 24 )
+ 1674.          kptr(8) = 24 + kptr(8)
+ 1675.          if ( and( 0x800000, kgds(13) ) /= 0 ) then
+ 1676.             kgds(13) = -and( 0x7fffff, kgds(13) )
+ 1676.          endif
+ 1679.          call gbytec(  _substr(msga(1),1,1), kgds(14), kptr(8), 24 )
+ 1680.          kptr(8) = 24 + kptr(8)
+ 1681.          if ( and( 0x800000, kgds(14) ) /= 0 ) then
+ 1682.             kgds(14) = -and( 0x7fffff, kgds(14) )
+ 1682.          endif
+ 1685.          call gbytec(  _substr(msga(1),1,1), kgds(15), kptr(8), 24 )
+ 1686.          kptr(8) = 24 + kptr(8)
+ 1687.          if ( and( 0x800000, kgds(15) ) /= 0 ) then
+ 1688.             kgds(15) = -and( 0x7fffff, kgds(15) )
+ 1688.          endif
+ 1691.          call gbytec(  _substr(msga(1),1,1), kgds(16), kptr(8), 16 )
+ 1692.          kptr(8) = 16 + kptr(8)
+ 1692.          goto 20
+ 1692.       else if ( kgds(1) == 4 ) then
+ 1692.          goto 10
+ 1692.          goto 20
+ 1692.       else if ( kgds(1) == 50 ) then
+ 1539.          call gbytec(  _substr(msga(1),1,1), kgds(2), kptr(8), 16 )
+ 1540.          kptr(8) = 16 + kptr(8)
+ 1542.          call gbytec(  _substr(msga(1),1,1), kgds(3), kptr(8), 16 )
+ 1543.          kptr(8) = 16 + kptr(8)
+ 1545.          call gbytec(  _substr(msga(1),1,1), kgds(4), kptr(8), 16 )
+ 1546.          kptr(8) = 16 + kptr(8)
+ 1548.          call gbytec(  _substr(msga(1),1,1), kgds(5), kptr(8), 8 )
+ 1549.          kptr(8) = 8 + kptr(8)
+ 1551.          call gbytec(  _substr(msga(1),1,1), kgds(6), kptr(8), 8 )
+ 1555.          kptr(8) = 152 + kptr(8)
+ 1555.          goto 20
+ 1555.       else if ( kgds(1) == 201 ) then
+ 1555.          goto 10
+ 1555.          goto 20
+ 1555.       else if ( kgds(1) == 202 ) then
+ 1555.          goto 10
+ 1555.          goto 20
+ 1555.       else if ( kgds(1) == 203 ) then
+ 1555.          goto 10
+ 1555.          goto 20
+ 1555.       else if ( kgds(1) == 204 ) then
+ 1555.    10    continue
+ 1426.          call gbytec(  _substr(msga(1),1,1), kgds(2), kptr(8), 16 )
+ 1427.          kptr(8) = 16 + kptr(8)
+ 1429.          call gbytec(  _substr(msga(1),1,1), kgds(3), kptr(8), 16 )
+ 1430.          kptr(8) = 16 + kptr(8)
+ 1432.          call gbytec(  _substr(msga(1),1,1), kgds(4), kptr(8), 24 )
+ 1433.          kptr(8) = 24 + kptr(8)
+ 1434.          if ( and( 0x800000, kgds(4) ) /= 0 ) then
+ 1435.             kgds(4) = -and( 0x7fffff, kgds(4) )
+ 1435.          endif
+ 1438.          call gbytec(  _substr(msga(1),1,1), kgds(5), kptr(8), 24 )
+ 1439.          kptr(8) = 24 + kptr(8)
+ 1440.          if ( and( 0x800000, kgds(5) ) /= 0 ) then
+ 1441.             kgds(5) = -and( 0x7fffff, kgds(5) )
+ 1441.          endif
+ 1444.          call gbytec(  _substr(msga(1),1,1), kgds(6), kptr(8), 8 )
+ 1445.          kptr(8) = 8 + kptr(8)
+ 1447.          call gbytec(  _substr(msga(1),1,1), kgds(7), kptr(8), 24 )
+ 1448.          kptr(8) = 24 + kptr(8)
+ 1449.          if ( and( 0x800000, kgds(7) ) /= 0 ) then
+ 1450.             kgds(7) = -and( 0x7fffff, kgds(7) )
+ 1450.          endif
+ 1453.          call gbytec(  _substr(msga(1),1,1), kgds(8), kptr(8), 24 )
+ 1454.          kptr(8) = 24 + kptr(8)
+ 1455.          if ( and( 0x800000, kgds(8) ) /= 0 ) then
+ 1456.             kgds(8) = -and( 0x7fffff, kgds(8) )
+ 1456.          endif
+ 1459.          call gbytec(  _substr(msga(1),1,1), kgds(9), kptr(8), 16 )
+ 1460.          kptr(8) = 16 + kptr(8)
+ 1466.          call gbytec(  _substr(msga(1),1,1), kgds(10), kptr(8), 16 )
+ 1467.          kptr(8) = 16 + kptr(8)
+ 1469.          call gbytec(  _substr(msga(1),1,1), kgds(11), kptr(8), 8 )
+ 1470.          kptr(8) = 8 + kptr(8)
+ 1473.          call gbytec(  _substr(msga(1),1,1), kgds(12), kptr(8), 32 )
+ 1474.          kptr(8) = 32 + kptr(8)
+ 1474.    20    continue
+ 1698.          if ( kgds(19) == 0 ) then
+ 1694.             goto 30
+ 1698.          else if ( kgds(19) == 255 ) then
+ 1698.    30       continue
+ 1699.             if ( kgds(20) /= 255 ) then
+ 1700.                isum = 0
+ 1701.                kptr(8) = $nsave_S0 + 8 * kgds(20) + -8
+ 1702.                call gbytesc(  _substr(msga(1),1,1), kgds(22), kptr(8), 16, 0, kgds(3) )
+ 1703.                $t_S1 = kgds(3)
+ 1703.                if ( $t_S1 > 0 ) then
+ 1703.                   $I_L1703_6 = 0
+ 1703. !dir$ ivdep
+ 1703.                   do
+ 1704.                      isum = isum + kgds(22 + $I_L1703_6)
+ 1705.                      $I_L1703_6 = 1 + $I_L1703_6
+ 1703.                      if ( $I_L1703_6 >= $t_S1 ) exit
+ 1703.                   enddo
+ 1703.                endif
+ 1706.                kgds(21) = isum
+ 1706.             endif
+ 1706.          endif
+ 1706.       else
+ 1405.          kret = 4
+ 1405.       endif
+ 1710.       return
+ 1710.       end
+ 1710.       
+ 1711.       
+ 1711.       subroutine fi634( msga, kptr, kpds, kgds, kbms, kret )
+ 1861.       if ( and( 64, kpds(4) ) == 64 ) then
+ 1865.          kptr(8) = kptr(9) + 8 * kptr(2) + 8 * kptr(3) + 8 * kptr(4) + 24
+ 1869.          call gbytec(  _substr(msga(1),1,1), kptr(11), kptr(8), 8 )
+ 1870.          kptr(8) = 8 + kptr(8)
+ 1874.          call gbytec(  _substr(msga(1),1,1), kptr(12), kptr(8), 16 )
+ 1875.          kptr(8) = 16 + kptr(8)
+ 1877.          if ( kptr(12) == 0 ) then
+ 1879.             ibits = -kptr(11) + 8 * kptr(5) + -48
+ 1880.             kptr(10) = ibits
+ 1881.             if ( kpds(3) == 21 .orelse. kpds(3) == 22 .orelse. kpds(3) == 25 .orelse. kpds(3) == 61 .orelse. kpds(3) == 62 ) then
+ 1884.                call fi634x( ibits, kptr(8),  _substr(msga(1),1,1), kbms(1) )
+ 1885.                if ( kpds(3) == 25 ) then
+ 1886.                   $kadd_S9 = 71
+ 1887.                else if ( kpds(3) /= 61 ) then
+ 1887.                   $kadd_S9 = cvmg( 36, 90, kpds(3) /= 62 )
+ 1887.                else
+ 1888.                   $kadd_S9 = 90
+ 1888.                endif
+ 1892.                if ( $kadd_S9 > 0 ) then
+ 1892.                   $I_L1892_118 = 0
+ 1892. !dir$ unroll 4
+ 1892.                   do
+ 1893.                      kbms(ibits + $I_L1892_118 + 1) = .false.
+ 1894.                      $I_L1892_118 = 1 + $I_L1892_118
+ 1892.                      if ( $I_L1892_118 >= $kadd_S9 ) exit
+ 1892.                   enddo
+ 1892.                endif
+ 1895.                kptr(10) = kptr(10) + $kadd_S9
+ 1895.             else
+ 1897.                if ( kpds(3) == 23 .orelse. kpds(3) == 24 .orelse. kpds(3) == 26 .orelse. kpds(3) == 63 .orelse. kpds(3) == 64 ) then
+ 1900.                   call fi634x( ibits, kptr(8),  _substr(msga(1),1,1), kbms(1) )
+ 1901.                   if ( kpds(3) == 26 ) then
+ 1902.                      $kadd_S7 = 72
+ 1903.                   else if ( kpds(3) /= 63 ) then
+ 1903.                      $kadd_S7 = cvmg( 37, 91, kpds(3) /= 64 )
+ 1903.                   else
+ 1904.                      $kadd_S7 = 91
+ 1904.                   endif
+ 1908.                   if ( $kadd_S7 > 0 ) then
+ 1908.                      $I_L1908_116 = 0
+ 1908. !dir$ unroll 4
+ 1908.                      do
+ 1909.                         kbms(ibits + $I_L1908_116 + 1) = .false.
+ 1910.                         $I_L1908_116 = 1 + $I_L1908_116
+ 1908.                         if ( $I_L1908_116 >= $kadd_S7 ) exit
+ 1908.                      enddo
+ 1908.                   endif
+ 1911.                   kptr(10) = kptr(10) + $kadd_S7 + -1
+ 1911.                else
+ 1913.                   if ( kpds(3) == 50 ) then
+ 1915.                      kin = 22
+ 1916.                      $kbits_S1 = 0
+ 1917.                      $I_L1917_130 = 0
+ 1917.                      do
+ 1918.                         $I_L1918_128 = 0
+ 1918.                         do
+ 1919.                            $I_L1919_120 = 0
+ 1919. !dir$ unroll 4
+ 1919.                            do
+ 1921.                               kbms($kbits_S1 + $I_L1919_120 + 1) = .false.
+ 1922.                               $I_L1919_120 = 1 + $I_L1919_120
+ 1919.                               if ( $I_L1919_120 >= 7 + -$I_L1917_130 ) exit
+ 1919.                            enddo
+ 1920.                            $kbits_S1 = ( $kbits_S1 + -$I_L1917_130 + 7 )
+ 1923.                            call fi634x( kin, kptr(8),  _substr(msga(1),1,1), kbms(1 + $kbits_S1) )
+ 1924.                            kptr(8) = kptr(8) + kin
+ 1925.                            $kbits_S1 = kin + $kbits_S1
+ 1926.                            $I_L1926_122 = 0
+ 1926. !dir$ unroll 4
+ 1926.                            do
+ 1928.                               kbms($kbits_S1 + $I_L1926_122 + 1) = .false.
+ 1929.                               $I_L1926_122 = 1 + $I_L1926_122
+ 1926.                               if ( $I_L1926_122 >= 7 + -$I_L1917_130 ) exit
+ 1926.                            enddo
+ 1927.                            $kbits_S1 = ( $kbits_S1 + -$I_L1917_130 + 7 )
+ 1930.                            $I_L1918_128 = 1 + $I_L1918_128
+ 1929.                            if ( $I_L1918_128 >= 4 ) exit
+ 1929.                         enddo
+ 1931.                         kin = 2 + kin
+ 1933.                         $I_L1917_130 = 1 + $I_L1917_130
+ 1930.                         if ( $I_L1917_130 >= 7 ) exit
+ 1930.                      enddo
+ 1934.                      $I_L1934_124 = 0
+ 1934.                      do
+ 1935.                         call fi634x( kin, kptr(8),  _substr(msga(1),1,1), kbms(1 + $kbits_S1) )
+ 1936.                         kptr(8) = kptr(8) + kin
+ 1937.                         $kbits_S1 = kin + $kbits_S1
+ 1938.                         $I_L1934_124 = 1 + $I_L1934_124
+ 1936.                         if ( $I_L1934_124 >= 5 ) exit
+ 1936.                      enddo
+ 1936.                   else
+ 1941.                      call fi634x( ibits, kptr(8),  _substr(msga(1),1,1), kbms(1) )
+ 1941.                   endif
+ 1941.                endif
+ 1941.             endif
+ 1941.          else
+ 1946.             kret = 12
+ 1946.          endif
+ 1946.       else
+ 1951.          kret = 0
+ 1955.          if ( kpds(3) == 255 ) then
+ 1957.             $j_S11 = kgds(2) * kgds(3)
+ 1958.             kptr(10) = $j_S11
+ 1959.             if ( $j_S11 > 0 ) then
+ 1959.                $I_L1959_114 = 0
+ 1959. !dir$ unroll 4
+ 1959.                do
+ 1960.                   kbms(1 + $I_L1959_114) = .true.
+ 1961.                   $I_L1959_114 = 1 + $I_L1959_114
+ 1959.                   if ( $I_L1959_114 >= $j_S11 ) exit
+ 1959.                enddo
+ 1959.             endif
+ 1963.          else if ( kpds(3) == 21 ) then
+ 1963.             goto 10
+ 1963.          else if ( kpds(3) == 22 ) then
+ 1963.    10       continue
+ 1969.             j = 1369
+ 1970.             kptr(10) = 1369
+ 1971.             call fi637( j, kpds(1), kgds(1), kret )
+ 1972.             if ( kret == 0 ) then
+ 1973.                $I_L1973_112 = 0
+ 1973. !dir$ unroll 4
+ 1973.                do
+ 1974.                   kbms(1 + $I_L1973_112) = grd21(1 + $I_L1973_112)
+ 1975.                   $I_L1973_112 = 1 + $I_L1973_112
+ 1973.                   if ( $I_L1973_112 >= 1369 ) exit
+ 1973.                enddo
+ 1973.             else
+ 1973.                goto 20
+ 1973.             endif
+ 1973.          else if ( kpds(3) == 23 ) then
+ 1973.             goto 30
+ 1973.          else if ( kpds(3) == 24 ) then
+ 1973.    30       continue
+ 1979.             j = 1369
+ 1980.             kptr(10) = 1369
+ 1981.             call fi637( j, kpds(1), kgds(1), kret )
+ 1982.             if ( kret == 0 ) then
+ 1983.                $I_L1983_110 = 0
+ 1983. !dir$ unroll 4
+ 1983.                do
+ 1984.                   kbms(1 + $I_L1983_110) = grd23(1 + $I_L1983_110)
+ 1985.                   $I_L1983_110 = 1 + $I_L1983_110
+ 1983.                   if ( $I_L1983_110 >= 1369 ) exit
+ 1983.                enddo
+ 1983.             else
+ 1983.                goto 20
+ 1983.             endif
+ 1983.          else if ( kpds(3) == 25 ) then
+ 1989.             j = 1368
+ 1990.             kptr(10) = 1368
+ 1991.             call fi637( j, kpds(1), kgds(1), kret )
+ 1992.             if ( kret == 0 ) then
+ 1993.                $I_L1993_108 = 0
+ 1993. !dir$ unroll 4
+ 1993.                do
+ 1994.                   kbms(1 + $I_L1993_108) = grd25(1 + $I_L1993_108)
+ 1995.                   $I_L1993_108 = 1 + $I_L1993_108
+ 1993.                   if ( $I_L1993_108 >= 1368 ) exit
+ 1993.                enddo
+ 1993.             else
+ 1993.                goto 20
+ 1993.             endif
+ 1993.          else if ( kpds(3) == 26 ) then
+ 1999.             j = 1368
+ 2000.             kptr(10) = 1368
+ 2001.             call fi637( j, kpds(1), kgds(1), kret )
+ 2002.             if ( kret == 0 ) then
+ 2003.                $I_L2003_106 = 0
+ 2003. !dir$ unroll 4
+ 2003.                do
+ 2004.                   kbms(1 + $I_L2003_106) = grd26(1 + $I_L2003_106)
+ 2005.                   $I_L2003_106 = 1 + $I_L2003_106
+ 2003.                   if ( $I_L2003_106 >= 1368 ) exit
+ 2003.                enddo
+ 2003.             else
+ 2003.                goto 20
+ 2003.             endif
+ 2003.          else if ( kpds(3) < 37 ) then
+ 2003.             goto 40
+ 2003.          else if ( kpds(3) <= 44 ) then
+ 2009.             j = 3447
+ 2009.             goto 110
+ 2009.          else
+ 2009.    40       continue
+ 2011.             if ( kpds(1) /= 7 ) then
+ 2011.                goto 50
+ 2011.             else if ( kpds(3) == 50 ) then
+ 2013.                j = 1188
+ 2014.                kptr(10) = 1188
+ 2015.                call fi637( j, kpds(1), kgds(1), kret )
+ 2016.                if ( kret /= 0 ) then
+ 2016.                   goto 20
+ 2016.                else if ( j > 0 ) then
+ 2017.                   $I_L2017_104 = 0
+ 2017. !dir$ unroll 4
+ 2017.                   do
+ 2018.                      kbms(1 + $I_L2017_104) = grd50(1 + $I_L2017_104)
+ 2019.                      $I_L2017_104 = 1 + $I_L2017_104
+ 2017.                      if ( $I_L2017_104 >= j ) exit
+ 2017.                   enddo
+ 2017.                endif
+ 2017.             else
+ 2017.    50          continue
+ 2021.                if ( kpds(3) == 61 .orelse. kpds(3) == 62 ) then
+ 2023.                   j = 4186
+ 2024.                   kptr(10) = 4186
+ 2025.                   call fi637( j, kpds(1), kgds(1), kret )
+ 2026.                   if ( kret == 0 ) then
+ 2027.                      $I_L2027_102 = 0
+ 2027. !dir$ unroll 4
+ 2027.                      do
+ 2028.                         kbms(1 + $I_L2027_102) = grd61(1 + $I_L2027_102)
+ 2029.                         $I_L2027_102 = 1 + $I_L2027_102
+ 2027.                         if ( $I_L2027_102 >= 4186 ) exit
+ 2027.                      enddo
+ 2027.                   else
+ 2027.                      goto 20
+ 2027.                   endif
+ 2027.                else
+ 2031.                   if ( kpds(3) == 63 .orelse. kpds(3) == 64 ) then
+ 2033.                      j = 4186
+ 2034.                      kptr(10) = 4186
+ 2035.                      call fi637( j, kpds(1), kgds(1), kret )
+ 2036.                      if ( kret == 0 ) then
+ 2037.                         $I_L2037_100 = 0
+ 2037. !dir$ unroll 4
+ 2037.                         do
+ 2038.                            kbms(1 + $I_L2037_100) = grd63(1 + $I_L2037_100)
+ 2039.                            $I_L2037_100 = 1 + $I_L2037_100
+ 2037.                            if ( $I_L2037_100 >= 4186 ) exit
+ 2037.                         enddo
+ 2037.                      else
+ 2037.                         goto 20
+ 2037.                      endif
+ 2037.                   else
+ 2045.                      if ( kpds(1) /= 7 ) then
+ 2041.                         goto 60
+ 2046.                      else if ( kpds(3) < 100 ) then
+ 2047.                         if ( kpds(3) == 1 ) then
+ 2049.                            j = 1679
+ 2049.                            goto 110
+ 2051.                         else if ( kpds(3) == 2 ) then
+ 2054.                            j = 10512
+ 2054.                            goto 110
+ 2054.                         else if ( kpds(3) == 3 ) then
+ 2058.                            j = 65160
+ 2058.                            goto 110
+ 2058.                         else if ( kpds(3) == 4 ) then
+ 2062.                            j = 259920
+ 2062.                            goto 110
+ 2062.                         else if ( kpds(3) == 5 ) then
+ 2066.                            j = 3021
+ 2066.                            goto 110
+ 2066.                         else if ( kpds(3) == 6 ) then
+ 2070.                            j = 2385
+ 2070.                            goto 110
+ 2070.                         else if ( kpds(3) == 8 ) then
+ 2074.                            j = 5104
+ 2074.                            goto 110
+ 2074.                         else if ( kpds(3) == 11 ) then
+ 2078.                            j = 223920
+ 2078.                            goto 110
+ 2078.                         else if ( kpds(3) == 12 ) then
+ 2082.                            j = 99631
+ 2082.                            goto 110
+ 2082.                         else if ( kpds(3) == 13 ) then
+ 2086.                            j = 36391
+ 2086.                            goto 110
+ 2086.                         else if ( kpds(3) == 14 ) then
+ 2090.                            j = 153811
+ 2090.                            goto 110
+ 2090.                         else if ( kpds(3) == 15 ) then
+ 2094.                            j = 74987
+ 2094.                            goto 110
+ 2094.                         else if ( kpds(3) == 16 ) then
+ 2098.                            j = 214268
+ 2098.                            goto 110
+ 2098.                         else if ( kpds(3) == 17 ) then
+ 2102.                            j = 387136
+ 2102.                            goto 110
+ 2102.                         else if ( kpds(3) == 18 ) then
+ 2106.                            j = 281866
+ 2106.                            goto 110
+ 2106.                         else if ( kpds(3) == 27 ) then
+ 2106.                            goto 120
+ 2106.                            goto 110
+ 2106.                         else if ( kpds(3) == 28 ) then
+ 2106.   120                      continue
+ 2110.                            j = 4225
+ 2110.                            goto 110
+ 2110.                         else if ( kpds(3) == 29 ) then
+ 2110.                            goto 130
+ 2110.                            goto 110
+ 2110.                         else if ( kpds(3) == 30 ) then
+ 2110.   130                      continue
+ 2114.                            j = 5365
+ 2114.                            goto 110
+ 2114.                         else if ( kpds(3) == 33 ) then
+ 2114.                            goto 140
+ 2114.                            goto 110
+ 2114.                         else if ( kpds(3) == 34 ) then
+ 2114.   140                      continue
+ 2118.                            j = 8326
+ 2118.                            goto 110
+ 2118.                         else if ( kpds(3) < 37 ) then
+ 2118.                            goto 150
+ 2118.                         else if ( kpds(3) <= 44 ) then
+ 2122.                            j = 3447
+ 2122.                            goto 110
+ 2122.                         else
+ 2122.   150                      continue
+ 2124.                            if ( kpds(3) == 45 ) then
+ 2126.                               j = 41760
+ 2126.                               goto 110
+ 2128.                            else if ( kpds(3) == 53 ) then
+ 2130.                               j = 5967
+ 2130.                               goto 110
+ 2130.                            else if ( kpds(3) == 55 ) then
+ 2130.                               goto 160
+ 2130.                               goto 110
+ 2130.                            else if ( kpds(3) == 56 ) then
+ 2130.   160                         continue
+ 2134.                               j = 6177
+ 2134.                               goto 110
+ 2134.                            else if ( kpds(3) < 67 ) then
+ 2134.                               goto 170
+ 2134.                            else if ( kpds(3) <= 71 ) then
+ 2138.                               j = 13689
+ 2138.                               goto 110
+ 2138.                            else
+ 2138.   170                         continue
+ 2140.                               if ( kpds(3) == 72 ) then
+ 2142.                                  j = 406
+ 2142.                                  goto 110
+ 2144.                               else if ( kpds(3) == 73 ) then
+ 2146.                                  j = 13056
+ 2146.                                  goto 110
+ 2146.                               else if ( kpds(3) == 74 ) then
+ 2150.                                  j = 10800
+ 2150.                                  goto 110
+ 2150.                               else if ( kpds(3) < 75 ) then
+ 2150.                                  goto 180
+ 2150.                               else if ( kpds(3) <= 77 ) then
+ 2154.                                  j = 12321
+ 2154.                                  goto 110
+ 2154.                               else
+ 2154.   180                            continue
+ 2156.                                  if ( kpds(3) == 85 ) then
+ 2156.                                     goto 190
+ 2156.                                     goto 110
+ 2156.                                  else if ( kpds(3) == 86 ) then
+ 2156.   190                               continue
+ 2158.                                     j = 32400
+ 2158.                                     goto 110
+ 2158.                                  else if ( kpds(3) == 87 ) then
+ 2162.                                     j = 5022
+ 2162.                                     goto 110
+ 2162.                                  else if ( kpds(3) == 88 ) then
+ 2166.                                     j = 317840
+ 2166.                                     goto 110
+ 2166.                                  else if ( kpds(3) == 90 ) then
+ 2170.                                     j = 111723
+ 2170.                                     goto 110
+ 2170.                                  else if ( kpds(3) == 91 ) then
+ 2174.                                     j = 111723
+ 2174.                                     goto 110
+ 2174.                                  else if ( kpds(3) == 92 ) then
+ 2178.                                     j = 111723
+ 2178.                                     goto 110
+ 2178.                                  else if ( kpds(3) == 93 ) then
+ 2182.                                     j = 111723
+ 2182.                                     goto 110
+ 2182.                                  else if ( kpds(3) == 94 ) then
+ 2186.                                     j = 196305
+ 2186.                                     goto 110
+ 2186.                                  else if ( kpds(3) == 95 ) then
+ 2190.                                     j = 36062
+ 2190.                                     goto 110
+ 2190.                                  else if ( kpds(3) == 96 ) then
+ 2194.                                     j = 646602
+ 2194.                                     goto 110
+ 2194.                                  else if ( kpds(3) == 97 ) then
+ 2198.                                     j = 12727
+ 2198.                                     goto 110
+ 2198.                                  else if ( kpds(3) == 98 ) then
+ 2202.                                     j = 18048
+ 2202.                                     goto 110
+ 2202.                                  else
+ 2202.                                     goto 60
+ 2202.                                  endif
+ 2202.                               endif
+ 2202.                            endif
+ 2202.                         endif
+ 2202.                      else if ( kpds(3) < 200 ) then
+ 2206.                         if ( kpds(3) == 100 ) then
+ 2208.                            j = 6889
+ 2208.                            goto 110
+ 2210.                         else if ( kpds(3) == 101 ) then
+ 2212.                            j = 10283
+ 2212.                            goto 110
+ 2212.                         else if ( kpds(3) == 103 ) then
+ 2216.                            j = 3640
+ 2216.                            goto 110
+ 2216.                         else if ( kpds(3) == 104 ) then
+ 2220.                            j = 16170
+ 2220.                            goto 110
+ 2220.                         else if ( kpds(3) == 105 ) then
+ 2224.                            j = 6889
+ 2224.                            goto 110
+ 2224.                         else if ( kpds(3) == 106 ) then
+ 2228.                            j = 19305
+ 2228.                            goto 110
+ 2228.                         else if ( kpds(3) == 107 ) then
+ 2232.                            j = 11040
+ 2232.                            goto 110
+ 2232.                         else if ( kpds(3) == 110 ) then
+ 2236.                            j = 103936
+ 2236.                            goto 110
+ 2236.                         else if ( kpds(3) == 120 ) then
+ 2240.                            j = 2020800
+ 2240.                            goto 110
+ 2240.                         else if ( kpds(3) == 122 ) then
+ 2244.                            j = 162750
+ 2244.                            goto 110
+ 2244.                         else if ( kpds(3) == 123 ) then
+ 2248.                            j = 100800
+ 2248.                            goto 110
+ 2248.                         else if ( kpds(3) == 124 ) then
+ 2252.                            j = 75360
+ 2252.                            goto 110
+ 2252.                         else if ( kpds(3) == 125 ) then
+ 2256.                            j = 102000
+ 2256.                            goto 110
+ 2256.                         else if ( kpds(3) == 126 ) then
+ 2260.                            j = 72960
+ 2260.                            goto 110
+ 2260.                         else if ( kpds(3) == 127 ) then
+ 2264.                            j = 294912
+ 2264.                            goto 110
+ 2264.                         else if ( kpds(3) == 130 ) then
+ 2268.                            j = 151987
+ 2268.                            goto 110
+ 2268.                         else if ( kpds(3) == 138 ) then
+ 2272.                            j = 134784
+ 2272.                            goto 110
+ 2272.                         else if ( kpds(3) == 145 ) then
+ 2276.                            j = 24505
+ 2276.                            goto 110
+ 2276.                         else if ( kpds(3) == 146 ) then
+ 2280.                            j = 23572
+ 2280.                            goto 110
+ 2280.                         else if ( kpds(3) == 147 ) then
+ 2284.                            j = 69412
+ 2284.                            goto 110
+ 2284.                         else if ( kpds(3) == 148 ) then
+ 2288.                            j = 117130
+ 2288.                            goto 110
+ 2288.                         else if ( kpds(3) == 160 ) then
+ 2292.                            j = 28080
+ 2292.                            goto 110
+ 2292.                         else if ( kpds(3) == 161 ) then
+ 2296.                            j = 13974
+ 2296.                            goto 110
+ 2296.                         else if ( kpds(3) == 163 ) then
+ 2300.                            j = 727776
+ 2300.                            goto 110
+ 2300.                         else if ( kpds(3) == 170 ) then
+ 2304.                            j = 131072
+ 2304.                            goto 110
+ 2304.                         else if ( kpds(3) == 171 ) then
+ 2308.                            j = 716100
+ 2308.                            goto 110
+ 2308.                         else if ( kpds(3) == 172 ) then
+ 2312.                            j = 489900
+ 2312.                            goto 110
+ 2312.                         else if ( kpds(3) == 173 ) then
+ 2316.                            j = 9331200
+ 2316.                            goto 110
+ 2316.                         else if ( kpds(3) == 174 ) then
+ 2320.                            j = 4147200
+ 2320.                            goto 110
+ 2320.                         else if ( kpds(3) == 175 ) then
+ 2324.                            j = 185704
+ 2324.                            goto 110
+ 2324.                         else if ( kpds(3) == 176 ) then
+ 2328.                            j = 76845
+ 2328.                            goto 110
+ 2328.                         else if ( kpds(3) == 180 ) then
+ 2332.                            j = 267168
+ 2332.                            goto 110
+ 2332.                         else if ( kpds(3) == 181 ) then
+ 2336.                            j = 102860
+ 2336.                            goto 110
+ 2336.                         else if ( kpds(3) == 182 ) then
+ 2340.                            j = 64218
+ 2340.                            goto 110
+ 2340.                         else if ( kpds(3) == 183 ) then
+ 2344.                            j = 180144
+ 2344.                            goto 110
+ 2344.                         else if ( kpds(3) == 190 ) then
+ 2348.                            j = 12972
+ 2348.                            goto 110
+ 2348.                         else if ( kpds(3) == 192 ) then
+ 2352.                            j = 91719
+ 2352.                            goto 110
+ 2352.                         else if ( kpds(3) == 194 ) then
+ 2356.                            j = 12727
+ 2356.                            goto 110
+ 2356.                         else if ( kpds(3) == 196 ) then
+ 2360.                            j = 45903
+ 2360.                            goto 110
+ 2360.                         else if ( kpds(3) == 198 ) then
+ 2364.                            j = 41760
+ 2364.                            goto 110
+ 2364.                         else if ( and( 128, kpds(4) ) /= 128 ) then
+ 2364.    60                      continue
+ 2540.                            if ( kpds(1) /= 34 .orelse. and( 128, kpds(4) ) /= 128 ) then
+ 2550.                               if ( kpds(1) /= 54 .orelse. and( 128, kpds(4) ) /= 128 ) then
+ 2560.                                  if ( kpds(1) /= 58 ) then
+ 2556.                                     goto 70
+ 2561.                                  else if ( kpds(3) == 220 ) then
+ 2561.                                     goto 100
+ 2561.                                  else if ( kpds(3) == 221 ) then
+ 2561.   100                               continue
+ 2564.                                     kptr(10) = 3969
+ 2565.                                     $I_L2565_88 = 0
+ 2565. !dir$ unroll 4
+ 2565.                                     do
+ 2566.                                        kbms(1 + $I_L2565_88) = .true.
+ 2567.                                        $I_L2565_88 = 1 + $I_L2565_88
+ 2565.                                        if ( $I_L2565_88 >= 3969 ) exit
+ 2565.                                     enddo
+ 2565.                                  else if ( kpds(3) == 223 ) then
+ 2573.                                     kptr(10) = 10512
+ 2574.                                     $I_L2574_90 = 0
+ 2574. !dir$ unroll 4
+ 2574.                                     do
+ 2575.                                        kbms(1 + $I_L2574_90) = .true.
+ 2576.                                        $I_L2574_90 = 1 + $I_L2574_90
+ 2574.                                        if ( $I_L2574_90 >= 10512 ) exit
+ 2574.                                     enddo
+ 2574.                                  else if ( and( 128, kpds(4) ) /= 128 ) then
+ 2574.    70                               continue
+ 2588.                                     if ( kpds(1) /= 74 .orelse. and( 128, kpds(4) ) /= 128 ) then
+ 2596.                                        if ( kpds(1) == 98 ) then
+ 2597.                                           if ( kpds(3) <= 0 ) then
+ 2597.                                              goto 80
+ 2597.                                           else if ( kpds(3) <= 12 ) then
+ 2598.                                              if ( kpds(3) >= 5 ) then
+ 2598.                                                 j = cvmg( 1369, 1073, kpds(3) > 8 )
+ 2598.                                              else
+ 2601.                                                 j = 1369
+ 2601.                                              endif
+ 2603.                                              kptr(10) = j
+ 2604.                                              call fi637( j, kpds(1), kgds(1), kret )
+ 2605.                                              if ( kret == 0 ) then
+ 2606.                                                 kptr(10) = j
+ 2607.                                                 if ( j > 0 ) then
+ 2607.                                                    $I_L2607_96 = 0
+ 2607. !dir$ unroll 4
+ 2607.                                                    do
+ 2608.                                                       kbms(1 + $I_L2607_96) = .true.
+ 2609.                                                       $I_L2607_96 = 1 + $I_L2607_96
+ 2607.                                                       if ( $I_L2607_96 >= j ) exit
+ 2607.                                                    enddo
+ 2607.                                                 endif
+ 2607.                                              else
+ 2607.                                                 goto 20
+ 2607.                                              endif
+ 2607.                                           else
+ 2607.    80                                        continue
+ 2611.                                              if ( kpds(3) < 13 ) then
+ 2611.                                                 goto 90
+ 2611.                                              else if ( kpds(3) <= 16 ) then
+ 2612.                                                 j = 361
+ 2613.                                                 kptr(10) = 361
+ 2614.                                                 call fi637( j, kpds(1), kgds(1), kret )
+ 2615.                                                 if ( kret /= 0 ) then
+ 2615.                                                    goto 20
+ 2615.                                                 else if ( j > 0 ) then
+ 2616.                                                    $I_L2616_94 = 0
+ 2616. !dir$ unroll 4
+ 2616.                                                    do
+ 2617.                                                       kbms(1 + $I_L2616_94) = .true.
+ 2618.                                                       $I_L2616_94 = 1 + $I_L2616_94
+ 2616.                                                       if ( $I_L2616_94 >= j ) exit
+ 2616.                                                    enddo
+ 2616.                                                 endif
+ 2616.                                              else
+ 2616.    90                                           continue
+ 2620.                                                 if ( and( 128, kpds(4) ) == 128 ) then
+ 2620.                                                    goto 20
+ 2620.                                                 else
+ 2623.                                                    kret = 5
+ 2623.                                                 endif
+ 2623.                                              endif
+ 2623.                                           endif
+ 2626.                                        else if ( and( 128, kpds(4) ) == 128 ) then
+ 2626.                                           goto 20
+ 2626.                                        else
+ 2633.                                           kret = 10
+ 2633.                                        endif
+ 2633.                                     else
+ 2633.                                        goto 20
+ 2633.                                     endif
+ 2633.                                  else
+ 2633.                                     goto 20
+ 2633.                                  endif
+ 2633.                               else
+ 2633.                                  goto 20
+ 2633.                               endif
+ 2633.                            else
+ 2633.                               goto 20
+ 2633.                            endif
+ 2633.                         else
+ 2633.                            goto 20
+ 2633.                         endif
+ 2633.                      else if ( kpds(3) == 201 ) then
+ 2372.                         j = 4225
+ 2372.                         goto 110
+ 2372.                      else if ( kpds(3) == 202 ) then
+ 2375.                         j = 2795
+ 2375.                         goto 110
+ 2375.                      else if ( kpds(3) == 203 ) then
+ 2375.                         goto 200
+ 2375.                         goto 110
+ 2375.                      else if ( kpds(3) == 205 ) then
+ 2375.   200                   continue
+ 2378.                         j = 1755
+ 2378.                         goto 110
+ 2378.                      else if ( kpds(3) == 204 ) then
+ 2381.                         j = 6324
+ 2381.                         goto 110
+ 2381.                      else if ( kpds(3) == 206 ) then
+ 2384.                         j = 2091
+ 2384.                         goto 110
+ 2384.                      else if ( kpds(3) == 207 ) then
+ 2387.                         j = 1715
+ 2387.                         goto 110
+ 2387.                      else if ( kpds(3) == 208 ) then
+ 2390.                         j = 783
+ 2390.                         goto 110
+ 2390.                      else if ( kpds(3) == 209 ) then
+ 2393.                         j = 61325
+ 2393.                         goto 110
+ 2393.                      else if ( kpds(3) == 210 ) then
+ 2396.                         j = 625
+ 2396.                         goto 110
+ 2396.                      else if ( kpds(3) == 211 ) then
+ 2399.                         j = 6045
+ 2399.                         goto 110
+ 2399.                      else if ( kpds(3) == 212 ) then
+ 2402.                         j = 23865
+ 2402.                         goto 110
+ 2402.                      else if ( kpds(3) == 213 ) then
+ 2405.                         j = 10965
+ 2405.                         goto 110
+ 2405.                      else if ( kpds(3) == 214 ) then
+ 2408.                         j = 6693
+ 2408.                         goto 110
+ 2408.                      else if ( kpds(3) == 215 ) then
+ 2411.                         j = 94833
+ 2411.                         goto 110
+ 2411.                      else if ( kpds(3) == 216 ) then
+ 2414.                         j = 14873
+ 2414.                         goto 110
+ 2414.                      else if ( kpds(3) == 217 ) then
+ 2417.                         j = 59001
+ 2417.                         goto 110
+ 2417.                      else if ( kpds(3) == 218 ) then
+ 2420.                         j = 262792
+ 2420.                         goto 110
+ 2420.                      else if ( kpds(3) == 219 ) then
+ 2423.                         j = 179025
+ 2423.                         goto 110
+ 2423.                      else if ( kpds(3) == 220 ) then
+ 2426.                         j = 122475
+ 2426.                         goto 110
+ 2426.                      else if ( kpds(3) == 221 ) then
+ 2429.                         j = 96673
+ 2429.                         goto 110
+ 2429.                      else if ( kpds(3) == 222 ) then
+ 2432.                         j = 15456
+ 2432.                         goto 110
+ 2432.                      else if ( kpds(3) == 223 ) then
+ 2435.                         j = 16641
+ 2435.                         goto 110
+ 2435.                      else if ( kpds(3) == 224 ) then
+ 2438.                         j = 4225
+ 2438.                         goto 110
+ 2438.                      else if ( kpds(3) == 225 ) then
+ 2441.                         j = 24975
+ 2441.                         goto 110
+ 2441.                      else if ( kpds(3) == 226 ) then
+ 2444.                         j = 381029
+ 2444.                         goto 110
+ 2444.                      else if ( kpds(3) == 227 ) then
+ 2447.                         j = 1509825
+ 2447.                         goto 110
+ 2447.                      else if ( kpds(3) == 228 ) then
+ 2450.                         j = 10512
+ 2450.                         goto 110
+ 2450.                      else if ( kpds(3) == 229 ) then
+ 2453.                         j = 65160
+ 2453.                         goto 110
+ 2453.                      else if ( kpds(3) == 230 ) then
+ 2456.                         j = 259920
+ 2456.                         goto 110
+ 2456.                      else if ( kpds(3) == 231 ) then
+ 2459.                         j = 130320
+ 2459.                         goto 110
+ 2459.                      else if ( kpds(3) == 232 ) then
+ 2462.                         j = 32760
+ 2462.                         goto 110
+ 2462.                      else if ( kpds(3) == 233 ) then
+ 2465.                         j = 45216
+ 2465.                         goto 110
+ 2465.                      else if ( kpds(3) == 234 ) then
+ 2468.                         j = 16093
+ 2468.                         goto 110
+ 2468.                      else if ( kpds(3) == 235 ) then
+ 2471.                         j = 259200
+ 2471.                         goto 110
+ 2471.                      else if ( kpds(3) == 236 ) then
+ 2474.                         j = 17063
+ 2474.                         goto 110
+ 2474.                      else if ( kpds(3) == 237 ) then
+ 2477.                         j = 2538
+ 2477.                         goto 110
+ 2477.                      else if ( kpds(3) == 238 ) then
+ 2480.                         j = 55825
+ 2480.                         goto 110
+ 2480.                      else if ( kpds(3) == 239 ) then
+ 2483.                         j = 19065
+ 2483.                         goto 110
+ 2483.                      else if ( kpds(3) == 240 ) then
+ 2486.                         j = 987601
+ 2486.                         goto 110
+ 2486.                      else if ( kpds(3) == 241 ) then
+ 2489.                         j = 244305
+ 2489.                         goto 110
+ 2489.                      else if ( kpds(3) == 242 ) then
+ 2492.                         j = 235025
+ 2492.                         goto 110
+ 2492.                      else if ( kpds(3) == 243 ) then
+ 2495.                         j = 12726
+ 2495.                         goto 110
+ 2495.                      else if ( kpds(3) == 244 ) then
+ 2498.                         j = 55825
+ 2498.                         goto 110
+ 2498.                      else if ( kpds(3) == 245 ) then
+ 2501.                         j = 124992
+ 2501.                         goto 110
+ 2501.                      else if ( kpds(3) == 246 ) then
+ 2504.                         j = 123172
+ 2504.                         goto 110
+ 2504.                      else if ( kpds(3) == 247 ) then
+ 2507.                         j = 124992
+ 2507.                         goto 110
+ 2507.                      else if ( kpds(3) == 248 ) then
+ 2510.                         j = 13635
+ 2510.                         goto 110
+ 2510.                      else if ( kpds(3) == 249 ) then
+ 2513.                         j = 125881
+ 2513.                         goto 110
+ 2513.                      else if ( kpds(3) == 250 ) then
+ 2516.                         j = 13635
+ 2516.                         goto 110
+ 2516.                      else if ( kpds(3) == 251 ) then
+ 2519.                         j = 69720
+ 2519.                         goto 110
+ 2519.                      else if ( kpds(3) == 252 ) then
+ 2522.                         j = 67725
+ 2522.                         goto 110
+ 2522.                      else if ( kpds(3) == 253 ) then
+ 2525.                         j = 83552
+ 2525.                         goto 110
+ 2525.                      else if ( kpds(3) == 254 ) then
+ 2528.                         j = 110700
+ 2528.   110                   continue
+ 2640.                         kptr(10) = j
+ 2641.                         call fi637( j, kpds(1), kgds(1), kret )
+ 2642.                         if ( kret /= 0 ) then
+ 2642.                            goto 20
+ 2642.                         else if ( j > 0 ) then
+ 2643.                            $I_L2643_98 = 0
+ 2643. !dir$ unroll 4
+ 2643.                            do
+ 2644.                               kbms(1 + $I_L2643_98) = .true.
+ 2645.                               $I_L2643_98 = 1 + $I_L2643_98
+ 2643.                               if ( $I_L2643_98 >= j ) exit
+ 2643.                            enddo
+ 2643.                         endif
+ 2643.                      else if ( and( 128, kpds(4) ) /= 128 ) then
+ 2533.                         kret = 5
+ 2533.                      else
+ 2533.    20                   continue
+ 2670.                         $j_S25 = kgds(2) * kgds(3)
+ 2673.                         kret = cvmg( kret, 0, kpds(3) /= 211 )
+ 2674.                         kptr(10) = $j_S25
+ 2675.                         if ( $j_S25 > 0 ) then
+ 2675.                            $I_L2675_92 = 0
+ 2675. !dir$ unroll 4
+ 2675.                            do
+ 2676.                               kbms(1 + $I_L2675_92) = .true.
+ 2677.                               $I_L2675_92 = 1 + $I_L2675_92
+ 2675.                               if ( $I_L2675_92 >= $j_S25 ) exit
+ 2675.                            enddo
+ 2675.                         endif
+ 2675.                      endif
+ 2675.                   endif
+ 2675.                endif
+ 2675.             endif
+ 2675.          endif
+ 2675.       endif
+ 2680.       return
+ 2680.       end
+ 2680.       
+ 2682.       
+ 2682.       subroutine fi634x( npts, nskp, msga, kbms )
+ 2682.       t$53 = npts
+ 2711.       t$54 = _zla( 0, npts )
+ 2712.       t$57 = 4 * _zla( 0, npts )
+ 2682.       t$55 = int( _alloc( 4 * _zla( 0, npts ) ), 8 )
+ 2712.       t$56 = t$55
+ 2714.       call gbytesc(  _substr(msga(1),1,1), ichk(1), nskp, 1, 0, npts )
+ 2715.       $F_A33 = t$53
+ 2715.       if ( t$53 > 0 ) then
+ 2715.          $I_A1 = 0
+ 2715.          do
+ 2715.             kbms(1 + $I_A1) = logical( ichk(1 + $I_A1) /= 0, 1 )
+ 2715.             $I_A1 = 1 + $I_A1
+ 2715.             if ( $I_A1 >= $F_A33 ) exit
+ 2715.          enddo
+ 2715.       endif
+ 2682.       _free( t$55 )
+ 2717.       return
+ 2717.       end
+ 2717.       
+ 2820.       
+ 2820.       subroutine fi635( msga, kptr, kpds, kgds, kbms, data, kret )
+ 2718.       ksave%header%el_len = 32
+ 2718.       ksave%header%assoc = 0
+ 2718.       ksave%header%ptr_alloc = 0
+ 2718.       ksave%header%p_or_a = 2
+ 2718.       ksave%header%a_contig = 1
+ 2718.       ksave%header%dv_versn = 2
+ 2718.       ksave%header%dv_smunit = 32
+ 2718.       ksave%header%d_type = 0
+ 2718.       ksave%header%n_params = 0
+ 2718.       ksave%header%pad_codim = 0
+ 2718.       ksave%header%n_codim = 0
+ 2718.       ksave%header%pad_dim = 0
+ 2718.       ksave%header%n_dim = 1
+ 2718.       ksave%header%d_type_idx = 10
+ 2718.       ksave%header%typ_code = 131074
+ 2718.       ksave%header%orig_base = 0
+ 2718.       ksave%header%orig_size = 0
+ 2718.       ksave%dim_1%LB = 1
+ 2718.       ksave%dim_1%EX = 0
+ 2718.       ksave%dim_1%SM = 1
+ 2834.       kptr(8) = kptr(9) + 8 * kptr(2) + 8 * kptr(3) + 8 * kptr(4) + 8 * kptr(5) + 24
+ 2838.       call gbytec(  _substr(msga(1),1,1), kptr(14), kptr(8), 4 )
+ 2839.       kptr(8) = 4 + kptr(8)
+ 2841.       call gbytec(  _substr(msga(1),1,1), kptr(15), kptr(8), 4 )
+ 2842.       kptr(8) = 4 + kptr(8)
+ 2843.       $kend_S5 = kptr(9) + -kptr(15) + 8 * kptr(2) + 8 * kptr(3) + 8 * kptr(4) + 8 * kptr(5) + 8 * kptr(6)
+ 2848.       call gbytec(  _substr(msga(1),1,1), ksign, kptr(8), 1 )
+ 2849.       kptr(8) = 1 + kptr(8)
+ 2851.       call gbytec(  _substr(msga(1),1,1), kscale, kptr(8), 15 )
+ 2852.       kptr(8) = 15 + kptr(8)
+ 2853.       if ( ksign > 0 ) then
+ 2854.          kscale = -kscale
+ 2854.       endif
+ 2856.       $scale_S13 = 2.0 ** kscale
+ 2857.       kptr(19) = kscale
+ 2861.       call gbytec(  _substr(msga(1),1,1), jsgn, kptr(8), 1 )
+ 2862.       t$58 = 1 + kptr(8)
+ 2862.       call gbytec(  _substr(msga(1),1,1), jexp, t$58, 7 )
+ 2863.       t$58 = 8 + kptr(8)
+ 2863.       call gbytec(  _substr(msga(1),1,1), ifr, t$58, 24 )
+ 2864.       kptr(8) = 32 + kptr(8)
+ 2872.       if ( ifr == 0 ) then
+ 2873.          refnce = 0.0
+ 2873.       else
+ 2877.          refnce = real( ifr ) * 16.0 ** ( -70 + jexp )
+ 2878.          if ( jsgn /= 0 ) then
+ 2878.             refnce = -refnce
+ 2878.          endif
+ 2878.       endif
+ 2883.       call gbytec(  _substr(msga(1),1,1), kbits, kptr(8), 8 )
+ 2884.       kptr(8) = 8 + kptr(8)
+ 2885.       kbds(4) = kbits
+ 2887.       kptr(20) = kbits
+ 2888.       $ibyt12_S25 = kptr(8)
+ 2894.       if ( and( 1, kptr(14) ) /= 0 ) then
+ 2898.          call gbytec(  _substr(msga(1),1,1), koctet, kptr(8), 16 )
+ 2899.          kptr(8) = 16 + kptr(8)
+ 2902.          call gbytec(  _substr(msga(1),1,1), kxflag, kptr(8), 8 )
+ 2904.          kptr(8) = 8 + kptr(8)
+ 2905.          kbds(16) = and( 16, kxflag ) /= 0
+ 2912.          kbds(14) = and( 32, kxflag ) /= 0
+ 2919.          kbds(17) = and( 64, kxflag ) /= 0
+ 2928.          call gbytec(  _substr(msga(1),1,1), nr, kptr(8), 16 )
+ 2929.          kptr(8) = 16 + kptr(8)
+ 2932.          call gbytec(  _substr(msga(1),1,1), nc, kptr(8), 16 )
+ 2933.          kptr(8) = 16 + kptr(8)
+ 2936.          call gbytec(  _substr(msga(1),1,1), nrv, kptr(8), 8 )
+ 2937.          kptr(8) = 8 + kptr(8)
+ 2940.          call gbytec(  _substr(msga(1),1,1), nc1, kptr(8), 8 )
+ 2941.          kptr(8) = 8 + kptr(8)
+ 2944.          call gbytec(  _substr(msga(1),1,1), ncv, kptr(8), 8 )
+ 2945.          kptr(8) = 8 + kptr(8)
+ 2948.          call gbytec(  _substr(msga(1),1,1), nc2, kptr(8), 8 )
+ 2949.          kptr(8) = 8 + kptr(8)
+ 2952.          call gbytec(  _substr(msga(1),1,1), kphys1, kptr(8), 8 )
+ 2953.          kptr(8) = 8 + kptr(8)
+ 2956.          call gbytec(  _substr(msga(1),1,1), kphys2, kptr(8), 8 )
+ 2957.          kptr(8) = 8 + kptr(8)
+ 2957.       endif
+ 2960.       if ( kbits == 0 ) then
+ 2962.          $scal10_S0 = 10.0 ** kpds(22)
+ 2964.          $refn10_S4 = refnce * 1.0/$scal10_S0
+ 2965.          $kentry_S2 = kptr(10)
+ 2966.          if ( $kentry_S2 > 0 ) then
+ 2966.             $I_L2966_58 = 0
+ 2966. !dir$ ivdep
+ 2966.             do
+ 2967.                data(1 + $I_L2966_58) = 0.0
+ 2968.                if ( kbms(1 + $I_L2966_58) ) then
+ 2969.                   data(1 + $I_L2966_58) = $refn10_S4
+ 2969.                endif
+ 2971.                $I_L2966_58 = 1 + $I_L2966_58
+ 2970.                if ( $I_L2966_58 >= $kentry_S2 ) exit
+ 2970.             enddo
+ 2970.          endif
+ 2970.          goto 10
+ 2970.       else
+ 2975.          knr = ( $kend_S5 + -kptr(8) ) / kbits
+ 2982.          $nrbyte_S6 = -11 + kptr(6)
+ 2984.          $nrbits_S7 = -kptr(15) + 8 * $nrbyte_S6
+ 2986.          $kentry_S8 = $nrbits_S7 / kbits
+ 2988.          ksave%header%a_contig = 1
+ 2988.          ksave%dim_1%LB = 1
+ 2988.          ksave%dim_1%EX = ( max( 0, $kentry_S8 ) )
+ 2988.          ksave%dim_1%SM = 1
+ 2988.          $_allo_P0(0) = 0x1000000000001L
+ 2988.          $_allo_P0(1) = loc( ksave )
+ 2988.          call __allocate( $_allo_P0, 0, 0, _fcd( 0, 0 ) )
+ 2996.          if ( and( 8, kptr(14) ) == 0 ) then
+ 2998.             if ( and( 4, kptr(14) ) == 0 ) then
+ 3000.                if ( and( 1, kptr(14) ) == 0 ) then
+ 3222.                   $scal10_S9 = 10.0 ** kpds(22)
+ 3223.                   $scal10_S12 = 1.0/$scal10_S9
+ 3224.                   if ( kpds(3) == 23 .orelse. kpds(3) == 24 .orelse. kpds(3) == 26 .orelse. kpds(3) == 63 .orelse. kpds(3) == 64 ) then
+ 3226.                      if ( kpds(3) == 26 ) then
+ 3227.                         $kadd_S23 = 72
+ 3228.                      else if ( kpds(3) /= 63 ) then
+ 3228.                         $kadd_S23 = cvmg( 37, 91, kpds(3) /= 64 )
+ 3228.                      else
+ 3229.                         $kadd_S23 = 91
+ 3229.                      endif
+ 3233.                      call gbytesc(  _substr(msga(1),1,1), (ksave%base_addr)(1, 0), kptr(8), kbits, 0, knr )
+ 3234.                      kptr(8) = kptr(8) + kbits * knr
+ 3235.                      $ii_S22 = 1
+ 3236.                      $kentry_S20 = kptr(10)
+ 3237.                      if ( $kentry_S20 > 0 ) then
+ 3237.                         $I_L3237_54 = 0
+ 3237. !dir$ ivdep
+ 3237.                         do
+ 3238.                            if ( kbms(1 + $I_L3237_54) ) then
+ 3239.                               data(1 + $I_L3237_54) = ( refnce + real( (ksave%base_addr)($ii_S22, 0) ) * $scale_S13 ) * $scal10_S12
+ 3240.                               $ii_S22 = 1 + $ii_S22
+ 3240.                            else
+ 3242.                               data(1 + $I_L3237_54) = 0.0
+ 3242.                            endif
+ 3244.                            $I_L3237_54 = 1 + $I_L3237_54
+ 3243.                            if ( $I_L3237_54 >= $kentry_S20 ) exit
+ 3243.                         enddo
+ 3243.                      endif
+ 3245.                      if ( -2 + $kadd_S23 >= 0 ) then
+ 3245.                         $SCA_data_I1 = data(1)
+ 3245.                         $I_L3245_56 = 0
+ 3245. !dir$ ivdep
+ 3245.                         do
+ 3246.                            data(2 + $I_L3245_56) = $SCA_data_I1
+ 3247.                            $I_L3245_56 = 1 + $I_L3245_56
+ 3245.                            if ( $I_L3245_56 >= -1 + $kadd_S23 ) exit
+ 3245.                         enddo
+ 3245.                      endif
+ 3245.                   else
+ 3248.                      if ( kpds(3) == 21 .orelse. kpds(3) == 22 .orelse. kpds(3) == 25 .orelse. kpds(3) == 61 .orelse. kpds(3) == 62 ) then
+ 3250.                         call gbytesc(  _substr(msga(1),1,1), (ksave%base_addr)(1, 0), kptr(8), kbits, 0, knr )
+ 3251.                         $ii_S17 = 1
+ 3252.                         $kentry_S15 = kptr(10)
+ 3253.                         if ( $kentry_S15 > 0 ) then
+ 3253.                            $I_L3253_50 = 0
+ 3253. !dir$ ivdep
+ 3253.                            do
+ 3254.                               if ( kbms(1 + $I_L3253_50) ) then
+ 3255.                                  data(1 + $I_L3253_50) = ( refnce + real( (ksave%base_addr)($ii_S17, 0) ) * $scale_S13 ) * $scal10_S12
+ 3256.                                  $ii_S17 = 1 + $ii_S17
+ 3256.                               else
+ 3258.                                  data(1 + $I_L3253_50) = 0.0
+ 3258.                               endif
+ 3260.                               $I_L3253_50 = 1 + $I_L3253_50
+ 3259.                               if ( $I_L3253_50 >= $kentry_S15 ) exit
+ 3259.                            enddo
+ 3259.                         endif
+ 3261.                         if ( kpds(3) == 25 ) then
+ 3262.                            $kadd_S18 = 71
+ 3263.                         else if ( kpds(3) /= 61 ) then
+ 3263.                            $kadd_S18 = cvmg( 36, 90, kpds(3) /= 62 )
+ 3263.                         else
+ 3264.                            $kadd_S18 = 90
+ 3264.                         endif
+ 3269.                         if ( $kadd_S18 > 0 ) then
+ 3269.                            $SCA_data_I2 = data($kentry_S15 + -$kadd_S18)
+ 3269.                            $I_L3269_52 = 0
+ 3269. !dir$ ivdep
+ 3269.                            do
+ 3270.                               data($kentry_S15 + $I_L3269_52 + -$kadd_S18 + 1) = $SCA_data_I2
+ 3271.                               $I_L3269_52 = 1 + $I_L3269_52
+ 3269.                               if ( $I_L3269_52 >= $kadd_S18 ) exit
+ 3269.                            enddo
+ 3269.                         endif
+ 3269.                      else
+ 3273.                         call gbytesc(  _substr(msga(1),1,1), (ksave%base_addr)(1, 0), kptr(8), kbits, 0, knr )
+ 3274.                         $ii_S14 = 1
+ 3275.                         $kentry_S10 = kptr(10)
+ 3276.                         if ( $kentry_S10 > 0 ) then
+ 3276.                            $I_L3276_48 = 0
+ 3276. !dir$ ivdep
+ 3276.                            do
+ 3277.                               if ( kbms(1 + $I_L3276_48) ) then
+ 3278.                                  data(1 + $I_L3276_48) = ( refnce + real( (ksave%base_addr)($ii_S14, 0) ) * $scale_S13 ) * $scal10_S12
+ 3279.                                  $ii_S14 = 1 + $ii_S14
+ 3279.                               else
+ 3281.                                  data(1 + $I_L3276_48) = 0.0
+ 3281.                               endif
+ 3283.                               $I_L3276_48 = 1 + $I_L3276_48
+ 3282.                               if ( $I_L3276_48 >= $kentry_S10 ) exit
+ 3282.                            enddo
+ 3282.                         endif
+ 3282.                      endif
+ 3282.                   endif
+ 3282.                   goto 10
+ 3282.                else
+ 3282.                   goto 20
+ 3282.                endif
+ 3051.             else if ( and( 1, kptr(14) ) == 0 ) then
+ 3051.                goto 20
+ 3051.             else if ( kbds(17) /= 0 ) then
+ 3051.                goto 20
+ 3051.             else if ( kbds(14) == 0 ) then
+ 3067.                call fi636( data(1),  _substr(msga(1),1,1), kbms(1), refnce, kptr(1), kpds(1), kgds(1) )
+ 3067.                goto 10
+ 3067.             else
+ 3079.                call fi636( data(1),  _substr(msga(1),1,1), kbms(1), refnce, kptr(1), kpds(1), kgds(1) )
+ 3079.                goto 10
+ 3079.             endif
+ 3109.          else if ( and( 4, kptr(14) ) /= 0 ) then
+ 3109.             goto 20
+ 3109.          else if ( and( 1, kptr(14) ) == 0 ) then
+ 3290.             kptr(8) = $ibyt12_S25
+ 3292.             call gbytec(  _substr(msga(1),1,1), jsgn, kptr(8), 1 )
+ 3293.             t$58 = 1 + kptr(8)
+ 3293.             call gbytec(  _substr(msga(1),1,1), jexp, t$58, 7 )
+ 3294.             t$58 = 8 + kptr(8)
+ 3294.             call gbytec(  _substr(msga(1),1,1), ifr, t$58, 24 )
+ 3295.             kptr(8) = 32 + kptr(8)
+ 3300.             if ( ifr == 0 ) then
+ 3301.                $realkk_S26 = 0.0
+ 3301.             else
+ 3305.                $realkk_S26 = real( ifr ) * 16.0 ** ( -70 + jexp )
+ 3306.                if ( jsgn /= 0 ) then
+ 3306.                   $realkk_S26 = -$realkk_S26
+ 3306.                endif
+ 3306.             endif
+ 3308.             data(1) = $realkk_S26
+ 3309.             call gbytesc(  _substr(msga(1),1,1), (ksave%base_addr)(1, 0), kptr(8), kbits, 0, knr )
+ 3311.             if ( $kentry_S8 > 0 ) then
+ 3311.                $I_L3311_46 = 0
+ 3311. !dir$ ivdep
+ 3311.                do
+ 3312.                   data(2 + $I_L3311_46) = refnce + real( (ksave%base_addr)(1 + $I_L3311_46, 0) ) * $scale_S13
+ 3313.                   $I_L3311_46 = 1 + $I_L3311_46
+ 3311.                   if ( $I_L3311_46 >= $kentry_S8 ) exit
+ 3311.                enddo
+ 3311.             endif
+ 3311.    10       continue
+ 3315.             if ( ksave%header%assoc == 1 ) then
+ 3315.                $_allo_P1(0) = 0x1000000000001L
+ 3315.                $_allo_P1(1) = loc( ksave )
+ 3315.                call __deallocate( $_allo_P1, 0, 0, _fcd( 0, 0 ) )
+ 3315.                ksave%header%assoc = 0
+ 3315.             endif
+ 2820.             $_allo_P2(0) = 0x1000000000001L
+ 2820.             $_allo_P2(1) = loc( ksave )
+ 2820.             call _dealloc( $_allo_P2, 0, 0, _fcd( 0, 0 ) )
+ 2820.          else
+ 2820.    20       continue
+ 3213.             if ( ksave%header%assoc == 1 ) then
+ 3213.                $_allo_P3(0) = 0x1000000000001L
+ 3213.                $_allo_P3(1) = loc( ksave )
+ 3213.                call __deallocate( $_allo_P3, 0, 0, _fcd( 0, 0 ) )
+ 3213.                ksave%header%assoc = 0
+ 3213.             endif
+ 3215.             kret = 11
+ 2820.             $_allo_P4(0) = 0x1000000000001L
+ 2820.             $_allo_P4(1) = loc( ksave )
+ 2820.             call _dealloc( $_allo_P4, 0, 0, _fcd( 0, 0 ) )
+ 2820.          endif
+ 2820.       endif
+ 3318.       return
+ 3318.       end
+ 3318.       
+ 3319.       
+ 3319.       subroutine fi636( data, msga, kbms, refnce, kptr, kpds, kgds )
+ 3396.       $I_L3396_36 = 0
+ 3396. !dir$ ivdep
+ 3396.       do
+ 3397.          kbds(1 + $I_L3396_36) = 0
+ 3398.          $I_L3396_36 = 1 + $I_L3396_36
+ 3396.          if ( $I_L3396_36 >= 20 ) exit
+ 3396.       enddo
+ 3400.       $ibds_S1 = kptr(2) + kptr(3) + kptr(4) + kptr(5)
+ 3405.       kbds(9) = 8 * $ibds_S1
+ 3408.       t$82 = 32 + 8 * $ibds_S1
+ 3408.       call gbytec(  _substr(msga(1),1,1), isign, t$82, 1 )
+ 3409.       t$82 = 33 + 8 * $ibds_S1
+ 3409.       call gbytec(  _substr(msga(1),1,1), kbds(11), t$82, 15 )
+ 3410.       if ( isign > 0 ) then
+ 3411.          kbds(11) = -kbds(11)
+ 3411.       endif
+ 3416.       call gbytec(  _substr(msga(1),1,1), jsgn, kptr(8), 1 )
+ 3417.       t$82 = 1 + kptr(8)
+ 3417.       call gbytec(  _substr(msga(1),1,1), jexp, t$82, 7 )
+ 3418.       t$82 = 8 + kptr(8)
+ 3418.       call gbytec(  _substr(msga(1),1,1), ifr, t$82, 24 )
+ 3419.       if ( ifr == 0 ) then
+ 3420.          refnce = 0.0
+ 3420.       else
+ 3424.          refnce = real( ifr ) * 16.0 ** ( -70 + jexp )
+ 3425.          if ( jsgn /= 0 ) then
+ 3425.             refnce = -refnce
+ 3425.          endif
+ 3425.       endif
+ 3429.       t$82 = 80 + 8 * $ibds_S1
+ 3429.       call gbytec(  _substr(msga(1),1,1), kbds(13), t$82, 8 )
+ 3430.       jptr = 88 + 8 * $ibds_S1
+ 3433.       call gbytec(  _substr(msga(1),1,1), kbds(1), jptr, 16 )
+ 3435.       jptr = 16 + jptr
+ 3437.       call gbytec(  _substr(msga(1),1,1), kflag, jptr, 8 )
+ 3439.       kbds(14) = and( 32, kflag ) /= 0
+ 3444.       kbds(16) = and( 16, kflag ) /= 0
+ 3449.       kbds(17) = and( 64, kflag ) /= 0
+ 3454.       jptr = 8 + jptr
+ 3456.       call gbytec(  _substr(msga(1),1,1), kbds(2), jptr, 16 )
+ 3458.       jptr = 16 + jptr
+ 3460.       call gbytec(  _substr(msga(1),1,1), kbds(3), jptr, 16 )
+ 3462.       jptr = 16 + jptr
+ 3464.       call gbytec(  _substr(msga(1),1,1), kbds(4), jptr, 16 )
+ 3470.       kbds(5) = 24 + jptr
+ 3472.       if ( kbds(14) /= 0 ) then
+ 3474.          $jptr_S3 = jptr + 8 * kbds(3) + 24
+ 3475.          kbds(6) = $jptr_S3
+ 3475.       else
+ 3478.          kbds(6) = 0
+ 3478.       endif
+ 3481.       kbds(7) = kbds(9) + 8 * kbds(1) + -8
+ 3484.       kbds(8) = kbds(9) + 8 * kbds(2) + -8
+ 3505.       ij = 0
+ 3507.       if ( kbds(14) == 0 ) then
+ 3509.          if ( kgds(2) /= 65535 ) then
+ 3534.             if ( and( 32, kgds(11) ) == 0 ) then
+ 3537.                $kout_S7 = kgds(3)
+ 3538.                $kin_S8 = kgds(2)
+ 3538.             else
+ 3542.                $kin_S8 = kgds(3)
+ 3543.                $kout_S7 = kgds(2)
+ 3543.             endif
+ 3546.             if ( $kout_S7 > 0 ) then
+ 3547.                if ( $kin_S8 > 0 ) then
+ 3546.                   $I_L3546_44 = 0
+ 3546.                   do
+ 3547.                      $I_L3547_38 = 0
+ 3547.                      do
+ 3548.                         if ( $I_L3547_38 == 0 ) then
+ 3549.                            call sbytec(  _substr(bmap2(1),1,1), 1, ij, 1 )
+ 3549.                         else
+ 3551.                            call sbytec(  _substr(bmap2(1),1,1), 0, ij, 1 )
+ 3551.                         endif
+ 3553.                         ij = 1 + ij
+ 3554.                         $I_L3547_38 = 1 + $I_L3547_38
+ 3552.                         if ( $I_L3547_38 >= $kin_S8 ) exit
+ 3552.                      enddo
+ 3555.                      $I_L3546_44 = 1 + $I_L3546_44
+ 3554.                      if ( $I_L3546_44 >= $kout_S7 ) exit
+ 3554.                   enddo
+ 3554.                endif
+ 3554.             endif
+ 3510.          else if ( kgds(20) /= 255 ) then
+ 3514.             lp = kptr(9) + 8 * kptr(2) + 8 * kptr(3) + 8 * kgds(20) + -8
+ 3516.             jt = 0
+ 3517.             $t_S4 = kgds(3)
+ 3517.             if ( $t_S4 > 0 ) then
+ 3517.                $I_L3517_46 = 0
+ 3517.                do
+ 3519.                   call gbytec(  _substr(msga(1),1,1), number, lp, 16 )
+ 3521.                   lp = 16 + lp
+ 3523.                   if ( number > 0 ) then
+ 3523.                      $I_L3523_40 = 0
+ 3523.                      do
+ 3524.                         if ( $I_L3523_40 == 0 ) then
+ 3525.                            call sbytec(  _substr(bmap2(1),1,1), 1, jt, 1 )
+ 3525.                         else
+ 3527.                            call sbytec(  _substr(bmap2(1),1,1), 0, jt, 1 )
+ 3527.                         endif
+ 3529.                         jt = 1 + jt
+ 3530.                         $I_L3523_40 = 1 + $I_L3523_40
+ 3528.                         if ( $I_L3523_40 >= number ) exit
+ 3528.                      enddo
+ 3528.                   endif
+ 3531.                   $I_L3517_46 = 1 + $I_L3517_46
+ 3530.                   if ( $I_L3517_46 >= $t_S4 ) exit
+ 3530.                enddo
+ 3530.             endif
+ 3530.          endif
+ 3530.       endif
+ 3564.       $scale2_S14 = 2.0 ** kbds(11)
+ 3565.       $scal10_S13 = 10.0 ** kpds(22)
+ 3567.       $t_S11 = kptr(10)
+ 3567.       if ( $t_S11 > 0 ) then
+ 3567.          $I_L3567_42 = 0
+ 3567.          do
+ 3570.             if ( kbms(1 + $I_L3567_42) ) then
+ 3573.                if ( kbds(14) /= 0 ) then
+ 3574.                   call gbytec(  _substr(msga(1),1,1), kbit, kbds(6), 1 )
+ 3574.                else
+ 3576.                   call gbytec(  _substr(bmap2(1),1,1), kbit, kbds(6), 1 )
+ 3576.                endif
+ 3579.                kbds(6) = 1 + kbds(6)
+ 3580.                if ( kbit /= 0 ) then
+ 3583.                   call gbytec(  _substr(msga(1),1,1), ifoval, kbds(7), kbds(13) )
+ 3584.                   kbds(7) = kbds(13) + kbds(7)
+ 3587.                   call gbytec(  _substr(msga(1),1,1), kbds(15), kbds(5), 8 )
+ 3588.                   kbds(5) = 8 + kbds(5)
+ 3588.                endif
+ 3594.                isoval = 0
+ 3595.                if ( kbds(15) /= 0 ) then
+ 3601.                   call gbytec(  _substr(msga(1),1,1), isoval, kbds(8), kbds(15) )
+ 3602.                   kbds(8) = kbds(8) + kbds(15)
+ 3602.                endif
+ 3604.                data(1 + $I_L3567_42) = ( ( refnce + ( real( ifoval + isoval ) * $scale2_S14 ) ) * 1.0/$scal10_S13 )
+ 3604.             else
+ 3610.                data(1 + $I_L3567_42) = 0.0
+ 3610.             endif
+ 3613.             $I_L3567_42 = 1 + $I_L3567_42
+ 3611.             if ( $I_L3567_42 >= $t_S11 ) exit
+ 3611.          enddo
+ 3611.       endif
+ 3617.       return
+ 3617.       end
+ 3617.       
+ 3618.       
+ 3618.       subroutine fi637( j, kpds, kgds, kret )
+ 3664.       kret = 0
+ 3665.       if ( and( 128, kpds(4) ) /= 0 ) then
+ 3669.          if ( kgds(2) /= 65535 ) then
+ 3672.             kret = 1
+ 3673.             $i_S0 = kgds(2) * kgds(3)
+ 3677.             if ( kpds(3) < 21 ) then
+ 3671.                goto 10
+ 3677.             else if ( kpds(3) <= 26 ) then
+ 3678.                kret = j + -$i_S0 /= 0
+ 3678.             else
+ 3678.    10          continue
+ 3681.                if ( kpds(3) < 37 ) then
+ 3681.                   goto 20
+ 3681.                else if ( kpds(3) <= 44 ) then
+ 3682.                   kret = j + -$i_S0 /= 0
+ 3682.                else
+ 3682.    20             continue
+ 3685.                   if ( kpds(3) == 50 ) then
+ 3686.                      kret = j + -$i_S0 /= 0
+ 3689.                   else if ( kpds(3) < 61 ) then
+ 3689.                      goto 30
+ 3689.                   else if ( kpds(3) <= 64 ) then
+ 3690.                      kret = j + -$i_S0 /= 0
+ 3690.                   else
+ 3690.    30                continue
+ 3696.                      if ( kpds(1) == 98 ) then
+ 3697.                         kret = 9
+ 3698.                         if ( kpds(3) <= 0 .orelse. kpds(3) > 16 ) then
+ 3708.                            kret = 5
+ 3708.                         else
+ 3699.                            if ( j + -$i_S0 == 0 ) then
+ 3699.                               goto 40
+ 3700.                            else if ( kpds(3) == 2 ) then
+ 3702.                               if ( $i_S0 == 10512 ) then
+ 3705.                                  j = 10512
+ 3705.    40                            continue
+ 3880.                                  kret = 0
+ 3880.                               endif
+ 3880.                            endif
+ 3880.                         endif
+ 3714.                      else if ( kpds(1) == 74 ) then
+ 3716.                         if ( kpds(3) >= 25 ) then
+ 3716.                            kret = cvmg( 5, cvmg( 9, 0, j + -$i_S0 /= 0 ), kpds(3) > 26 )
+ 3716.                         else
+ 3721.                            kret = 5
+ 3721.                         endif
+ 3721.                      else if ( kpds(1) /= 54 ) then
+ 3733.                         if ( kpds(1) /= 34 ) then
+ 3739.                            if ( kpds(1) == 58 ) then
+ 3740.                               if ( kpds(3) < 37 ) then
+ 3740.                                  goto 50
+ 3740.                               else if ( kpds(3) <= 44 ) then
+ 3741.                                  kret = j + -$i_S0 /= 0
+ 3741.                               else
+ 3741.    50                            continue
+ 3744.                                  if ( kpds(3) < 220 ) then
+ 3744.                                     goto 60
+ 3744.                                  else if ( kpds(3) <= 221 ) then
+ 3745.                                     kret = j + -$i_S0 /= 0
+ 3745.                                  else
+ 3745.    60                               continue
+ 3748.                                     kret = cvmg( 5, j + -$i_S0 /= 0, kpds(3) /= 223 )
+ 3748.                                  endif
+ 3748.                               endif
+ 3759.                            else if ( kpds(1) /= 7 ) then
+ 3874.                               kret = 10
+ 3874.                            else if ( kpds(3) <= 0 ) then
+ 3874.                               goto 70
+ 3874.                            else if ( kpds(3) <= 6 ) then
+ 3762.                               kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3762.                            else
+ 3762.    70                         continue
+ 3765.                               if ( kpds(3) == 8 ) then
+ 3766.                                  kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3769.                               else if ( kpds(3) < 11 ) then
+ 3769.                                  goto 80
+ 3769.                               else if ( kpds(3) <= 18 ) then
+ 3770.                                  kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3770.                               else
+ 3770.    80                            continue
+ 3773.                                  if ( kpds(3) < 27 ) then
+ 3773.                                     goto 90
+ 3773.                                  else if ( kpds(3) <= 30 ) then
+ 3774.                                     kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3774.                                  else
+ 3774.    90                               continue
+ 3777.                                     if ( kpds(3) < 33 ) then
+ 3777.                                        goto 100
+ 3777.                                     else if ( kpds(3) <= 34 ) then
+ 3778.                                        kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3778.                                     else
+ 3778.   100                                  continue
+ 3781.                                        if ( kpds(3) < 37 ) then
+ 3781.                                           goto 110
+ 3781.                                        else if ( kpds(3) <= 44 ) then
+ 3782.                                           kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3782.                                        else
+ 3782.   110                                     continue
+ 3785.                                           if ( kpds(3) == 53 ) then
+ 3786.                                              kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3789.                                           else if ( kpds(3) < 55 ) then
+ 3789.                                              goto 120
+ 3789.                                           else if ( kpds(3) <= 56 ) then
+ 3790.                                              kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3790.                                           else
+ 3790.   120                                        continue
+ 3793.                                              if ( kpds(3) < 67 ) then
+ 3793.                                                 goto 130
+ 3793.                                              else if ( kpds(3) <= 77 ) then
+ 3794.                                                 kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3794.                                              else
+ 3794.   130                                           continue
+ 3797.                                                 if ( kpds(3) < 85 ) then
+ 3797.                                                    goto 140
+ 3797.                                                 else if ( kpds(3) <= 88 ) then
+ 3798.                                                    kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3798.                                                 else
+ 3798.   140                                              continue
+ 3801.                                                    if ( kpds(3) < 90 ) then
+ 3801.                                                       goto 150
+ 3801.                                                    else if ( kpds(3) <= 98 ) then
+ 3802.                                                       kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3802.                                                    else
+ 3802.   150                                                 continue
+ 3805.                                                       if ( kpds(3) == 100 .orelse. kpds(3) == 101 ) then
+ 3806.                                                          kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3806.                                                       else
+ 3809.                                                          if ( kpds(3) < 103 ) then
+ 3809.                                                             goto 160
+ 3809.                                                          else if ( kpds(3) <= 107 ) then
+ 3810.                                                             kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3810.                                                          else
+ 3810.   160                                                       continue
+ 3813.                                                             if ( kpds(3) == 110 ) then
+ 3814.                                                                kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3817.                                                             else if ( kpds(3) == 120 ) then
+ 3818.                                                                kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3818.                                                             else if ( kpds(3) < 122 ) then
+ 3818.                                                                goto 170
+ 3818.                                                             else if ( kpds(3) <= 127 ) then
+ 3822.                                                                kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3822.                                                             else
+ 3822.   170                                                          continue
+ 3825.                                                                if ( kpds(3) == 130 ) then
+ 3826.                                                                   kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3829.                                                                else if ( kpds(3) == 138 ) then
+ 3830.                                                                   kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3830.                                                                else if ( kpds(3) < 145 ) then
+ 3830.                                                                   goto 180
+ 3830.                                                                else if ( kpds(3) <= 148 ) then
+ 3834.                                                                   kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3834.                                                                else
+ 3834.   180                                                             continue
+ 3837.                                                                   if ( kpds(3) == 160 .orelse. kpds(3) == 161 ) then
+ 3838.                                                                      kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3838.                                                                   else
+ 3841.                                                                      if ( kpds(3) == 163 ) then
+ 3842.                                                                         kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3845.                                                                      else if ( kpds(3) < 170 ) then
+ 3845.                                                                         goto 190
+ 3845.                                                                      else if ( kpds(3) <= 176 ) then
+ 3846.                                                                         kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3846.                                                                      else
+ 3846.   190                                                                   continue
+ 3849.                                                                         if ( kpds(3) < 180 ) then
+ 3849.                                                                            goto 200
+ 3849.                                                                         else if ( kpds(3) <= 183 ) then
+ 3850.                                                                            kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3850.                                                                         else
+ 3850.   200                                                                      continue
+ 3853.                                                                            if ( kpds(3) == 190 .orelse. kpds(3) == 192 ) then
+ 3854.                                                                               kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3854.                                                                            else
+ 3857.                                                                               if ( kpds(3) == 194 .orelse. kpds(3) == 196 ) then
+ 3858.                                                                                  kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3858.                                                                               else
+ 3861.                                                                                  if ( kpds(3) == 198 ) then
+ 3862.                                                                                     kret = cvmg( 9, 0, j + -$i_S0 /= 0 )
+ 3865.                                                                                  else if ( kpds(3) >= 201 ) then
+ 3865.                                                                                     kret = cvmg( 5, cvmg( 9, 0, j + -$i_S0 /= 0 ), kpds(3) > 254 )
+ 3865.                                                                                  else
+ 3870.                                                                                     kret = 5
+ 3870.                                                                                  endif
+ 3870.                                                                               endif
+ 3870.                                                                            endif
+ 3870.                                                                         endif
+ 3870.                                                                      endif
+ 3870.                                                                   endif
+ 3870.                                                                endif
+ 3870.                                                             endif
+ 3870.                                                          endif
+ 3870.                                                       endif
+ 3870.                                                    endif
+ 3870.                                                 endif
+ 3870.                                              endif
+ 3870.                                           endif
+ 3870.                                        endif
+ 3870.                                     endif
+ 3870.                                  endif
+ 3870.                               endif
+ 3870.                            endif
+ 3870.                         endif
+ 3870.                      endif
+ 3870.                   endif
+ 3870.                endif
+ 3870.             endif
+ 3870.          endif
+ 3870.       endif
+ 3882.       return
+ 3882.       end
+ 3882.       

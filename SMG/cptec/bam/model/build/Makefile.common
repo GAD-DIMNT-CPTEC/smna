@@ -1,0 +1,612 @@
+#
+#  $Author: pkubota $
+#  $Date: 2007/10/10 20:28:03 $
+#  $Revision: 1.4 $
+#
+# $Id: Makefile.common,v 1.4 2007/10/10 20:28:03 pkubota Exp $
+#
+#  02/09/2021 - Eduardo Khamis - v2.2.1
+#
+# Platform independent part of make procedure for POSGRIB directory, 
+# included by machine specific makefiles.
+#
+
+EXE_NAME     = ParModel_MPI
+EXEC_DIR     = ../exec
+SOURCE_DIR   = ../source
+LIB_DIR      = $(SOURCE_DIR)/lib
+RRTMG_SW_DIR = ${SOURCE_DIR}/Physics/Radiation/RRTMG/ext/rrtmg_sw
+RRTMG_LW_DIR = ${SOURCE_DIR}/Physics/Radiation/RRTMG/ext/rrtmg_lw
+LIB          = ${RRTMG_SW_DIR}/rrtmg_sw.a
+LIB2         = ${RRTMG_LW_DIR}/rrtmg_lw.a
+#LIB3        = -lhugetlbfs
+
+
+# MODEL objects
+OBJ= \
+	Atmos_Model.o \
+	Constants.o \
+	CloudOpticalProperty.o\
+	Cu_Grellens.o \
+	Cu_Grellens_CPTEC.o \
+	Cu_Kuolcl.o \
+	Cu_RAS.o \
+	Cu_ZhangMcFarlane.o \
+	Cu_RAS3PHASE.o \
+	Cu_GDM_BAM.o \
+	Convection.o \
+	Communications.o \
+	DeepConvection.o \
+	Diagnostics.o \
+        Dumpgraph.o \
+	FieldsDynamics.o \
+	FieldsPhysics.o \
+	GridDynamics.o \
+	GridDump.o \
+	GridHistory.o \
+	GwddSchemeAlpert.o\
+	Gwdd_ECMWF.o\
+	GwddSchemeCAM.o \
+	GwddSchemeCPTEC.o \
+	GwddSchemeUSSP.o\
+	GwddDriver.o\
+	Init.o \
+	InputOutput.o  \
+	IOLowLevel.o \
+	MicroPhysics.o \
+	Micro_Hack.o \
+	Micro_HWRF.o \
+	Micro_Ferrier.o \
+	Micro_MORR.o \
+	Micro_HugMorr.o \
+	Micro_UKME.o \
+	Model.o \
+	NonLinearNMI.o \
+	Options.o \
+	Parallelism.o \
+	PBL_Entrain.o\
+	Pbl_HostlagBoville.o \
+	Pbl_MellorYamada0.o \
+	Pbl_MellorYamada1.o \
+	Pbl_UniversityWashington.o \
+	PhysicsDriver.o \
+	PhysicalFunctions.o \
+	PblDriver.o \
+	Micro_LrgScl.o \
+	RadiationDriver.o \
+	Rad_COLA.o \
+	Rad_Clirad.o \
+	Rad_CliRadLW.o \
+	Rad_CliradTarasova.o \
+	Rad_CliRadLWTarasova.o \
+	Rad_RRTMG.o \
+	Rad_UKMO.o \
+	SemiLagrangian.o \
+	Shall_JHack.o\
+	SfcPBLDriver.o\
+	Sfc_MellorYamada0.o \
+	Sfc_MellorYamada1.o\
+	ShallowConvection.o \
+	Shall_MasFlux.o \
+	Shall_Souza.o\
+	Shall_Tied.o \
+	Shall_UWShCu.o\
+	Sizes.o \
+	SlabOceanModel.o \
+	SpecDynamics.o \
+	SpecDump.o \
+	Surface.o \
+	Sfc_SSiB.o \
+	Sfc_SiB2.o \
+	Sfc_Ibis_BioGeoChemistry.o \
+	Sfc_Ibis_BioGeoPhysics.o\
+	Sfc_Ibis_Fiels.o \
+	Sfc_Ibis_Interface.o \
+	Sfc_SeaFlux_Interface.o \
+	Sfc_SeaFlux_COLA_Model.o \
+	Sfc_SeaFlux_WGFS_Model.o \
+	Sfc_SeaFlux_UKME_Model.o \
+	Sfc_SeaIceFlux_WRF_Model.o \
+	StratCloudFraction.o \
+	ModThermalCell.o \
+	TimeStep.o \
+	Transform.o \
+	Utils.o \
+	Watches.o
+
+
+# ===== MODEL Program
+$(EXE_NAME): copy_sources_to_build $(LIB) $(LIB2) $(OBJ)
+	@echo ""
+	@echo ""
+	@echo " =====> Making pre program ..."
+	$(F90) -o $(EXE_NAME) $(LOADFLAG) $(OBJ)  $(LIB) $(LIB2) $(LIB3)
+	-chmod +x ./$(EXE_NAME)
+
+
+# ===== All .o files dependencies
+Atmos_Model.o	:	Atmos_Model.f90 Utils.o FieldsDynamics.o Init.o GwddDriver.o\
+			NonLinearNMI.o FieldsPhysics.o SemiLagrangian.o \
+			InputOutput.o Options.o GridHistory.o Diagnostics.o \
+			SpecDynamics.o TimeStep.o IOLowLevel.o Convection.o \
+			Sizes.o RadiationDriver.o PblDriver.o Surface.o \
+			Parallelism.o Constants.o PhysicsDriver.o Watches.o Sfc_SSiB.o Sfc_SiB2.o\
+			SfcPBLDriver.o  Sfc_Ibis_Fiels.o PhysicalFunctions.o SpecDump.o GridDump.o
+	$(F90) -c $(NOASSUME) Atmos_Model.f90
+
+
+Constants.o	:	Constants.f90 
+	$(F90) -c Constants.f90
+
+
+Convection.o	:	Convection.f90 Constants.o Diagnostics.o PhysicalFunctions.o\
+	 		GridHistory.o Options.o FieldsPhysics.o Init.o  \
+			DeepConvection.o ShallowConvection.o \
+			MicroPhysics.o 
+	$(F90) -c Convection.f90
+
+Communications.o	:	Communications.f90  Sizes.o Options.o \
+				Constants.o Parallelism.o Utils.o
+	$(F90) -c $(NOASSUME)  Communications.f90
+
+Cu_Grellens.o	:	Cu_Grellens.f90  PhysicalFunctions.o Constants.o Options.o
+	$(F90) -c ${INLINE_CU_GRELL}  $(NOASSUME) Cu_Grellens.f90
+
+Cu_Grellens_CPTEC.o	:	Cu_Grellens_CPTEC.f90 Constants.o Options.o
+	$(F90) -c ${INLINE_CU_GRELL}  $(NOASSUME) Cu_Grellens_CPTEC.f90
+
+Cu_GDM_BAM.o	:	Cu_GDM_BAM.f90 Constants.o PhysicalFunctions.o
+	$(F90) -c ${INLINE_CU_GRELL}  $(NOASSUME) Cu_GDM_BAM.f90
+
+Cu_Kuolcl.o	:	Cu_Kuolcl.f90 Constants.o Options.o  Parallelism.o
+	$(F90) -c ${INLINE_CU_KUO}  $(NOASSUME) Cu_Kuolcl.f90
+
+
+Cu_RAS.o	:	Cu_RAS.f90  PhysicalFunctions.o  Constants.o  Options.o  Parallelism.o
+	$(F90) -c ${INLINE_CU_RAS}  $(NOASSUME) Cu_RAS.f90
+
+Cu_ZhangMcFarlane.o	:	Cu_ZhangMcFarlane.f90
+	$(F90) -c ${INLINE_CU_RAS}  $(NOASSUME) Cu_ZhangMcFarlane.f90
+#	$(F90) -c  -eC -Wf" -init stack=nan  -init heap=nan" ${INLINE_CU_RAS}  $(NOASSUME) Cu_ZhangMcFarlane.f90
+
+Cu_RAS3PHASE.o	:	Cu_RAS3PHASE.f90   PhysicalFunctions.o Utils.o Constants.o Options.o
+	$(F90) -c ${INLINE_CU_GRELL}  $(NOASSUME) Cu_RAS3PHASE.f90
+
+DeepConvection.o	:	DeepConvection.f90 Constants.o \
+	 		Cu_Kuolcl.o Cu_Grellens.o Cu_Grellens_CPTEC.o Cu_RAS.o Cu_ZhangMcFarlane.o Cu_RAS3PHASE.o Cu_GDM_BAM.o
+	$(F90) -c DeepConvection.f90
+
+Diagnostics.o	:	Diagnostics.f90 Constants.o Parallelism.o FieldsPhysics.o\
+	 IOLowLevel.o  Options.o Utils.o Communications.o Sizes.o  InputOutput.o
+	$(F90) -c $(NOASSUME) Diagnostics.f90
+
+Dumpgraph.o	:	Dumpgraph.f90 Constants.o Parallelism.o\
+	 FieldsDynamics.o Utils.o Sizes.o  Communications.o
+	$(F90) -c Dumpgraph.f90
+
+FieldsDynamics.o	:	FieldsDynamics.f90 Constants.o 
+	$(F90) -c FieldsDynamics.f90
+
+FieldsPhysics.o	:	FieldsPhysics.f90 Sizes.o Constants.o
+	$(F90) -c FieldsPhysics.f90
+
+
+GridDynamics.o	:	GridDynamics.f90 Sizes.o FieldsDynamics.o \
+			Constants.o SpecDynamics.o PhysicsDriver.o \
+			GridHistory.o Diagnostics.o Utils.o Parallelism.o\
+			FieldsPhysics.o Options.o Sfc_Ibis_Fiels.o
+	$(F90) -c GridDynamics.f90
+
+GridDump.o	:	GridDump.f90 Communications.o Constants.o  \
+			Utils.o Parallelism.o FieldsPhysics.o
+	$(F90) -c GridDump.f90
+
+GridHistory.o	:	GridHistory.f90 Constants.o Parallelism.o \
+			Options.o Utils.o IOLowLevel.o Communications.o Sizes.o InputOutput.o
+	$(F90) -c GridHistory.f90
+
+GwddDriver.o	:	GwddDriver.f90 Constants.o Options.o Diagnostics.o GridHistory.o\
+			GwddSchemeAlpert.o GwddSchemeCAM.o GwddSchemeUSSP.o GwddSchemeCPTEC.o Gwdd_ECMWF.o\
+			FieldsPhysics.o Utils.o IOLowLevel.o
+	$(F90) -c   GwddDriver.f90
+
+
+GwddSchemeAlpert.o	:	GwddSchemeAlpert.f90 Constants.o Options.o
+	$(F90) -c GwddSchemeAlpert.f90
+
+
+GwddSchemeCAM.o	:	GwddSchemeCAM.f90 
+	$(F90) -c  GwddSchemeCAM.f90
+
+Gwdd_ECMWF.o	:	Gwdd_ECMWF.f90  Utils.o
+	$(F90) -c  Gwdd_ECMWF.f90
+
+GwddSchemeUSSP.o	:	GwddSchemeUSSP.f90 
+	$(F90) -c  GwddSchemeUSSP.f90
+
+GwddSchemeCPTEC.o	:	GwddSchemeCPTEC.f90 GwddSchemeUSSP.o
+	$(F90) -c  GwddSchemeCPTEC.f90
+
+Init.o	:	Init.f90 Utils.o Constants.o FieldsDynamics.o \
+		IOLowLevel.o SpecDynamics.o Sizes.o Transform.o Options.o Parallelism.o
+	$(F90) -c Init.f90
+
+
+InputOutput.o	:	InputOutput.f90 Constants.o Options.o Utils.o IOLowLevel.o \
+		Communications.o Sizes.o Parallelism.o
+	$(F90) -c InputOutput.f90
+
+Parallelism.o	:	Parallelism.f90 
+	$(F90) -c  Parallelism.f90
+
+PhysicsDriver.o	:	PhysicsDriver.f90 Constants.o Sizes.o FieldsPhysics.o\
+			Convection.o Init.o RadiationDriver.o Sfc_SSiB.o Sfc_SiB2.o GwddDriver.o\
+			Diagnostics.o PblDriver.o GridHistory.o Options.o \
+			Surface.o SfcPBLDriver.o  Sfc_Ibis_Fiels.o PhysicalFunctions.o\
+			Sfc_Ibis_Interface.o Utils.o ModThermalCell.o
+	$(F90) -c PhysicsDriver.f90
+
+PhysicalFunctions.o	:	PhysicalFunctions.f90
+	$(F90) -c PhysicalFunctions.f90
+
+MicroPhysics.o	:	MicroPhysics.f90 Micro_LrgScl.o \
+			Micro_Hack.o Micro_HWRF.o Micro_Ferrier.o  FieldsPhysics.o \
+			Micro_UKME.o Micro_MORR.o Constants.o Micro_HugMorr.o
+	$(F90)   -c MicroPhysics.f90
+
+Micro_Hack.o	:	Micro_Hack.f90  PhysicalFunctions.o
+	$(F90)   -c Micro_Hack.f90
+#	$(F90)  -eC -Wf" -init stack=nan  -init heap=nan" -c Micro_Hack.f90
+
+Micro_HWRF.o	:	Micro_HWRF.f90  Parallelism.o
+	$(F90)   -c Micro_HWRF.f90 
+#	$(F90)  -eC -Wf" -init stack=nan  -init heap=nan" -c Micro_HWRF.f90
+
+Micro_Ferrier.o	:	Micro_Ferrier.f90 
+	$(F90)   -c Micro_Ferrier.f90 
+#	$(F90)  -eC -Wf" -init stack=nan  -init heap=nan" -c Micro_Ferrier.f90
+
+Micro_LrgScl.o	:	Micro_LrgScl.f90 Constants.o Options.o
+	$(F90) -c Micro_LrgScl.f90
+
+Micro_HugMorr.o	:	Micro_HugMorr.f90
+	$(F90)   -c Micro_HugMorr.f90 
+#	$(F90)  -eC -Wf" -init stack=nan  -init heap=nan" -c Micro_HugMorr.f90
+
+Micro_MORR.o	:	Micro_MORR.f90
+	$(F90)   -c Micro_MORR.f90 
+#	$(F90)  -eC -Wf" -init stack=nan  -init heap=nan" -c Micro_MORR.f90
+
+Micro_UKME.o	:	Micro_UKME.f90   StratCloudFraction.o
+	$(F90)   -c Micro_UKME.f90 
+#	$(F90)  -eC -Wf" -init stack=nan  -init heap=nan" -c Micro_UKME.f90
+
+Model.o	:	Model.f90  Atmos_Model.o
+	$(F90) -c  Model.f90
+
+
+NonLinearNMI.o	:	NonLinearNMI.f90 Sizes.o FieldsDynamics.o FieldsPhysics.o \
+			IOLowLevel.o Constants.o SpecDynamics.o TimeStep.o \
+			Options.o Utils.o Parallelism.o InputOutput.o
+	$(F90) -c NonLinearNMI.f90
+
+Sfc_SeaFlux_COLA_Model.o	:	Sfc_SeaFlux_COLA_Model.f90 Constants.o
+	$(F90) -c Sfc_SeaFlux_COLA_Model.f90
+
+Sfc_SeaFlux_WGFS_Model.o	:	Sfc_SeaFlux_WGFS_Model.f90 PhysicalFunctions.o
+	$(F90) -c Sfc_SeaFlux_WGFS_Model.f90
+
+Sfc_SeaFlux_UKME_Model.o	:	Sfc_SeaFlux_UKME_Model.f90 PhysicalFunctions.o
+	$(F90) -c Sfc_SeaFlux_UKME_Model.f90
+
+Options.o	:	Options.f90 Constants.o Parallelism.o
+	$(F90) -c Options.f90
+
+PBL_Entrain.o	:	PBL_Entrain.f90 Constants.o
+	$(F90) -c    PBL_Entrain.f90
+
+Pbl_HostlagBoville.o	:	Pbl_HostlagBoville.f90 PBL_Entrain.o \
+			Constants.o Options.o Parallelism.o
+	$(F90) -c     Pbl_HostlagBoville.f90
+
+Pbl_MellorYamada0.o	:	Pbl_MellorYamada0.f90 Constants.o Options.o
+	$(F90) -c    Pbl_MellorYamada0.f90
+
+
+Pbl_MellorYamada1.o	:	Pbl_MellorYamada1.f90 Constants.o
+	$(F90) -c    Pbl_MellorYamada1.f90
+
+Pbl_UniversityWashington.o	:	Pbl_UniversityWashington.f90 PhysicalFunctions.o 
+	$(F90) -c    Pbl_UniversityWashington.f90
+
+
+PblDriver.o	:	PblDriver.f90  Constants.o Options.o \
+			Diagnostics.o GridHistory.o Pbl_MellorYamada0.o Pbl_UniversityWashington.o\
+		        Pbl_MellorYamada1.o  Pbl_HostlagBoville.o Parallelism.o 
+	$(F90) -c PblDriver.f90
+
+
+CloudOpticalProperty.o	:	CloudOpticalProperty.f90 PhysicalFunctions.o 
+	$(F90) -c CloudOpticalProperty.f90
+
+RadiationDriver.o	:	RadiationDriver.f90 Constants.o  PhysicalFunctions.o\
+			Options.o Utils.o Diagnostics.o GridHistory.o Rad_CliradTarasova.o \
+			Rad_COLA.o Rad_Clirad.o Rad_CliRadLW.o Rad_CliRadLWTarasova.o Rad_UKMO.o Rad_RRTMG.o CloudOpticalProperty.o Watches.o
+	$(F90) -c RadiationDriver.f90
+
+Rad_COLA.o	:	Rad_COLA.f90 Constants.o 
+	$(F90) -c Rad_COLA.f90
+
+Rad_Clirad.o	:	Rad_Clirad.f90  Constants.o  Options.o
+	$(F90) -c Rad_Clirad.f90 
+#	$(F90) -I./coa.data90 -I./cah.data90 -I./mcai.data90 -c Rad_Clirad.f90 
+
+Rad_CliRadLW.o	:	Rad_CliRadLW.f90  Constants.o  Options.o
+	$(F90) -c Rad_CliRadLW.f90
+
+
+Rad_CliradTarasova.o	:	Rad_CliradTarasova.f90  Constants.o  Options.o
+	$(F90)  -c Rad_CliradTarasova.f90 
+
+Rad_CliRadLWTarasova.o	:	Rad_CliRadLWTarasova.f90  Constants.o  Options.o
+	$(F90) -c Rad_CliRadLWTarasova.f90
+
+Rad_RRTMG.o	:	Rad_RRTMG.f90
+	$(F90) -c  Rad_RRTMG.f90
+
+Rad_UKMO.o	:	Rad_UKMO.f90   Options.o Parallelism.o
+	$(F90) -c Rad_UKMO.f90
+
+SemiLagrangian.o	:	SemiLagrangian.f90 Constants.o FieldsDynamics.o \
+				Sizes.o Utils.o Communications.o Options.o Parallelism.o
+	$(F90) -c SemiLagrangian.f90
+
+
+Sfc_SeaFlux_Interface.o	:	Sfc_SeaFlux_Interface.f90  Constants.o Options.o  Sfc_SeaFlux_UKME_Model.o \
+				Sfc_SeaFlux_WGFS_Model.o Sfc_SeaFlux_COLA_Model.o SlabOceanModel.o \
+				Sfc_SeaIceFlux_WRF_Model.o
+	$(F90) -c Sfc_SeaFlux_Interface.f90
+
+Sfc_SeaIceFlux_WRF_Model.o	:	Sfc_SeaIceFlux_WRF_Model.f90 Constants.o
+	$(F90) -c Sfc_SeaIceFlux_WRF_Model.f90
+
+Sfc_Ibis_BioGeoChemistry.o	:	Sfc_Ibis_BioGeoChemistry.f90 Constants.o
+	$(F90) -c Sfc_Ibis_BioGeoChemistry.f90
+
+Sfc_Ibis_BioGeoPhysics.o	:	Sfc_Ibis_BioGeoPhysics.f90 Constants.o PhysicalFunctions.o
+	$(F90) -c Sfc_Ibis_BioGeoPhysics.f90
+
+
+Sfc_Ibis_Fiels.o	:	Sfc_Ibis_Fiels.f90 Parallelism.o Options.o Utils.o Constants.o \
+		InputOutput.o IOLowLevel.o FieldsPhysics.o Parallelism.o Sfc_SeaIceFlux_WRF_Model.o
+	$(F90) -c Sfc_Ibis_Fiels.f90
+
+Sfc_Ibis_Interface.o	:	Sfc_Ibis_Interface.f90 Sfc_Ibis_Fiels.o Options.o  Sfc_SeaFlux_Interface.o \
+			 Sfc_Ibis_BioGeoPhysics.o Sfc_Ibis_BioGeoChemistry.o Parallelism.o SlabOceanModel.o \
+			 Sfc_SeaIceFlux_WRF_Model.o Utils.o
+	$(F90) -c Sfc_Ibis_Interface.f90
+
+
+SfcPBLDriver.o	:	SfcPBLDriver.f90  Constants.o Options.o Sfc_MellorYamada0.o \
+		Sfc_MellorYamada1.o
+	$(F90) -c   SfcPBLDriver.f90
+
+Sfc_MellorYamada0.o	:	Sfc_MellorYamada0.f90  Constants.o Options.o
+	$(F90) -c   Sfc_MellorYamada0.f90
+
+
+Sfc_MellorYamada1.o	:	Sfc_MellorYamada1.f90 Constants.o 
+	$(F90) -c    Sfc_MellorYamada1.f90
+
+
+ShallowConvection.o	:	ShallowConvection.f90 Constants.o \
+				  Shall_Tied.o Shall_Souza.o Shall_JHack.o  Shall_MasFlux.o
+	$(F90) -c ShallowConvection.f90
+
+Shall_JHack.o	:	Shall_JHack.f90 Shall_UWShCu.o
+	$(F90) -c Shall_JHack.f90
+
+Shall_MasFlux.o	:	Shall_MasFlux.f90   PhysicalFunctions.o
+	$(F90) -c ${INLINE_SOUZA}  $(NOASSUME) Shall_MasFlux.f90
+
+Shall_Souza.o	:	Shall_Souza.f90 Constants.o Options.o
+	$(F90) -c ${INLINE_SOUZA}  $(NOASSUME) Shall_Souza.f90
+
+
+
+Shall_Tied.o	:	Shall_Tied.f90 Constants.o Options.o
+	$(F90) -c $(NOASSUME) Shall_Tied.f90
+
+Shall_UWShCu.o	:	Shall_UWShCu.f90
+	$(F90) -c $(NOASSUME) Shall_UWShCu.f90
+
+
+Sizes.o	:		Sizes.f90 Constants.o Options.o Parallelism.o
+	$(F90) -c Sizes.f90
+
+
+SlabOceanModel.o	:	SlabOceanModel.f90 Utils.o Options.o  FieldsPhysics.o 
+	$(F90) -c  SlabOceanModel.f90
+
+SpecDynamics.o	:	SpecDynamics.f90 Constants.o FieldsDynamics.o \
+			Sizes.o Options.o Utils.o Diagnostics.o Parallelism.o
+	$(F90) -c ${VECTORIZ} SpecDynamics.f90
+
+SpecDump.o	:	SpecDump.f90 Constants.o FieldsDynamics.o \
+			Sizes.o Options.o Utils.o Parallelism.o FieldsPhysics.o
+	$(F90) -c SpecDump.f90
+
+Surface.o	:	Surface.f90 Constants.o  Sfc_SSiB.o  FieldsPhysics.o \
+			GridHistory.o Diagnostics.o Options.o Sfc_SiB2.o Sfc_Ibis_Interface.o \
+			Sfc_Ibis_Fiels.o PhysicalFunctions.o
+	$(F90) -c  Surface.f90
+
+Sfc_SSiB.o	:	Sfc_SSiB.f90 InputOutput.o  IOLowLevel.o Utils.o Constants.o Options.o \
+			FieldsPhysics.o  Parallelism.o SlabOceanModel.o Sfc_SeaFlux_Interface.o Sfc_SeaIceFlux_WRF_Model.o
+	$(F90) -c Sfc_SSiB.f90
+
+Sfc_SiB2.o	:	Sfc_SiB2.f90 InputOutput.o IOLowLevel.o  Utils.o Constants.o Options.o \
+			FieldsPhysics.o Parallelism.o PhysicalFunctions.o \
+			SlabOceanModel.o Sfc_SeaFlux_Interface.o Sfc_SeaIceFlux_WRF_Model.o
+	$(F90) -c Sfc_SiB2.f90
+
+StratCloudFraction.o	:	StratCloudFraction.f90 
+	$(F90)   -c StratCloudFraction.f90 
+
+IOLowLevel.o	:	IOLowLevel.f90 Constants.o Options.o Parallelism.o
+	$(F90) -c IOLowLevel.f90
+
+ModThermalCell.o	:	 ModThermalCell.f90  
+	$(F90) -c     ModThermalCell.f90
+
+TimeStep.o	:	TimeStep.f90 Constants.o FieldsDynamics.o Options.o \
+			Utils.o GridDynamics.o Transform.o SpecDynamics.o \
+			SemiLagrangian.o  Sizes.o RadiationDriver.o IOLowLevel.o \
+			FieldsPhysics.o PhysicsDriver.o Communications.o \
+			Parallelism.o
+	$(F90) -c TimeStep.f90
+
+
+Transform.o	:	Transform.f90 Constants.o Utils.o Sizes.o \
+			Options.o Communications.o  Parallelism.o
+	$(F90) -c $(NOASSUME) Transform.f90
+
+
+Utils.o		:	Utils.f90 Sizes.o Constants.o IOLowLevel.o Options.o Parallelism.o
+	$(F90) -c Utils.f90
+
+Watches.o	:	Watches.f90 Parallelism.o
+	$(F90) -c Watches.f90
+
+
+
+.SUFFIXES: .f90 .o
+
+
+.f90.o :
+	$(F90) -c  $<
+
+
+
+###############################
+
+copy_sources_to_build:
+	@echo ""
+	@echo ""
+	@echo " =====> copying sources to build ..."
+	-rsync -Cravzp $(SOURCE_DIR)/Main/Atmos_Model.f90 \
+                $(SOURCE_DIR)/Utils/Constants.f90 \
+		$(SOURCE_DIR)/Physics/Convection/Convection.f90 \
+                $(SOURCE_DIR)/Parallelism/Communications.f90 \
+		$(SOURCE_DIR)/Physics/Convection/DeepConvection/GrellEns/Cu_Grellens.f90 \
+		$(SOURCE_DIR)/Physics/Convection/DeepConvection/GrellEnsCPTEC/Cu_Grellens_CPTEC.f90 \
+		$(SOURCE_DIR)/Physics/Convection/DeepConvection/GDM_BAM/Cu_GDM_BAM.f90 \
+		$(SOURCE_DIR)/Physics/Convection/DeepConvection/Kuo/Cu_Kuolcl.f90 \
+		$(SOURCE_DIR)/Physics/Convection/DeepConvection/Ras/Cu_RAS.f90 \
+		$(SOURCE_DIR)/Physics/Convection/DeepConvection/Zhang/Cu_ZhangMcFarlane.f90 \
+		$(SOURCE_DIR)/Physics/Convection/DeepConvection/RAS3PHASE/Cu_RAS3PHASE.f90 \
+		$(SOURCE_DIR)/Physics/Convection/DeepConvection/DeepConvection.f90 \
+                $(SOURCE_DIR)/Diagnostics/Diagnostics.f90 \
+                $(SOURCE_DIR)/InputOutput/Dumpgraph.f90 \
+                $(SOURCE_DIR)/Fields/FieldsDynamics.f90 \
+                $(SOURCE_DIR)/Fields/FieldsPhysics.f90 \
+                $(SOURCE_DIR)/Dynamics/GridDynamics.f90 \
+                $(SOURCE_DIR)/Assimilation/GridDump.f90 \
+                $(SOURCE_DIR)/Diagnostics/GridHistory.f90 \
+		$(SOURCE_DIR)/Physics/GravityWaveDrag/GwddDriver.f90 \
+		$(SOURCE_DIR)/Physics/GravityWaveDrag/Alpert/GwddSchemeAlpert.f90 \
+		$(SOURCE_DIR)/Physics/GravityWaveDrag/CAM/GwddSchemeCAM.f90 \
+		$(SOURCE_DIR)/Physics/GravityWaveDrag/ECMWF/Gwdd_ECMWF.f90 \
+		$(SOURCE_DIR)/Physics/GravityWaveDrag/UKMET/GwddSchemeUSSP.f90 \
+		$(SOURCE_DIR)/Physics/GravityWaveDrag/UKMET/GwddSchemeCPTEC.f90 \
+                $(SOURCE_DIR)/Initialization/Init.f90 \
+                $(SOURCE_DIR)/InputOutput/InputOutput.f90 \
+                $(SOURCE_DIR)/Parallelism/Parallelism.f90 \
+                $(SOURCE_DIR)/Physics/PhysicsDriver.f90 \
+                $(SOURCE_DIR)/Utils/PhysicalFunctions.f90 \
+		$(SOURCE_DIR)/Physics/Convection/MicroPhysics/MicroPhysics.f90 \
+		$(SOURCE_DIR)/Physics/Convection/MicroPhysics/Hack/Micro_Hack.f90 \
+		$(SOURCE_DIR)/Physics/Convection/MicroPhysics/HWRF/Micro_HWRF.f90 \
+		$(SOURCE_DIR)/Physics/Convection/MicroPhysics/Ferrier/Micro_Ferrier.f90 \
+		$(SOURCE_DIR)/Physics/Convection/MicroPhysics/LrgScl/Micro_LrgScl.f90 \
+		$(SOURCE_DIR)/Physics/Convection/MicroPhysics/MORRISON_AERO/Micro_HugMorr.f90 \
+		$(SOURCE_DIR)/Physics/Convection/MicroPhysics/MORRISON/Micro_MORR.f90 \
+		$(SOURCE_DIR)/Physics/Convection/MicroPhysics/UKME/Micro_UKME.f90 \
+		$(SOURCE_DIR)/Main/Model.f90 \
+                $(SOURCE_DIR)/Initialization/NonLinearNMI.f90 \
+		$(SOURCE_DIR)/Physics/Surface/Ocean/SeaFlux_COLA/Sfc_SeaFlux_COLA_Model.f90 \
+		$(SOURCE_DIR)/Physics/Surface/Ocean/SeaFlux_WGFS/Sfc_SeaFlux_WGFS_Model.f90 \
+		$(SOURCE_DIR)/Physics/Surface/Ocean/SeaFlux_UKME/Sfc_SeaFlux_UKME_Model.f90 \
+                $(SOURCE_DIR)/Initialization/Options.f90 \
+		$(SOURCE_DIR)/Physics/BoundaryLayer/PBL_Entrain.f90 \
+		$(SOURCE_DIR)/Physics/BoundaryLayer/HostlagBoville/Pbl_HostlagBoville.f90 \
+		$(SOURCE_DIR)/Physics/BoundaryLayer/MellorYamada0/Pbl_MellorYamada0.f90 \
+		$(SOURCE_DIR)/Physics/BoundaryLayer/MellorYamada1/Pbl_MellorYamada1.f90 \
+		$(SOURCE_DIR)/Physics/BoundaryLayer/ParkBretherton/Pbl_UniversityWashington.f90 \
+		$(SOURCE_DIR)/Physics/BoundaryLayer/PblDriver.f90 \
+		$(SOURCE_DIR)/Physics/Radiation/CloudOpticalProperty.f90 \
+		$(SOURCE_DIR)/Physics/Radiation/RadiationDriver.f90 \
+		$(SOURCE_DIR)/Physics/Radiation/COLA/Rad_COLA.f90 \
+		$(SOURCE_DIR)/Physics/Radiation/Clirad/Rad_Clirad.f90 \
+		$(SOURCE_DIR)/Physics/Radiation/Clirad/Rad_CliRadLW.f90 \
+		$(SOURCE_DIR)/Physics/Radiation/CliradTarasova/Rad_CliradTarasova.f90 \
+		$(SOURCE_DIR)/Physics/Radiation/CliradTarasova/Rad_CliRadLWTarasova.f90 \
+		$(SOURCE_DIR)/Physics/Radiation/RRTMG/Rad_RRTMG.f90 \
+		$(SOURCE_DIR)/Physics/Radiation/UKMET/Rad_UKMO.f90 \
+                $(SOURCE_DIR)/Dynamics/SemiLagrangian.f90 \
+		$(SOURCE_DIR)/Physics/Surface/Ocean/Sfc_SeaFlux_Interface.f90 \
+		$(SOURCE_DIR)/Physics/Surface/Ocean/SeaIceFlux_WRF/Sfc_SeaIceFlux_WRF_Model.f90 \
+		$(SOURCE_DIR)/Physics/Surface/Land/IBIS2.6/Sfc_Ibis_BioGeoChemistry.f90 \
+		$(SOURCE_DIR)/Physics/Surface/Land/IBIS2.6/Sfc_Ibis_BioGeoPhysics.f90 \
+		$(SOURCE_DIR)/Physics/Surface/Land/IBIS2.6/Sfc_Ibis_Fiels.f90 \
+		$(SOURCE_DIR)/Physics/Surface/Land/IBIS2.6/Sfc_Ibis_Interface.f90 \
+		$(SOURCE_DIR)/Physics/Surface/SfcPBLDriver.f90 \
+		$(SOURCE_DIR)/Physics/Surface/sfcpbl/Sfc_MellorYamada0.f90 \
+		$(SOURCE_DIR)/Physics/Surface/sfcpbl/Sfc_MellorYamada1.f90 \
+		$(SOURCE_DIR)/Physics/Convection/ShallowConvection/ShallowConvection.f90 \
+		$(SOURCE_DIR)/Physics/Convection/ShallowConvection/JHack/Shall_JHack.f90 \
+		$(SOURCE_DIR)/Physics/Convection/ShallowConvection/MasFlux/Shall_MasFlux.f90 \
+		$(SOURCE_DIR)/Physics/Convection/ShallowConvection/Souza/Shall_Souza.f90 \
+		$(SOURCE_DIR)/Physics/Convection/ShallowConvection/Tied/Shall_Tied.f90 \
+		$(SOURCE_DIR)/Physics/Convection/ShallowConvection/UWShCu/Shall_UWShCu.f90 \
+                $(SOURCE_DIR)/Parallelism/Sizes.f90 \
+		$(SOURCE_DIR)/Physics/Surface/Ocean/SLAB/SlabOceanModel.f90 \
+                $(SOURCE_DIR)/Dynamics/SpecDynamics.f90 \
+                $(SOURCE_DIR)/Assimilation/SpecDump.f90 \
+                $(SOURCE_DIR)/Physics/Surface/Surface.f90 \
+		$(SOURCE_DIR)/Physics/Surface/Land/SSiB/Sfc_SSiB.f90 \
+		$(SOURCE_DIR)/Physics/Surface/Land/SiB2.5/Sfc_SiB2.f90 \
+		$(SOURCE_DIR)/Physics/Convection/MicroPhysics/UKME/StratCloudFraction.f90 \
+                $(SOURCE_DIR)/InputOutput/IOLowLevel.f90 \
+		$(SOURCE_DIR)/Physics/ThermCellV0/ModThermalCell.f90 \
+                $(SOURCE_DIR)/Dynamics/TimeStep.f90 \
+		$(SOURCE_DIR)/Transform/Transform.f90 \
+                $(SOURCE_DIR)/Utils/Utils.f90 \
+                $(SOURCE_DIR)/Utils/Watches.f90 \
+               .
+
+clean:
+	@echo ""
+	@echo ""
+	@echo " =====> Cleaning all sources and objects from build ..."
+	-rm -f $(OBJ)
+	-rm -f $(EXE_NAME)
+	-rm -f $(EXEC_DIR)/$(EXE_NAME)
+	-rm -f *.mod
+	-rm -f *.o
+	-rm -f *.f90
+	-rm -f *.data90
+	@rm -f makefile.*
+	@rm -f ${RRTMG_SW_DIR}/makefile.*
+	@rm -f ${RRTMG_LW_DIR}/makefile.*
+
+install:
+	@echo ""
+	@echo ""
+	@echo " =====> Installing $(EXE_NAME) to $(EXEC_DIR)"
+	-cp -f $(EXE_NAME) $(EXEC_DIR)
+
+
+.PHONY: all pre
+
+

@@ -1,0 +1,87 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  putgbe.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/putgbe.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine putgbe( lugb, kf, kpds, kgds, kens, lb, f, iret )
+    2.       t$1 = kf
+  162.       t$3 = _zla( 0, kf )
+  166.       t$6 = 4 * _zla( 0, kf )
+    2.       t$2 = ( 1000 + 17 * kf / 8 )
+  167.       t$7 = _zla( 0, ( 1000 + 17 * kf / 8 ) )
+    2.       t$8 = int( _alloc( _zla( 0, ( 1000 + 17 * kf / 8 ) ) ), 8 )
+  165.       t$10 = 8 * _zla( 0, kf )
+    2.       t$4 = int( _alloc( 8 * _zla( 0, kf ) ), 8 )
+  166.       t$5 = t$4
+  165.       t$9 = t$4 + 4 * _zla( 0, kf )
+  170.       call r63w72( kpds(1), kgds(1), ipds(1), igds(1) )
+  171.       $I_A1 = 0
+  171. !dir$ ivdep
+  171.       do
+  171.          ibds(1 + $I_A1) = 0
+  171.          $I_A1 = 1 + $I_A1
+  171.          if ( $I_A1 >= 200 ) exit
+  171.       enddo
+  174.       $kbm_S1 = kf
+  175.       if ( ipds(7) /= 0 ) then
+  176.          $kbm_S1 = 0
+  177.          if ( kf > 0 ) then
+  177.             $I_L177_8 = 0
+  177. !dir$ ivdep
+  177.             do
+  178.                if ( lb(1 + $I_L177_8) ) then
+  179.                   ibm(1 + $I_L177_8) = 1
+  180.                   $kbm_S1 = 1 + $kbm_S1
+  180.                else
+  182.                   ibm(1 + $I_L177_8) = 0
+  182.                endif
+  184.                $I_L177_8 = 1 + $I_L177_8
+  183.                if ( $I_L177_8 >= kf ) exit
+  183.             enddo
+  183.          endif
+  185.          if ( $kbm_S1 + -kf == 0 ) then
+  185.             ipds(7) = 0
+  185.          endif
+  185.       endif
+  189.       if ( $kbm_S1 == 0 ) then
+  190.          if ( kf > 0 ) then
+  190.             $I_L190_10 = 0
+  190. !dir$ ivdep
+  190.             do
+  191.                fr(1 + $I_L190_10) = 0.0
+  192.                $I_L190_10 = 1 + $I_L190_10
+  190.                if ( $I_L190_10 >= kf ) exit
+  190.             enddo
+  190.          endif
+  193.          nbit = 0
+  193.       else
+  195.          call getbit( ipds(7), 0, ipds(25), kf, ibm(1), f(1), fr(1), fmin, fmax, nbit )
+  196.          nbit = min( 16, nbit )
+  196.       endif
+  200.       call w3fi68( ipds(1),  _substr(pds(1),1,1) )
+  201.       if ( ipds(24) == 2 ) then
+  202.          ilast = 45
+  203.          call pdsens( kens(1), kprob, xprob, kclust, kmembr, ilast,  _substr(pds(1),1,1) )
+  203.       endif
+  207.       call w3fi72( 0, fr(1), 0, nbit, 1, ipds(1),  _substr(pds(1),1,1), 1, 255, igds(1), 0, 0, ibm(1), kf, ibds(1), kfo,  _substr(grib(1),1,1), lgrib, iret )
+  210.       if ( iret == 0 ) then
+  210.          call wryte( lugb, lgrib,  _substr(grib(1),1,1) )
+  210.       endif
+    2.       _free( t$8 )
+    2.       _free( t$4 )
+  213.       return
+  213.       end
+  213.       
