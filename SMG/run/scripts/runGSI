@@ -86,7 +86,7 @@ else
 fi
 
 # define output diretory of this run at AnlDate
-DataOutDir=${work_gsi_dataout}/${AnlDate}
+DataOutDir=${subt_gsi_dataout}/${AnlDate}
 if [ ! -e ${DataOutDir} ];then
    mkdir -p ${DataOutDir}
 fi
@@ -158,7 +158,7 @@ for inc in $(seq -3 3 3); do
    FDIR=GFCT${BkgPrefix}${BkgDate}${Date}F.dir.${BkgMRES}
 
    # Forecast file
-   file=${work_model_bam_dataout}/${BkgMRES}/${BkgDate}/${FFCT}
+   file=${subt_model_bam}/dataout/${BkgMRES}/${BkgDate}/${FFCT}
    if [ -e ${file} ];then
       cp -pfr ${file} ${RunDir}/BAM.fct.${TIME}
    else
@@ -170,7 +170,7 @@ for inc in $(seq -3 3 3); do
    fi
 
    # Description file
-   file=${work_model_bam_dataout}/${BkgMRES}/${BkgDate}/${FDIR}
+   file=${subt_model_bam}/dataout/${BkgMRES}/${BkgDate}/${FDIR}
    if [ -e ${file} ];then
       cp -pfr ${file} ${RunDir}/BAM.dir.${TIME}
    else
@@ -187,16 +187,21 @@ done
 # Copy fixed files to use in GSI run
 FixedFiles ${AnlTrunc} ${AnlNLevs} ${RunDir}
 
-# Get Satellite bias files
-getSatBias ${AnlDate} ${BkgDate} ${RunDir} ${work_gsi_dataout}
+#
+#-----------------------------------------------------------#
+# Copy info Files (satInfo, convInfo, ozInfo)
+#getInfoFiles ${AnlDate}
 
+# Get Satellite bias files
+getSatBias ${AnlDate} ${BkgDate} ${RunDir} ${subt_gsi_dataout}
+BcCycles=$?
 #------------------------------------------------------------#
 # running GSI at tupa 
 #
 
-if [ ${BcCycles} -gt 0 ];then
-   BcCycles=$((${BcCycles}-1))
-fi
+#if [ ${BcCycles} -gt 0 ];then
+#   BcCycles=$((${BcCycles}-1))
+#fi
 
 for cycle in $(seq 0 ${BcCycles} ); do
 
@@ -217,7 +222,11 @@ for cycle in $(seq 0 ${BcCycles} ); do
       
    fi
 
-   subGSI ${RunDir} ${IMax} ${JMax} ${KMax} ${AnlTrunc} ${BkgTrunc} ${AnlDate} ${ObsMod}
+   if [ ${cycle} -eq 0 -a ${BcCycles} -gt 0 ];then
+      subGSI ${RunDir} ${IMax} ${JMax} ${KMax} ${AnlTrunc} ${BkgTrunc} ${AnlDate} ${ObsMod} .true.
+   else
+      subGSI ${RunDir} ${IMax} ${JMax} ${KMax} ${AnlTrunc} ${BkgTrunc} ${AnlDate} ${ObsMod} .false.
+   fi
 
    if [ $? -eq 0 ];then
       echo -e "\033[34;1m [\033[m\033[32;2m OK \033[m\033[34;1m]\033[m"
@@ -228,16 +237,16 @@ for cycle in $(seq 0 ${BcCycles} ); do
 
    mergeDiagFiles ${RunDir} ${AnlDate}
 
-   echo -ne "\033[34;1m Running GSI Angle Update tool \033[m" 
-
-   subBCAng ${RunDir} ${AnlDate}
-
-   if [ $? -eq 0 ];then
-      echo -e "\033[34;1m [\033[m\033[32;2m OK \033[m\033[34;1m]\033[m"
-   else
-      echo -e "\033[34;1m[\033[m\033[31;1m Fail \033[m\033[34;1m]\033[m"
-      exit 1
-   fi
+#   echo -ne "\033[34;1m Running GSI Angle Update tool \033[m" 
+#
+#   subBCAng ${RunDir} ${AnlDate}
+#
+#   if [ $? -eq 0 ];then
+#      echo -e "\033[34;1m [\033[m\033[32;2m OK \033[m\033[34;1m]\033[m"
+#   else
+#      echo -e "\033[34;1m[\033[m\033[31;1m Fail \033[m\033[34;1m]\033[m"
+#      exit 1
+#   fi
 
    #-----------------------------------------------------------#
    # Copy files to output diretory
@@ -246,7 +255,7 @@ for cycle in $(seq 0 ${BcCycles} ); do
    if [ ${BcCycles} -gt 0 ];then
 
       if [ ${cycle} -eq ${BcCycles} ];then
-         copyFile ${RunDir} ${DataOutDir}
+         copyFiles ${RunDir} ${DataOutDir}
       else
          copyFiles ${RunDir} ${BcDirOut}
 
@@ -255,6 +264,7 @@ for cycle in $(seq 0 ${BcCycles} ); do
          #
 
          cp -pfr ${BcDirOut}/${satbiasOu} ${RunDir}/${satbiasIn}
+         cp -pfr ${BcDirOut}/${satbiasPCOu} ${RunDir}/${satbiasPCIn}
          cp -pfr ${BcDirOut}/${satbiasAngOu} ${RunDir}/${satbiasAngIn}
 
       fi

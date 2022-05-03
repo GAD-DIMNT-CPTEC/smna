@@ -92,6 +92,11 @@ cd ${home_run_bam}
 
 
 /bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -s -n 2 -O
+STATUS=$?
+if [ ${STATUS} -ne 0 ];then
+   exit ${STATUS}
+fi
+
 
 mv -f ${modelDataIn}/OZONSMT${LABELANL}S.grd.${postfix} ${modelDataIn}/OZON${PREFIX}${LABELANL}S.grd.${postfix}
 
@@ -113,10 +118,18 @@ cp -pfr ${gsiDataOut}/GANL${PREFIX}${LABELANL}S.unf.${MRES} ${modelDataIn}
 #
 
 /bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -p CPT -n 3
+STATUS=$?
+if [ ${STATUS} -ne 0 ];then
+   exit ${STATUS}
+fi
 
 # Rodando o Modelo
 
 /bin/bash runModel -das -v -np ${NPROC} -N 10 -d 4 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i -3
+STATUS=$?
+if [ ${STATUS} -ne 0 ];then
+   exit ${STATUS}
+fi
 
 # Pos-processa as previsoes caso a variavel RUNPOS possua o valor Yes ou Y
 if [ ${RUNPOS} == "yes" -o ${RUNPOS} == "y" ]
@@ -133,6 +146,11 @@ then
   cd ${home_run_bam}
   echo   "./runPos -np 120 -N 12 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1"
   /bin/bash runPos -np 120 -N 12 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1
+  STATUS=$?
+   if [ ${STATUS} -ne 0 ];then
+      exit ${STATUS}
+   fi
+
 fi
 
 exit 0

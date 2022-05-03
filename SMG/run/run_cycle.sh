@@ -276,7 +276,7 @@ while [ ${LABELI} -le ${LABELF} ]; do
 
    # Executa o GSI
    SECONDS=0
-#   /bin/bash ${scripts_smg}/runGSI -t ${modelTrunc} -T ${gsiTrunc} -l ${modelNLevs} -p ${modelPrefix} -np ${gsiMPITasks} -I ${LABELI}
+   /bin/bash ${scripts_smg}/runGSI -t ${modelTrunc} -T ${gsiTrunc} -l ${modelNLevs} -p ${modelPrefix} -np ${gsiMPITasks} -I ${LABELI}
    if [ $? -ne 0 ]; then echo -e "\033[31;1m > Falha no GSI \033[m"; exit 1; fi
 
    echo ""
@@ -305,7 +305,7 @@ while [ ${LABELI} -le ${LABELF} ]; do
    echo ""
    echo -e "\033[34;1m > Executando o MCGA \033[m"
    /bin/bash ${scripts_smg}/run_model.sh ${LABELI} ${FCT_DATE} ${modelPrefix} ${modelTrunc} ${modelNLevs} ${modelMPITasks} No
-   if [ $? -ne 0 ]; then echo -e "\033[31;1m > Falha no MCGA \033[m"; exit 1; fi
+   if [ $? -ne 0 ]; then echo -e "\033[31;1m > Falha no modelo :\033[m \033[33;1mVerifique PRE, BAM ou POS\033[m"; exit 1; fi
 
    echo ""
    duration=$SECONDS
