@@ -1,0 +1,1761 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_lw/radlw.f90
+Compiled : 12/12/20  00:53:05
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps radlw.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_lw/radlw.f90
+Date     : 12/12/2020  00:53:08
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_7521/radlw_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     A - Pattern matched      a - atomic memory operation
+                              b - blocked
+     C - Collapsed            c - conditional and/or computed
+     D - Deleted               
+     E - Cloned               f - fused
+     G - Accelerated          g - partitioned
+     I - Inlined              i - interchanged
+     M - Multithreaded        m - partitioned
+                              n - non-blocking remote transfer
+                              p - partial
+                              r - unrolled
+                              s - shortloop
+     V - Vectorized           w - unwound
+
+
+    1.             !
+    2.             !
+    3.             !
+    4.             !
+    5.             !  radlw_init___rrtmg_lw_ini
+    6.             !                          |
+    7.             !                          |__ lwdatinit
+    8.             !                          |
+    9.             !                          |__ lwcmbdat       ! g-point interval reduction data
+   10.             !                          |
+   11.             !                          |__ lwcldpr        ! cloud optical properties
+   12.             !                          |
+   13.             !                          |__ lwatmref       ! reference MLS profile
+   14.             !                          |
+   15.             !                          |__ lwavplank      ! Planck function 
+   16.             !                          |
+   17.             !                          |__ lw_kgb01       ! molecular absorption coefficients
+   18.             !                          |
+   19.             !                          |__ lw_kgb02
+   20.             !                          |
+   21.             !                          |__ lw_kgb03
+   22.             !                          |
+   23.             !                          |__ lw_kgb04
+   24.             !                          |
+   25.             !                          |__ lw_kgb05
+   26.             !                          |
+   27.             !                          |__ lw_kgb06
+   28.             !                          |
+   29.             !                          |__ lw_kgb07
+   30.             !                          |
+   31.             !                          |__ lw_kgb08
+   32.             !                          |
+   33.             !                          |__ lw_kgb09
+   34.             !                          |
+   35.             !                          |__ lw_kgb10
+   36.             !                          |
+   37.             !                          |__ lw_kgb11
+   38.             !                          |
+   39.             !                          |__ lw_kgb12
+   40.             !                          |
+   41.             !                          |__ lw_kgb13
+   42.             !                          |
+   43.             !                          |__ lw_kgb14
+   44.             !                          |
+   45.             !                          |__ lw_kgb15
+   46.             !                          |
+   47.             !                          |__ lw_kgb16
+   48.             !                          |
+   49.             !                          |__ cmbgb1
+   50.             !                          |
+   51.             !                          |__ cmbgb2
+   52.             !                          |
+   53.             !                          |__ cmbgb3
+   54.             !                          |
+   55.             !                          |__ cmbgb4
+   56.             !                          |
+   57.             !                          |__ cmbgb5
+   58.             !                          |
+   59.             !                          |__ cmbgb6
+   60.             !                          |
+   61.             !                          |__ cmbgb7
+   62.             !                          |
+   63.             !                          |__ cmbgb8
+   64.             !                          |
+   65.             !                          |__ cmbgb9
+   66.             !                          |
+   67.             !                          |__ cmbgb10
+   68.             !                          |
+   69.             !                          |__ cmbgb11
+   70.             !                          |
+   71.             !                          |__ cmbgb12
+   72.             !                          |
+   73.             !                          |__ cmbgb13
+   74.             !                          |
+   75.             !                          |__ cmbgb14
+   76.             !                          |
+   77.             !                          |__ cmbgb15
+   78.             !                          |
+   79.             !                          |__ cmbgb16
+   80.             
+   81.             !
+   82.             !  rad_rrtmg_lw____
+   83.             !              |
+   84.             !              |__ mcica_subcol_lw __ generate_stochastic_clouds __ kissvec
+   85.             !              |
+   86.             !              |__ rrtmg_lw __ inatm
+   87.             !                          |
+   88.             !                          |__ cldprmc
+   89.             !                          |
+   90.             !                          |__ setcoef
+   91.             !                          |
+   92.             !                          |__ taumol
+   93.             !                          |          |
+   94.             !                          |          |__ taugb1
+   95.             !                          |          |
+   96.             !                          |          |__ taugb2
+   97.             !                          |          |
+   98.             !                          |          |__ taugb3
+   99.             !                          |          |
+  100.             !                          |          |__ taugb4
+  101.             !                          |          |
+  102.             !                          |          |__ taugb5
+  103.             !                          |          |
+  104.             !                          |          |__ taugb6
+  105.             !                          |          |
+  106.             !                          |          |__ taugb7
+  107.             !                          |          |
+  108.             !                          |          |__ taugb8
+  109.             !                          |          |
+  110.             !                          |          |__ taugb9
+  111.             !                          |          |
+  112.             !                          |          |__ taugb10
+  113.             !                          |          |
+  114.             !                          |          |__ taugb11
+  115.             !                          |          |
+  116.             !                          |          |__ taugb12
+  117.             !                          |          |
+  118.             !                          |          |__ taugb13
+  119.             !                          |          |
+  120.             !                          |          |__ taugb14
+  121.             !                          |          |
+  122.             !                          |          |__ taugb15
+  123.             !                          |          |
+  124.             !                          |          |__ taugb16
+  125.             !                          |
+  126.             !                          |__ rtrnmc
+  127.             !
+  128.             !
+  129.             !
+  130.             !
+  131.             module radlw
+  132.             !-----------------------------------------------------------------------
+  133.             ! 
+  134.             ! Purpose: Longwave radiation calculations.
+  135.             !
+  136.             !-----------------------------------------------------------------------
+  137.             use shr_kind_mod,      only: r8 => shr_kind_r8
+  138.             !use ppgrid,            only: pcols, pver, pverp
+  139.             !use scamMod,           only: single_column, scm_crm_mode
+  140.             use parrrtm,           only: nbndlw, ngptlw
+  141.             use rrtmg_lw_init,     only: rrtmg_lw_ini
+  142.             use rrtmg_lw_rad,      only: rrtmg_lw
+  143.             !use spmd_utils,        only: masterproc
+  144.             !use perf_mod,          only: t_startf, t_stopf
+  145.             !use cam_logfile,       only: iulog
+  146.             !use abortutils,        only: endrun
+  147.             use radconstants,      only: nlwbands
+  148.             
+  149.             implicit none
+  150.             
+  151.             private
+  152.             save
+  153.             
+  154.             ! Public methods
+  155.             
+  156.             public ::&
+  157.                radlw_init,   &! initialize constants
+  158.                rad_rrtmg_lw   ! driver for longwave radiation code
+  159.                
+  160.             ! Private data
+  161.             integer :: ntoplw    ! top level to solve for longwave cooling
+  162.             
+  163.             !===============================================================================
+  164.             CONTAINS
+  165.             !===============================================================================
+  166.             
+  167.             subroutine rad_rrtmg_lw(&
+  168.                        imca,ncol            ,rrtmg_levs      , &
+  169.                        r_state_pmidmb  ,r_state_pintmb  ,r_state_tlay    , &
+  170.                        r_state_tlev    ,r_state_h2ovmr  ,r_state_o3vmr   ,r_state_co2vmr  , &
+  171.                        r_state_ch4vmr  ,r_state_o2vmr   ,r_state_n2ovmr  ,r_state_cfc11vmr, &
+  172.                        r_state_cfc12vmr,r_state_cfc22vmr,r_state_ccl4vmr ,       &
+  173.                        pmid            ,aer_lw_abs      ,cld             ,cicewp_in          , &
+  174.                        cliqwp_in          ,rei_in             ,rel_in             ,tauc_lw         , &
+  175.                        qrl             ,qrlc            ,flns            ,flnt            , &
+  176.                        flnsc           ,flntc           ,flwds           ,flut            , &
+  177.                        flutc           ,fnl             ,fcnl            ,fldsc           , &
+  178.                        lu              ,ld              , FeedBackOptics_cld,&
+  179.                        pcols           ,pver            ,pverp)
+  180.             
+  181.             !-----------------------------------------------------------------------
+  182.             !   use cam_history,         only: outfld
+  183.                use mcica_subcol_gen_lw, only: mcica_subcol_lw
+  184.                use shr_const_mod, only: cpair       => shr_const_cpdair 
+  185.             
+  186.             !------------------------------Arguments--------------------------------
+  187.             !
+  188.             ! Input arguments
+  189.             !
+  190.                integer, intent(in) :: imca
+  191.                integer, intent(in) :: pcols, pver, pverp
+  192.                integer, intent(in) :: ncol                  ! number of atmospheric columns
+  193.                integer, intent(in) :: rrtmg_levs            ! number of levels rad is applied
+  194.                CHARACTER(LEN=*), INTENT(IN   ) :: FeedBackOptics_cld
+  195.             
+  196.             !
+  197.             ! Input arguments which are only passed to other routines
+  198.             !
+  199.                 real(r8), intent(in) :: r_state_tlev    (pcols,rrtmg_levs+1)
+  200.                 real(r8), intent(in) :: r_state_pmidmb  (pcols,rrtmg_levs)
+  201.                 real(r8), intent(in) :: r_state_pintmb  (pcols,rrtmg_levs+1)
+  202.                 real(r8), intent(in) :: r_state_tlay    (pcols,rrtmg_levs)
+  203.                 real(r8), intent(in) :: r_state_h2ovmr  (pcols,rrtmg_levs)
+  204.                 real(r8), intent(in) :: r_state_o3vmr   (pcols,rrtmg_levs)
+  205.                 real(r8), intent(in) :: r_state_co2vmr  (pcols,rrtmg_levs)
+  206.                 real(r8), intent(in) :: r_state_ch4vmr  (pcols,rrtmg_levs)
+  207.                 real(r8), intent(in) :: r_state_o2vmr   (pcols,rrtmg_levs)
+  208.                 real(r8), intent(in) :: r_state_n2ovmr  (pcols,rrtmg_levs)
+  209.                 real(r8), intent(in) :: r_state_cfc11vmr(pcols,rrtmg_levs)
+  210.                 real(r8), intent(in) :: r_state_cfc12vmr(pcols,rrtmg_levs)
+  211.                 real(r8), intent(in) :: r_state_cfc22vmr(pcols,rrtmg_levs)
+  212.                 real(r8), intent(in) :: r_state_ccl4vmr (pcols,rrtmg_levs)
+  213.             
+  214.                real(r8), intent(in) :: pmid(pcols,rrtmg_levs)     ! Level pressure (Pascals)
+  215.             
+  216.                real(r8), intent(in) :: aer_lw_abs (pcols,rrtmg_levs,nbndlw) ! aerosol absorption optics depth (LW)
+  217.             
+  218.                real(r8), intent(in) :: cld   (pcols,rrtmg_levs)      ! Cloud cover
+  219.                real(r8), intent(in) :: cicewp_in(pcols,rrtmg_levs)   ! in-cloud cloud ice water path
+  220.                real(r8), intent(in) :: cliqwp_in(pcols,rrtmg_levs)   ! in-cloud cloud liquid water path
+  221.                real(r8), intent(in) :: rei_in   (pcols,rrtmg_levs)      ! ice particle effective radius (microns)
+  222.                real(r8), intent(in) :: rel_in   (pcols,rrtmg_levs)      ! liquid particle radius (micron)
+  223.             
+  224.                real(r8), intent(in) :: tauc_lw(nbndlw,pcols,rrtmg_levs)   ! Cloud longwave optical depth by band
+  225.                real(r8) :: cicewp(pcols,rrtmg_levs)   ! in-cloud cloud ice water path
+  226.                real(r8) :: cliqwp(pcols,rrtmg_levs)   ! in-cloud cloud liquid water path
+  227.                real(r8) :: rei   (pcols,rrtmg_levs)      ! ice particle effective radius (microns)
+  228.                real(r8) :: rel   (pcols,rrtmg_levs)      ! liquid particle radius (micron)
+  229.             
+  230.             !
+  231.             ! Output arguments
+  232.             !
+  233.                real(r8), intent(out) :: qrl (pcols,rrtmg_levs)     ! Longwave heating rate
+  234.                real(r8), intent(out) :: qrlc(pcols,rrtmg_levs)     ! Clearsky longwave heating rate
+  235.                real(r8), intent(out) :: flns(pcols)          ! Surface cooling flux
+  236.                real(r8), intent(out) :: flnt(pcols)          ! Net outgoing flux
+  237.                real(r8), intent(out) :: flut(pcols)          ! Upward flux at top of model
+  238.                real(r8), intent(out) :: flnsc(pcols)         ! Clear sky surface cooing
+  239.                real(r8), intent(out) :: flntc(pcols)         ! Net clear sky outgoing flux
+  240.                real(r8), intent(out) :: flutc(pcols)         ! Upward clear-sky flux at top of model
+  241.                real(r8), intent(out) :: flwds(pcols)         ! Down longwave flux at surface
+  242.                real(r8), intent(out) :: fldsc(pcols)         ! Down longwave clear flux at surface
+  243.                real(r8), intent(out) :: fcnl(pcols,rrtmg_levs+1)    ! clear sky net flux at interfaces
+  244.                real(r8), intent(out) :: fnl(pcols,rrtmg_levs+1)     ! net flux at interfaces
+  245.             
+  246.                real(r8), intent(out)  :: lu( pCols,rrtmg_levs+1,nbndlw) ! longwave spectral flux up
+  247.                real(r8), intent(out)  :: ld( pCols,rrtmg_levs+1,nbndlw) ! longwave spectral flux down
+  248.                
+  249.             !
+  250.             !---------------------------Local variables-----------------------------
+  251.             !
+  252.                integer :: i,j, k, kk, nbnd         ! indices
+  253.             
+  254.                real(r8) :: ful(pcols,rrtmg_levs+1)     ! Total upwards longwave flux
+  255.                real(r8) :: fsul(pcols,rrtmg_levs+1)    ! Clear sky upwards longwave flux
+  256.                real(r8) :: fdl(pcols,rrtmg_levs+1)     ! Total downwards longwave flux
+  257.                real(r8) :: fsdl(pcols,rrtmg_levs+1)    ! Clear sky downwards longwv flux
+  258.             
+  259.                integer :: inflglw               ! Flag for cloud parameterization method
+  260.                integer :: iceflglw              ! Flag for ice cloud param method
+  261.                integer :: liqflglw              ! Flag for liquid cloud param method
+  262.                integer :: icld                  ! Flag for cloud overlap method
+  263.                                              ! 0=clear, 1=random, 2=maximum/random, 3=maximum
+  264.             
+  265.                real(r8) :: tsfc(pcols)          ! surface temperature
+  266.                real(r8) :: emis(pcols,nbndlw)   ! surface emissivity
+  267.             
+  268.                real(r8) :: taua_lw(pcols,rrtmg_levs-1,nbndlw)     ! aerosol optical depth by band
+  269.             
+  270.                real(r8), parameter :: dps = 1._r8/86400._r8 ! Inverse of seconds per day
+  271.             
+  272.                ! Cloud arrays for McICA 
+  273.                integer, parameter :: nsubclw = ngptlw       ! rrtmg_lw g-point (quadrature point) dimension
+  274.                integer :: permuteseed                       ! permute seed for sub-column generator
+  275.             
+  276.             
+  277.                real(r8) :: cld_stolw    (nsubclw, pcols, rrtmg_levs-1)     ! cloud fraction (mcica)
+  278.                real(r8) :: cicewp_stolw (nsubclw, pcols, rrtmg_levs-1)  ! cloud ice water path (mcica)
+  279.                real(r8) :: cliqwp_stolw (nsubclw, pcols, rrtmg_levs-1)  ! cloud liquid water path (mcica)
+  280.                real(r8) :: rei_stolw    (pcols,rrtmg_levs-1)               ! ice particle size (mcica)
+  281.                real(r8) :: rel_stolw    (pcols,rrtmg_levs-1)               ! liquid particle size (mcica)
+  282.                real(r8) :: tauc_stolw   (nsubclw, pcols, rrtmg_levs-1)    ! cloud optical depth (mcica - optional)
+  283.             
+  284.                ! Includes extra layer above model top
+  285.                real(r8) :: uflx   (pcols,rrtmg_levs+1)  ! Total upwards longwave flux
+  286.                real(r8) :: uflxc  (pcols,rrtmg_levs+1) ! Clear sky upwards longwave flux
+  287.                real(r8) :: dflx   (pcols,rrtmg_levs+1)  ! Total downwards longwave flux
+  288.                real(r8) :: dflxc  (pcols,rrtmg_levs+1) ! Clear sky downwards longwv flux
+  289.                real(r8) :: hr     (pcols,rrtmg_levs)      ! Longwave heating rate (K/d)
+  290.                real(r8) :: hrc    (pcols,rrtmg_levs)     ! Clear sky longwave heating rate (K/d)
+  291.                real(r8) :: lwuflxs(nbndlw,pcols,rrtmg_levs+1)  ! Longwave spectral flux up
+  292.                real(r8) :: lwdflxs(nbndlw,pcols,rrtmg_levs+1)  ! Longwave spectral flux down
+  293.                !-----------------------------------------------------------------------
+  294.                INTEGER :: nmca
+  295.                INTEGER :: ims
+  296.             
+  297.                ! mji/rrtmg
+  298.  V-------<>    qrl  = 0.0_r8  ;   qrlc = 0.0_r8  ;   flns = 0.0_r8  ;   flnt = 0.0_r8  ;
+  299.  V-------<>    flut = 0.0_r8  ;   flnsc = 0.0_r8 ;   flntc = 0.0_r8 ;   flutc = 0.0_r8 ;
+  300.  V-------<>    flwds = 0.0_r8 ;   fldsc = 0.0_r8 ;   fcnl = 0.0_r8  ;   fnl = 0.0_r8   ;
+  301.  Vc------<>    lu = 0.0_r8    ;   ld = 0.0_r8    ;
+  302.                
+  303.             !
+  304.             !---------------------------Local variables-----------------------------
+  305.             !
+  306.             
+  307.  V-------<>    ful = 0.0_r8  ;            fsul = 0.0_r8  ;           fdl = 0.0_r8        ;      fsdl = 0.0_r8   ;       
+  308.  Vc------<>    tsfc = 0.0_r8 ;            emis = 0.0_r8  ;           taua_lw = 0.0_r8       ;
+  309.             
+  310.             
+  311.                ! Cloud arrays for McICA 
+  312.             
+  313.  VC------<>     cicewp = cicewp_in!0.0_r8             
+  314.  VC------<>     cliqwp = cliqwp_in! 0.0_r8             
+  315.  VC------<>     rei = rei_in    !0.0_r8                
+  316.  VC------<>     rel = rel_in    !0.0_r8                
+  317.             
+  318.  VC------<>     cld_stolw  = 0.0_r8      
+  319.  VC------<>     cicewp_stolw  = 0.0_r8      
+  320.  VC------<>     cliqwp_stolw  = 0.0_r8      
+  321.                 rei_stolw  = 0.0_r8      
+  322.                 rel_stolw  = 0.0_r8      
+  323.  VC------<>     tauc_stolw    = 0.0_r8      
+  324.             
+  325.                ! Includes extra layer above model top
+  326.  VC------<>    uflx    = 0.0_r8             
+  327.  VC------<>    uflxc   = 0.0_r8             
+  328.  VC------<>    dflx    = 0.0_r8             
+  329.  VC------<>    dflxc   = 0.0_r8             
+  330.  VC------<>    hr   = 0.0_r8             
+  331.  VC------<>    hrc     = 0.0_r8             
+  332.  VC------<>    lwuflxs = 0.0_r8             
+  333.  VC------<>    lwdflxs = 0.0_r8             
+  334.                !-----------------------------------------------------------------------
+  335.             
+  336.                ! Calculate cloud optical properties here if using CAM method, or if using one of the
+  337.                ! methods in RRTMG_LW, then pass in cloud physical properties and zero out cloud optical 
+  338.                ! properties here
+  339.                
+  340.                ! Zero optional cloud optical depth input array tauc_lw, 
+  341.                ! if inputting cloud physical properties into RRTMG_LW
+  342.                !          tauc_lw(:,:,:) = 0.
+  343.                ! Or, pass in CAM cloud longwave optical depth to RRTMG_LW
+  344.                ! do nbnd = 1, nbndlw
+  345.                !    tauc_lw(nbnd,:ncol,:pver) = cldtau(:ncol,:pver)
+  346.                ! end do
+  347.             
+  348.                ! Call mcica sub-column generator for RRTMG_LW
+  349.             
+  350.                ! Call sub-column generator for McICA in radiation
+  351.                !call t_startf('mcica_subcol_lw')
+  352.             
+  353.                ! Select cloud overlap approach (1=random, 2=maximum-random, 3=maximum)
+  354.                icld = 2
+  355.                ! Set permute seed (must be offset between LW and SW by at least 140 to insure 
+  356.                ! effective randomization)
+  357.                permuteseed = 150
+  358.             
+  359.                ! These fields are no longer supplied by CAM.
+  360.              !  cicewp = 0.0_r8
+  361.              !  cliqwp = 0.0_r8
+  362.              !  rei = 0.0_r8
+  363.              !  rel = 0.0_r8
+  364.             
+  365.             ! Set nmca to sample size for Monte Carlo calculation
+  366.                IF(TRIM(FeedBackOptics_cld) == 'WRF')THEN
+  367.                   if (imca.eq.0) nmca = 1
+  368.                   if (imca.eq.1) nmca = 1!200
+  369.                ELSE
+  370.                   if (imca.eq.0) nmca = 1
+  371.                   if (imca.eq.1) nmca = 2!200
+  372.                END IF
+  373.             ! This is the statistical sampling loop for McICA
+  374.             
+  375.  1--------<    do ims = 1, nmca
+  376.  1          
+  377.  1          
+  378.  1                ! Call sub-colum cloud generator for McICA calculations
+  379.  1                ! Output will be written for all nmca samples.  This will be excessive if
+  380.  1                ! band output (iout=99) option is selected. 
+  381.  1          
+  382.  1                if (imca.eq.1) then
+  383.  1                   call mcica_subcol_lw( ncol                                                 , & !integer, intent(in) :: ncol        ! number of columns
+  384.  1                                         rrtmg_levs-1                                         , & !integer, intent(in) :: nlay        ! number of model layers
+  385.  1                                         icld                                                 , & !integer, intent(in) :: icld        ! clear/cloud, cloud overlap flag
+  386.  1                                         permuteseed                                          , & !integer, intent(in) :: permuteseed    ! if the cloud generator is called multiple times, 
+  387.  1                                         pmid        (1:pcols,1:rrtmg_levs-1)                 , & !real(kind=r8), intent(in) :: play(ncol,nlay)           ! layer pressures (mb) 
+  388.  1                                         cld         (1:pcols,1:rrtmg_levs-1)                 , & !real(kind=r8), intent(in) :: cldfrac(ncol,nlay)       ! layer cloud fraction
+  389.  1                                         cicewp      (1:pcols,1:rrtmg_levs-1)                 , & !real(kind=r8), intent(in) :: ciwp (ncol,nlay)      ! cloud ice water path
+  390.  1                                         cliqwp      (1:pcols,1:rrtmg_levs-1)                 , & !real(kind=r8), intent(in) :: clwp (ncol,nlay)      ! cloud liquid water path
+  391.  1                                         rei         (1:pcols,1:rrtmg_levs-1)                 , & !real(kind=r8), intent(in) :: rei (ncol,nlay)        ! cloud ice particle size
+  392.  1                                         rel         (1:pcols,1:rrtmg_levs-1)                 , & !real(kind=r8), intent(in) :: rel (ncol,nlay)           ! cloud liquid particle size
+  393.  1                                         tauc_lw     (1:nbndlw ,1: pcols,1: rrtmg_levs-1)     , & !real(kind=r8), intent(in) :: tauc (nbndlw,ncol,nlay)         ! cloud optical depth
+  394.  1                                         cld_stolw   (1:nsubclw,1: pcols,1: rrtmg_levs-1)     , & !real(kind=r8), intent(out) :: cldfmcl(ngptlw,ncol,nlay)    ! cloud fraction [mcica]
+  395.  1                                         cicewp_stolw(1:nsubclw,1: pcols,1: rrtmg_levs-1)     , & !real(kind=r8), intent(out) :: ciwpmcl(ngptlw,ncol,nlay)    ! cloud ice water path [mcica]
+  396.  1                                         cliqwp_stolw(1:nsubclw,1: pcols,1: rrtmg_levs-1)     , & !real(kind=r8), intent(out) :: clwpmcl(ngptlw,ncol,nlay)    ! cloud liquid water path [mcica]
+  397.  1                                         rei_stolw   (1:pcols,1:rrtmg_levs-1)                 , & !real(kind=r8), intent(out) :: reicmcl (ncol,nlay)    ! ice partcle size (microns)
+  398.  1                                         rel_stolw   (1:pcols,1:rrtmg_levs-1)                 , & !real(kind=r8), intent(out) :: relqmcl (ncol,nlay)    ! liquid particle size (microns)
+  399.  1                                         tauc_stolw  (1:nsubclw,1: pcols,1: rrtmg_levs-1)       ) !real(kind=r8), intent(out) :: taucmcl(ngptlw,ncol,nlay)    ! cloud optical depth [mcica]
+  400.  1                endif
+  401.  1          
+  402.  1             !call t_stopf('mcica_subcol_lw')
+  403.  1          
+  404.  1             
+  405.  1             !call t_startf('rrtmg_lw')
+  406.  1          
+  407.  1             !
+  408.  1             ! Call RRTMG_LW model
+  409.  1             !
+  410.  1             ! Set input flags for cloud parameterizations
+  411.  1             ! Use separate specification of ice and liquid cloud optical depth.
+  412.  1             ! Use either Ebert and Curry ice parameterization (iceflglw = 0 or 1), 
+  413.  1             ! or use Key (Streamer) approach (iceflglw = 2), or use Fu method
+  414.  1             ! (iceflglw = 3), and Hu/Stamnes for liquid (liqflglw = 1).
+  415.  1             ! For use in Fu method (iceflglw = 3), rei is converted in RRTMG_LW
+  416.  1             ! from effective radius to generalized effective size using the
+  417.  1             ! conversion of D. Mitchell, JAS, 2002.  For ice particles outside
+  418.  1             ! the effective range of either the Key or Fu approaches, the 
+  419.  1             ! Ebert and Curry method is applied. 
+  420.  1             IF(TRIM(FeedBackOptics_cld) == 'WRF')THEN
+  421.  1             !   !WRFMODEL ! For passing in cloud physical properties; cloud optics parameterized in RRTMG:
+  422.  1             !   !WRFMODEL       icld = 2
+  423.  1             !   !WRFMODEL       inflglw = 2
+  424.  1             !   !WRFMODEL       iceflglw = 3
+  425.  1             !   !WRFMODEL       liqflglw = 1
+  426.  1                 inflglw = 0
+  427.  1                 iceflglw = 0
+  428.  1                 liqflglw = 0
+  429.  1             ELSE IF(TRIM(FeedBackOptics_cld) == 'CAM5')THEN
+  430.  1                inflglw = 0
+  431.  1                iceflglw = 0
+  432.  1                liqflglw = 0
+  433.  1             ELSE
+  434.  1                ! IF(ims == 10)THEN
+  435.  1                !   ! Input CAM cloud optical depth directly
+  436.  1                !   !PK inflglw = 0
+  437.  1                !   !PK iceflglw = 0
+  438.  1                !   !PK liqflglw = 0
+  439.  1                inflglw = 0
+  440.  1                iceflglw = 0
+  441.  1                liqflglw = 0
+  442.  1                 !ELSE
+  443.  1                 !   ! Use E&C approach for ice to mimic CAM3
+  444.  1                 !   !   inflglw = 2
+  445.  1                 !   !   iceflglw = 1
+  446.  1                 !   !   liqflglw = 1
+  447.  1                 !   ! Use merged Fu and E&C params for ice
+  448.  1                 !   !   inflglw = 2
+  449.  1                 !   !   iceflglw = 3
+  450.  1                 !   !   liqflglw = 1
+  451.  1                 !   !WRFMODEL ! For passing in cloud physical properties; cloud optics parameterized in RRTMG:
+  452.  1                 !   !WRFMODEL       icld = 2
+  453.  1                 !   !WRFMODEL       inflglw = 2
+  454.  1                 !   !WRFMODEL       iceflglw = 3
+  455.  1                 !   !WRFMODEL       liqflglw = 1
+  456.  1                 !    inflglw = 2
+  457.  1                 !    iceflglw = 3
+  458.  1                 !    liqflglw = 1
+  459.  1                 !END IF 
+  460.  1             END IF
+  461.  1             ! Convert incoming water amounts from specific humidity to vmr as needed;
+  462.  1             ! Convert other incoming molecular amounts from mmr to vmr as needed;
+  463.  1             ! Convert pressures from Pa to hPa;
+  464.  1             ! Set surface emissivity to 1.0 here, this is treated in land surface model;
+  465.  1             ! Set surface temperature
+  466.  1             ! Set aerosol optical depth to zero for now
+  467.  1          
+  468.  1 Vc----<>    emis(:ncol,:nbndlw) = 1._r8
+  469.  1 V-----<>    tsfc(:ncol) = r_state_tlev(:ncol,rrtmg_levs+1)
+  470.  1 Vc----<>    taua_lw(:ncol, 1:rrtmg_levs-1, :nbndlw) = aer_lw_abs(:ncol,pverp-rrtmg_levs+1:pverp-1,:nbndlw)
+  471.  1          
+  472.  1 Vc----<>     lu(1:ncol,:,:) = 0.0_r8
+  473.  1 Vc----<>     ld(1:ncol,:,:) = 0.0_r8
+  474.  1          
+  475.  1             call rrtmg_lw(&
+  476.  1                  imca                                              , & !integer      , intent(in   ) :: imca
+  477.  1                  pcols                                             , & !integer      , intent(in   ) :: pcols
+  478.  1                  ncol                                              , & !integer      , intent(in   ) :: ncol                   ! Number of horizontal columns
+  479.  1                  rrtmg_levs                                        , & !integer      , intent(in   ) :: nlay                   ! Number of model layers
+  480.  1                  icld                                              , & !integer      , intent(inout) :: icld                   ! Cloud overlap method
+  481.  1                  r_state_pmidmb  (1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(in   ) :: play     (ncol,nlay)   ! Layer pressures (hPa, mb)
+  482.  1                  r_state_pintmb  (1:pcols,1:rrtmg_levs+1)          , & !real(kind=r8), intent(in   ) :: plev     (ncol,nlay+1) ! Interface pressures (hPa, mb)
+  483.  1                  r_state_tlay    (1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(in   ) :: tlay     (ncol,nlay)   ! Layer temperatures (K)
+  484.  1                  r_state_tlev    (1:pcols,1:rrtmg_levs+1)          , & !real(kind=r8), intent(in   ) :: tlev     (ncol,nlay+1)    ! Interface temperatures (K)
+  485.  1                  tsfc            (1:pcols)                         , & !real(kind=r8), intent(in   ) :: tsfc     (ncol)        ! Surface temperature (K)
+  486.  1                  r_state_h2ovmr  (1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(in   ) :: h2ovmr   (ncol,nlay)     ! H2O volume mixing ratio
+  487.  1                  r_state_o3vmr   (1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(in   ) :: o3vmr    (ncol,nlay)      ! O3 volume mixing ratio
+  488.  1                  r_state_co2vmr  (1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(in   ) :: co2vmr   (ncol,nlay)     ! CO2 volume mixing ratio
+  489.  1                  r_state_ch4vmr  (1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(in   ) :: ch4vmr   (ncol,nlay)         ! Methane volume mixing ratio
+  490.  1                  r_state_o2vmr   (1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(in   ) :: o2vmr    (ncol,nlay)          ! O2 volume mixing ratio
+  491.  1                  r_state_n2ovmr  (1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(in   ) :: n2ovmr   (ncol,nlay)     ! Nitrous oxide volume mixing ratio
+  492.  1                  r_state_cfc11vmr(1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(in   ) :: cfc11vmr (ncol,nlay)   ! CFC11 volume mixing ratio
+  493.  1                  r_state_cfc12vmr(1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(in   ) :: cfc12vmr (ncol,nlay)   ! CFC12 volume mixing ratio
+  494.  1                  r_state_cfc22vmr(1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(in   ) :: cfc22vmr (ncol,nlay)   ! CFC22 volume mixing ratio
+  495.  1                  r_state_ccl4vmr (1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(in   ) :: ccl4vmr  (ncol,nlay)    ! CCL4 volume mixing ratio
+  496.  1                  emis            (1:pcols,1:nbndlw)                , & !real(kind=r8), intent(in   ) :: emis     (ncol,nbndlw)     ! Surface emissivity
+  497.  1                  inflglw                                           , & !integer      , intent(in   ) :: inflglw                          ! Flag for cloud optical properties
+  498.  1                  iceflglw                                          , & !integer      , intent(in   ) :: iceflglw                         ! Flag for ice particle specification
+  499.  1                  liqflglw                                          , & !integer      , intent(in   ) :: liqflglw                         ! Flag for liquid droplet specification
+  500.  1                  cld_stolw       (1:nsubclw,1:pcols,1:rrtmg_levs-1), & !real(kind=r8), intent(in   ) :: cldfmcl (ngptlw,ncol,nlay-1)       ! Cloud fraction
+  501.  1                  tauc_stolw      (1:nsubclw,1:pcols,1:rrtmg_levs-1), & !real(kind=r8), intent(in   ) :: taucmcl (ngptlw,ncol,nlay-1)       ! Cloud optical depth
+  502.  1                  cicewp_stolw    (1:nsubclw,1:pcols,1:rrtmg_levs-1), & !real(kind=r8), intent(in   ) :: ciwpmcl (ngptlw,ncol,nlay-1)       ! Cloud ice water path (g/m2)
+  503.  1                  cliqwp_stolw    (1:nsubclw,1:pcols,1:rrtmg_levs-1), & !real(kind=r8), intent(in   ) :: clwpmcl (ngptlw,ncol,nlay-1)      ! Cloud liquid water path (g/m2)
+  504.  1                  cld             (1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(in   ) :: cld     (ncol,nlay)    ! layer cloud fraction
+  505.  1                  cicewp          (1:pcols,1:rrtmg_levs-1)          , & !real(kind=r8), intent(in   ) :: cicewp  (ncol,nlay-1) 
+  506.  1                  cliqwp          (1:pcols,1:rrtmg_levs-1)          , & !real(kind=r8), intent(in   ) :: cliqwp  (ncol,nlay-1)  
+  507.  1                  tauc_lw         (1:nbndlw,1:pcols,1:rrtmg_levs)   , & !real(kind=r8), intent(in   ) :: tauc_lw (nbndlw,ncol,nlay)        ! cloud optical depth
+  508.  1                  rei             (1:pcols,1:rrtmg_levs-1)          , & !real(kind=r8), intent(in   ) :: reicmcl (ncol,nlay-1)     ! Cloud ice effective radius (microns)
+  509.  1                  rel             (1:pcols,1:rrtmg_levs-1)          , & !real(kind=r8), intent(in   ) :: relqmcl (ncol,nlay-1)     ! Cloud water drop effective radius (microns)
+  510.  1                  taua_lw         (1:pcols,1:rrtmg_levs-1,1:nbndlw) , & !real(kind=r8), intent(in   ) :: tauaer  (ncol,nlay-1,nbndlw)        ! aerosol optical depth
+  511.  1                  uflx            (1:pcols,1:rrtmg_levs+1)          , & !real(kind=r8), intent(inout) :: uflx    (ncol,nlay+1)      ! Total sky longwave upward flux (W/m2)
+  512.  1                  dflx            (1:pcols,1:rrtmg_levs+1)          , & !real(kind=r8), intent(inout) :: dflx    (ncol,nlay+1)      ! Total sky longwave downward flux (W/m2)
+  513.  1                  hr              (1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(inout) :: hr      (ncol,nlay)        ! Total sky longwave radiative heating rate (K/d)
+  514.  1                  uflxc           (1:pcols,1:rrtmg_levs+1)          , & !real(kind=r8), intent(inout) :: uflxc   (ncol,nlay+1)        ! Clear sky longwave upward flux (W/m2)
+  515.  1                  dflxc           (1:pcols,1:rrtmg_levs+1)          , & !real(kind=r8), intent(inout) :: dflxc   (ncol,nlay+1)       ! Clear sky longwave downward flux (W/m2)
+  516.  1                  hrc             (1:pcols,1:rrtmg_levs)            , & !real(kind=r8), intent(inout) :: hrc     (ncol,nlay)      ! Clear sky longwave radiative heating rate (K/d)
+  517.  1                  lwuflxs         (1:nbndlw,1:pcols,1:rrtmg_levs+1) , & !real(kind=r8), intent(inout) :: uflxs   (nbndlw,ncol,nlay+1)    ! Total sky longwave upward flux spectral (W/m2)
+  518.  1                  lwdflxs         (1:nbndlw,1:pcols,1:rrtmg_levs+1)   ) !real(kind=r8), intent(inout) :: dflxs   (nbndlw,ncol,nlay+1)    ! Total sky longwave downward flux spectral (W/m2)
+  519.  1          !      subroutine rrtmg_lw(&
+  520.  1          !       pcols           ,ncol            ,nlay            ,icld            , &
+  521.  1          !       play            ,plev            ,tlay            ,tlev            , &
+  522.  1          !       tsfc            ,h2ovmr          ,o3vmr           ,co2vmr          , &
+  523.  1          !       ch4vmr          ,o2vmr           ,n2ovmr          ,cfc11vmr        , &
+  524.  1          !       cfc12vmr        ,cfc22vmr        ,ccl4vmr         ,emis            , &
+  525.  1          !       inflglw         ,iceflglw        ,liqflglw        ,cldfmcl         , &
+  526.  1          !       taucmcl         ,ciwpmcl         ,clwpmcl         ,reicmcl         , &
+  527.  1          !       relqmcl         ,tauaer          ,uflx            ,dflx            , &
+  528.  1          !       hr              ,uflxc           ,dflxc           ,hrc             , &
+  529.  1          !       uflxs           ,dflxs            )
+  530.  1          
+  531.  1                      if (imca .eq. 0) then
+  532.  1                         if (ims .eq. nmca) then
+  533.  1 2------<                   DO k=1,rrtmg_levs+1
+  534.  1 2 3----<                      DO i=1,ncol
+  535.  1 2 3                              uflx     (i,k) = uflx     (i,k)  /nmca
+  536.  1 2 3                              dflx     (i,k) = dflx     (i,k)  /nmca
+  537.  1 2 3                              uflxc    (i,k) = uflxc    (i,k)  /nmca
+  538.  1 2 3                              dflxc    (i,k) = dflxc    (i,k)  /nmca
+  539.  1 2 3---->                      END DO
+  540.  1 2------>                   END DO 
+  541.  1 2------<                   DO k=1,rrtmg_levs
+  542.  1 2 3----<                      DO i=1,ncol
+  543.  1 2 3                               hr          (i,k) = hr     (i,k)  /nmca
+  544.  1 2 3                               hrc         (i,k) = hrc    (i,k)  /nmca
+  545.  1 2 3---->                      END DO
+  546.  1 2------>                   END DO 
+  547.  1 2------<                   DO k=1,rrtmg_levs+1
+  548.  1 2 C----<                      DO i=1,ncol
+  549.  1 2 C C--<                         DO j=1,nbndlw
+  550.  1 2 C C                               lwuflxs       (j,i,k)    =lwuflxs    (j,i,k)/nmca
+  551.  1 2 C C                               lwdflxs       (j,i,k)    =lwdflxs    (j,i,k)/nmca
+  552.  1 2 C C-->                         END DO
+  553.  1 2 C---->                       END DO
+  554.  1 2------>                   END DO 
+  555.  1                         endif
+  556.  1                      elseif (imca .eq. 1) then
+  557.  1                         if (ims .eq. nmca) then
+  558.  1 2------<                   DO k=1,rrtmg_levs+1
+  559.  1 2 3----<                      DO i=1,ncol
+  560.  1 2 3                              uflx     (i,k) = uflx     (i,k)  /nmca
+  561.  1 2 3                              dflx     (i,k) = dflx     (i,k)  /nmca
+  562.  1 2 3                              uflxc    (i,k) = uflxc    (i,k)  /nmca
+  563.  1 2 3                              dflxc    (i,k) = dflxc    (i,k)  /nmca
+  564.  1 2 3---->                      END DO
+  565.  1 2------>                   END DO 
+  566.  1 2------<                   DO k=1,rrtmg_levs
+  567.  1 2 3----<                      DO i=1,ncol
+  568.  1 2 3                               hr          (i,k) = hr     (i,k)  /nmca
+  569.  1 2 3                               hrc         (i,k) = hrc    (i,k)  /nmca
+  570.  1 2 3---->                      END DO
+  571.  1 2------>                   END DO 
+  572.  1 2------<                   DO k=1,rrtmg_levs+1
+  573.  1 2 C----<                      DO i=1,ncol
+  574.  1 2 C C--<                         DO j=1,nbndlw
+  575.  1 2 C C                               lwuflxs       (j,i,k)    =lwuflxs    (j,i,k)/nmca
+  576.  1 2 C C                               lwdflxs       (j,i,k)    =lwdflxs    (j,i,k)/nmca
+  577.  1 2 C C-->                         END DO
+  578.  1 2 C---->                       END DO
+  579.  1 2------>                   END DO 
+  580.  1                         endif
+  581.  1                      endif
+  582.  1          
+  583.  1          ! End statistical loop for McICA
+  584.  1          
+  585.  1-------->   END DO 
+  586.                !
+  587.                !----------------------------------------------------------------------
+  588.                ! All longitudes: store history tape quantities
+  589.                ! Flux units are in W/m2 on output from rrtmg_lw and contain output for
+  590.                ! extra layer above model top with vertical indexing from bottom to top.
+  591.                ! Heating units are in K/d on output from RRTMG and contain output for
+  592.                ! extra layer above model top with vertical indexing from bottom to top.
+  593.                ! Heating units are converted to J/kg/s below for use in CAM. 
+  594.             
+  595.  V-------<>    flwds(:ncol) = dflx (:ncol,1)
+  596.  V-------<>    fldsc(:ncol) = dflxc(:ncol,1)
+  597.                flns(:ncol)  = uflx (:ncol,1) - dflx (:ncol,1)
+  598.                flnsc(:ncol) = uflxc(:ncol,1) - dflxc(:ncol,1)
+  599.                flnt(:ncol)  = uflx (:ncol,rrtmg_levs) - dflx (:ncol,rrtmg_levs)
+  600.                flntc(:ncol) = uflxc(:ncol,rrtmg_levs) - dflxc(:ncol,rrtmg_levs)
+  601.  V-------<>    flut(:ncol)  = uflx (:ncol,rrtmg_levs)
+  602.  V-------<>    flutc(:ncol) = uflxc(:ncol,rrtmg_levs)
+  603.             
+  604.                !
+  605.                ! Reverse vertical indexing here for CAM arrays to go from top to bottom.
+  606.                !
+  607.  VC------<>    ful = 0._r8
+  608.  VC------<>    fdl = 0._r8
+  609.  VC------<>    fsul = 0._r8
+  610.  VC------<>    fsdl = 0._r8
+  611.  Vc------<>    ful (:ncol,pverp-rrtmg_levs+1:pverp)= uflx(:ncol,rrtmg_levs:1:-1)
+  612.  Vc------<>    fdl (:ncol,pverp-rrtmg_levs+1:pverp)= dflx(:ncol,rrtmg_levs:1:-1)
+  613.  Vc------<>    fsul(:ncol,pverp-rrtmg_levs+1:pverp)=uflxc(:ncol,rrtmg_levs:1:-1)
+  614.  Vc------<>    fsdl(:ncol,pverp-rrtmg_levs+1:pverp)=dflxc(:ncol,rrtmg_levs:1:-1)
+  615.             
+  616.             !   if (single_column.and.scm_crm_mode) then
+  617.             !      call outfld('FUL     ',ful,pcols,lchnk)
+  618.             !      call outfld('FDL     ',fdl,pcols,lchnk)
+  619.             !      call outfld('FULC    ',fsul,pcols,lchnk)
+  620.             !      call outfld('FDLC    ',fsdl,pcols,lchnk)
+  621.             !   endif
+  622.                
+  623.                fnl(:ncol,:) = ful(:ncol,:) - fdl(:ncol,:)
+  624.                ! mji/ cam excluded this?
+  625.                fcnl(:ncol,:) = fsul(:ncol,:) - fsdl(:ncol,:)
+  626.             
+  627.                ! Pass longwave heating to CAM arrays and convert from K/d to J/kg/s
+  628.               ! qrl = 0._r8
+  629.               ! qrlc = 0._r8
+  630.               ! qrl (:ncol,pverp-rrtmg_levs+1:pver)=hr (:ncol,rrtmg_levs-1:1:-1)*cpair*dps
+  631.               ! qrlc(:ncol,pverp-rrtmg_levs+1:pver)=hrc(:ncol,rrtmg_levs-1:1:-1)*cpair*dps
+  632.               
+  633.                ! Pass longwave heating to CAM arrays and convert from K/d to K/s
+  634.  VC------<>    qrl = 0._r8
+  635.  VC------<>    qrlc = 0._r8
+  636.  Vc------<>    qrl (:ncol,pverp-rrtmg_levs+1:pver)=hr (:ncol,rrtmg_levs-1:1:-1)/86400.0_r8 !*cpair*dps
+  637.  Vc------<>    qrlc(:ncol,pverp-rrtmg_levs+1:pver)=hrc(:ncol,rrtmg_levs-1:1:-1)/86400.0_r8 !*cpair*dps
+  638.             
+  639.                ! Return 0 above solution domain
+  640.                if ( ntoplw > 1 )then
+  641.  Vc------<>       qrl(:ncol,:ntoplw-1) = 0._r8
+  642.  Vc------<>       qrlc(:ncol,:ntoplw-1) = 0._r8
+  643.                end if
+  644.             
+  645.                ! Pass spectral fluxes, reverse layering
+  646.                ! order=(/3,1,2/) maps the first index of lwuflxs to the third index of lu.
+  647.                !if (associated(lu)) then
+  648.  Vc------<>       lu(:ncol,pverp-rrtmg_levs+1:pverp,:) = reshape(lwuflxs(:,:ncol,rrtmg_levs:1:-1), &
+  649.                        (/ncol,rrtmg_levs,nbndlw/), order=(/3,1,2/))
+  650.                !end if
+  651.                
+  652.                !if (associated(ld)) then
+  653.  Vc------<>       ld(:ncol,pverp-rrtmg_levs+1:pverp,:) = reshape(lwdflxs(:,:ncol,rrtmg_levs:1:-1), &
+  654.                        (/ncol,rrtmg_levs,nbndlw/), order=(/3,1,2/))
+  655.                !end if
+  656.                
+  657.                !call t_stopf('rrtmg_lw')
+  658.             
+  659.             end subroutine rad_rrtmg_lw
+ftn-5002 ftn: NOTE File = radlw.f90, Line = 659 
+  Local variable "NBND" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = radlw.f90, Line = 659 
+  Local variable "KK" is declared but neither defined nor used.
+
+ftn-5008 ftn: NOTE File = radlw.f90, Line = 659 
+  Named Constant "DPS" is not used.
+
+  660.             
+  661.             !-------------------------------------------------------------------------------
+  662.             
+  663.             subroutine radlw_init(pref_mid,pver)
+  664.             !----------------------------------------------------------------------- 
+  665.             ! 
+  666.             ! Purpose: 
+  667.             ! Initialize various constants for radiation scheme.
+  668.             !
+  669.             !-----------------------------------------------------------------------
+  670.             
+  671.             !   use ref_pres, only : pref_mid
+  672.                integer, intent(in) :: pver
+  673.                real(r8), intent(in) :: pref_mid(:)  ! reference pressure at layer midpoints (Pa)
+  674.             
+  675.                integer :: k
+  676.             !   do k = 1, plev
+  677.             !      pref_edge(k) = hypi(k)
+  678.             !      pref_mid(k)  = hypm(k)
+  679.             !   end do
+  680.             
+  681.                ! If the top model level is above ~90 km (0.1 Pa), set the top level to compute
+  682.                ! longwave cooling to about 80 km (1 Pa)
+  683.                if (pref_mid(1) .lt. 0.1_r8) then
+  684.  1--------<       do k = 1, pver
+  685.  1                   if (pref_mid(k) .lt. 1._r8) ntoplw  = k
+  686.  1-------->       end do
+  687.                else
+  688.                   ntoplw  = 1
+  689.                end if
+  690.             !   if (masterproc) then
+  691.             !      write(iulog,*) 'radlw_init: ntoplw =',ntoplw
+  692.             !   endif
+  693.             
+  694.                call rrtmg_lw_ini
+  695.             
+  696.             end subroutine radlw_init
+  697.             
+  698.             !-------------------------------------------------------------------------------
+  699.             
+  700.             end module radlw
+
+ftn-6067 ftn: SCALAR File = radlw.f90, Line = 298 
+  A loop nest at line 298 was partially collapsed.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 298 
+  A loop starting at line 298 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 299 
+  A loop starting at line 299 was vectorized.
+
+ftn-6067 ftn: SCALAR File = radlw.f90, Line = 300 
+  A loop nest at line 300 was partially collapsed.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 300 
+  A loop starting at line 300 was vectorized.
+
+ftn-6067 ftn: SCALAR File = radlw.f90, Line = 301 
+  A loop nest at line 301 was partially collapsed.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 301 
+  A loop starting at line 301 was conditionally vectorized.
+
+ftn-6067 ftn: SCALAR File = radlw.f90, Line = 307 
+  A loop nest at line 307 was partially collapsed.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 307 
+  A loop starting at line 307 was vectorized.
+
+ftn-6067 ftn: SCALAR File = radlw.f90, Line = 308 
+  A loop nest at line 308 was partially collapsed.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 308 
+  A loop starting at line 308 was conditionally vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 313 
+   A loop nest at line 313 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 313 
+  A loop starting at line 313 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 314 
+   A loop nest at line 314 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 314 
+  A loop starting at line 314 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 315 
+   A loop nest at line 315 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 315 
+  A loop starting at line 315 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 316 
+   A loop nest at line 316 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 316 
+  A loop starting at line 316 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 318 
+   A loop nest at line 318 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 318 
+  A loop starting at line 318 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 319 
+   A loop nest at line 319 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 319 
+  A loop starting at line 319 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 320 
+   A loop nest at line 320 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 320 
+  A loop starting at line 320 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 323 
+   A loop nest at line 323 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 323 
+  A loop starting at line 323 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 326 
+   A loop nest at line 326 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 326 
+  A loop starting at line 326 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 327 
+   A loop nest at line 327 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 327 
+  A loop starting at line 327 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 328 
+   A loop nest at line 328 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 328 
+  A loop starting at line 328 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 329 
+   A loop nest at line 329 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 329 
+  A loop starting at line 329 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 330 
+   A loop nest at line 330 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 330 
+  A loop starting at line 330 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 331 
+   A loop nest at line 331 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 331 
+  A loop starting at line 331 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 332 
+   A loop nest at line 332 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 332 
+  A loop starting at line 332 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 333 
+   A loop nest at line 333 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 333 
+  A loop starting at line 333 was vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 468 
+  A loop starting at line 468 was conditionally vectorized.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 469 
+  A loop starting at line 469 was vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 470 
+  A loop starting at line 470 was conditionally vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 472 
+  A loop starting at line 472 was conditionally vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 473 
+  A loop starting at line 473 was conditionally vectorized.
+
+ftn-6003 ftn: SCALAR File = radlw.f90, Line = 548 
+  A loop starting at line 548 was collapsed into the loop starting at line 549.
+
+ftn-6003 ftn: SCALAR File = radlw.f90, Line = 573 
+  A loop starting at line 573 was collapsed into the loop starting at line 574.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 595 
+  A loop starting at line 595 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 596 
+  A loop starting at line 596 was vectorized.
+
+ftn-6340 ftn: VECTOR File = radlw.f90, Line = 597 
+  A loop starting at line 597 was not vectorized because of a potential reassociation issue on line 597.
+
+ftn-6340 ftn: VECTOR File = radlw.f90, Line = 598 
+  A loop starting at line 598 was not vectorized because of a potential reassociation issue on line 598.
+
+ftn-6340 ftn: VECTOR File = radlw.f90, Line = 599 
+  A loop starting at line 599 was not vectorized because of a potential reassociation issue on line 599.
+
+ftn-6340 ftn: VECTOR File = radlw.f90, Line = 600 
+  A loop starting at line 600 was not vectorized because of a potential reassociation issue on line 600.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 601 
+  A loop starting at line 601 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 602 
+  A loop starting at line 602 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 607 
+   A loop nest at line 607 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 607 
+  A loop starting at line 607 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 608 
+   A loop nest at line 608 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 608 
+  A loop starting at line 608 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 609 
+   A loop nest at line 609 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 609 
+  A loop starting at line 609 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 610 
+   A loop nest at line 610 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 610 
+  A loop starting at line 610 was vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 611 
+  A loop starting at line 611 was conditionally vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 612 
+  A loop starting at line 612 was conditionally vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 613 
+  A loop starting at line 613 was conditionally vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 614 
+  A loop starting at line 614 was conditionally vectorized.
+
+ftn-6340 ftn: VECTOR File = radlw.f90, Line = 623 
+  A loop starting at line 623 was not vectorized because of a potential reassociation issue on line 623.
+
+ftn-6340 ftn: VECTOR File = radlw.f90, Line = 625 
+  A loop starting at line 625 was not vectorized because of a potential reassociation issue on line 625.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 634 
+   A loop nest at line 634 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 634 
+  A loop starting at line 634 was vectorized.
+
+ftn-6066 ftn: SCALAR File = radlw.f90, Line = 635 
+   A loop nest at line 635 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = radlw.f90, Line = 635 
+  A loop starting at line 635 was vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 636 
+  A loop starting at line 636 was conditionally vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 637 
+  A loop starting at line 637 was conditionally vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 641 
+  A loop starting at line 641 was conditionally vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 642 
+  A loop starting at line 642 was conditionally vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 648 
+  A loop starting at line 648 was conditionally vectorized.
+
+ftn-6213 ftn: VECTOR File = radlw.f90, Line = 653 
+  A loop starting at line 653 was conditionally vectorized.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                  C r o s s   R e f e r e n c e   for   RADLW
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+AER_LW_ABS                      Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>, 16), INTENT(IN)
+  Decl     173     216
+  Set 
+  Used     470
+
+CICEWP                          Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     225
+  Set      313
+  Used
+
+CICEWP_IN                       Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     173     219
+  Set 
+  Used     313
+
+CICEWP_STOLW                    Stack                             REAL(KIND=8), DIMENSION(140, <exp>, <exp>)
+  Decl     278
+  Set      319
+  Used
+
+CLD                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     173     218
+  Set 
+  Used
+
+CLD_STOLW                       Stack                             REAL(KIND=8), DIMENSION(140, <exp>, <exp>)
+  Decl     277
+  Set      318
+  Used
+
+CLIQWP                          Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     226
+  Set      314
+  Used
+
+CLIQWP_IN                       Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     174     220
+  Set 
+  Used     314
+
+CLIQWP_STOLW                    Stack                             REAL(KIND=8), DIMENSION(140, <exp>, <exp>)
+  Decl     279
+  Set      320
+  Used
+
+CPAIR                                                             REAL(KIND=8), PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD
+  Decl     184
+  Set 
+  Used
+
+DFLX                            Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     287
+  Set      328     536     561
+  Used     595     597     599     612
+
+DFLXC                           Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     288
+  Set      329     538     563
+  Used     596     598     600     614
+
+DPS                                                               REAL(KIND=8), PARAMETER
+  Decl     270
+  Set 
+  Used
+
+EMIS                            Stack                             REAL(KIND=8), DIMENSION(<exp>, 16)
+  Decl     266
+  Set      308     468
+  Used
+
+FCNL                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(OUT)
+  Decl     177     243
+  Set      300     625
+  Used
+
+FDL                             Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     256
+  Set      307     608     612
+  Used     623
+
+FEEDBACKOPTICS_CLD              Dummy Arg                         CHARACTER(*), INTENT(IN)
+  Decl     178     194
+  Set 
+  Used     366     420     429
+
+FLDSC                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     177     242
+  Set      300     596
+  Used
+
+FLNS                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     175     235
+  Set      298     597
+  Used
+
+FLNSC                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     176     238
+  Set      299     598
+  Used
+
+FLNT                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     175     236
+  Set      298     599
+  Used
+
+FLNTC                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     176     239
+  Set      299     600
+  Used
+
+FLUT                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     176     237
+  Set      299     601
+  Used
+
+FLUTC                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     177     240
+  Set      299     602
+  Used
+
+FLWDS                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     176     241
+  Set      300     595
+  Used
+
+FNL                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(OUT)
+  Decl     177     244
+  Set      300     623
+  Used
+
+FSDL                            Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     257
+  Set      307     610     614
+  Used     625
+
+FSUL                            Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     255
+  Set      307     609     613
+  Used     625
+
+FUL                             Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     254
+  Set      307     607     611
+  Used     623
+
+HR                              Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     289
+  Set      330     543     568
+  Used     636
+
+HRC                             Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     290
+  Set      331     544     569
+  Used     637
+
+I                               Stack                             INTEGER
+  Decl     252
+  Set 
+  Used     535     536     537     538     543     544     550     551     560     561     562     563     568     569     575
+           576
+
+ICEFLGLW                        Stack                             INTEGER
+  Decl     260
+  Set      427     431     440
+  Used     498
+
+ICLD                            Stack                             INTEGER
+  Decl     262
+  Set      354
+  Used     385     480
+
+IMCA                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     168     190
+  Set 
+  Used     367     368     370     371     382     476     531     556
+
+IMS                             Stack                             INTEGER
+  Decl     295
+  Set 
+  Used     532     557
+
+INFLGLW                         Stack                             INTEGER
+  Decl     259
+  Set      426     430     439
+  Used     497
+
+J                               Stack                             INTEGER
+  Decl     252
+  Set 
+  Used     550     551     575     576
+
+K                               Stack                             INTEGER
+  Decl     252
+  Set 
+  Used     535     536     537     538     543     544     550     551     560     561     562     563     568     569     575
+           576
+
+K                               Stack                             INTEGER
+  Decl     675
+  Set 
+  Used     685
+
+KK                              Stack                             INTEGER
+  Decl     252
+  Set 
+  Used
+
+LD                              Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>, 16), INTENT(OUT)
+  Decl     178     247
+  Set      301     473     653
+  Used
+
+LIQFLGLW                        Stack                             INTEGER
+  Decl     261
+  Set      428     432     441
+  Used     499
+
+LU                              Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>, 16), INTENT(OUT)
+  Decl     178     246
+  Set      301     472     648
+  Used
+
+LWDFLXS                         Stack                             REAL(KIND=8), DIMENSION(16, <exp>, <exp>)
+  Decl     292
+  Set      333     551     576
+  Used
+
+LWUFLXS                         Stack                             REAL(KIND=8), DIMENSION(16, <exp>, <exp>)
+  Decl     291
+  Set      332     550     575
+  Used
+
+MCICA_SUBCOL_GEN_LW                                               Module
+  Decl
+  Set 
+  Used     183
+
+MCICA_SUBCOL_LW                 Use assoc                         Subroutine, From module MCICA_SUBCOL_GEN_LW, Module procedure
+  Decl
+  Set 
+  Used     383
+
+NBND                            Stack                             INTEGER
+  Decl     252
+  Set 
+  Used
+
+NBNDLW                          Use assoc                         INTEGER, PARAMETER, From module PARRRTM, PRIVATE
+  Decl
+  Set 
+  Used     216     224     246     247     266     268     291     292     393     468     470     496     507     510     517
+           518     549     574     649     654
+
+NCOL                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     168     192
+  Set 
+  Used     383     468     469     470     472     473     478     534     542     548     559     567     573     595     596
+           597     598     599     600     601     602     611     612     613     614     623     625     636     637     641
+           642     648     653
+
+NGPTLW                          Use assoc                         INTEGER, PARAMETER, From module PARRRTM, PRIVATE
+  Decl
+  Set 
+  Used     273
+
+NMCA                            Stack                             INTEGER
+  Decl     294
+  Set      367     368     370     371
+  Used     375     532     535     536     537     538     543     544     550     551     557     560     561     562     563
+           568     569     575     576
+
+NSUBCLW                                                           INTEGER, PARAMETER
+  Decl     273
+  Set 
+  Used     277     278     279     282     394     395     396     399     500     501     502     503
+
+NTOPLW                          Static offset=0                   INTEGER, PRIVATE, SAVE
+  Decl     161
+  Set      685     688
+  Used     640     641     642
+
+PARRRTM                                                           Module
+  Decl
+  Set 
+  Used     140
+
+PCOLS                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     179     191
+  Set 
+  Used     199     200     201     202     203     204     205     206     207     208     209     210     211     212     214
+           216     218     219     220     221     222     224     225     226     227     228     233     234     235     236
+           237     238     239     240     241     242     243     244     246     247     254     255     256     257     265
+           266     268     277     278     279     280     281     282     285     286     287     288     289     290     291
+           292     477
+
+PERMUTESEED                     Stack                             INTEGER
+  Decl     274
+  Set      357
+  Used     386
+
+PMID                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     173     214
+  Set 
+  Used
+
+PREF_MID                        Dummy Arg                         REAL(KIND=8), DIMENSION(:), INTENT(IN)
+  Decl     663     673
+  Set 
+  Used     683     685
+
+PVER                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     179     191
+  Set 
+  Used     636     637
+
+PVER                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     663     672
+  Set 
+  Used     684
+
+PVERP                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     179     191
+  Set 
+  Used     470     611     612     613     614     636     637     648     653
+
+QRL                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(OUT)
+  Decl     175     233
+  Set      298     634     636     641
+  Used
+
+QRLC                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(OUT)
+  Decl     175     234
+  Set      298     635     637     642
+  Used
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD, PRIVATE
+  Decl     137
+  Set 
+  Used     199     200     201     202     203     204     205     206     207     208     209     210     211     212     214
+           216     218     219     220     221     222     224     225     226     227     228     233     234     235     236
+           237     238     239     240     241     242     243     244     246     247     254     255     256     257     265
+           266     268     270     277     278     279     280     281     282     285     286     287     288     289     290
+           291     292     673
+
+RADCONSTANTS                                                      Module
+  Decl
+  Set 
+  Used     147
+
+RADLW                                                             Module
+  Decl     131
+  Set 
+  Used
+
+RADLW_INIT                                                        Subroutine, Module procedure
+  Decl     157     663
+  Set 
+  Used
+
+RAD_RRTMG_LW                                                      Subroutine, Module procedure
+  Decl     158     167
+  Set 
+  Used
+
+REI                             Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     227
+  Set      315
+  Used
+
+REI_IN                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     174     221
+  Set 
+  Used     315
+
+REI_STOLW                       Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     280
+  Set      321
+  Used
+
+REL                             Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     228
+  Set      316
+  Used
+
+REL_IN                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     174     222
+  Set 
+  Used     316
+
+REL_STOLW                       Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     281
+  Set      322
+  Used
+
+RESHAPE                                                           Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     653
+
+RRTMG_LEVS                      Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     168     193
+  Set 
+  Used     199     200     201     202     203     204     205     206     207     208     209     210     211     212     214
+           216     218     219     220     221     222     224     225     226     227     228     233     234     243     244
+           246     247     254     255     256     257     268     277     278     279     280     281     282     285     286
+           287     288     289     290     291     292     469     470     479     533     541     547     558     566     572
+           599     600     601     602     611     612     613     614     636     637     648     653
+
+RRTMG_LW                        Use assoc                         Subroutine, From module RRTMG_LW_RAD, Module procedure, PRIVATE
+  Decl
+  Set 
+  Used     475
+
+RRTMG_LW                        Use assoc                         Subroutine, From module RRTMG_LW_RAD, Module procedure, PRIVATE
+  Decl
+  Set 
+  Used     475
+
+RRTMG_LW_INI                    Use assoc                         Subroutine, From module RRTMG_LW_INIT, Module procedure, PRIVATE
+  Decl
+  Set 
+  Used     694
+
+RRTMG_LW_INI                    Use assoc                         Subroutine, From module RRTMG_LW_INIT, Module procedure, PRIVATE
+  Decl
+  Set 
+  Used     694
+
+RRTMG_LW_INIT                                                     Module
+  Decl
+  Set 
+  Used     141
+
+RRTMG_LW_RAD                                                      Module
+  Decl
+  Set 
+  Used     142
+
+R_STATE_CCL4VMR                 Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     172     212
+  Set 
+  Used
+
+R_STATE_CFC11VMR                Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     171     209
+  Set 
+  Used
+
+R_STATE_CFC12VMR                Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     172     210
+  Set 
+  Used
+
+R_STATE_CFC22VMR                Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     172     211
+  Set 
+  Used
+
+R_STATE_CH4VMR                  Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     171     206
+  Set 
+  Used
+
+R_STATE_CO2VMR                  Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     170     205
+  Set 
+  Used
+
+R_STATE_H2OVMR                  Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     170     203
+  Set 
+  Used
+
+R_STATE_N2OVMR                  Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     171     208
+  Set 
+  Used
+
+R_STATE_O2VMR                   Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     171     207
+  Set 
+  Used
+
+R_STATE_O3VMR                   Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     170     204
+  Set 
+  Used
+
+R_STATE_PINTMB                  Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     169     201
+  Set 
+  Used
+
+R_STATE_PMIDMB                  Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     169     200
+  Set 
+  Used
+
+R_STATE_TLAY                    Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     169     202
+  Set 
+  Used
+
+R_STATE_TLEV                    Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     170     199
+  Set 
+  Used     469
+
+SHR_CONST_MOD                                                     Module
+  Decl
+  Set 
+  Used     184
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used     137
+
+TAUA_LW                         Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>, 16)
+  Decl     268
+  Set      308     470
+  Used
+
+TAUC_LW                         Dummy Arg                         REAL(KIND=8), DIMENSION(16, <exp>, <exp>), INTENT(IN)
+  Decl     174     224
+  Set 
+  Used
+
+TAUC_STOLW                      Stack                             REAL(KIND=8), DIMENSION(140, <exp>, <exp>)
+  Decl     282
+  Set      323
+  Used
+
+TRIM                                                              Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     420     429
+
+TSFC                            Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     265
+  Set      308     469
+  Used     485
+
+UFLX                            Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     285
+  Set      326     535     560
+  Used     597     599     601     611
+
+UFLXC                           Stack                             REAL(KIND=8), DIMENSION(<exp>, <exp>)
+  Decl     286
+  Set      327     537     562
+  Used     598     600     602     613
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+MCICA_SUBCOL_GEN_LW
+      Defined as:  No definitions.
+
+      Used By:     RADLW
+
+Name  Messages
+----  --------
+MCICA_SUBCOL_LW in MCICA_SUBCOL_GEN_LW
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   RAD_RRTMG_LW in RADLW (Line 383, file radlw.f90)
+
+Name  Messages
+----  --------
+PARRRTM
+      Defined as:  No definitions.
+
+      Used By:     RADLW
+
+Name  Messages
+----  --------
+RADCONSTANTS
+      Defined as:  No definitions.
+
+      Used By:     RADLW
+
+Name  Messages
+----  --------
+RADLW
+      Defined as:  Module (line 131, file radlw.f90)
+
+      Calls:       RRTMG_LW in RRTMG_LW_RAD (Line 475, file radlw.f90)
+                   RRTMG_LW_INI in RRTMG_LW_INIT (Line 694, file radlw.f90)
+
+        Uses:      SHR_KIND_MOD
+                   PARRRTM
+                   RRTMG_LW_INIT
+                   RRTMG_LW_RAD
+                   RADCONSTANTS
+                   MCICA_SUBCOL_GEN_LW
+                   SHR_CONST_MOD
+
+Name  Messages
+----  --------
+RADLW_INIT in RADLW
+      Defined as:  Subroutine (line 157, file radlw.f90)
+
+      Interface:   None
+
+      Calls:       TRIM(Intrinsic) (Line 366, file radlw.f90)
+                   TRIM(Intrinsic) (Line 420, file radlw.f90)
+                   TRIM(Intrinsic) (Line 429, file radlw.f90)
+                   RESHAPE(Intrinsic) (Line 648, file radlw.f90)
+                   RESHAPE(Intrinsic) (Line 653, file radlw.f90)
+
+Name  Messages
+----  --------
+RAD_RRTMG_LW in RADLW
+      Defined as:  Subroutine (line 158, file radlw.f90)
+
+      Interface:   None
+
+      Calls:       MCICA_SUBCOL_LW in MCICA_SUBCOL_GEN_LW (Line 383, file radlw.f90)
+
+Name  Messages
+----  --------
+RESHAPE(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   RADLW_INIT in RADLW (Line 648, file radlw.f90)
+                   RADLW_INIT in RADLW (Line 653, file radlw.f90)
+
+Name  Messages
+----  --------
+RRTMG_LW in RRTMG_LW_RAD
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   RADLW (Line 475, file radlw.f90)
+
+Name  Messages
+----  --------
+RRTMG_LW_INI in RRTMG_LW_INIT
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   RADLW (Line 694, file radlw.f90)
+
+Name  Messages
+----  --------
+RRTMG_LW_INIT
+      Defined as:  No definitions.
+
+      Used By:     RADLW
+
+Name  Messages
+----  --------
+RRTMG_LW_RAD
+      Defined as:  No definitions.
+
+      Used By:     RADLW
+
+Name  Messages
+----  --------
+SHR_CONST_MOD
+      Defined as:  No definitions.
+
+      Used By:     RADLW
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     RADLW
+
+Name  Messages
+----  --------
+TRIM(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   RADLW_INIT in RADLW (Line 366, file radlw.f90)
+                   RADLW_INIT in RADLW (Line 420, file radlw.f90)
+                   RADLW_INIT in RADLW (Line 429, file radlw.f90)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

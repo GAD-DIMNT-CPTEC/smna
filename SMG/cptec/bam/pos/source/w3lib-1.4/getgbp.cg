@@ -1,0 +1,69 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgbp.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgbp.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgbp( lugb, lugi, jg, j, jpds, jgds, kg, k, kpds, kgds, g, iret )
+  192.       $MR_lugi_0 = 0[loc( lugi ),0]
+  192.       if ( $MR_lugi_0 > 0 ) then
+  192.          $MR_S0 = 0[loc( j ),0]
+  192.          if ( $MR_S0 >= 0 ) then
+  192.             $lux_S1 = lux
+  192.             if ( $lux_S1 - $MR_lugi_0 /= 0 ) then
+  192.                goto 10
+  192.             else
+  192.                goto 20
+  192.             endif
+  192.          else
+  192.    10       continue
+  193.             lux = $MR_lugi_0
+  194.             $jj_S2 = min( $MR_S0, -1 - $MR_S0 )
+  194.             jj = $jj_S2
+  194.          endif
+  194.       else
+  194.    20    continue
+  195.          if ( $MR_lugi_0 <= 0 ) then
+  195.             $MR_S3 = 0[loc( j ),0]
+  195.             if ( $MR_S3 >= 0 ) then
+  195.                $lux_S4 = lux
+  195.                $MR_lugb_S5 = 0[loc( lugb ),0]
+  195.                if ( $MR_lugb_S5 - $lux_S4 /= 0 ) then
+  195.                   goto 30
+  195.                else
+  195.                   goto 40
+  195.                endif
+  195.             else
+  195.    30          continue
+  196.                $MR_lugb_S6 = 0[loc( lugb ),0]
+  196.                lux = $MR_lugb_S6
+  197.                $jj_S7 = min( $MR_S3, -1 - $MR_S3 )
+  197.                jj = $jj_S7
+  197.             endif
+  197.          else
+  197.    40       continue
+  199.             $MR_S8 = 0[loc( j ),0]
+  199.             jj = $MR_S8
+  199.          endif
+  199.       endif
+  203.       $Con_P6 = 262144
+  203.       call getgbmp( 0[loc( lugb ),0], 0[loc( lugi ),0], 0[loc( jg ),0], jj, 0[loc( jpds ),0], 0[loc( jgds ),0], $Con_P6, substr[cbuf,0:1], nlen, nnum, mnum, 0[loc( kg ),0], 0[loc( k ),0], 0[loc( kpds ),0], 0[loc( kgds ),0], substr[g,0:1], 0[loc( iret ),0] )
+  206.       $MR_iret_5 = 0[loc( iret ),0]
+  206.       $lux_S9 = lux
+  206.       $lux_S10 = cvmg( $lux_S9, 0, $MR_iret_5 /= 96 )
+  206.       lux = $lux_S10
+  209.       return
+  209.       end
+  209.       

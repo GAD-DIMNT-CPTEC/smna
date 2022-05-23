@@ -1,0 +1,56 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  pdsens.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/pdsens.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+   39.       
+   39.       subroutine pdsens( kens, kprob, xprob, kclust, kmembr, ilast, msga )
+   43.       if ( ilast >= 41 ) then
+   50.          il = cvmg( cvmg( cvmg( cvmg( il, 45, ilast < 41 ), 55, ilast < 46 ), 76, ilast < 61 ), 86, ilast < 77 )
+   51.          if ( -42 + il >= 0 ) then
+   51.             $I_L51_4 = 0
+   51.             do
+   52.                t$4 = ( 336 + 8 * $I_L51_4 )
+   52.                call sbytec(  _substr(msga(1),1,1), 0, t$4, 8 )
+   53.                $I_L51_4 = 1 + $I_L51_4
+   53.                if ( $I_L51_4 >= -41 + il ) exit
+   53.             enddo
+   53.          endif
+   55.          call sbytec(  _substr(msga(1),1,1), il, 0, 24 )
+   57.          if ( il >= 45 ) then
+   57.             call sbytesc(  _substr(msga(1),1,1), kens(1), 320, 8, 0, 5 )
+   57.          endif
+   59.          if ( il >= 55 ) then
+   60.             call sbytesc(  _substr(msga(1),1,1), kprob(1), 360, 8, 0, 2 )
+   61.             call w3fi01( lw )
+   62.             t$4 = 8 * lw
+   62.             call w3fi76( xprob(1), iexp, imant, t$4 )
+   63.             call sbytec(  _substr(msga(1),1,1), iexp, 376, 8 )
+   64.             call sbytec(  _substr(msga(1),1,1), imant, 384, 24 )
+   65.             t$4 = 8 * lw
+   65.             call w3fi76( xprob(2), iexp, imant, t$4 )
+   66.             call sbytec(  _substr(msga(1),1,1), iexp, 408, 8 )
+   67.             call sbytec(  _substr(msga(1),1,1), imant, 416, 24 )
+   67.          endif
+   70.          if ( il >= 76 ) then
+   70.             call sbytesc(  _substr(msga(1),1,1), kclust(1), 480, 8, 0, 16 )
+   70.          endif
+   72.          if ( il >= 86 ) then
+   72.             call sbytesc(  _substr(msga(1),1,1), kmembr(1), 608, 1, 0, 80 )
+   72.          endif
+   72.       endif
+   76.       return
+   76.       end
+   76.       

@@ -1,0 +1,103 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  putgbex.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/putgbex.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine putgbex( lugb, kf, kpds, kgds, kens, kprob, xprob, kclust, kmembr, lb, f, iret )
+    2.       $PRT_P6 = 17 * 0[loc( kf ),0]
+    2.       t$8 = int( _alloc( max( 0, ( 1000 + _ash( $PRT_P6 + _rsh( _ash( $PRT_P6, 2 ), 29 ), 3 ) ) ) ), 8 )
+    2.       t$4 = int( _alloc( _lsh( max( 0, 0[loc( kf ),0] ), 3 ) ), 8 )
+  175.       t$5 = t$4
+  174.       $MR_kf_0 = 0[loc( kf ),0]
+  174.       t$9 = t$4 + _lsh( max( 0, $MR_kf_0 ), 2 )
+  179.       call r63w72( 0[loc( kpds ),0], 0[loc( kgds ),0], ipds[0], igds[0] )
+  180.       $LC_S4 = -50
+  180.       $SI_S3 = 0
+  180.       $LIS_0[0:4:1] = _bcst( 0, 4 )
+  180.       do
+  180.          ibds[$SI_S3:4:1] = $LIS_0[0:4:1]
+  180.          $SI_S3 = 16 + $SI_S3
+  180.          $LC_S4 = 1 + $LC_S4
+  180.          if ( $LC_S4 >= 0 ) exit
+  180.       enddo
+  183.       $kbm_S6 = $MR_kf_0
+  184.       if ( (6,ipds)[0] /= 0 ) then
+  185.          $kbm_S6 = 0
+  186.          if ( $MR_kf_0 > 0 ) then
+  186.             $I_L186_S5 = 0
+  188.             $LIS_E2 = -1 + $MR_kf_0
+  193.             $LIS_E1 = $MR_kf_0
+  186.             do
+  187.                if ( int( 0[$I_L186_S5 + loc( lb )].B ) /= 0 ) then
+  188.                   if ( $LIS_E2 - $I_L186_S5 < 0 ) then
+  188.                      $LB_Y0 = 1
+  188.                      $UB_Y1 = $LIS_E1
+  188.                      $Subscript_Y5 = 1 + $I_L186_S5
+  188.                      _bounds_error( $_File_Y40, $Line_Y45, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y46 )
+  188.                   endif
+  188.                   0[t$9,$I_L186_S5] = 1
+  189.                   $kbm_S6 = 1 + $kbm_S6
+  189.                else
+  191.                   if ( $LIS_E2 - $I_L186_S5 < 0 ) then
+  191.                      $LB_Y0 = 1
+  191.                      $UB_Y1 = $LIS_E1
+  191.                      $Subscript_Y5 = 1 + $I_L186_S5
+  191.                      _bounds_error( $_File_Y40, $Line_Y47, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y48 )
+  191.                   endif
+  191.                   0[t$9,$I_L186_S5] = 0
+  191.                endif
+  193.                $I_L186_S5 = 1 + $I_L186_S5
+  192.                if ( $I_L186_S5 >= $LIS_E1 ) exit
+  192.             enddo
+  192.          endif
+  194.          if ( $kbm_S6 - $MR_kf_0 == 0 ) then
+  194.             (6,ipds)[0] = 0
+  194.          endif
+  194.       endif
+  198.       if ( $kbm_S6 == 0 ) then
+  199.          if ( $MR_kf_0 > 0 ) then
+  200.             $W0 = 0.0
+  200.             __sset_cce( 0[t$5,0], $W0, 0[loc( kf ),0] )
+  200.          endif
+  202.          nbit = 0
+  202.       else
+  204.          $Con_P7 = 0
+  204.          call getbit( (6,ipds)[0], $Con_P7, (24,ipds)[0], 0[loc( kf ),0], 0[t$9,0], 0[loc( f ),0], 0[t$5,0], fmin, fmax, nbit )
+  205.          $nbit_S7 = nbit
+  205.          $nbit_S8 = min( 16, $nbit_S7 )
+  205.          nbit = $nbit_S8
+  205.       endif
+  209.       call w3fi68( ipds[0], substr[pds,0:1] )
+  210.       if ( (23,ipds)[0] == 2 ) then
+  211.          ilast = 86
+  212.          call pdsens( 0[loc( kens ),0], 0[loc( kprob ),0], 0[loc( xprob ),0], 0[loc( kclust ),0], 0[loc( kmembr ),0], ilast, substr[pds,0:1] )
+  212.       endif
+  216.       $Con_P7 = 0
+  216.       $Con_P8 = 0
+  216.       $Con_P9 = 1
+  216.       $Con_P10 = 1
+  216.       $Con_P11 = 255
+  216.       $Con_P12 = 0
+  216.       $Con_P13 = 0
+  216.       call w3fi72( $Con_P7, 0[t$5,0], $Con_P8, nbit, $Con_P9, ipds[0], substr[pds,0:1], $Con_P10, $Con_P11, igds[0], $Con_P12, $Con_P13, 0[t$9,0], 0[loc( kf ),0], ibds[0], kfo, substr[0,t$8:1], lgrib, 0[loc( iret ),0] )
+  219.       if ( 0[loc( iret ),0] == 0 ) then
+  219.          call wryte( 0[loc( lugb ),0], lgrib, substr[0,t$8:1] )
+  219.       endif
+    2.       _free( t$8 )
+    2.       _free( t$4 )
+  222.       return
+  222.       end
+  222.       

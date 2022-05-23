@@ -1,0 +1,3021 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi63.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi63.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi63( msga, kpds, kgds, kbms, data, kptr, kret )
+  632.       $LCS_kptr_0 = loc( kptr )
+  632.       9[$LCS_kptr_0,0] = 0
+  637.       call fi631( substr[msga,0:1], 0[$LCS_kptr_0,0], 0[loc( kpds ),0], 0[loc( kret ),0] )
+  638.       $LCS_kret_1 = loc( kret )
+  638.       $MR_kret_S2 = 0[$LCS_kret_1,0]
+  638.       if ( $MR_kret_S2 == 0 ) then
+  645.          call fi632( substr[msga,0:1], 0[loc( kptr ),0], 0[loc( kpds ),0], 0[$LCS_kret_1,0] )
+  646.          $LCS_kret_2 = loc( kret )
+  646.          $MR_kret_S3 = 0[$LCS_kret_2,0]
+  646.          if ( $MR_kret_S3 == 0 ) then
+  653.             if ( and( 128, 3[loc( kpds ),0] ) /= 0 ) then
+  654.                call fi633( substr[msga,0:1], 0[loc( kptr ),0], 0[loc( kgds ),0], 0[$LCS_kret_2,0] )
+  655.                $MR_kret_S4 = 0[loc( kret ),0]
+  655.                if ( $MR_kret_S4 == 0 ) then
+  654.                   goto 10
+  654.                endif
+  654.             else
+  654.    10          continue
+  663.                call fi634( substr[msga,0:1], 0[loc( kptr ),0], 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kbms )].B, 0[loc( kret ),0] )
+  664.                $MR_kret_S5 = 0[loc( kret ),0]
+  664.                if ( $MR_kret_S5 == 0 ) then
+  659.                   goto 20
+  665.                else if ( $MR_kret_S5 == 9 ) then
+  665.    20             continue
+  674.                   $LCS_kpds_3 = loc( kpds )
+  674.                   if ( 17[$LCS_kpds_3,0] == 1 ) then
+  675.                      call fi635( substr[msga,0:1], 0[loc( kptr ),0], 0[$LCS_kpds_3,0], 0[loc( kgds ),0], 0[loc( kbms )].B, 0[loc( data ),0], 0[loc( kret ),0] )
+  676.                      $LCS_kptr_4 = loc( kptr )
+  676.                      if ( 2[$LCS_kptr_4,0] == 50 ) then
+  710.                         $MR_kptr_4 = 8[$LCS_kptr_4,0]
+  710.                         t$1 = 384 + $MR_kptr_4
+  710.                         $Con_P12 = 1
+  710.                         call gbytec( substr[msga,0:1], jsgn, t$1, $Con_P12 )
+  711.                         t$1 = 385 + $MR_kptr_4
+  711.                         $Con_P12 = 7
+  711.                         call gbytec( substr[msga,0:1], jexp, t$1, $Con_P12 )
+  712.                         t$1 = 392 + $MR_kptr_4
+  712.                         $Con_P12 = 24
+  712.                         call gbytec( substr[msga,0:1], ifr, t$1, $Con_P12 )
+  714.                         $ifr_S6 = ifr
+  714.                         if ( $ifr_S6 == 0 ) then
+  715.                            $realkk_S9 = 0.0
+  715.                         else
+  719.                            $jexp_S7 = jexp
+  719.                            $realkk_S9 = 16.0 ** ( -70 + $jexp_S7 ) * real( $ifr_S6 )
+  720.                            $jsgn_S8 = jsgn
+  720.                            if ( $jsgn_S8 /= 0 ) then
+  720.                               $realkk_S9 = -$realkk_S9
+  720.                            endif
+  720.                         endif
+  722.                         fval1 = $realkk_S9
+  730.                         t$1 = 416 + $MR_kptr_4
+  730.                         $Con_P12 = 1
+  730.                         call gbytec( substr[msga,0:1], jsgn, t$1, $Con_P12 )
+  731.                         t$1 = 417 + $MR_kptr_4
+  731.                         $Con_P12 = 7
+  731.                         call gbytec( substr[msga,0:1], jexp, t$1, $Con_P12 )
+  732.                         t$1 = 424 + $MR_kptr_4
+  732.                         $Con_P12 = 24
+  732.                         call gbytec( substr[msga,0:1], ifr, t$1, $Con_P12 )
+  734.                         $ifr_S10 = ifr
+  734.                         if ( $ifr_S10 == 0 ) then
+  735.                            $realkk_S13 = 0.0
+  735.                         else
+  739.                            $jexp_S11 = jexp
+  739.                            $realkk_S13 = 16.0 ** ( -70 + $jexp_S11 ) * real( $ifr_S10 )
+  740.                            $jsgn_S12 = jsgn
+  740.                            if ( $jsgn_S12 /= 0 ) then
+  740.                               $realkk_S13 = -$realkk_S13
+  740.                            endif
+  740.                         endif
+  742.                         fdiff1 = $realkk_S13
+  744.                         t$1 = 448 + $MR_kptr_4
+  744.                         $Con_P12 = 1
+  744.                         call gbytec( substr[msga,0:1], isign, t$1, $Con_P12 )
+  745.                         t$1 = 449 + $MR_kptr_4
+  745.                         $Con_P12 = 15
+  745.                         call gbytec( substr[msga,0:1], iscal2, t$1, $Con_P12 )
+  746.                         if ( isign > 0 ) then
+  747.                            $iscal2_S14 = iscal2
+  747.                            $iscal2_S15 = -$iscal2_S14
+  747.                            iscal2 = $iscal2_S15
+  747.                         endif
+  752.                         npts = 9[loc( kptr ),0]
+  756.                         $LCS_kpds_5 = loc( kpds )
+  756.                         call w3fi83( 0[loc( data ),0], npts, fval1, fdiff1, iscal2, 21[$LCS_kpds_5,0], 0[$LCS_kpds_5,0], 0[loc( kgds ),0] )
+  756.                      endif
+  756.                   else
+  765.                      0[loc( kret ),0] = 7
+  765.                   endif
+  765.                endif
+  765.             endif
+  765.          endif
+  765.       endif
+  769.       return
+  769.       end
+  769.       
+  770.       
+  770.       subroutine fi631( msga, kptr, kpds, kret )
+  850.       0[loc( kret ),0] = 0
+  852.       $I_L852_S3 = 0
+  853.       $SR_S2 = 0
+  852.       do
+  853.          t$3 = $SR_S2
+  853.          $Con_P16 = 32
+  853.          call gbytec( substr[msga,0:1], mgrib, t$3, $Con_P16 )
+  854.          if ( mgrib == 1196575042 ) then
+  855.             $LCS_0 = _lsh( $I_L852_S3, 3 )
+  855.             $MR_kptr_S4 = $LCS_0
+  855.             $LCS_kptr_1 = loc( kptr )
+  855.             8[$LCS_kptr_1,0] = $MR_kptr_S4
+  865.             $MR_kptr_S5 = ( 32 + $LCS_0 )
+  865.             7[$LCS_kptr_1,0] = $MR_kptr_S5
+  866.             $Con_P16 = 24
+  866.             call gbytec( substr[msga,0:1], itotal, 7[$LCS_kptr_1,0], $Con_P16 )
+  868.             $MR_itotal_3 = itotal
+  868.             $MR_kptr_S6 = 8[loc( kptr ),0]
+  868.             ipoint = $MR_kptr_S6 + _lsh( $MR_itotal_3, 3 ) + -32
+  869.             $Con_P16 = 32
+  869.             call gbytec( substr[msga,0:1], i7777, ipoint, $Con_P16 )
+  870.             if ( i7777 == 926365495 ) then
+  874.                $LCS_kptr_2 = loc( kptr )
+  874.                $MR_kptr_S7 = 7[$LCS_kptr_2,0]
+  874.                $MR_kptr_S8 = 24 + $MR_kptr_S7
+  874.                7[$LCS_kptr_2,0] = $MR_kptr_S8
+  875.                0[$LCS_kptr_2,0] = $MR_itotal_3
+  876.                1[$LCS_kptr_2,0] = 8
+  877.                $Con_P16 = 8
+  877.                call gbytec( substr[msga,0:1], 17[loc( kpds ),0], 7[$LCS_kptr_2,0], $Con_P16 )
+  878.                $LCS_kptr_3 = loc( kptr )
+  878.                $MR_kptr_S9 = 7[$LCS_kptr_3,0]
+  878.                $MR_kptr_S10 = 8 + $MR_kptr_S9
+  878.                7[$LCS_kptr_3,0] = $MR_kptr_S10
+  887.                $Con_P16 = 24
+  887.                call gbytec( substr[msga,0:1], 2[$LCS_kptr_3,0], 7[$LCS_kptr_3,0], $Con_P16 )
+  888.                $MR_kptr_S11 = 7[loc( kptr ),0]
+  888.                look = 56 + $MR_kptr_S11
+  890.                $Con_P16 = 8
+  890.                call gbytec( substr[msga,0:1], 3[loc( kpds ),0], look, $Con_P16 )
+  891.                $LCS_kptr_4 = loc( kptr )
+  891.                $MR_kptr_S12 = 2[$LCS_kptr_4,0]
+  891.                $MR_kptr_S13 = $MR_kptr_S11 + _lsh( $MR_kptr_S12, 3 )
+  891.                7[$LCS_kptr_4,0] = $MR_kptr_S13
+  893.                $MR_kpds_9 = 3[loc( kpds ),0]
+  893.                if ( and( 128, $MR_kpds_9 ) /= 0 ) then
+  895.                   $Con_P16 = 24
+  895.                   call gbytec( substr[msga,0:1], 3[$LCS_kptr_4,0], 7[$LCS_kptr_4,0], $Con_P16 )
+  896.                   $LCS_kptr_5 = loc( kptr )
+  896.                   $MR_kptr_S14 = 3[$LCS_kptr_5,0]
+  896.                   $MR_kptr_S15 = 7[$LCS_kptr_5,0]
+  896.                   $MR_kptr_S16 = $MR_kptr_S15 + _lsh( $MR_kptr_S14, 3 )
+  896.                   7[$LCS_kptr_5,0] = $MR_kptr_S16
+  896.                else
+  898.                   3[loc( kptr ),0] = 0
+  898.                endif
+  901.                if ( and( 64, $MR_kpds_9 ) /= 0 ) then
+  903.                   $LCS_kptr_6 = loc( kptr )
+  903.                   $Con_P16 = 24
+  903.                   call gbytec( substr[msga,0:1], 4[$LCS_kptr_6,0], 7[$LCS_kptr_6,0], $Con_P16 )
+  903.                else
+  905.                   4[loc( kptr ),0] = 0
+  905.                endif
+  907.                $LCS_kptr_7 = loc( kptr )
+  907.                $MR_kptr_S17 = 4[$LCS_kptr_7,0]
+  907.                $MR_kptr_S18 = 7[$LCS_kptr_7,0]
+  907.                $MR_kptr_S19 = $MR_kptr_S18 + _lsh( $MR_kptr_S17, 3 )
+  907.                7[$LCS_kptr_7,0] = $MR_kptr_S19
+  910.                $Con_P16 = 24
+  910.                call gbytec( substr[msga,0:1], 5[$LCS_kptr_7,0], 7[$LCS_kptr_7,0], $Con_P16 )
+  913.                $LCS_kptr_8 = loc( kptr )
+  913.                $MR_kptr_S20 = 5[$LCS_kptr_8,0]
+  913.                $MR_kptr_S21 = 7[$LCS_kptr_8,0]
+  913.                $MR_kptr_S22 = $MR_kptr_S21 + _lsh( $MR_kptr_S20, 3 )
+  913.                7[$LCS_kptr_8,0] = $MR_kptr_S22
+  916.                $Con_P16 = 32
+  916.                call gbytec( substr[msga,0:1], k7777, 7[$LCS_kptr_8,0], $Con_P16 )
+  917.                $LCS_kptr_9 = loc( kptr )
+  917.                $MR_kptr_S24 = 2[$LCS_kptr_9,0]
+  917.                $MR_kptr_13 = 1[$LCS_kptr_9,0]
+  917.                $MR_kptr_S23 = 3[$LCS_kptr_9,0]
+  917.                $MR_kptr_S25 = 4[$LCS_kptr_9,0]
+  917.                $MR_kptr_S26 = 5[$LCS_kptr_9,0]
+  917.                $LCS_4_10 = $MR_kptr_13 + $MR_kptr_S23 + $MR_kptr_S24 + $MR_kptr_S25 + $MR_kptr_S26 + 4
+  918.                if ( k7777 == 926365495 ) then
+  918.                   $MR_kptr_6 = 0[$LCS_kptr_9,0]
+  918.                   if ( $LCS_4_10 - $MR_kptr_6 /= 0 ) then
+  918.                      goto 10
+  920.                   else if ( 17[loc( kpds ),0] == 0 ) then
+  923.                      0[$LCS_kptr_9,0] = $LCS_4_10
+  923.                   endif
+  923.                else
+  923.    10             continue
+  919.                   0[loc( kret ),0] = 2
+  919.                endif
+  919.             else
+  881.                0[loc( kret ),0] = 2
+  881.             endif
+  881.             goto 20
+  881.          endif
+  853.          $SR_S2 = 8 + $SR_S2
+  858.          $I_L852_S3 = 1 + $I_L852_S3
+  857.          if ( $I_L852_S3 >= 105 ) exit
+  857.       enddo
+  859.       0[loc( kret ),0] = 1
+  859.    20 continue
+  929.       return
+  929.       end
+  929.       
+  930.       
+  930.       subroutine fi632( msga, kptr, kpds, kret )
+ 1017.       0[loc( kret ),0] = 0
+ 1019.       $LCS_kptr_0 = loc( kptr )
+ 1019.       $MR_kptr_S2 = 8[$LCS_kptr_0,0] + _lsh( 1[$LCS_kptr_0,0], 3 ) + 24
+ 1019.       7[$LCS_kptr_0,0] = $MR_kptr_S2
+ 1022.       $Con_P12 = 8
+ 1022.       call gbytec( substr[msga,0:1], 18[loc( kpds ),0], 7[$LCS_kptr_0,0], $Con_P12 )
+ 1023.       $LCS_kptr_1 = loc( kptr )
+ 1023.       $MR_kptr_S3 = 7[$LCS_kptr_1,0]
+ 1023.       $MR_kptr_S4 = 8 + $MR_kptr_S3
+ 1023.       7[$LCS_kptr_1,0] = $MR_kptr_S4
+ 1025.       $Con_P12 = 8
+ 1025.       call gbytec( substr[msga,0:1], 0[loc( kpds ),0], 7[$LCS_kptr_1,0], $Con_P12 )
+ 1026.       $LCS_kptr_2 = loc( kptr )
+ 1026.       $MR_kptr_S5 = 7[$LCS_kptr_2,0]
+ 1026.       $MR_kptr_S6 = 8 + $MR_kptr_S5
+ 1026.       7[$LCS_kptr_2,0] = $MR_kptr_S6
+ 1029.       $Con_P12 = 8
+ 1029.       call gbytec( substr[msga,0:1], 1[loc( kpds ),0], 7[$LCS_kptr_2,0], $Con_P12 )
+ 1030.       $LCS_kptr_3 = loc( kptr )
+ 1030.       $MR_kptr_S7 = 7[$LCS_kptr_3,0]
+ 1030.       $MR_kptr_S8 = 8 + $MR_kptr_S7
+ 1030.       7[$LCS_kptr_3,0] = $MR_kptr_S8
+ 1033.       $Con_P12 = 8
+ 1033.       call gbytec( substr[msga,0:1], 2[loc( kpds ),0], 7[$LCS_kptr_3,0], $Con_P12 )
+ 1038.       $LCS_kptr_4 = loc( kptr )
+ 1038.       $MR_kptr_S9 = 7[$LCS_kptr_4,0]
+ 1038.       $MR_kptr_S10 = 16 + $MR_kptr_S9
+ 1038.       7[$LCS_kptr_4,0] = $MR_kptr_S10
+ 1041.       $Con_P12 = 8
+ 1041.       call gbytec( substr[msga,0:1], 4[loc( kpds ),0], 7[$LCS_kptr_4,0], $Con_P12 )
+ 1042.       $LCS_kptr_5 = loc( kptr )
+ 1042.       $MR_kptr_S11 = 7[$LCS_kptr_5,0]
+ 1042.       $MR_kptr_S12 = 8 + $MR_kptr_S11
+ 1042.       7[$LCS_kptr_5,0] = $MR_kptr_S12
+ 1045.       $Con_P12 = 8
+ 1045.       call gbytec( substr[msga,0:1], 5[loc( kpds ),0], 7[$LCS_kptr_5,0], $Con_P12 )
+ 1046.       $LCS_kptr_6 = loc( kptr )
+ 1046.       $MR_kptr_S13 = 7[$LCS_kptr_6,0]
+ 1046.       $MR_kptr_S14 = 8 + $MR_kptr_S13
+ 1046.       7[$LCS_kptr_6,0] = $MR_kptr_S14
+ 1049.       $Con_P12 = 16
+ 1049.       call gbytec( substr[msga,0:1], 6[loc( kpds ),0], 7[$LCS_kptr_6,0], $Con_P12 )
+ 1050.       $LCS_kptr_7 = loc( kptr )
+ 1050.       $MR_kptr_S15 = 7[$LCS_kptr_7,0]
+ 1050.       $MR_kptr_S16 = 16 + $MR_kptr_S15
+ 1050.       7[$LCS_kptr_7,0] = $MR_kptr_S16
+ 1053.       $Con_P12 = 8
+ 1053.       call gbytec( substr[msga,0:1], 7[loc( kpds ),0], 7[$LCS_kptr_7,0], $Con_P12 )
+ 1054.       $LCS_kptr_8 = loc( kptr )
+ 1054.       $MR_kptr_S17 = 7[$LCS_kptr_8,0]
+ 1054.       $MR_kptr_S18 = 8 + $MR_kptr_S17
+ 1054.       7[$LCS_kptr_8,0] = $MR_kptr_S18
+ 1057.       $Con_P12 = 8
+ 1057.       call gbytec( substr[msga,0:1], 8[loc( kpds ),0], 7[$LCS_kptr_8,0], $Con_P12 )
+ 1058.       $LCS_kptr_9 = loc( kptr )
+ 1058.       $MR_kptr_S19 = 7[$LCS_kptr_9,0]
+ 1058.       $MR_kptr_S20 = 8 + $MR_kptr_S19
+ 1058.       7[$LCS_kptr_9,0] = $MR_kptr_S20
+ 1061.       $Con_P12 = 8
+ 1061.       call gbytec( substr[msga,0:1], 9[loc( kpds ),0], 7[$LCS_kptr_9,0], $Con_P12 )
+ 1062.       $LCS_kptr_10 = loc( kptr )
+ 1062.       $MR_kptr_S21 = 7[$LCS_kptr_10,0]
+ 1062.       $MR_kptr_S22 = 8 + $MR_kptr_S21
+ 1062.       7[$LCS_kptr_10,0] = $MR_kptr_S22
+ 1065.       $Con_P12 = 8
+ 1065.       call gbytec( substr[msga,0:1], 10[loc( kpds ),0], 7[$LCS_kptr_10,0], $Con_P12 )
+ 1066.       $LCS_kptr_11 = loc( kptr )
+ 1066.       $MR_kptr_S23 = 7[$LCS_kptr_11,0]
+ 1066.       $MR_kptr_S24 = 8 + $MR_kptr_S23
+ 1066.       7[$LCS_kptr_11,0] = $MR_kptr_S24
+ 1069.       $Con_P12 = 8
+ 1069.       call gbytec( substr[msga,0:1], 11[loc( kpds ),0], 7[$LCS_kptr_11,0], $Con_P12 )
+ 1070.       $LCS_kptr_12 = loc( kptr )
+ 1070.       $MR_kptr_S25 = 7[$LCS_kptr_12,0]
+ 1070.       $MR_kptr_S26 = 8 + $MR_kptr_S25
+ 1070.       7[$LCS_kptr_12,0] = $MR_kptr_S26
+ 1073.       $Con_P12 = 8
+ 1073.       call gbytec( substr[msga,0:1], 12[loc( kpds ),0], 7[$LCS_kptr_12,0], $Con_P12 )
+ 1074.       $LCS_kptr_13 = loc( kptr )
+ 1074.       $MR_kptr_S27 = 7[$LCS_kptr_13,0]
+ 1074.       $MR_kptr_S28 = 8 + $MR_kptr_S27
+ 1074.       7[$LCS_kptr_13,0] = $MR_kptr_S28
+ 1077.       $Con_P12 = 8
+ 1077.       call gbytec( substr[msga,0:1], 13[loc( kpds ),0], 7[$LCS_kptr_13,0], $Con_P12 )
+ 1078.       $LCS_kptr_14 = loc( kptr )
+ 1078.       $MR_kptr_S29 = 7[$LCS_kptr_14,0]
+ 1078.       $MR_kptr_S30 = 8 + $MR_kptr_S29
+ 1078.       7[$LCS_kptr_14,0] = $MR_kptr_S30
+ 1081.       $Con_P12 = 8
+ 1081.       call gbytec( substr[msga,0:1], 14[loc( kpds ),0], 7[$LCS_kptr_14,0], $Con_P12 )
+ 1082.       $LCS_kptr_15 = loc( kptr )
+ 1082.       $MR_kptr_S31 = 7[$LCS_kptr_15,0]
+ 1082.       $MR_kptr_S32 = 8 + $MR_kptr_S31
+ 1082.       7[$LCS_kptr_15,0] = $MR_kptr_S32
+ 1085.       $Con_P12 = 8
+ 1085.       call gbytec( substr[msga,0:1], 15[loc( kpds ),0], 7[$LCS_kptr_15,0], $Con_P12 )
+ 1086.       $LCS_kptr_16 = loc( kptr )
+ 1086.       $MR_kptr_S33 = 7[$LCS_kptr_16,0]
+ 1086.       $MR_kptr_S34 = 8 + $MR_kptr_S33
+ 1086.       7[$LCS_kptr_16,0] = $MR_kptr_S34
+ 1091.       $LCS_kpds_17 = loc( kpds )
+ 1091.       if ( 15[$LCS_kpds_17,0] == 10 ) then
+ 1092.          $MR_kpds_S35 = 13[$LCS_kpds_17,0]
+ 1092.          $MR_kpds_S36 = 14[$LCS_kpds_17,0] + _lsh( $MR_kpds_S35, 8 )
+ 1092.          13[$LCS_kpds_17,0] = $MR_kpds_S36
+ 1093.          14[$LCS_kpds_17,0] = 0
+ 1093.       endif
+ 1097.       $Con_P12 = 16
+ 1097.       call gbytec( substr[msga,0:1], 16[loc( kpds ),0], 7[loc( kptr ),0], $Con_P12 )
+ 1098.       $LCS_kptr_18 = loc( kptr )
+ 1098.       $MR_kptr_S37 = 7[$LCS_kptr_18,0]
+ 1098.       $MR_kptr_S38 = 16 + $MR_kptr_S37
+ 1098.       7[$LCS_kptr_18,0] = $MR_kptr_S38
+ 1101.       $Con_P12 = 8
+ 1101.       call gbytec( substr[msga,0:1], 19[loc( kpds ),0], 7[$LCS_kptr_18,0], $Con_P12 )
+ 1102.       $LCS_kptr_19 = loc( kptr )
+ 1102.       $MR_kptr_S39 = 7[$LCS_kptr_19,0]
+ 1102.       $MR_kptr_S40 = 8 + $MR_kptr_S39
+ 1102.       7[$LCS_kptr_19,0] = $MR_kptr_S40
+ 1105.       $Con_P12 = 8
+ 1105.       call gbytec( substr[msga,0:1], 20[loc( kpds ),0], 7[$LCS_kptr_19,0], $Con_P12 )
+ 1106.       $LCS_kptr_20 = loc( kptr )
+ 1106.       $MR_kptr_S41 = 7[$LCS_kptr_20,0]
+ 1106.       $MR_kptr_S42 = 8 + $MR_kptr_S41
+ 1106.       7[$LCS_kptr_20,0] = $MR_kptr_S42
+ 1107.       $MR_kptr_S43 = 2[$LCS_kptr_20,0]
+ 1107.       if ( $MR_kptr_S43 > 25 ) then
+ 1109.          $Con_P12 = 8
+ 1109.          call gbytec( substr[msga,0:1], 22[loc( kpds ),0], 7[$LCS_kptr_20,0], $Con_P12 )
+ 1110.          $LCS_kptr_21 = loc( kptr )
+ 1110.          $MR_kptr_S44 = 7[$LCS_kptr_21,0]
+ 1110.          $MR_kptr_S45 = 8 + $MR_kptr_S44
+ 1110.          7[$LCS_kptr_21,0] = $MR_kptr_S45
+ 1111.          $MR_kptr_S46 = 2[$LCS_kptr_21,0]
+ 1111.          if ( $MR_kptr_S46 >= 28 ) then
+ 1114.             $Con_P12 = 1
+ 1114.             call gbytec( substr[msga,0:1], isign, 7[$LCS_kptr_21,0], $Con_P12 )
+ 1115.             $LCS_kptr_22 = loc( kptr )
+ 1115.             $MR_kptr_S47 = 7[$LCS_kptr_22,0]
+ 1115.             $MR_kptr_S48 = 1 + $MR_kptr_S47
+ 1115.             7[$LCS_kptr_22,0] = $MR_kptr_S48
+ 1116.             $Con_P12 = 15
+ 1116.             call gbytec( substr[msga,0:1], idec, 7[$LCS_kptr_22,0], $Con_P12 )
+ 1117.             $LCS_kptr_23 = loc( kptr )
+ 1117.             $MR_kptr_S49 = 7[$LCS_kptr_23,0]
+ 1117.             $MR_kptr_S50 = 15 + $MR_kptr_S49
+ 1117.             7[$LCS_kptr_23,0] = $MR_kptr_S50
+ 1118.             $LCS_kpds_24 = loc( kpds )
+ 1118.             21[$LCS_kpds_24,0] = cvmg( idec, -idec, isign <= 0 )
+ 1123.             $MR_kptr_S51 = 2[$LCS_kptr_23,0]
+ 1123.             $isiz_S0 = -28 + $MR_kptr_S51
+ 1124.             if ( $isiz_S0 <= 12 ) then
+ 1126.                t$4 = 8 + $MR_kptr_S50
+ 1126.                $Con_P12 = 8
+ 1126.                call gbytec( substr[msga,0:1], 23[$LCS_kpds_24,0], t$4, $Con_P12 )
+ 1128.                t$4 = 16 + $MR_kptr_S50
+ 1128.                $Con_P12 = 8
+ 1128.                call gbytec( substr[msga,0:1], 24[loc( kpds ),0], t$4, $Con_P12 )
+ 1130.                $MR_kptr_S52 = $MR_kptr_S50 + _lsh( $isiz_S0, 3 )
+ 1130.                7[loc( kptr ),0] = $MR_kptr_S52
+ 1130.             else
+ 1133.                t$4 = 8 + $MR_kptr_S50
+ 1133.                $Con_P12 = 8
+ 1133.                call gbytec( substr[msga,0:1], 23[loc( kpds ),0], t$4, $Con_P12 )
+ 1135.                t$4 = 16 + $MR_kptr_S50
+ 1135.                $Con_P12 = 8
+ 1135.                call gbytec( substr[msga,0:1], 24[loc( kpds ),0], t$4, $Con_P12 )
+ 1137.                $MR_kptr_S53 = 96 + $MR_kptr_S50
+ 1137.                7[loc( kptr ),0] = $MR_kptr_S53
+ 1139.                call w3fi01( lw )
+ 1141.                mwdbit = 32
+ 1142.                $isiz_S1 = -40 + $MR_kptr_S51
+ 1143.                $MR_lw_10 = lw
+ 1143.                $LCS_25 = $isiz_S1 / $MR_lw_10
+ 1143.                iter = $LCS_25
+ 1144.                if ( $isiz_S1 - $MR_lw_10 * $LCS_25 /= 0 ) then
+ 1144.                   $MR_iter_11 = 1 + $LCS_25
+ 1144.                   iter = $MR_iter_11
+ 1144.                endif
+ 1145.                $Con_P12 = 0
+ 1145.                call gbytesc( substr[msga,0:1], 35[loc( kpds ),0], 7[loc( kptr ),0], mwdbit, $Con_P12, iter )
+ 1146.                $LCS_kptr_26 = loc( kptr )
+ 1146.                $MR_kptr_S54 = 7[$LCS_kptr_26,0]
+ 1146.                $MR_kptr_S55 = $MR_kptr_S54 + _lsh( $isiz_S1, 3 )
+ 1146.                7[$LCS_kptr_26,0] = $MR_kptr_S55
+ 1146.             endif
+ 1146.          endif
+ 1146.       endif
+ 1217.       return
+ 1217.       end
+ 1217.       
+ 1218.       
+ 1218.       subroutine fi633( msga, kptr, kgds, kret )
+ 1360.       0[loc( kret ),0] = 0
+ 1363.       $LCS_kptr_0 = loc( kptr )
+ 1363.       $MR_kptr_S8 = 8[$LCS_kptr_0,0] + _lsh( 2[$LCS_kptr_0,0] + 1[$LCS_kptr_0,0], 3 ) + 24
+ 1363.       7[$LCS_kptr_0,0] = $MR_kptr_S8
+ 1364.       $nsave_S0 = -24 + $MR_kptr_S8
+ 1367.       $Con_P20 = 8
+ 1367.       call gbytec( substr[msga,0:1], 18[loc( kgds ),0], 7[$LCS_kptr_0,0], $Con_P20 )
+ 1368.       $LCS_kptr_1 = loc( kptr )
+ 1368.       $MR_kptr_S9 = 7[$LCS_kptr_1,0]
+ 1368.       $MR_kptr_S10 = 8 + $MR_kptr_S9
+ 1368.       7[$LCS_kptr_1,0] = $MR_kptr_S10
+ 1371.       $Con_P20 = 8
+ 1371.       call gbytec( substr[msga,0:1], 19[loc( kgds ),0], 7[$LCS_kptr_1,0], $Con_P20 )
+ 1372.       $LCS_kptr_2 = loc( kptr )
+ 1372.       $MR_kptr_S11 = 7[$LCS_kptr_2,0]
+ 1372.       $MR_kptr_S12 = 8 + $MR_kptr_S11
+ 1372.       7[$LCS_kptr_2,0] = $MR_kptr_S12
+ 1375.       $Con_P20 = 8
+ 1375.       call gbytec( substr[msga,0:1], 0[loc( kgds ),0], 7[$LCS_kptr_2,0], $Con_P20 )
+ 1376.       $LCS_kptr_3 = loc( kptr )
+ 1376.       $MR_kptr_S13 = 7[$LCS_kptr_3,0]
+ 1376.       $MR_kptr_S14 = 8 + $MR_kptr_S13
+ 1376.       7[$LCS_kptr_3,0] = $MR_kptr_S14
+ 1379.       $MR_kgds_4 = 0[loc( kgds ),0]
+ 1379.       $SW_MR_kgds_V4 = $MR_kgds_4
+ 1379.       switch( 1 + $SW_MR_kgds_V4 )
+ 1379.       
+ 1426.          case 1 :
+ 1426.             goto 10
+ 1426.             goto 20
+ 1562.          case 2 :
+ 1562.             $Con_P20 = 16
+ 1562.             call gbytec( substr[msga,0:1], 1[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1563.             $LCS_kptr_4 = loc( kptr )
+ 1563.             $MR_kptr_S15 = 7[$LCS_kptr_4,0]
+ 1563.             $MR_kptr_S16 = 16 + $MR_kptr_S15
+ 1563.             7[$LCS_kptr_4,0] = $MR_kptr_S16
+ 1565.             $Con_P20 = 16
+ 1565.             call gbytec( substr[msga,0:1], 2[loc( kgds ),0], 7[$LCS_kptr_4,0], $Con_P20 )
+ 1566.             $LCS_kptr_5 = loc( kptr )
+ 1566.             $MR_kptr_S17 = 7[$LCS_kptr_5,0]
+ 1566.             $MR_kptr_S18 = 16 + $MR_kptr_S17
+ 1566.             7[$LCS_kptr_5,0] = $MR_kptr_S18
+ 1568.             $Con_P20 = 24
+ 1568.             call gbytec( substr[msga,0:1], 3[loc( kgds ),0], 7[$LCS_kptr_5,0], $Con_P20 )
+ 1569.             $LCS_kptr_6 = loc( kptr )
+ 1569.             $MR_kptr_S19 = 7[$LCS_kptr_6,0]
+ 1569.             $MR_kptr_S20 = 24 + $MR_kptr_S19
+ 1569.             7[$LCS_kptr_6,0] = $MR_kptr_S20
+ 1570.             $LCS_kgds_7 = loc( kgds )
+ 1570.             $MR_kgds_S21 = 3[$LCS_kgds_7,0]
+ 1570.             if ( and( 0x800000, $MR_kgds_S21 ) /= 0 ) then
+ 1571.                $MR_kgds_S22 = -and( 0x7fffff, $MR_kgds_S21 )
+ 1571.                3[$LCS_kgds_7,0] = $MR_kgds_S22
+ 1571.             endif
+ 1574.             $Con_P20 = 24
+ 1574.             call gbytec( substr[msga,0:1], 4[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1575.             $LCS_kptr_8 = loc( kptr )
+ 1575.             $MR_kptr_S23 = 7[$LCS_kptr_8,0]
+ 1575.             $MR_kptr_S24 = 24 + $MR_kptr_S23
+ 1575.             7[$LCS_kptr_8,0] = $MR_kptr_S24
+ 1576.             $LCS_kgds_9 = loc( kgds )
+ 1576.             $MR_kgds_S25 = 4[$LCS_kgds_9,0]
+ 1576.             if ( and( 0x800000, $MR_kgds_S25 ) /= 0 ) then
+ 1577.                $MR_kgds_S26 = -and( 0x7fffff, $MR_kgds_S25 )
+ 1577.                4[$LCS_kgds_9,0] = $MR_kgds_S26
+ 1577.             endif
+ 1580.             $Con_P20 = 8
+ 1580.             call gbytec( substr[msga,0:1], 5[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1581.             $LCS_kptr_10 = loc( kptr )
+ 1581.             $MR_kptr_S27 = 7[$LCS_kptr_10,0]
+ 1581.             $MR_kptr_S28 = 8 + $MR_kptr_S27
+ 1581.             7[$LCS_kptr_10,0] = $MR_kptr_S28
+ 1583.             $Con_P20 = 24
+ 1583.             call gbytec( substr[msga,0:1], 6[loc( kgds ),0], 7[$LCS_kptr_10,0], $Con_P20 )
+ 1584.             $LCS_kptr_11 = loc( kptr )
+ 1584.             $MR_kptr_S29 = 7[$LCS_kptr_11,0]
+ 1584.             $MR_kptr_S30 = 24 + $MR_kptr_S29
+ 1584.             7[$LCS_kptr_11,0] = $MR_kptr_S30
+ 1585.             $LCS_kgds_12 = loc( kgds )
+ 1585.             $MR_kgds_S31 = 6[$LCS_kgds_12,0]
+ 1585.             if ( and( 0x800000, $MR_kgds_S31 ) /= 0 ) then
+ 1586.                $MR_kgds_S32 = -and( 0x7fffff, $MR_kgds_S31 )
+ 1586.                6[$LCS_kgds_12,0] = $MR_kgds_S32
+ 1586.             endif
+ 1589.             $Con_P20 = 24
+ 1589.             call gbytec( substr[msga,0:1], 7[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1590.             $LCS_kptr_13 = loc( kptr )
+ 1590.             $MR_kptr_S33 = 7[$LCS_kptr_13,0]
+ 1590.             $MR_kptr_S34 = 24 + $MR_kptr_S33
+ 1590.             7[$LCS_kptr_13,0] = $MR_kptr_S34
+ 1591.             $LCS_kgds_14 = loc( kgds )
+ 1591.             $MR_kgds_S35 = 7[$LCS_kgds_14,0]
+ 1591.             if ( and( 0x800000, $MR_kgds_S35 ) /= 0 ) then
+ 1592.                $MR_kgds_S36 = -and( 0x7fffff, $MR_kgds_S35 )
+ 1592.                7[$LCS_kgds_14,0] = $MR_kgds_S36
+ 1592.             endif
+ 1595.             $Con_P20 = 24
+ 1595.             call gbytec( substr[msga,0:1], 8[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1596.             $LCS_kptr_15 = loc( kptr )
+ 1596.             $MR_kptr_S37 = 7[$LCS_kptr_15,0]
+ 1596.             $MR_kptr_S38 = 24 + $MR_kptr_S37
+ 1596.             7[$LCS_kptr_15,0] = $MR_kptr_S38
+ 1597.             $LCS_kgds_16 = loc( kgds )
+ 1597.             $MR_kgds_S39 = 8[$LCS_kgds_16,0]
+ 1597.             if ( and( 0x800000, $MR_kgds_S39 ) /= 0 ) then
+ 1598.                $MR_kgds_S40 = -and( 0x7fffff, $MR_kgds_S39 )
+ 1598.                8[$LCS_kgds_16,0] = $MR_kgds_S40
+ 1598.             endif
+ 1601.             $Con_P20 = 8
+ 1601.             call gbytec( substr[msga,0:1], 9[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1602.             $LCS_kptr_17 = loc( kptr )
+ 1602.             $MR_kptr_S41 = 7[$LCS_kptr_17,0]
+ 1602.             $MR_kptr_S42 = 8 + $MR_kptr_S41
+ 1602.             7[$LCS_kptr_17,0] = $MR_kptr_S42
+ 1604.             $Con_P20 = 8
+ 1604.             call gbytec( substr[msga,0:1], 10[loc( kgds ),0], 7[$LCS_kptr_17,0], $Con_P20 )
+ 1605.             $LCS_kptr_18 = loc( kptr )
+ 1605.             $MR_kptr_S43 = 7[$LCS_kptr_18,0]
+ 1605.             $MR_kptr_S44 = 8 + $MR_kptr_S43
+ 1605.             7[$LCS_kptr_18,0] = $MR_kptr_S44
+ 1607.             $Con_P20 = 24
+ 1607.             call gbytec( substr[msga,0:1], 11[loc( kgds ),0], 7[$LCS_kptr_18,0], $Con_P20 )
+ 1608.             $LCS_kptr_19 = loc( kptr )
+ 1608.             $MR_kptr_S45 = 7[$LCS_kptr_19,0]
+ 1608.             $MR_kptr_S46 = 24 + $MR_kptr_S45
+ 1608.             7[$LCS_kptr_19,0] = $MR_kptr_S46
+ 1609.             $LCS_kgds_20 = loc( kgds )
+ 1609.             $MR_kgds_S47 = 11[$LCS_kgds_20,0]
+ 1609.             if ( and( 0x800000, $MR_kgds_S47 ) /= 0 ) then
+ 1610.                $MR_kgds_S48 = -and( 0x7fffff, $MR_kgds_S47 )
+ 1610.                11[$LCS_kgds_20,0] = $MR_kgds_S48
+ 1610.             endif
+ 1613.             $Con_P20 = 24
+ 1613.             call gbytec( substr[msga,0:1], 12[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1614.             $LCS_kptr_21 = loc( kptr )
+ 1614.             $MR_kptr_S49 = 7[$LCS_kptr_21,0]
+ 1614.             $MR_kptr_S50 = 24 + $MR_kptr_S49
+ 1614.             7[$LCS_kptr_21,0] = $MR_kptr_S50
+ 1615.             $LCS_kgds_22 = loc( kgds )
+ 1615.             $MR_kgds_S51 = 12[$LCS_kgds_22,0]
+ 1615.             if ( and( 0x800000, $MR_kgds_S51 ) /= 0 ) then
+ 1616.                $MR_kgds_S52 = -and( 0x7fffff, $MR_kgds_S51 )
+ 1616.                12[$LCS_kgds_22,0] = $MR_kgds_S52
+ 1616.             endif
+ 1620.             $MR_kptr_S53 = 64 + $MR_kptr_S50
+ 1620.             7[loc( kptr ),0] = $MR_kptr_S53
+ 1620.             goto 20
+ 1482.          case 3 :
+ 1482.             goto 40
+ 1482.             goto 20
+ 1482.          case 6 :
+ 1482.    40       continue
+ 1482.             $Con_P20 = 16
+ 1482.             call gbytec( substr[msga,0:1], 1[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1483.             $LCS_kptr_65 = loc( kptr )
+ 1483.             $MR_kptr_S138 = 7[$LCS_kptr_65,0]
+ 1483.             $MR_kptr_S139 = 16 + $MR_kptr_S138
+ 1483.             7[$LCS_kptr_65,0] = $MR_kptr_S139
+ 1485.             $Con_P20 = 16
+ 1485.             call gbytec( substr[msga,0:1], 2[loc( kgds ),0], 7[$LCS_kptr_65,0], $Con_P20 )
+ 1486.             $LCS_kptr_66 = loc( kptr )
+ 1486.             $MR_kptr_S140 = 7[$LCS_kptr_66,0]
+ 1486.             $MR_kptr_S141 = 16 + $MR_kptr_S140
+ 1486.             7[$LCS_kptr_66,0] = $MR_kptr_S141
+ 1488.             $Con_P20 = 24
+ 1488.             call gbytec( substr[msga,0:1], 3[loc( kgds ),0], 7[$LCS_kptr_66,0], $Con_P20 )
+ 1489.             $LCS_kptr_67 = loc( kptr )
+ 1489.             $MR_kptr_S142 = 7[$LCS_kptr_67,0]
+ 1489.             $MR_kptr_S143 = 24 + $MR_kptr_S142
+ 1489.             7[$LCS_kptr_67,0] = $MR_kptr_S143
+ 1490.             $LCS_kgds_68 = loc( kgds )
+ 1490.             $MR_kgds_S144 = 3[$LCS_kgds_68,0]
+ 1490.             if ( and( 0x800000, $MR_kgds_S144 ) /= 0 ) then
+ 1491.                $MR_kgds_S145 = -and( 0x7fffff, $MR_kgds_S144 )
+ 1491.                3[$LCS_kgds_68,0] = $MR_kgds_S145
+ 1491.             endif
+ 1494.             $Con_P20 = 24
+ 1494.             call gbytec( substr[msga,0:1], 4[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1495.             $LCS_kptr_69 = loc( kptr )
+ 1495.             $MR_kptr_S146 = 7[$LCS_kptr_69,0]
+ 1495.             $MR_kptr_S147 = 24 + $MR_kptr_S146
+ 1495.             7[$LCS_kptr_69,0] = $MR_kptr_S147
+ 1496.             $LCS_kgds_70 = loc( kgds )
+ 1496.             $MR_kgds_S148 = 4[$LCS_kgds_70,0]
+ 1496.             if ( and( 0x800000, $MR_kgds_S148 ) /= 0 ) then
+ 1497.                $MR_kgds_S149 = -and( 0x7fffff, $MR_kgds_S148 )
+ 1497.                4[$LCS_kgds_70,0] = $MR_kgds_S149
+ 1497.             endif
+ 1500.             $Con_P20 = 8
+ 1500.             call gbytec( substr[msga,0:1], 5[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1501.             $LCS_kptr_71 = loc( kptr )
+ 1501.             $MR_kptr_S150 = 7[$LCS_kptr_71,0]
+ 1501.             $MR_kptr_S151 = 8 + $MR_kptr_S150
+ 1501.             7[$LCS_kptr_71,0] = $MR_kptr_S151
+ 1503.             $Con_P20 = 24
+ 1503.             call gbytec( substr[msga,0:1], 6[loc( kgds ),0], 7[$LCS_kptr_71,0], $Con_P20 )
+ 1504.             $LCS_kptr_72 = loc( kptr )
+ 1504.             $MR_kptr_S152 = 7[$LCS_kptr_72,0]
+ 1504.             $MR_kptr_S153 = 24 + $MR_kptr_S152
+ 1504.             7[$LCS_kptr_72,0] = $MR_kptr_S153
+ 1505.             $LCS_kgds_73 = loc( kgds )
+ 1505.             $MR_kgds_S154 = 6[$LCS_kgds_73,0]
+ 1505.             if ( and( 0x800000, $MR_kgds_S154 ) /= 0 ) then
+ 1506.                $MR_kgds_S155 = -and( 0x7fffff, $MR_kgds_S154 )
+ 1506.                6[$LCS_kgds_73,0] = $MR_kgds_S155
+ 1506.             endif
+ 1509.             $Con_P20 = 24
+ 1509.             call gbytec( substr[msga,0:1], 7[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1510.             $LCS_kptr_74 = loc( kptr )
+ 1510.             $MR_kptr_S156 = 7[$LCS_kptr_74,0]
+ 1510.             $MR_kptr_S157 = 24 + $MR_kptr_S156
+ 1510.             7[$LCS_kptr_74,0] = $MR_kptr_S157
+ 1511.             $LCS_kgds_75 = loc( kgds )
+ 1511.             $MR_kgds_S158 = 7[$LCS_kgds_75,0]
+ 1511.             if ( and( 0x800000, $MR_kgds_S158 ) /= 0 ) then
+ 1512.                $MR_kgds_S159 = -and( 0x7fffff, $MR_kgds_S158 )
+ 1512.                7[$LCS_kgds_75,0] = $MR_kgds_S159
+ 1512.             endif
+ 1515.             $Con_P20 = 24
+ 1515.             call gbytec( substr[msga,0:1], 8[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1516.             $LCS_kptr_76 = loc( kptr )
+ 1516.             $MR_kptr_S160 = 7[$LCS_kptr_76,0]
+ 1516.             $MR_kptr_S161 = 24 + $MR_kptr_S160
+ 1516.             7[$LCS_kptr_76,0] = $MR_kptr_S161
+ 1517.             $LCS_kgds_77 = loc( kgds )
+ 1517.             $MR_kgds_S162 = 8[$LCS_kgds_77,0]
+ 1517.             if ( and( 0x800000, $MR_kgds_S162 ) /= 0 ) then
+ 1518.                $MR_kgds_S163 = -and( 0x7fffff, $MR_kgds_S162 )
+ 1518.                8[$LCS_kgds_77,0] = $MR_kgds_S163
+ 1518.             endif
+ 1521.             $Con_P20 = 8
+ 1521.             call gbytec( substr[msga,0:1], 9[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1522.             $LCS_kptr_78 = loc( kptr )
+ 1522.             $MR_kptr_S164 = 7[$LCS_kptr_78,0]
+ 1522.             $MR_kptr_S165 = 8 + $MR_kptr_S164
+ 1522.             7[$LCS_kptr_78,0] = $MR_kptr_S165
+ 1524.             $Con_P20 = 8
+ 1524.             call gbytec( substr[msga,0:1], 10[loc( kgds ),0], 7[$LCS_kptr_78,0], $Con_P20 )
+ 1525.             $LCS_kptr_79 = loc( kptr )
+ 1525.             $MR_kptr_S166 = 7[$LCS_kptr_79,0]
+ 1525.             $MR_kptr_S167 = 8 + $MR_kptr_S166
+ 1525.             7[$LCS_kptr_79,0] = $MR_kptr_S167
+ 1528.             $Con_P20 = 32
+ 1528.             call gbytec( substr[msga,0:1], 11[loc( kgds ),0], 7[$LCS_kptr_79,0], $Con_P20 )
+ 1529.             $LCS_kptr_80 = loc( kptr )
+ 1529.             $MR_kptr_S168 = 7[$LCS_kptr_80,0]
+ 1529.             $MR_kptr_S169 = 32 + $MR_kptr_S168
+ 1529.             7[$LCS_kptr_80,0] = $MR_kptr_S169
+ 1529.             goto 20
+ 1628.          case 4 :
+ 1628.             $Con_P20 = 16
+ 1628.             call gbytec( substr[msga,0:1], 1[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1629.             $LCS_kptr_23 = loc( kptr )
+ 1629.             $MR_kptr_S54 = 7[$LCS_kptr_23,0]
+ 1629.             $MR_kptr_S55 = 16 + $MR_kptr_S54
+ 1629.             7[$LCS_kptr_23,0] = $MR_kptr_S55
+ 1631.             $Con_P20 = 16
+ 1631.             call gbytec( substr[msga,0:1], 2[loc( kgds ),0], 7[$LCS_kptr_23,0], $Con_P20 )
+ 1632.             $LCS_kptr_24 = loc( kptr )
+ 1632.             $MR_kptr_S56 = 7[$LCS_kptr_24,0]
+ 1632.             $MR_kptr_S57 = 16 + $MR_kptr_S56
+ 1632.             7[$LCS_kptr_24,0] = $MR_kptr_S57
+ 1634.             $Con_P20 = 24
+ 1634.             call gbytec( substr[msga,0:1], 3[loc( kgds ),0], 7[$LCS_kptr_24,0], $Con_P20 )
+ 1635.             $LCS_kptr_25 = loc( kptr )
+ 1635.             $MR_kptr_S58 = 7[$LCS_kptr_25,0]
+ 1635.             $MR_kptr_S59 = 24 + $MR_kptr_S58
+ 1635.             7[$LCS_kptr_25,0] = $MR_kptr_S59
+ 1636.             $LCS_kgds_26 = loc( kgds )
+ 1636.             $MR_kgds_S60 = 3[$LCS_kgds_26,0]
+ 1636.             if ( and( 0x800000, $MR_kgds_S60 ) /= 0 ) then
+ 1637.                $MR_kgds_S61 = -and( 0x7fffff, $MR_kgds_S60 )
+ 1637.                3[$LCS_kgds_26,0] = $MR_kgds_S61
+ 1637.             endif
+ 1640.             $Con_P20 = 24
+ 1640.             call gbytec( substr[msga,0:1], 4[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1641.             $LCS_kptr_27 = loc( kptr )
+ 1641.             $MR_kptr_S62 = 7[$LCS_kptr_27,0]
+ 1641.             $MR_kptr_S63 = 24 + $MR_kptr_S62
+ 1641.             7[$LCS_kptr_27,0] = $MR_kptr_S63
+ 1642.             $LCS_kgds_28 = loc( kgds )
+ 1642.             $MR_kgds_S64 = 4[$LCS_kgds_28,0]
+ 1642.             if ( and( 0x800000, $MR_kgds_S64 ) /= 0 ) then
+ 1643.                $MR_kgds_S65 = -and( 0x7fffff, $MR_kgds_S64 )
+ 1643.                4[$LCS_kgds_28,0] = $MR_kgds_S65
+ 1643.             endif
+ 1646.             $Con_P20 = 8
+ 1646.             call gbytec( substr[msga,0:1], 5[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1647.             $LCS_kptr_29 = loc( kptr )
+ 1647.             $MR_kptr_S66 = 7[$LCS_kptr_29,0]
+ 1647.             $MR_kptr_S67 = 8 + $MR_kptr_S66
+ 1647.             7[$LCS_kptr_29,0] = $MR_kptr_S67
+ 1649.             $Con_P20 = 24
+ 1649.             call gbytec( substr[msga,0:1], 6[loc( kgds ),0], 7[$LCS_kptr_29,0], $Con_P20 )
+ 1650.             $LCS_kptr_30 = loc( kptr )
+ 1650.             $MR_kptr_S68 = 7[$LCS_kptr_30,0]
+ 1650.             $MR_kptr_S69 = 24 + $MR_kptr_S68
+ 1650.             7[$LCS_kptr_30,0] = $MR_kptr_S69
+ 1651.             $LCS_kgds_31 = loc( kgds )
+ 1651.             $MR_kgds_S70 = 6[$LCS_kgds_31,0]
+ 1651.             if ( and( 0x800000, $MR_kgds_S70 ) /= 0 ) then
+ 1652.                $MR_kgds_S71 = -and( 0x7fffff, $MR_kgds_S70 )
+ 1652.                6[$LCS_kgds_31,0] = $MR_kgds_S71
+ 1652.             endif
+ 1655.             $Con_P20 = 24
+ 1655.             call gbytec( substr[msga,0:1], 7[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1656.             $LCS_kptr_32 = loc( kptr )
+ 1656.             $MR_kptr_S72 = 7[$LCS_kptr_32,0]
+ 1656.             $MR_kptr_S73 = 24 + $MR_kptr_S72
+ 1656.             7[$LCS_kptr_32,0] = $MR_kptr_S73
+ 1658.             $Con_P20 = 24
+ 1658.             call gbytec( substr[msga,0:1], 8[loc( kgds ),0], 7[$LCS_kptr_32,0], $Con_P20 )
+ 1659.             $LCS_kptr_33 = loc( kptr )
+ 1659.             $MR_kptr_S74 = 7[$LCS_kptr_33,0]
+ 1659.             $MR_kptr_S75 = 24 + $MR_kptr_S74
+ 1659.             7[$LCS_kptr_33,0] = $MR_kptr_S75
+ 1661.             $Con_P20 = 8
+ 1661.             call gbytec( substr[msga,0:1], 9[loc( kgds ),0], 7[$LCS_kptr_33,0], $Con_P20 )
+ 1662.             $LCS_kptr_34 = loc( kptr )
+ 1662.             $MR_kptr_S76 = 7[$LCS_kptr_34,0]
+ 1662.             $MR_kptr_S77 = 8 + $MR_kptr_S76
+ 1662.             7[$LCS_kptr_34,0] = $MR_kptr_S77
+ 1664.             $Con_P20 = 8
+ 1664.             call gbytec( substr[msga,0:1], 10[loc( kgds ),0], 7[$LCS_kptr_34,0], $Con_P20 )
+ 1665.             $LCS_kptr_35 = loc( kptr )
+ 1665.             $MR_kptr_S78 = 7[$LCS_kptr_35,0]
+ 1665.             $MR_kptr_S79 = 8 + $MR_kptr_S78
+ 1665.             7[$LCS_kptr_35,0] = $MR_kptr_S79
+ 1667.             $Con_P20 = 24
+ 1667.             call gbytec( substr[msga,0:1], 11[loc( kgds ),0], 7[$LCS_kptr_35,0], $Con_P20 )
+ 1668.             $LCS_kptr_36 = loc( kptr )
+ 1668.             $MR_kptr_S80 = 7[$LCS_kptr_36,0]
+ 1668.             $MR_kptr_S81 = 24 + $MR_kptr_S80
+ 1668.             7[$LCS_kptr_36,0] = $MR_kptr_S81
+ 1669.             $LCS_kgds_37 = loc( kgds )
+ 1669.             $MR_kgds_S82 = 11[$LCS_kgds_37,0]
+ 1669.             if ( and( 0x800000, $MR_kgds_S82 ) /= 0 ) then
+ 1670.                $MR_kgds_S83 = -and( 0x7fffff, $MR_kgds_S82 )
+ 1670.                11[$LCS_kgds_37,0] = $MR_kgds_S83
+ 1670.             endif
+ 1673.             $Con_P20 = 24
+ 1673.             call gbytec( substr[msga,0:1], 12[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1674.             $LCS_kptr_38 = loc( kptr )
+ 1674.             $MR_kptr_S84 = 7[$LCS_kptr_38,0]
+ 1674.             $MR_kptr_S85 = 24 + $MR_kptr_S84
+ 1674.             7[$LCS_kptr_38,0] = $MR_kptr_S85
+ 1675.             $LCS_kgds_39 = loc( kgds )
+ 1675.             $MR_kgds_S86 = 12[$LCS_kgds_39,0]
+ 1675.             if ( and( 0x800000, $MR_kgds_S86 ) /= 0 ) then
+ 1676.                $MR_kgds_S87 = -and( 0x7fffff, $MR_kgds_S86 )
+ 1676.                12[$LCS_kgds_39,0] = $MR_kgds_S87
+ 1676.             endif
+ 1679.             $Con_P20 = 24
+ 1679.             call gbytec( substr[msga,0:1], 13[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1680.             $LCS_kptr_40 = loc( kptr )
+ 1680.             $MR_kptr_S88 = 7[$LCS_kptr_40,0]
+ 1680.             $MR_kptr_S89 = 24 + $MR_kptr_S88
+ 1680.             7[$LCS_kptr_40,0] = $MR_kptr_S89
+ 1681.             $LCS_kgds_41 = loc( kgds )
+ 1681.             $MR_kgds_S90 = 13[$LCS_kgds_41,0]
+ 1681.             if ( and( 0x800000, $MR_kgds_S90 ) /= 0 ) then
+ 1682.                $MR_kgds_S91 = -and( 0x7fffff, $MR_kgds_S90 )
+ 1682.                13[$LCS_kgds_41,0] = $MR_kgds_S91
+ 1682.             endif
+ 1685.             $Con_P20 = 24
+ 1685.             call gbytec( substr[msga,0:1], 14[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1686.             $LCS_kptr_42 = loc( kptr )
+ 1686.             $MR_kptr_S92 = 7[$LCS_kptr_42,0]
+ 1686.             $MR_kptr_S93 = 24 + $MR_kptr_S92
+ 1686.             7[$LCS_kptr_42,0] = $MR_kptr_S93
+ 1687.             $LCS_kgds_43 = loc( kgds )
+ 1687.             $MR_kgds_S94 = 14[$LCS_kgds_43,0]
+ 1687.             if ( and( 0x800000, $MR_kgds_S94 ) /= 0 ) then
+ 1688.                $MR_kgds_S95 = -and( 0x7fffff, $MR_kgds_S94 )
+ 1688.                14[$LCS_kgds_43,0] = $MR_kgds_S95
+ 1688.             endif
+ 1691.             $Con_P20 = 16
+ 1691.             call gbytec( substr[msga,0:1], 15[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1692.             $LCS_kptr_44 = loc( kptr )
+ 1692.             $MR_kptr_S96 = 7[$LCS_kptr_44,0]
+ 1692.             $MR_kptr_S97 = 16 + $MR_kptr_S96
+ 1692.             7[$LCS_kptr_44,0] = $MR_kptr_S97
+ 1692.             goto 20
+ 1426.          case 5 :
+ 1426.             goto 10
+ 1426.             goto 20
+ 1539.          case 51 :
+ 1539.             $Con_P20 = 16
+ 1539.             call gbytec( substr[msga,0:1], 1[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1540.             $LCS_kptr_45 = loc( kptr )
+ 1540.             $MR_kptr_S98 = 7[$LCS_kptr_45,0]
+ 1540.             $MR_kptr_S99 = 16 + $MR_kptr_S98
+ 1540.             7[$LCS_kptr_45,0] = $MR_kptr_S99
+ 1542.             $Con_P20 = 16
+ 1542.             call gbytec( substr[msga,0:1], 2[loc( kgds ),0], 7[$LCS_kptr_45,0], $Con_P20 )
+ 1543.             $LCS_kptr_46 = loc( kptr )
+ 1543.             $MR_kptr_S100 = 7[$LCS_kptr_46,0]
+ 1543.             $MR_kptr_S101 = 16 + $MR_kptr_S100
+ 1543.             7[$LCS_kptr_46,0] = $MR_kptr_S101
+ 1545.             $Con_P20 = 16
+ 1545.             call gbytec( substr[msga,0:1], 3[loc( kgds ),0], 7[$LCS_kptr_46,0], $Con_P20 )
+ 1546.             $LCS_kptr_47 = loc( kptr )
+ 1546.             $MR_kptr_S102 = 7[$LCS_kptr_47,0]
+ 1546.             $MR_kptr_S103 = 16 + $MR_kptr_S102
+ 1546.             7[$LCS_kptr_47,0] = $MR_kptr_S103
+ 1548.             $Con_P20 = 8
+ 1548.             call gbytec( substr[msga,0:1], 4[loc( kgds ),0], 7[$LCS_kptr_47,0], $Con_P20 )
+ 1549.             $LCS_kptr_48 = loc( kptr )
+ 1549.             $MR_kptr_S104 = 7[$LCS_kptr_48,0]
+ 1549.             $MR_kptr_S105 = 8 + $MR_kptr_S104
+ 1549.             7[$LCS_kptr_48,0] = $MR_kptr_S105
+ 1551.             $Con_P20 = 8
+ 1551.             call gbytec( substr[msga,0:1], 5[loc( kgds ),0], 7[$LCS_kptr_48,0], $Con_P20 )
+ 1555.             $LCS_kptr_49 = loc( kptr )
+ 1555.             $MR_kptr_S106 = 7[$LCS_kptr_49,0]
+ 1555.             $MR_kptr_S107 = 152 + $MR_kptr_S106
+ 1555.             7[$LCS_kptr_49,0] = $MR_kptr_S107
+ 1555.             goto 20
+ 1426.          case 202 :
+ 1426.             goto 10
+ 1426.             goto 20
+ 1426.          case 203 :
+ 1426.             goto 10
+ 1426.             goto 20
+ 1426.          case 204 :
+ 1426.             goto 10
+ 1426.             goto 20
+ 1426.          case 205 :
+ 1426.    10       continue
+ 1426.             $Con_P20 = 16
+ 1426.             call gbytec( substr[msga,0:1], 1[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1427.             $LCS_kptr_50 = loc( kptr )
+ 1427.             $MR_kptr_S108 = 7[$LCS_kptr_50,0]
+ 1427.             $MR_kptr_S109 = 16 + $MR_kptr_S108
+ 1427.             7[$LCS_kptr_50,0] = $MR_kptr_S109
+ 1429.             $Con_P20 = 16
+ 1429.             call gbytec( substr[msga,0:1], 2[loc( kgds ),0], 7[$LCS_kptr_50,0], $Con_P20 )
+ 1430.             $LCS_kptr_51 = loc( kptr )
+ 1430.             $MR_kptr_S110 = 7[$LCS_kptr_51,0]
+ 1430.             $MR_kptr_S111 = 16 + $MR_kptr_S110
+ 1430.             7[$LCS_kptr_51,0] = $MR_kptr_S111
+ 1432.             $Con_P20 = 24
+ 1432.             call gbytec( substr[msga,0:1], 3[loc( kgds ),0], 7[$LCS_kptr_51,0], $Con_P20 )
+ 1433.             $LCS_kptr_52 = loc( kptr )
+ 1433.             $MR_kptr_S112 = 7[$LCS_kptr_52,0]
+ 1433.             $MR_kptr_S113 = 24 + $MR_kptr_S112
+ 1433.             7[$LCS_kptr_52,0] = $MR_kptr_S113
+ 1434.             $LCS_kgds_53 = loc( kgds )
+ 1434.             $MR_kgds_S114 = 3[$LCS_kgds_53,0]
+ 1434.             if ( and( 0x800000, $MR_kgds_S114 ) /= 0 ) then
+ 1435.                $MR_kgds_S115 = -and( 0x7fffff, $MR_kgds_S114 )
+ 1435.                3[$LCS_kgds_53,0] = $MR_kgds_S115
+ 1435.             endif
+ 1438.             $Con_P20 = 24
+ 1438.             call gbytec( substr[msga,0:1], 4[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1439.             $LCS_kptr_54 = loc( kptr )
+ 1439.             $MR_kptr_S116 = 7[$LCS_kptr_54,0]
+ 1439.             $MR_kptr_S117 = 24 + $MR_kptr_S116
+ 1439.             7[$LCS_kptr_54,0] = $MR_kptr_S117
+ 1440.             $LCS_kgds_55 = loc( kgds )
+ 1440.             $MR_kgds_S118 = 4[$LCS_kgds_55,0]
+ 1440.             if ( and( 0x800000, $MR_kgds_S118 ) /= 0 ) then
+ 1441.                $MR_kgds_S119 = -and( 0x7fffff, $MR_kgds_S118 )
+ 1441.                4[$LCS_kgds_55,0] = $MR_kgds_S119
+ 1441.             endif
+ 1444.             $Con_P20 = 8
+ 1444.             call gbytec( substr[msga,0:1], 5[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1445.             $LCS_kptr_56 = loc( kptr )
+ 1445.             $MR_kptr_S120 = 7[$LCS_kptr_56,0]
+ 1445.             $MR_kptr_S121 = 8 + $MR_kptr_S120
+ 1445.             7[$LCS_kptr_56,0] = $MR_kptr_S121
+ 1447.             $Con_P20 = 24
+ 1447.             call gbytec( substr[msga,0:1], 6[loc( kgds ),0], 7[$LCS_kptr_56,0], $Con_P20 )
+ 1448.             $LCS_kptr_57 = loc( kptr )
+ 1448.             $MR_kptr_S122 = 7[$LCS_kptr_57,0]
+ 1448.             $MR_kptr_S123 = 24 + $MR_kptr_S122
+ 1448.             7[$LCS_kptr_57,0] = $MR_kptr_S123
+ 1449.             $LCS_kgds_58 = loc( kgds )
+ 1449.             $MR_kgds_S124 = 6[$LCS_kgds_58,0]
+ 1449.             if ( and( 0x800000, $MR_kgds_S124 ) /= 0 ) then
+ 1450.                $MR_kgds_S125 = -and( 0x7fffff, $MR_kgds_S124 )
+ 1450.                6[$LCS_kgds_58,0] = $MR_kgds_S125
+ 1450.             endif
+ 1453.             $Con_P20 = 24
+ 1453.             call gbytec( substr[msga,0:1], 7[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1454.             $LCS_kptr_59 = loc( kptr )
+ 1454.             $MR_kptr_S126 = 7[$LCS_kptr_59,0]
+ 1454.             $MR_kptr_S127 = 24 + $MR_kptr_S126
+ 1454.             7[$LCS_kptr_59,0] = $MR_kptr_S127
+ 1455.             $LCS_kgds_60 = loc( kgds )
+ 1455.             $MR_kgds_S128 = 7[$LCS_kgds_60,0]
+ 1455.             if ( and( 0x800000, $MR_kgds_S128 ) /= 0 ) then
+ 1456.                $MR_kgds_S129 = -and( 0x7fffff, $MR_kgds_S128 )
+ 1456.                7[$LCS_kgds_60,0] = $MR_kgds_S129
+ 1456.             endif
+ 1459.             $Con_P20 = 16
+ 1459.             call gbytec( substr[msga,0:1], 8[loc( kgds ),0], 7[loc( kptr ),0], $Con_P20 )
+ 1460.             $LCS_kptr_61 = loc( kptr )
+ 1460.             $MR_kptr_S130 = 7[$LCS_kptr_61,0]
+ 1460.             $MR_kptr_S131 = 16 + $MR_kptr_S130
+ 1460.             7[$LCS_kptr_61,0] = $MR_kptr_S131
+ 1466.             $Con_P20 = 16
+ 1466.             call gbytec( substr[msga,0:1], 9[loc( kgds ),0], 7[$LCS_kptr_61,0], $Con_P20 )
+ 1467.             $LCS_kptr_62 = loc( kptr )
+ 1467.             $MR_kptr_S132 = 7[$LCS_kptr_62,0]
+ 1467.             $MR_kptr_S133 = 16 + $MR_kptr_S132
+ 1467.             7[$LCS_kptr_62,0] = $MR_kptr_S133
+ 1469.             $Con_P20 = 8
+ 1469.             call gbytec( substr[msga,0:1], 10[loc( kgds ),0], 7[$LCS_kptr_62,0], $Con_P20 )
+ 1470.             $LCS_kptr_63 = loc( kptr )
+ 1470.             $MR_kptr_S134 = 7[$LCS_kptr_63,0]
+ 1470.             $MR_kptr_S135 = 8 + $MR_kptr_S134
+ 1470.             7[$LCS_kptr_63,0] = $MR_kptr_S135
+ 1473.             $Con_P20 = 32
+ 1473.             call gbytec( substr[msga,0:1], 11[loc( kgds ),0], 7[$LCS_kptr_63,0], $Con_P20 )
+ 1474.             $LCS_kptr_64 = loc( kptr )
+ 1474.             $MR_kptr_S136 = 7[$LCS_kptr_64,0]
+ 1474.             $MR_kptr_S137 = 32 + $MR_kptr_S136
+ 1474.             7[$LCS_kptr_64,0] = $MR_kptr_S137
+ 1474.    20       continue
+ 1698.             $MR_kgds_14 = 18[loc( kgds ),0]
+ 1698.             if ( $MR_kgds_14 == 0 ) then
+ 1694.                goto 30
+ 1698.             else if ( $MR_kgds_14 == 255 ) then
+ 1698.    30          continue
+ 1699.                $LCS_kgds_81 = loc( kgds )
+ 1699.                $MR_kgds_15 = 19[$LCS_kgds_81,0]
+ 1699.                if ( $MR_kgds_15 /= 255 ) then
+ 1700.                   isum = 0
+ 1701.                   $MR_kptr_S170 = $nsave_S0 + _lsh( $MR_kgds_15, 3 ) + -8
+ 1701.                   $LCS_kptr_82 = loc( kptr )
+ 1701.                   7[$LCS_kptr_82,0] = $MR_kptr_S170
+ 1702.                   $Con_P20 = 16
+ 1702.                   $Con_P21 = 0
+ 1702.                   call gbytesc( substr[msga,0:1], 21[$LCS_kgds_81,0], 7[$LCS_kptr_82,0], $Con_P20, $Con_P21, 2[$LCS_kgds_81,0] )
+ 1703.                   $LCS_kgds_84 = loc( kgds )
+ 1703.                   $t_S1 = 2[$LCS_kgds_84,0]
+ 1703.                   if ( $t_S1 > 0 ) then
+ 1703.                      $I_L1703_S174 = 0
+ 1704.                      $SC_isum_I1 = 0
+ 1703.                      $LCS_83 = $t_S1
+ 1703.                      if ( $LCS_83 >= 4 ) then !  99.50%
+ 1703.                         $TC_0 = and( -4, $LCS_83 )
+ 1704.                         $VR_isum_3[0:4:1] = _bcst( 0, 4 )
+ 1703.                         $LC_S171 = -$TC_0
+ 1703.                         $SI_S172 = 0
+ 1703.                         if ( $LC_S171 < -23 ) then
+ 1703.                            $Induc01_S173 = -23 + $TC_0
+ 1703.                            do
+ 1704.                               $LCS_85 = $LCS_kgds_84 + $SI_S172
+ 1704.                               $VR_isum_3[0:4:1] = 21[$LCS_85:4:1] + 37[$LCS_85:4:1] + 41[$LCS_85:4:1] + $VR_isum_3[0:4:1] + 25[$LCS_85:4:1] + 33[$LCS_85:4:1] + 29[$LCS_85:4:1]
+ 1703.                               $SI_S172 = 96 + $SI_S172
+ 1703.                               $LC_S171 = 24 + $LC_S171
+ 1703.                               $Induc01_S173 = -24 + $Induc01_S173
+ 1703.                               if ( $Induc01_S173 <= 0 ) exit
+ 1703.                            enddo
+ 1703.                         endif
+ 1703.                         if ( $LC_S171 < 0 ) then
+ 1703.                            do
+ 1704.                               $VR_isum_3[0:4:1] = 21[$LCS_kgds_84 + $SI_S172:4:1] + $VR_isum_3[0:4:1]
+ 1703.                               $SI_S172 = 16 + $SI_S172
+ 1703.                               $LC_S171 = 4 + $LC_S171
+ 1703.                               if ( $LC_S171 >= 0 ) exit
+ 1703.                            enddo
+ 1703.                         endif
+ 1704.                         $SC_isum_I1 = _rpls( $VR_isum_3[0:4:1], 4, 1 )
+ 1703.                         $I_L1703_S174 = $TC_0
+ 1703.                      endif
+ 1703.                      $LCS_t_86 = $t_S1
+ 1703.                      if ( $LCS_t_86 > $I_L1703_S174 ) then !  99.50%
+ 1704.                         $LIS_S7 = loc( kgds )
+ 1703.                         do
+ 1704.                            $SC_isum_I1 = $SC_isum_I1 + 21[$LIS_S7,$I_L1703_S174]
+ 1705.                            $I_L1703_S174 = 1 + $I_L1703_S174
+ 1703.                            if ( $I_L1703_S174 >= $LCS_t_86 ) exit
+ 1703.                         enddo
+ 1703.                      endif
+ 1704.                      isum = $SC_isum_I1
+ 1704.                   endif
+ 1706.                   20[loc( kgds ),0] = isum
+ 1706.                endif
+ 1706.             endif
+ 1405.          case 206 :
+ 1405.          case 52 : 201 :
+ 1405.          case 7 : 50 :
+ 1405.          case 0 :
+ 1405.             0[loc( kret ),0] = 4
+ 1710.       return
+ 1710.       end
+ 1710.       
+ 1711.       
+ 1711.       subroutine fi634( msga, kptr, kpds, kgds, kbms, kret )
+ 1861.       $MR_kpds_0 = 3[loc( kpds ),0]
+ 1861.       if ( and( 64, $MR_kpds_0 ) == 64 ) then
+ 1865.          $LCS_kptr_0 = loc( kptr )
+ 1865.          $MR_kptr_S49 = 8[$LCS_kptr_0,0] + _lsh( 1[$LCS_kptr_0,0] + 3[$LCS_kptr_0,0] + 2[$LCS_kptr_0,0], 3 ) + 24
+ 1865.          7[$LCS_kptr_0,0] = $MR_kptr_S49
+ 1869.          $Con_P86 = 8
+ 1869.          call gbytec( substr[msga,0:1], 10[$LCS_kptr_0,0], 7[$LCS_kptr_0,0], $Con_P86 )
+ 1870.          $LCS_kptr_1 = loc( kptr )
+ 1870.          $MR_kptr_S50 = 7[$LCS_kptr_1,0]
+ 1870.          $MR_kptr_S51 = 8 + $MR_kptr_S50
+ 1870.          7[$LCS_kptr_1,0] = $MR_kptr_S51
+ 1874.          $Con_P86 = 16
+ 1874.          call gbytec( substr[msga,0:1], 11[$LCS_kptr_1,0], 7[$LCS_kptr_1,0], $Con_P86 )
+ 1875.          $LCS_kptr_2 = loc( kptr )
+ 1875.          $MR_kptr_S52 = 7[$LCS_kptr_2,0]
+ 1875.          $MR_kptr_S53 = 16 + $MR_kptr_S52
+ 1875.          7[$LCS_kptr_2,0] = $MR_kptr_S53
+ 1877.          if ( 11[$LCS_kptr_2,0] == 0 ) then
+ 1879.             $MR_ibits_9 = -48 + ( _lsh( 4[$LCS_kptr_2,0], 3 ) - 10[$LCS_kptr_2,0] )
+ 1879.             ibits = $MR_ibits_9
+ 1880.             9[$LCS_kptr_2,0] = $MR_ibits_9
+ 1881.             $MR_kpds_S54 = 2[loc( kpds ),0]
+ 1881.             $SW_MR_kpds_V0 = $MR_kpds_S54
+ 1881.             switch( -21 + $SW_MR_kpds_V0 + 1 )
+ 1881.             
+ 1884.                case 1 :
+ 1884.                   goto 10
+ 1884.                case 2 :
+ 1884.                   goto 10
+ 1884.                case 5 :
+ 1884.                   goto 10
+ 1884.                case 41 :
+ 1884.                   goto 10
+ 1884.                case 42 :
+ 1884.    10             continue
+ 1884.                   call fi634x( ibits, 7[loc( kptr ),0], substr[msga,0:1], 0[loc( kbms )].B )
+ 1885.                   if ( $MR_kpds_S54 == 25 ) then
+ 1886.                      $kadd_S69 = 71
+ 1887.                   else if ( $MR_kpds_S54 /= 61 ) then
+ 1887.                      $kadd_S69 = cvmg( 36, 90, $MR_kpds_S54 /= 62 )
+ 1887.                   else
+ 1888.                      $kadd_S69 = 90
+ 1888.                   endif
+ 1892.                   if ( $kadd_S69 > 0 ) then
+ 1893.                      _memset( 0[ibits + loc( kbms )].B, 0, $kadd_S69 )
+ 1893.                   endif
+ 1895.                   $LCS_kptr_6 = loc( kptr )
+ 1895.                   $MR_kptr_S70 = 9[$LCS_kptr_6,0]
+ 1895.                   $MR_kptr_S71 = $kadd_S69 + $MR_kptr_S70
+ 1895.                   9[$LCS_kptr_6,0] = $MR_kptr_S71
+ 1900.                case 3 :
+ 1900.                   goto 20
+ 1900.                case 4 :
+ 1900.                   goto 20
+ 1900.                case 6 :
+ 1900.                   goto 20
+ 1900.                case 43 :
+ 1900.                   goto 20
+ 1900.                case 44 :
+ 1900.    20             continue
+ 1900.                   call fi634x( ibits, 7[loc( kptr ),0], substr[msga,0:1], 0[loc( kbms )].B )
+ 1901.                   if ( $MR_kpds_S54 == 26 ) then
+ 1902.                      $kadd_S66 = 72
+ 1903.                   else if ( $MR_kpds_S54 /= 63 ) then
+ 1903.                      $kadd_S66 = cvmg( 37, 91, $MR_kpds_S54 /= 64 )
+ 1903.                   else
+ 1904.                      $kadd_S66 = 91
+ 1904.                   endif
+ 1908.                   if ( $kadd_S66 > 0 ) then
+ 1909.                      _memset( 0[ibits + loc( kbms )].B, 0, $kadd_S66 )
+ 1909.                   endif
+ 1911.                   $LCS_kptr_5 = loc( kptr )
+ 1911.                   $MR_kptr_S67 = 9[$LCS_kptr_5,0]
+ 1911.                   $MR_kptr_S68 = $kadd_S66 + $MR_kptr_S67 + -1
+ 1911.                   9[$LCS_kptr_5,0] = $MR_kptr_S68
+ 1915.                case 30 :
+ 1915.                   kin = 22
+ 1916.                   $kbits_S56 = 0
+ 1917.                   $I_L1917_S55 = 0
+ 1917.                   do
+ 1918.                      $I_L1918_S60 = 0
+ 1920.                      $LIS_E0 = 7 - $I_L1917_S55
+ 1918.                      do
+ 1921.                         _memset( 0[$kbits_S56 + loc( kbms )].B, 0, 7 - $I_L1917_S55 )
+ 1920.                         $kbits_S29 = ( $LIS_E0 + $kbits_S56 )
+ 1923.                         call fi634x( kin, 7[loc( kptr ),0], substr[msga,0:1], 0[$kbits_S29 + loc( kbms )].B )
+ 1924.                         $LCS_kptr_3 = loc( kptr )
+ 1924.                         $MR_kptr_S58 = 7[$LCS_kptr_3,0]
+ 1924.                         $kin_S57 = kin
+ 1924.                         $MR_kptr_S59 = $kin_S57 + $MR_kptr_S58
+ 1924.                         7[$LCS_kptr_3,0] = $MR_kptr_S59
+ 1925.                         $kbits_S30 = $kbits_S29 + $kin_S57
+ 1928.                         _memset( 0[$kbits_S30 + loc( kbms )].B, 0, 7 - $I_L1917_S55 )
+ 1927.                         $kbits_S56 = ( $LIS_E0 + $kbits_S30 )
+ 1930.                         $I_L1918_S60 = 1 + $I_L1918_S60
+ 1929.                         if ( $I_L1918_S60 >= 4 ) exit
+ 1929.                      enddo
+ 1931.                      $kin_S61 = 2 + $kin_S57
+ 1931.                      kin = $kin_S61
+ 1933.                      $I_L1917_S55 = 1 + $I_L1917_S55
+ 1930.                      if ( $I_L1917_S55 >= 7 ) exit
+ 1930.                   enddo
+ 1934.                   $I_L1934_S65 = 0
+ 1934.                   do
+ 1935.                      call fi634x( kin, 7[loc( kptr ),0], substr[msga,0:1], 0[$kbits_S56 + loc( kbms )].B )
+ 1936.                      $LCS_kptr_4 = loc( kptr )
+ 1936.                      $MR_kptr_S63 = 7[$LCS_kptr_4,0]
+ 1936.                      $kin_S62 = kin
+ 1936.                      $MR_kptr_S64 = $kin_S62 + $MR_kptr_S63
+ 1936.                      7[$LCS_kptr_4,0] = $MR_kptr_S64
+ 1937.                      $kbits_S56 = $kbits_S56 + $kin_S62
+ 1938.                      $I_L1934_S65 = 1 + $I_L1934_S65
+ 1936.                      if ( $I_L1934_S65 >= 5 ) exit
+ 1936.                   enddo
+ 1941.                case 45 :
+ 1941.                case 31 : 40 :
+ 1941.                case 7 : 29 :
+ 1941.                case 0 :
+ 1941.                   call fi634x( ibits, 7[loc( kptr ),0], substr[msga,0:1], 0[loc( kbms )].B )
+ 1941.          else
+ 1946.             0[loc( kret ),0] = 12
+ 1946.          endif
+ 1946.       else
+ 1951.          0[loc( kret ),0] = 0
+ 1955.          $MR_kpds_S72 = 2[loc( kpds ),0]
+ 1955.          $SW_MR_kpds_V1 = $MR_kpds_S72
+ 1955.          switch( -21 + $SW_MR_kpds_V1 + 1 )
+ 1955.          
+ 1957.             case 235 :
+ 1957.                $LCS_kgds_7 = loc( kgds )
+ 1957.                $MR_kgds_S74 = 2[$LCS_kgds_7,0]
+ 1957.                $MR_kgds_S73 = 1[$LCS_kgds_7,0]
+ 1957.                $j_S11 = $MR_kgds_S73 * $MR_kgds_S74
+ 1958.                9[loc( kptr ),0] = $j_S11
+ 1959.                if ( $j_S11 > 0 ) then
+ 1960.                   _memset( 0[loc( kbms )].B, 1, $j_S11 )
+ 1960.                endif
+ 1969.             case 1 :
+ 1969.                goto 30
+ 1969.             case 2 :
+ 1969.    30          continue
+ 1969.                j = 1369
+ 1970.                9[loc( kptr ),0] = 1369
+ 1971.                call fi637( j, 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kret ),0] )
+ 1972.                $MR_kret_S99 = 0[loc( kret ),0]
+ 1972.                if ( $MR_kret_S99 == 0 ) then
+ 1973.                   $I_L1973_S100 = 0
+ 1974.                   $LIS_S48 = loc( kbms )
+ 1973.                   do
+ 1974.                      $LCS_15 = $LIS_S48 + $I_L1973_S100
+ 1974.                      0[$LCS_15].B = grd21[$I_L1973_S100].B
+ 1974.                      1[$LCS_15].B = (1,grd21)[$I_L1973_S100].B
+ 1974.                      2[$LCS_15].B = (2,grd21)[$I_L1973_S100].B
+ 1974.                      3[$LCS_15].B = (3,grd21)[$I_L1973_S100].B
+ 1975.                      $I_L1973_S100 = 4 + $I_L1973_S100
+ 1975.                      if ( $I_L1973_S100 >= 1368 ) exit
+ 1975.                   enddo
+ 1974.                   1368[$LIS_S48].B = (1368,grd21)[0].B
+ 1974.                else
+ 1974.                   goto 40
+ 1974.                endif
+ 1979.             case 3 :
+ 1979.                goto 50
+ 1979.             case 4 :
+ 1979.    50          continue
+ 1979.                j = 1369
+ 1980.                9[loc( kptr ),0] = 1369
+ 1981.                call fi637( j, 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kret ),0] )
+ 1982.                $MR_kret_S97 = 0[loc( kret ),0]
+ 1982.                if ( $MR_kret_S97 == 0 ) then
+ 1983.                   $I_L1983_S98 = 0
+ 1984.                   $LIS_S46 = loc( kbms )
+ 1983.                   do
+ 1984.                      $LCS_14 = $LIS_S46 + $I_L1983_S98
+ 1984.                      0[$LCS_14].B = grd23[$I_L1983_S98].B
+ 1984.                      1[$LCS_14].B = (1,grd23)[$I_L1983_S98].B
+ 1984.                      2[$LCS_14].B = (2,grd23)[$I_L1983_S98].B
+ 1984.                      3[$LCS_14].B = (3,grd23)[$I_L1983_S98].B
+ 1985.                      $I_L1983_S98 = 4 + $I_L1983_S98
+ 1985.                      if ( $I_L1983_S98 >= 1368 ) exit
+ 1985.                   enddo
+ 1984.                   1368[$LIS_S46].B = (1368,grd23)[0].B
+ 1984.                else
+ 1984.                   goto 40
+ 1984.                endif
+ 1989.             case 5 :
+ 1989.                j = 1368
+ 1990.                9[loc( kptr ),0] = 1368
+ 1991.                call fi637( j, 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kret ),0] )
+ 1992.                $MR_kret_S75 = 0[loc( kret ),0]
+ 1992.                if ( $MR_kret_S75 == 0 ) then
+ 1993.                   $I_L1993_S76 = 0
+ 1994.                   $LIS_S36 = loc( kbms )
+ 1993.                   do
+ 1994.                      $LCS_8 = $LIS_S36 + $I_L1993_S76
+ 1994.                      0[$LCS_8].B = grd25[$I_L1993_S76].B
+ 1994.                      1[$LCS_8].B = (1,grd25)[$I_L1993_S76].B
+ 1994.                      2[$LCS_8].B = (2,grd25)[$I_L1993_S76].B
+ 1994.                      3[$LCS_8].B = (3,grd25)[$I_L1993_S76].B
+ 1995.                      $I_L1993_S76 = 4 + $I_L1993_S76
+ 1995.                      if ( $I_L1993_S76 >= 1368 ) exit
+ 1995.                   enddo
+ 1995.                else
+ 1995.                   goto 40
+ 1995.                endif
+ 1999.             case 6 :
+ 1999.                j = 1368
+ 2000.                9[loc( kptr ),0] = 1368
+ 2001.                call fi637( j, 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kret ),0] )
+ 2002.                $MR_kret_S77 = 0[loc( kret ),0]
+ 2002.                if ( $MR_kret_S77 == 0 ) then
+ 2003.                   $I_L2003_S78 = 0
+ 2004.                   $LIS_S38 = loc( kbms )
+ 2003.                   do
+ 2004.                      $LCS_9 = $LIS_S38 + $I_L2003_S78
+ 2004.                      0[$LCS_9].B = grd26[$I_L2003_S78].B
+ 2004.                      1[$LCS_9].B = (1,grd26)[$I_L2003_S78].B
+ 2004.                      2[$LCS_9].B = (2,grd26)[$I_L2003_S78].B
+ 2004.                      3[$LCS_9].B = (3,grd26)[$I_L2003_S78].B
+ 2005.                      $I_L2003_S78 = 4 + $I_L2003_S78
+ 2005.                      if ( $I_L2003_S78 >= 1368 ) exit
+ 2005.                   enddo
+ 2005.                else
+ 2005.                   goto 40
+ 2005.                endif
+ 2011.             case 7 : 16 :
+ 2011.             case 0 :
+ 2011.                goto 60
+ 2011.             case 236 :
+ 2011.             case 25 : 234 :
+ 2011.    60          continue
+ 2011.                $LCS_kpds_10 = loc( kpds )
+ 2011.                $MR_kpds_32 = 0[$LCS_kpds_10,0]
+ 2011.                if ( $MR_kpds_32 /= 7 ) then
+ 2011.                   goto 70
+ 2011.                else if ( $MR_kpds_S72 == 50 ) then
+ 2013.                   j = 1188
+ 2014.                   9[loc( kptr ),0] = 1188
+ 2015.                   call fi637( j, 0[$LCS_kpds_10,0], 0[loc( kgds ),0], 0[loc( kret ),0] )
+ 2016.                   $MR_kret_S79 = 0[loc( kret ),0]
+ 2016.                   if ( $MR_kret_S79 == 0 ) then
+ 2017.                      $j_S80 = j
+ 2017.                      if ( $j_S80 > 0 ) then
+ 2017.                         $I_L2017_S81 = 0
+ 2018.                         if ( $j_S80 > 1188 ) then
+ 2018.                            $LB_Y0 = 1
+ 2018.                            $UB_Y1 = 1188
+ 2018.                            $Subscript_Y2 = 1
+ 2018.                            $Subscript_Y3 = $j_S80
+ 2018.                            $Subscript_Y4 = 1
+ 2018.                            _rbounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y43 )
+ 2018.                         endif
+ 2019.                         $LIS_E2 = $j_S80
+ 2018.                         $LIS_S40 = loc( kbms )
+ 2019.                         if ( 4 <= $LIS_E2 ) then
+ 2017.                            $LIS_E3 = $LIS_E2 - $LIS_E2 - and( -4, $LIS_E2 + _rsh( _ash( $LIS_E2, 1 ), 62 ) )
+ 2017.                            do
+ 2018.                               $MR_grd50_S82 = grd50[$I_L2017_S81].B
+ 2018.                               $LCS_11 = $LIS_S40 + $I_L2017_S81
+ 2018.                               0[$LCS_11].B = $MR_grd50_S82
+ 2018.                               1[$LCS_11].B = (1,grd50)[$I_L2017_S81].B
+ 2018.                               2[$LCS_11].B = (2,grd50)[$I_L2017_S81].B
+ 2018.                               3[$LCS_11].B = (3,grd50)[$I_L2017_S81].B
+ 2019.                               $I_L2017_S81 = 4 + $I_L2017_S81
+ 2019.                               if ( $I_L2017_S81 >= $LIS_E3 ) exit
+ 2019.                            enddo
+ 2019.                         endif
+ 2017.                         if ( $I_L2017_S81 < $LIS_E2 ) then
+ 2017.                            do
+ 2018.                               $MR_grd50_S83 = grd50[$I_L2017_S81].B
+ 2018.                               0[$LIS_S40 + $I_L2017_S81].B = $MR_grd50_S83
+ 2019.                               $I_L2017_S81 = 1 + $I_L2017_S81
+ 2017.                               if ( $I_L2017_S81 >= $LIS_E2 ) exit
+ 2017.                            enddo
+ 2017.                         endif
+ 2017.                      endif
+ 2017.                   else
+ 2017.                      goto 40
+ 2017.                   endif
+ 2017.                else
+ 2017.    70             continue
+ 2017.                   $SW_MR_kpds_V2 = $MR_kpds_S72
+ 2021.                   switch( -61 + $SW_MR_kpds_V2 + 1 )
+ 2021.                   
+ 2023.                      case 1 :
+ 2023.                         goto 80
+ 2023.                      case 2 :
+ 2023.    80                   continue
+ 2023.                         j = 4186
+ 2024.                         9[loc( kptr ),0] = 4186
+ 2025.                         call fi637( j, 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kret ),0] )
+ 2026.                         $MR_kret_S95 = 0[loc( kret ),0]
+ 2026.                         if ( $MR_kret_S95 == 0 ) then
+ 2027.                            $I_L2027_S96 = 0
+ 2028.                            $LIS_S44 = loc( kbms )
+ 2027.                            do
+ 2028.                               $LCS_13 = $LIS_S44 + $I_L2027_S96
+ 2028.                               0[$LCS_13].B = grd61[$I_L2027_S96].B
+ 2028.                               1[$LCS_13].B = (1,grd61)[$I_L2027_S96].B
+ 2028.                               2[$LCS_13].B = (2,grd61)[$I_L2027_S96].B
+ 2028.                               3[$LCS_13].B = (3,grd61)[$I_L2027_S96].B
+ 2029.                               $I_L2027_S96 = 4 + $I_L2027_S96
+ 2029.                               if ( $I_L2027_S96 >= 4184 ) exit
+ 2029.                            enddo
+ 2028.                            4184[$LIS_S44].B = (4184,grd61)[0].B
+ 2028.                            4185[$LIS_S44].B = (4185,grd61)[0].B
+ 2028.                         else
+ 2028.                            goto 40
+ 2028.                         endif
+ 2033.                      case 3 :
+ 2033.                         goto 90
+ 2033.                      case 4 :
+ 2033.    90                   continue
+ 2033.                         j = 4186
+ 2034.                         9[loc( kptr ),0] = 4186
+ 2035.                         call fi637( j, 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kret ),0] )
+ 2036.                         $MR_kret_S93 = 0[loc( kret ),0]
+ 2036.                         if ( $MR_kret_S93 == 0 ) then
+ 2037.                            $I_L2037_S94 = 0
+ 2038.                            $LIS_S42 = loc( kbms )
+ 2037.                            do
+ 2038.                               $LCS_12 = $LIS_S42 + $I_L2037_S94
+ 2038.                               0[$LCS_12].B = grd63[$I_L2037_S94].B
+ 2038.                               1[$LCS_12].B = (1,grd63)[$I_L2037_S94].B
+ 2038.                               2[$LCS_12].B = (2,grd63)[$I_L2037_S94].B
+ 2038.                               3[$LCS_12].B = (3,grd63)[$I_L2037_S94].B
+ 2039.                               $I_L2037_S94 = 4 + $I_L2037_S94
+ 2039.                               if ( $I_L2037_S94 >= 4184 ) exit
+ 2039.                            enddo
+ 2038.                            4184[$LIS_S42].B = (4184,grd63)[0].B
+ 2038.                            4185[$LIS_S42].B = (4185,grd63)[0].B
+ 2038.                         else
+ 2038.                            goto 40
+ 2038.                         endif
+ 2045.                      case 5 :
+ 2045.                      case 0 :
+ 2045.                         if ( $MR_kpds_32 == 7 ) then
+ 2041.                            $SW_MR_kpds_V3 = $MR_kpds_S72
+ 2046.                            switch( -1 + $SW_MR_kpds_V3 + 1 )
+ 2046.                            
+ 2205.                               case 100 : 101 :
+ 2205.                                  if ( $MR_kpds_S72 < 200 ) then
+ 2206.                                     if ( $MR_kpds_S72 == 100 ) then
+ 2208.                                        j = 6889
+ 2208.                                        goto 100
+ 2210.                                     else if ( $MR_kpds_S72 == 101 ) then
+ 2212.                                        j = 10283
+ 2212.                                        goto 100
+ 2212.                                     else if ( $MR_kpds_S72 == 103 ) then
+ 2216.                                        j = 3640
+ 2216.                                        goto 100
+ 2216.                                     else if ( $MR_kpds_S72 == 104 ) then
+ 2220.                                        j = 16170
+ 2220.                                        goto 100
+ 2220.                                     else if ( $MR_kpds_S72 == 105 ) then
+ 2224.                                        j = 6889
+ 2224.                                        goto 100
+ 2224.                                     else if ( $MR_kpds_S72 == 106 ) then
+ 2228.                                        j = 19305
+ 2228.                                        goto 100
+ 2228.                                     else if ( $MR_kpds_S72 == 107 ) then
+ 2232.                                        j = 11040
+ 2232.                                        goto 100
+ 2232.                                     else if ( $MR_kpds_S72 == 110 ) then
+ 2236.                                        j = 103936
+ 2236.                                        goto 100
+ 2236.                                     else if ( $MR_kpds_S72 == 120 ) then
+ 2240.                                        j = 2020800
+ 2240.                                        goto 100
+ 2240.                                     else if ( $MR_kpds_S72 == 122 ) then
+ 2244.                                        j = 162750
+ 2244.                                        goto 100
+ 2244.                                     else if ( $MR_kpds_S72 == 123 ) then
+ 2248.                                        j = 100800
+ 2248.                                        goto 100
+ 2248.                                     else if ( $MR_kpds_S72 == 124 ) then
+ 2252.                                        j = 75360
+ 2252.                                        goto 100
+ 2252.                                     else if ( $MR_kpds_S72 == 125 ) then
+ 2256.                                        j = 102000
+ 2256.                                        goto 100
+ 2256.                                     else if ( $MR_kpds_S72 == 126 ) then
+ 2260.                                        j = 72960
+ 2260.                                        goto 100
+ 2260.                                     else if ( $MR_kpds_S72 == 127 ) then
+ 2264.                                        j = 294912
+ 2264.                                        goto 100
+ 2264.                                     else if ( $MR_kpds_S72 == 130 ) then
+ 2268.                                        j = 151987
+ 2268.                                        goto 100
+ 2268.                                     else if ( $MR_kpds_S72 == 138 ) then
+ 2272.                                        j = 134784
+ 2272.                                        goto 100
+ 2272.                                     else if ( $MR_kpds_S72 == 145 ) then
+ 2276.                                        j = 24505
+ 2276.                                        goto 100
+ 2276.                                     else if ( $MR_kpds_S72 == 146 ) then
+ 2280.                                        j = 23572
+ 2280.                                        goto 100
+ 2280.                                     else if ( $MR_kpds_S72 == 147 ) then
+ 2284.                                        j = 69412
+ 2284.                                        goto 100
+ 2284.                                     else if ( $MR_kpds_S72 == 148 ) then
+ 2288.                                        j = 117130
+ 2288.                                        goto 100
+ 2288.                                     else if ( $MR_kpds_S72 == 160 ) then
+ 2292.                                        j = 28080
+ 2292.                                        goto 100
+ 2292.                                     else if ( $MR_kpds_S72 == 161 ) then
+ 2296.                                        j = 13974
+ 2296.                                        goto 100
+ 2296.                                     else if ( $MR_kpds_S72 == 163 ) then
+ 2300.                                        j = 727776
+ 2300.                                        goto 100
+ 2300.                                     else if ( $MR_kpds_S72 == 170 ) then
+ 2304.                                        j = 131072
+ 2304.                                        goto 100
+ 2304.                                     else if ( $MR_kpds_S72 == 171 ) then
+ 2308.                                        j = 716100
+ 2308.                                        goto 100
+ 2308.                                     else if ( $MR_kpds_S72 == 172 ) then
+ 2312.                                        j = 489900
+ 2312.                                        goto 100
+ 2312.                                     else if ( $MR_kpds_S72 == 173 ) then
+ 2316.                                        j = 9331200
+ 2316.                                        goto 100
+ 2316.                                     else if ( $MR_kpds_S72 == 174 ) then
+ 2320.                                        j = 4147200
+ 2320.                                        goto 100
+ 2320.                                     else if ( $MR_kpds_S72 == 175 ) then
+ 2324.                                        j = 185704
+ 2324.                                        goto 100
+ 2324.                                     else if ( $MR_kpds_S72 == 176 ) then
+ 2328.                                        j = 76845
+ 2328.                                        goto 100
+ 2328.                                     else if ( $MR_kpds_S72 == 180 ) then
+ 2332.                                        j = 267168
+ 2332.                                        goto 100
+ 2332.                                     else if ( $MR_kpds_S72 == 181 ) then
+ 2336.                                        j = 102860
+ 2336.                                        goto 100
+ 2336.                                     else if ( $MR_kpds_S72 == 182 ) then
+ 2340.                                        j = 64218
+ 2340.                                        goto 100
+ 2340.                                     else if ( $MR_kpds_S72 == 183 ) then
+ 2344.                                        j = 180144
+ 2344.                                        goto 100
+ 2344.                                     else if ( $MR_kpds_S72 == 190 ) then
+ 2348.                                        j = 12972
+ 2348.                                        goto 100
+ 2348.                                     else if ( $MR_kpds_S72 == 192 ) then
+ 2352.                                        j = 91719
+ 2352.                                        goto 100
+ 2352.                                     else if ( $MR_kpds_S72 == 194 ) then
+ 2356.                                        j = 12727
+ 2356.                                        goto 100
+ 2356.                                     else if ( $MR_kpds_S72 == 196 ) then
+ 2360.                                        j = 45903
+ 2360.                                        goto 100
+ 2360.                                     else if ( $MR_kpds_S72 == 198 ) then
+ 2364.                                        j = 41760
+ 2364.                                        goto 100
+ 2364.                                     else if ( and( 128, $MR_kpds_0 ) /= 128 ) then
+ 2364.                                        goto 110
+ 2364.                                     else
+ 2364.                                        goto 40
+ 2364.                                     endif
+ 2371.                                  else if ( $MR_kpds_S72 == 201 ) then
+ 2372.                                     j = 4225
+ 2372.                                     goto 100
+ 2372.                                  else if ( $MR_kpds_S72 == 202 ) then
+ 2375.                                     j = 2795
+ 2375.                                     goto 100
+ 2375.                                  else if ( $MR_kpds_S72 == 203 ) then
+ 2375.                                     goto 160
+ 2375.                                     goto 100
+ 2375.                                  else if ( $MR_kpds_S72 == 205 ) then
+ 2375.   160                               continue
+ 2378.                                     j = 1755
+ 2378.                                     goto 100
+ 2378.                                  else if ( $MR_kpds_S72 == 204 ) then
+ 2381.                                     j = 6324
+ 2381.                                     goto 100
+ 2381.                                  else if ( $MR_kpds_S72 == 206 ) then
+ 2384.                                     j = 2091
+ 2384.                                     goto 100
+ 2384.                                  else if ( $MR_kpds_S72 == 207 ) then
+ 2387.                                     j = 1715
+ 2387.                                     goto 100
+ 2387.                                  else if ( $MR_kpds_S72 == 208 ) then
+ 2390.                                     j = 783
+ 2390.                                     goto 100
+ 2390.                                  else if ( $MR_kpds_S72 == 209 ) then
+ 2393.                                     j = 61325
+ 2393.                                     goto 100
+ 2393.                                  else if ( $MR_kpds_S72 == 210 ) then
+ 2396.                                     j = 625
+ 2396.                                     goto 100
+ 2396.                                  else if ( $MR_kpds_S72 == 211 ) then
+ 2399.                                     j = 6045
+ 2399.                                     goto 100
+ 2399.                                  else if ( $MR_kpds_S72 == 212 ) then
+ 2402.                                     j = 23865
+ 2402.                                     goto 100
+ 2402.                                  else if ( $MR_kpds_S72 == 213 ) then
+ 2405.                                     j = 10965
+ 2405.                                     goto 100
+ 2405.                                  else if ( $MR_kpds_S72 == 214 ) then
+ 2408.                                     j = 6693
+ 2408.                                     goto 100
+ 2408.                                  else if ( $MR_kpds_S72 == 215 ) then
+ 2411.                                     j = 94833
+ 2411.                                     goto 100
+ 2411.                                  else if ( $MR_kpds_S72 == 216 ) then
+ 2414.                                     j = 14873
+ 2414.                                     goto 100
+ 2414.                                  else if ( $MR_kpds_S72 == 217 ) then
+ 2417.                                     j = 59001
+ 2417.                                     goto 100
+ 2417.                                  else if ( $MR_kpds_S72 == 218 ) then
+ 2420.                                     j = 262792
+ 2420.                                     goto 100
+ 2420.                                  else if ( $MR_kpds_S72 == 219 ) then
+ 2423.                                     j = 179025
+ 2423.                                     goto 100
+ 2423.                                  else if ( $MR_kpds_S72 == 220 ) then
+ 2426.                                     j = 122475
+ 2426.                                     goto 100
+ 2426.                                  else if ( $MR_kpds_S72 == 221 ) then
+ 2429.                                     j = 96673
+ 2429.                                     goto 100
+ 2429.                                  else if ( $MR_kpds_S72 == 222 ) then
+ 2432.                                     j = 15456
+ 2432.                                     goto 100
+ 2432.                                  else if ( $MR_kpds_S72 == 223 ) then
+ 2435.                                     j = 16641
+ 2435.                                     goto 100
+ 2435.                                  else if ( $MR_kpds_S72 == 224 ) then
+ 2438.                                     j = 4225
+ 2438.                                     goto 100
+ 2438.                                  else if ( $MR_kpds_S72 == 225 ) then
+ 2441.                                     j = 24975
+ 2441.                                     goto 100
+ 2441.                                  else if ( $MR_kpds_S72 == 226 ) then
+ 2444.                                     j = 381029
+ 2444.                                     goto 100
+ 2444.                                  else if ( $MR_kpds_S72 == 227 ) then
+ 2447.                                     j = 1509825
+ 2447.                                     goto 100
+ 2447.                                  else if ( $MR_kpds_S72 == 228 ) then
+ 2450.                                     j = 10512
+ 2450.                                     goto 100
+ 2450.                                  else if ( $MR_kpds_S72 == 229 ) then
+ 2453.                                     j = 65160
+ 2453.                                     goto 100
+ 2453.                                  else if ( $MR_kpds_S72 == 230 ) then
+ 2456.                                     j = 259920
+ 2456.                                     goto 100
+ 2456.                                  else if ( $MR_kpds_S72 == 231 ) then
+ 2459.                                     j = 130320
+ 2459.                                     goto 100
+ 2459.                                  else if ( $MR_kpds_S72 == 232 ) then
+ 2462.                                     j = 32760
+ 2462.                                     goto 100
+ 2462.                                  else if ( $MR_kpds_S72 == 233 ) then
+ 2465.                                     j = 45216
+ 2465.                                     goto 100
+ 2465.                                  else if ( $MR_kpds_S72 == 234 ) then
+ 2468.                                     j = 16093
+ 2468.                                     goto 100
+ 2468.                                  else if ( $MR_kpds_S72 == 235 ) then
+ 2471.                                     j = 259200
+ 2471.                                     goto 100
+ 2471.                                  else if ( $MR_kpds_S72 == 236 ) then
+ 2474.                                     j = 17063
+ 2474.                                     goto 100
+ 2474.                                  else if ( $MR_kpds_S72 == 237 ) then
+ 2477.                                     j = 2538
+ 2477.                                     goto 100
+ 2477.                                  else if ( $MR_kpds_S72 == 238 ) then
+ 2480.                                     j = 55825
+ 2480.                                     goto 100
+ 2480.                                  else if ( $MR_kpds_S72 == 239 ) then
+ 2483.                                     j = 19065
+ 2483.                                     goto 100
+ 2483.                                  else if ( $MR_kpds_S72 == 240 ) then
+ 2486.                                     j = 987601
+ 2486.                                     goto 100
+ 2486.                                  else if ( $MR_kpds_S72 == 241 ) then
+ 2489.                                     j = 244305
+ 2489.                                     goto 100
+ 2489.                                  else if ( $MR_kpds_S72 == 242 ) then
+ 2492.                                     j = 235025
+ 2492.                                     goto 100
+ 2492.                                  else if ( $MR_kpds_S72 == 243 ) then
+ 2495.                                     j = 12726
+ 2495.                                     goto 100
+ 2495.                                  else if ( $MR_kpds_S72 == 244 ) then
+ 2498.                                     j = 55825
+ 2498.                                     goto 100
+ 2498.                                  else if ( $MR_kpds_S72 == 245 ) then
+ 2501.                                     j = 124992
+ 2501.                                     goto 100
+ 2501.                                  else if ( $MR_kpds_S72 == 246 ) then
+ 2504.                                     j = 123172
+ 2504.                                     goto 100
+ 2504.                                  else if ( $MR_kpds_S72 == 247 ) then
+ 2507.                                     j = 124992
+ 2507.                                     goto 100
+ 2507.                                  else if ( $MR_kpds_S72 == 248 ) then
+ 2510.                                     j = 13635
+ 2510.                                     goto 100
+ 2510.                                  else if ( $MR_kpds_S72 == 249 ) then
+ 2513.                                     j = 125881
+ 2513.                                     goto 100
+ 2513.                                  else if ( $MR_kpds_S72 == 250 ) then
+ 2516.                                     j = 13635
+ 2516.                                     goto 100
+ 2516.                                  else if ( $MR_kpds_S72 == 251 ) then
+ 2519.                                     j = 69720
+ 2519.                                     goto 100
+ 2519.                                  else if ( $MR_kpds_S72 == 252 ) then
+ 2522.                                     j = 67725
+ 2522.                                     goto 100
+ 2522.                                  else if ( $MR_kpds_S72 == 253 ) then
+ 2525.                                     j = 83552
+ 2525.                                     goto 100
+ 2525.                                  else if ( $MR_kpds_S72 == 254 ) then
+ 2528.                                     j = 110700
+ 2528.                                     goto 100
+ 2528.                                  else if ( and( 128, $MR_kpds_0 ) /= 128 ) then
+ 2533.                                     0[loc( kret ),0] = 5
+ 2533.                                  else
+ 2533.                                     goto 40
+ 2533.                                  endif
+ 2049.                               case 1 :
+ 2049.                                  j = 1679
+ 2049.                                  goto 100
+ 2054.                               case 2 :
+ 2054.                                  j = 10512
+ 2054.                                  goto 100
+ 2058.                               case 3 :
+ 2058.                                  j = 65160
+ 2058.                                  goto 100
+ 2062.                               case 4 :
+ 2062.                                  j = 259920
+ 2062.                                  goto 100
+ 2066.                               case 5 :
+ 2066.                                  j = 3021
+ 2066.                                  goto 100
+ 2070.                               case 6 :
+ 2070.                                  j = 2385
+ 2070.                                  goto 100
+ 2074.                               case 8 :
+ 2074.                                  j = 5104
+ 2074.                                  goto 100
+ 2078.                               case 11 :
+ 2078.                                  j = 223920
+ 2078.                                  goto 100
+ 2082.                               case 12 :
+ 2082.                                  j = 99631
+ 2082.                                  goto 100
+ 2086.                               case 13 :
+ 2086.                                  j = 36391
+ 2086.                                  goto 100
+ 2090.                               case 14 :
+ 2090.                                  j = 153811
+ 2090.                                  goto 100
+ 2094.                               case 15 :
+ 2094.                                  j = 74987
+ 2094.                                  goto 100
+ 2098.                               case 16 :
+ 2098.                                  j = 214268
+ 2098.                                  goto 100
+ 2102.                               case 17 :
+ 2102.                                  j = 387136
+ 2102.                                  goto 100
+ 2106.                               case 18 :
+ 2106.                                  j = 281866
+ 2106.                                  goto 100
+ 2110.                               case 27 :
+ 2110.                                  goto 170
+ 2110.                                  goto 100
+ 2110.                               case 28 :
+ 2110.   170                            continue
+ 2110.                                  j = 4225
+ 2110.                                  goto 100
+ 2114.                               case 29 :
+ 2114.                                  goto 180
+ 2114.                                  goto 100
+ 2114.                               case 30 :
+ 2114.   180                            continue
+ 2114.                                  j = 5365
+ 2114.                                  goto 100
+ 2118.                               case 33 :
+ 2118.                                  goto 190
+ 2118.                                  goto 100
+ 2118.                               case 34 :
+ 2118.   190                            continue
+ 2118.                                  j = 8326
+ 2118.                                  goto 100
+ 2124.                               case 35 : 36 :
+ 2124.                               case 31 : 32 :
+ 2124.                               case 19 : 26 :
+ 2124.                               case 9 : 10 :
+ 2124.                               case 7 :
+ 2124.                               case 0 :
+ 2124.                                  goto 200
+ 2124.                               case 45 : 99 :
+ 2124.   200                            continue
+ 2124.                                  $SW_MR_kpds_V4 = $MR_kpds_S72
+ 2124.                                  switch( -45 + $SW_MR_kpds_V4 + 1 )
+ 2124.                                  
+ 2126.                                     case 1 :
+ 2126.                                        j = 41760
+ 2126.                                        goto 100
+ 2130.                                     case 9 :
+ 2130.                                        j = 5967
+ 2130.                                        goto 100
+ 2134.                                     case 11 :
+ 2134.                                        goto 210
+ 2134.                                        goto 100
+ 2134.                                     case 12 :
+ 2134.   210                                  continue
+ 2134.                                        j = 6177
+ 2134.                                        goto 100
+ 2140.                                     case 13 : 22 :
+ 2140.                                     case 10 :
+ 2140.                                     case 2 : 8 :
+ 2140.                                     case 0 :
+ 2140.                                        goto 220
+ 2140.                                     case 28 : 29 :
+ 2140.   220                                  continue
+ 2140.                                        $SW_MR_kpds_V5 = $MR_kpds_S72
+ 2140.                                        switch( -72 + $SW_MR_kpds_V5 + 1 )
+ 2140.                                        
+ 2142.                                           case 1 :
+ 2142.                                              j = 406
+ 2142.                                              goto 100
+ 2146.                                           case 2 :
+ 2146.                                              j = 13056
+ 2146.                                              goto 100
+ 2150.                                           case 3 :
+ 2150.                                              j = 10800
+ 2150.                                              goto 100
+ 2156.                                           case 0 :
+ 2156.                                              goto 230
+ 2156.                                           case 7 : 8 :
+ 2156.   230                                        continue
+ 2156.                                              $SW_MR_kpds_V6 = $MR_kpds_S72
+ 2156.                                              switch( -85 + $SW_MR_kpds_V6 + 1 )
+ 2156.                                              
+ 2158.                                                 case 1 :
+ 2158.                                                    goto 240
+ 2158.                                                    goto 100
+ 2158.                                                 case 2 :
+ 2158.   240                                              continue
+ 2158.                                                    j = 32400
+ 2158.                                                    goto 100
+ 2162.                                                 case 3 :
+ 2162.                                                    j = 5022
+ 2162.                                                    goto 100
+ 2166.                                                 case 4 :
+ 2166.                                                    j = 317840
+ 2166.                                                    goto 100
+ 2170.                                                 case 6 :
+ 2170.                                                    j = 111723
+ 2170.                                                    goto 100
+ 2174.                                                 case 7 :
+ 2174.                                                    j = 111723
+ 2174.                                                    goto 100
+ 2178.                                                 case 8 :
+ 2178.                                                    j = 111723
+ 2178.                                                    goto 100
+ 2182.                                                 case 9 :
+ 2182.                                                    j = 111723
+ 2182.                                                    goto 100
+ 2186.                                                 case 10 :
+ 2186.                                                    j = 196305
+ 2186.                                                    goto 100
+ 2190.                                                 case 11 :
+ 2190.                                                    j = 36062
+ 2190.                                                    goto 100
+ 2194.                                                 case 12 :
+ 2194.                                                    j = 646602
+ 2194.                                                    goto 100
+ 2198.                                                 case 13 :
+ 2198.                                                    j = 12727
+ 2198.                                                    goto 100
+ 2202.                                                 case 14 :
+ 2202.                                                    j = 18048
+ 2202.                                                    goto 100
+ 2540.                                                 case 15 :
+ 2540.                                                 case 5 :
+ 2540.                                                 case 0 :
+ 2540.                                                    goto 110
+ 2154.                                           case 4 : 6 :
+ 2154.                                              j = 12321
+ 2154.                                              goto 100
+ 2138.                                     case 23 : 27 :
+ 2138.                                        j = 13689
+ 2138.                                        goto 100
+ 2122.                               case 37 : 44 :
+ 2122.                                  j = 3447
+ 2122.                                  goto 100
+ 2122.                         else
+ 2122.   110                      continue
+ 2540.                            if ( $MR_kpds_32 /= 34 .orelse. and( 128, $MR_kpds_0 ) /= 128 ) then
+ 2550.                               if ( $MR_kpds_32 /= 54 .orelse. and( 128, $MR_kpds_0 ) /= 128 ) then
+ 2560.                                  if ( $MR_kpds_32 /= 58 ) then
+ 2556.                                     goto 120
+ 2561.                                  else if ( $MR_kpds_S72 == 220 ) then
+ 2561.                                     goto 150
+ 2561.                                  else if ( $MR_kpds_S72 == 221 ) then
+ 2561.   150                               continue
+ 2564.                                     9[loc( kptr ),0] = 3969
+ 2566.                                     _memset( 0[loc( kbms )].B, 1, 3969 )
+ 2566.                                  else if ( $MR_kpds_S72 == 223 ) then
+ 2573.                                     9[loc( kptr ),0] = 10512
+ 2575.                                     _memset( 0[loc( kbms )].B, 1, 10512 )
+ 2575.                                  else if ( and( 128, $MR_kpds_0 ) /= 128 ) then
+ 2575.   120                               continue
+ 2588.                                     if ( $MR_kpds_32 /= 74 .orelse. and( 128, $MR_kpds_0 ) /= 128 ) then
+ 2596.                                        if ( $MR_kpds_32 == 98 ) then
+ 2597.                                           if ( $MR_kpds_S72 <= 0 ) then
+ 2597.                                              goto 130
+ 2597.                                           else if ( $MR_kpds_S72 <= 12 ) then
+ 2598.                                              if ( $MR_kpds_S72 >= 5 ) then
+ 2598.                                                 $j_S87 = cvmg( 1369, 1073, $MR_kpds_S72 > 8 )
+ 2598.                                                 j = $j_S87
+ 2598.                                              else
+ 2601.                                                 j = 1369
+ 2601.                                              endif
+ 2603.                                              $j_S88 = j
+ 2603.                                              9[loc( kptr ),0] = $j_S88
+ 2604.                                              call fi637( j, 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kret ),0] )
+ 2605.                                              $MR_kret_S89 = 0[loc( kret ),0]
+ 2605.                                              if ( $MR_kret_S89 == 0 ) then
+ 2606.                                                 $j_S90 = j
+ 2606.                                                 9[loc( kptr ),0] = $j_S90
+ 2607.                                                 if ( $j_S90 > 0 ) then
+ 2608.                                                    _memset( 0[loc( kbms )].B, 1, j )
+ 2608.                                                 endif
+ 2608.                                              else
+ 2608.                                                 goto 40
+ 2608.                                              endif
+ 2608.                                           else
+ 2608.   130                                        continue
+ 2611.                                              if ( $MR_kpds_S72 < 13 ) then
+ 2611.                                                 goto 140
+ 2611.                                              else if ( $MR_kpds_S72 <= 16 ) then
+ 2612.                                                 j = 361
+ 2613.                                                 9[loc( kptr ),0] = 361
+ 2614.                                                 call fi637( j, 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kret ),0] )
+ 2615.                                                 $MR_kret_S91 = 0[loc( kret ),0]
+ 2615.                                                 if ( $MR_kret_S91 == 0 ) then
+ 2616.                                                    $j_S92 = j
+ 2616.                                                    if ( $j_S92 > 0 ) then
+ 2617.                                                       _memset( 0[loc( kbms )].B, 1, j )
+ 2617.                                                    endif
+ 2617.                                                 else
+ 2617.                                                    goto 40
+ 2617.                                                 endif
+ 2617.                                              else
+ 2617.   140                                           continue
+ 2620.                                                 if ( and( 128, $MR_kpds_0 ) == 128 ) then
+ 2620.                                                    goto 40
+ 2620.                                                 else
+ 2623.                                                    0[loc( kret ),0] = 5
+ 2623.                                                 endif
+ 2623.                                              endif
+ 2623.                                           endif
+ 2626.                                        else if ( and( 128, $MR_kpds_0 ) == 128 ) then
+ 2626.                                           goto 40
+ 2626.                                        else
+ 2633.                                           0[loc( kret ),0] = 10
+ 2633.                                        endif
+ 2633.                                     else
+ 2633.                                        goto 40
+ 2633.                                     endif
+ 2633.                                  else
+ 2633.                                     goto 40
+ 2633.                                  endif
+ 2633.                               else
+ 2633.                                  goto 40
+ 2633.                               endif
+ 2633.                            else
+ 2633.                               goto 40
+ 2633.                            endif
+ 2633.                         endif
+ 2633.                endif
+ 2009.             case 17 : 24 :
+ 2009.                j = 3447
+ 2009.   100          continue
+ 2640.                $j_S84 = j
+ 2640.                9[loc( kptr ),0] = $j_S84
+ 2641.                call fi637( j, 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kret ),0] )
+ 2642.                $MR_kret_S85 = 0[loc( kret ),0]
+ 2642.                if ( $MR_kret_S85 == 0 ) then
+ 2643.                   $j_S86 = j
+ 2643.                   if ( $j_S86 > 0 ) then
+ 2644.                      _memset( 0[loc( kbms )].B, 1, j )
+ 2644.                   endif
+ 2644.                else
+ 2644.    40             continue
+ 2670.                   $LCS_kgds_16 = loc( kgds )
+ 2670.                   $MR_kgds_S102 = 2[$LCS_kgds_16,0]
+ 2670.                   $MR_kgds_S101 = 1[$LCS_kgds_16,0]
+ 2670.                   $j_S25 = $MR_kgds_S101 * $MR_kgds_S102
+ 2673.                   $MR_kpds_S103 = 2[loc( kpds ),0]
+ 2673.                   $LCS_kret_17 = loc( kret )
+ 2673.                   $MR_kret_S104 = 0[$LCS_kret_17,0]
+ 2673.                   $MR_kret_S105 = cvmg( $MR_kret_S104, 0, $MR_kpds_S103 /= 211 )
+ 2673.                   0[$LCS_kret_17,0] = $MR_kret_S105
+ 2674.                   9[loc( kptr ),0] = $j_S25
+ 2675.                   if ( $j_S25 > 0 ) then
+ 2676.                      _memset( 0[loc( kbms )].B, 1, $j_S25 )
+ 2676.                   endif
+ 2676.                endif
+ 2676.       endif
+ 2680.       return
+ 2680.       end
+ 2680.       
+ 2682.       
+ 2682.       subroutine fi634x( npts, nskp, msga, kbms )
+ 2682.       $LCS_npts_0 = 0[loc( npts ),0]
+ 2682.       t$55 = int( _alloc( _lsh( max( 0, $LCS_npts_0 ), 2 ) ), 8 )
+ 2712.       t$56 = t$55
+ 2714.       $Con_P3 = 1
+ 2714.       $Con_P4 = 0
+ 2714.       call gbytesc( substr[msga,0:1], 0[t$56,0], 0[loc( nskp ),0], $Con_P3, $Con_P4, 0[loc( npts ),0] )
+ 2715.       $F_A33 = $LCS_npts_0
+ 2715.       if ( $LCS_npts_0 > 0 ) then !  99.50%
+ 2715.          $I_S0 = 0
+ 2715.          do
+ 2715.             0[$I_S0 + loc( kbms )].B = logical( 0[t$56,$I_S0] /= 0, 1 )
+ 2715.             $I_S0 = 1 + $I_S0
+ 2715.             if ( $I_S0 >= $F_A33 ) exit
+ 2715.          enddo
+ 2715.       endif
+ 2682.       _free( t$55 )
+ 2717.       return
+ 2717.       end
+ 2717.       
+ 2820.       
+ 2820.       subroutine fi635( msga, kptr, kpds, kgds, kbms, data, kret )
+ 2718.       (1,ksave)[0].L = 32
+ 2718.       $MR_ksave_S70 = (2,ksave)[0].L
+ 2718.       $MR_ksave_S71 = or( 0x100000000010058UL, and( 16, $MR_ksave_S70 ) )
+ 2718.       (2,ksave)[0].L = $MR_ksave_S71
+ 2718.       (6,ksave)[0] = 10
+ 2718.       (7,ksave)[0] = 131074
+ 2718.       (4,ksave)[0].L = 0
+ 2718.       (5,ksave)[0].L = 0
+ 2718.       (6,ksave)[0].L = 1
+ 2718.       (7,ksave)[0].L = 0
+ 2718.       (8,ksave)[0].L = 1
+ 2834.       $LCS_kptr_0 = loc( kptr )
+ 2834.       $MR_kptr_S73 = 4[$LCS_kptr_0,0]
+ 2834.       $MR_kptr_S76 = 8[$LCS_kptr_0,0]
+ 2834.       $MR_kptr_S72 = 3[$LCS_kptr_0,0]
+ 2834.       $MR_kptr_S74 = 2[$LCS_kptr_0,0]
+ 2834.       $MR_kptr_S75 = 1[$LCS_kptr_0,0]
+ 2834.       $MR_kptr_S77 = $MR_kptr_S76 + _lsh( $MR_kptr_S72 + $MR_kptr_S73 + $MR_kptr_S74 + $MR_kptr_S75, 3 ) + 24
+ 2834.       7[$LCS_kptr_0,0] = $MR_kptr_S77
+ 2838.       $Con_P54 = 4
+ 2838.       call gbytec( substr[msga,0:1], 13[$LCS_kptr_0,0], 7[$LCS_kptr_0,0], $Con_P54 )
+ 2839.       $LCS_kptr_1 = loc( kptr )
+ 2839.       $MR_kptr_S78 = 7[$LCS_kptr_1,0]
+ 2839.       $MR_kptr_S79 = 4 + $MR_kptr_S78
+ 2839.       7[$LCS_kptr_1,0] = $MR_kptr_S79
+ 2841.       $Con_P54 = 4
+ 2841.       call gbytec( substr[msga,0:1], 14[$LCS_kptr_1,0], 7[$LCS_kptr_1,0], $Con_P54 )
+ 2842.       $LCS_kptr_2 = loc( kptr )
+ 2842.       $MR_kptr_S80 = 7[$LCS_kptr_2,0]
+ 2842.       $MR_kptr_S81 = 4 + $MR_kptr_S80
+ 2842.       7[$LCS_kptr_2,0] = $MR_kptr_S81
+ 2843.       $MR_kptr_S88 = 14[$LCS_kptr_2,0]
+ 2843.       $MR_kptr_S87 = 8[$LCS_kptr_2,0]
+ 2843.       $MR_kptr_S83 = 4[$LCS_kptr_2,0]
+ 2843.       $MR_kptr_S82 = 3[$LCS_kptr_2,0]
+ 2843.       $MR_kptr_S84 = 2[$LCS_kptr_2,0]
+ 2843.       $MR_kptr_S85 = 1[$LCS_kptr_2,0]
+ 2843.       $MR_kptr_S86 = 5[$LCS_kptr_2,0]
+ 2843.       $kend_S5 = $MR_kptr_S87 + _lsh( $MR_kptr_S82 + $MR_kptr_S83 + $MR_kptr_S84 + $MR_kptr_S85 + $MR_kptr_S86, 3 ) - $MR_kptr_S88
+ 2848.       $Con_P54 = 1
+ 2848.       call gbytec( substr[msga,0:1], ksign, 7[$LCS_kptr_2,0], $Con_P54 )
+ 2849.       $LCS_kptr_3 = loc( kptr )
+ 2849.       $MR_kptr_S89 = 7[$LCS_kptr_3,0]
+ 2849.       $MR_kptr_S90 = 1 + $MR_kptr_S89
+ 2849.       7[$LCS_kptr_3,0] = $MR_kptr_S90
+ 2851.       $Con_P54 = 15
+ 2851.       call gbytec( substr[msga,0:1], kscale, 7[$LCS_kptr_3,0], $Con_P54 )
+ 2852.       $LCS_kptr_4 = loc( kptr )
+ 2852.       $MR_kptr_S91 = 7[$LCS_kptr_4,0]
+ 2852.       $MR_kptr_S92 = 15 + $MR_kptr_S91
+ 2852.       7[$LCS_kptr_4,0] = $MR_kptr_S92
+ 2853.       if ( ksign > 0 ) then
+ 2854.          $kscale_S93 = kscale
+ 2854.          $kscale_S94 = -$kscale_S93
+ 2854.          kscale = $kscale_S94
+ 2854.       endif
+ 2856.       $kscale_S95 = kscale
+ 2856.       $scale_S13 = 2.0 ** $kscale_S95
+ 2857.       $LCS_kptr_5 = loc( kptr )
+ 2857.       18[$LCS_kptr_5,0] = $kscale_S95
+ 2861.       $Con_P54 = 1
+ 2861.       call gbytec( substr[msga,0:1], jsgn, 7[$LCS_kptr_5,0], $Con_P54 )
+ 2862.       $MR_kptr_S96 = 7[loc( kptr ),0]
+ 2862.       t$58 = 1 + $MR_kptr_S96
+ 2862.       $Con_P54 = 7
+ 2862.       call gbytec( substr[msga,0:1], jexp, t$58, $Con_P54 )
+ 2863.       t$58 = 8 + $MR_kptr_S96
+ 2863.       $Con_P54 = 24
+ 2863.       call gbytec( substr[msga,0:1], ifr, t$58, $Con_P54 )
+ 2864.       $MR_kptr_S97 = 32 + $MR_kptr_S96
+ 2864.       7[loc( kptr ),0] = $MR_kptr_S97
+ 2872.       $ifr_S98 = ifr
+ 2872.       if ( $ifr_S98 == 0 ) then
+ 2873.          refnce = 0.0
+ 2873.       else
+ 2877.          $jexp_S99 = jexp
+ 2877.          $refnce_S100 = 16.0 ** ( -70 + $jexp_S99 ) * real( $ifr_S98 )
+ 2877.          refnce = $refnce_S100
+ 2878.          $jsgn_S101 = jsgn
+ 2878.          if ( $jsgn_S101 /= 0 ) then
+ 2878.             $refnce_S102 = -$refnce_S100
+ 2878.             refnce = $refnce_S102
+ 2878.          endif
+ 2878.       endif
+ 2883.       $Con_P54 = 8
+ 2883.       call gbytec( substr[msga,0:1], kbits, 7[loc( kptr ),0], $Con_P54 )
+ 2884.       $LCS_kptr_6 = loc( kptr )
+ 2884.       $MR_kptr_S103 = 7[$LCS_kptr_6,0]
+ 2884.       $MR_kptr_S104 = 8 + $MR_kptr_S103
+ 2884.       7[$LCS_kptr_6,0] = $MR_kptr_S104
+ 2885.       $kbits_S105 = kbits
+ 2885.       (3,kbds)[0] = $kbits_S105
+ 2887.       19[$LCS_kptr_6,0] = $kbits_S105
+ 2894.       $MR_kptr_S106 = 13[$LCS_kptr_6,0]
+ 2894.       if ( and( 1, $MR_kptr_S106 ) /= 0 ) then
+ 2898.          $Con_P54 = 16
+ 2898.          call gbytec( substr[msga,0:1], koctet, 7[$LCS_kptr_6,0], $Con_P54 )
+ 2899.          $LCS_kptr_7 = loc( kptr )
+ 2899.          $MR_kptr_S107 = 7[$LCS_kptr_7,0]
+ 2899.          $MR_kptr_S108 = 16 + $MR_kptr_S107
+ 2899.          7[$LCS_kptr_7,0] = $MR_kptr_S108
+ 2902.          $Con_P54 = 8
+ 2902.          call gbytec( substr[msga,0:1], kxflag, 7[$LCS_kptr_7,0], $Con_P54 )
+ 2904.          $LCS_kptr_8 = loc( kptr )
+ 2904.          $MR_kptr_S109 = 7[$LCS_kptr_8,0]
+ 2904.          $MR_kptr_S110 = 8 + $MR_kptr_S109
+ 2904.          7[$LCS_kptr_8,0] = $MR_kptr_S110
+ 2905.          $MR_kxflag_25 = kxflag
+ 2905.          (15,kbds)[0] = int( and( 16, $MR_kxflag_25 ) /= 0 )
+ 2912.          $MR_kbds_S111 = int( and( 32, $MR_kxflag_25 ) /= 0 )
+ 2912.          (13,kbds)[0] = $MR_kbds_S111
+ 2919.          $MR_kbds_S112 = int( and( 64, $MR_kxflag_25 ) /= 0 )
+ 2919.          (16,kbds)[0] = $MR_kbds_S112
+ 2928.          $Con_P54 = 16
+ 2928.          call gbytec( substr[msga,0:1], nr, 7[$LCS_kptr_8,0], $Con_P54 )
+ 2929.          $LCS_kptr_9 = loc( kptr )
+ 2929.          $MR_kptr_S113 = 7[$LCS_kptr_9,0]
+ 2929.          $MR_kptr_S114 = 16 + $MR_kptr_S113
+ 2929.          7[$LCS_kptr_9,0] = $MR_kptr_S114
+ 2932.          $Con_P54 = 16
+ 2932.          call gbytec( substr[msga,0:1], nc, 7[$LCS_kptr_9,0], $Con_P54 )
+ 2933.          $LCS_kptr_10 = loc( kptr )
+ 2933.          $MR_kptr_S115 = 7[$LCS_kptr_10,0]
+ 2933.          $MR_kptr_S116 = 16 + $MR_kptr_S115
+ 2933.          7[$LCS_kptr_10,0] = $MR_kptr_S116
+ 2936.          $Con_P54 = 8
+ 2936.          call gbytec( substr[msga,0:1], nrv, 7[$LCS_kptr_10,0], $Con_P54 )
+ 2937.          $LCS_kptr_11 = loc( kptr )
+ 2937.          $MR_kptr_S117 = 7[$LCS_kptr_11,0]
+ 2937.          $MR_kptr_S118 = 8 + $MR_kptr_S117
+ 2937.          7[$LCS_kptr_11,0] = $MR_kptr_S118
+ 2940.          $Con_P54 = 8
+ 2940.          call gbytec( substr[msga,0:1], nc1, 7[$LCS_kptr_11,0], $Con_P54 )
+ 2941.          $LCS_kptr_12 = loc( kptr )
+ 2941.          $MR_kptr_S119 = 7[$LCS_kptr_12,0]
+ 2941.          $MR_kptr_S120 = 8 + $MR_kptr_S119
+ 2941.          7[$LCS_kptr_12,0] = $MR_kptr_S120
+ 2944.          $Con_P54 = 8
+ 2944.          call gbytec( substr[msga,0:1], ncv, 7[$LCS_kptr_12,0], $Con_P54 )
+ 2945.          $LCS_kptr_13 = loc( kptr )
+ 2945.          $MR_kptr_S121 = 7[$LCS_kptr_13,0]
+ 2945.          $MR_kptr_S122 = 8 + $MR_kptr_S121
+ 2945.          7[$LCS_kptr_13,0] = $MR_kptr_S122
+ 2948.          $Con_P54 = 8
+ 2948.          call gbytec( substr[msga,0:1], nc2, 7[$LCS_kptr_13,0], $Con_P54 )
+ 2949.          $LCS_kptr_14 = loc( kptr )
+ 2949.          $MR_kptr_S123 = 7[$LCS_kptr_14,0]
+ 2949.          $MR_kptr_S124 = 8 + $MR_kptr_S123
+ 2949.          7[$LCS_kptr_14,0] = $MR_kptr_S124
+ 2952.          $Con_P54 = 8
+ 2952.          call gbytec( substr[msga,0:1], kphys1, 7[$LCS_kptr_14,0], $Con_P54 )
+ 2953.          $LCS_kptr_15 = loc( kptr )
+ 2953.          $MR_kptr_S125 = 7[$LCS_kptr_15,0]
+ 2953.          $MR_kptr_S126 = 8 + $MR_kptr_S125
+ 2953.          7[$LCS_kptr_15,0] = $MR_kptr_S126
+ 2956.          $Con_P54 = 8
+ 2956.          call gbytec( substr[msga,0:1], kphys2, 7[$LCS_kptr_15,0], $Con_P54 )
+ 2957.          $LCS_kptr_16 = loc( kptr )
+ 2957.          $MR_kptr_S127 = 7[$LCS_kptr_16,0]
+ 2957.          $MR_kptr_S128 = 8 + $MR_kptr_S127
+ 2957.          7[$LCS_kptr_16,0] = $MR_kptr_S128
+ 2957.       endif
+ 2960.       if ( $kbits_S105 == 0 ) then
+ 2962.          $MR_kpds_S129 = 21[loc( kpds ),0]
+ 2962.          $scal10_S0 = 10.0 ** $MR_kpds_S129
+ 2964.          $refnce_S130 = refnce
+ 2964.          $refn10_S4 = $refnce_S130 / $scal10_S0
+ 2965.          $MR_kptr_S131 = 9[loc( kptr ),0]
+ 2966.          if ( $MR_kptr_S131 > 0 ) then
+ 2966.             $I_L2966_S132 = 0
+ 2971.             $LIS_E2 = $MR_kptr_S131
+ 2968.             $LIS_S30 = loc( kbms )
+ 2967.             $LIS_S28 = loc( data )
+ 2966.             do
+ 2967.                0[$LIS_S28,$I_L2966_S132] = 0.0
+ 2968.                if ( int( 0[$LIS_S30 + $I_L2966_S132].B ) /= 0 ) then
+ 2969.                   0[$LIS_S28,$I_L2966_S132] = $refn10_S4
+ 2969.                endif
+ 2971.                $I_L2966_S132 = 1 + $I_L2966_S132
+ 2970.                if ( $I_L2966_S132 >= $LIS_E2 ) exit
+ 2970.             enddo
+ 2970.          endif
+ 2970.          goto 10
+ 2970.       else
+ 2975.          $LCS_kptr_17 = loc( kptr )
+ 2975.          $MR_kptr_S133 = 7[$LCS_kptr_17,0]
+ 2975.          $knr_S134 = ( $kend_S5 - $MR_kptr_S133 ) / $kbits_S105
+ 2975.          knr = $knr_S134
+ 2982.          $MR_kptr_S135 = 5[$LCS_kptr_17,0]
+ 2982.          $nrbyte_S6 = -11 + $MR_kptr_S135
+ 2984.          $MR_kptr_S136 = 14[$LCS_kptr_17,0]
+ 2984.          $nrbits_S7 = _lsh( $nrbyte_S6, 3 ) - $MR_kptr_S136
+ 2986.          $kentry_S8 = $nrbits_S7 / $kbits_S105
+ 2988.          $MR_ksave_S137 = (2,ksave)[0].L
+ 2988.          $MR_ksave_S138 = or( 16, $MR_ksave_S137 )
+ 2988.          (2,ksave)[0].L = $MR_ksave_S138
+ 2988.          (6,ksave)[0].L = 1
+ 2988.          $CS_3 = max( 0, $kentry_S8 )
+ 2988.          (7,ksave)[0].L = $CS_3
+ 2988.          (8,ksave)[0].L = 1
+ 2988.          $_allo_P0[0].L = 0x1000000000001L
+ 2988.          (1,$_allo_P0)[0].L = loc( ksave )
+ 2988.          call __allocate( $_allo_P0, 0, 0, _fcd( 0, 0 ) )
+ 2996.          $LCS_kptr_19 = loc( kptr )
+ 2996.          $MR_kptr_S139 = 13[$LCS_kptr_19,0]
+ 2996.          if ( and( 8, $MR_kptr_S139 ) == 0 ) then
+ 2998.             if ( and( 4, $MR_kptr_S139 ) == 0 ) then
+ 3000.                if ( and( 1, $MR_kptr_S139 ) == 0 ) then
+ 3222.                   $LCS_kpds_18 = loc( kpds )
+ 3222.                   $MR_kpds_S140 = 21[$LCS_kpds_18,0]
+ 3222.                   $scal10_S9 = 10.0 ** $MR_kpds_S140
+ 3223.                   $scal10_S12 = 1.0 / $scal10_S9
+ 3224.                   $MR_kpds_35 = 2[$LCS_kpds_18,0]
+ 3224.                   $SW_MR_kpds_V8 = $MR_kpds_35
+ 3224.                   switch( -21 + $SW_MR_kpds_V8 + 1 )
+ 3224.                   
+ 3226.                      case 3 :
+ 3226.                         goto 20
+ 3226.                      case 4 :
+ 3226.                         goto 20
+ 3226.                      case 6 :
+ 3226.                         goto 20
+ 3226.                      case 43 :
+ 3226.                         goto 20
+ 3226.                      case 44 :
+ 3226.    20                   continue
+ 3226.                         if ( $MR_kpds_35 == 26 ) then
+ 3227.                            $kadd_S161 = 72
+ 3228.                         else if ( $MR_kpds_35 /= 63 ) then
+ 3228.                            $kadd_S161 = cvmg( 37, 91, $MR_kpds_35 /= 64 )
+ 3228.                         else
+ 3229.                            $kadd_S161 = 91
+ 3229.                         endif
+ 3233.                         $Con_P54 = 0
+ 3233.                         call gbytesc( substr[msga,0:1], 0[int( ksave[0].L, 8 ),0], 7[loc( kptr ),0], kbits, $Con_P54, knr )
+ 3234.                         $knr_S152 = knr
+ 3234.                         $kbits_S153 = kbits
+ 3234.                         $LCS_kptr_24 = loc( kptr )
+ 3234.                         $MR_kptr_S154 = 7[$LCS_kptr_24,0]
+ 3234.                         $MR_kptr_S155 = $MR_kptr_S154 + $knr_S152 * $kbits_S153
+ 3234.                         7[$LCS_kptr_24,0] = $MR_kptr_S155
+ 3235.                         $ii_S159 = 1
+ 3236.                         $MR_kptr_S156 = 9[$LCS_kptr_24,0]
+ 3237.                         if ( $MR_kptr_S156 > 0 ) then
+ 3237.                            $I_L3237_S158 = 0
+ 3239.                            $MR_ksave_S157 = ksave[0].L
+ 3239.                            $refnce_S160 = refnce
+ 3244.                            $LIS_E8 = $MR_kptr_S156
+ 3239.                            $LIS_S57 = int( $MR_ksave_S157, 8 )
+ 3239.                            $LIS_S58 = loc( data )
+ 3239.                            $LIS_S55 = $CS_3
+ 3238.                            $LIS_S51 = loc( kbms )
+ 3237.                            do
+ 3238.                               if ( int( 0[$LIS_S51 + $I_L3237_S158].B ) /= 0 ) then
+ 3239.                                  if ( or( $CS_3 - $ii_S159, -1 + $ii_S159 ) < 0 ) then
+ 3239.                                     $LB_Y0 = 1
+ 3239.                                     $UB_Y1 = $LIS_S55
+ 3239.                                     $Subscript_Y5 = $ii_S159
+ 3239.                                     _bounds_error( $_File_Y40, $Line_Y46, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y47 )
+ 3239.                                  endif
+ 3239.                                  0[$LIS_S58,$I_L3237_S158] = ( real( -1[$LIS_S57,$ii_S159] ) * $scale_S13 + $refnce_S160 ) * $scal10_S12
+ 3240.                                  $ii_S159 = 1 + $ii_S159
+ 3240.                               else
+ 3242.                                  0[$LIS_S58,$I_L3237_S158] = 0.0
+ 3242.                               endif
+ 3244.                               $I_L3237_S158 = 1 + $I_L3237_S158
+ 3243.                               if ( $I_L3237_S158 >= $LIS_E8 ) exit
+ 3243.                            enddo
+ 3243.                         endif
+ 3245.                         if ( -2 + $kadd_S161 >= 0 ) then
+ 3245.                            $LCS_data_26 = loc( data )
+ 3245.                            $SCA_data_I1 = 0[$LCS_data_26,0]
+ 3246.                            $W2 = $SCA_data_I1
+ 3246.                            __sset_cce( 1[$LCS_data_26,0], $W2, -1 + $kadd_S161 )
+ 3246.                         endif
+ 3250.                      case 1 :
+ 3250.                         goto 30
+ 3250.                      case 2 :
+ 3250.                         goto 30
+ 3250.                      case 5 :
+ 3250.                         goto 30
+ 3250.                      case 41 :
+ 3250.                         goto 30
+ 3250.                      case 42 :
+ 3250.    30                   continue
+ 3250.                         $Con_P54 = 0
+ 3250.                         call gbytesc( substr[msga,0:1], 0[int( ksave[0].L, 8 ),0], 7[loc( kptr ),0], kbits, $Con_P54, knr )
+ 3251.                         $ii_S149 = 1
+ 3252.                         $MR_kptr_S146 = 9[loc( kptr ),0]
+ 3253.                         if ( $MR_kptr_S146 > 0 ) then
+ 3253.                            $I_L3253_S148 = 0
+ 3255.                            $MR_ksave_S147 = ksave[0].L
+ 3255.                            $refnce_S150 = refnce
+ 3260.                            $LIS_E7 = $MR_kptr_S146
+ 3255.                            $LIS_S47 = int( $MR_ksave_S147, 8 )
+ 3255.                            $LIS_S48 = loc( data )
+ 3255.                            $LIS_S45 = $CS_3
+ 3254.                            $LIS_S41 = loc( kbms )
+ 3253.                            do
+ 3254.                               if ( int( 0[$LIS_S41 + $I_L3253_S148].B ) /= 0 ) then
+ 3255.                                  if ( or( $CS_3 - $ii_S149, -1 + $ii_S149 ) < 0 ) then
+ 3255.                                     $LB_Y0 = 1
+ 3255.                                     $UB_Y1 = $LIS_S45
+ 3255.                                     $Subscript_Y5 = $ii_S149
+ 3255.                                     _bounds_error( $_File_Y40, $Line_Y44, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y45 )
+ 3255.                                  endif
+ 3255.                                  0[$LIS_S48,$I_L3253_S148] = ( real( -1[$LIS_S47,$ii_S149] ) * $scale_S13 + $refnce_S150 ) * $scal10_S12
+ 3256.                                  $ii_S149 = 1 + $ii_S149
+ 3256.                               else
+ 3258.                                  0[$LIS_S48,$I_L3253_S148] = 0.0
+ 3258.                               endif
+ 3260.                               $I_L3253_S148 = 1 + $I_L3253_S148
+ 3259.                               if ( $I_L3253_S148 >= $LIS_E7 ) exit
+ 3259.                            enddo
+ 3259.                         endif
+ 3261.                         if ( $MR_kpds_35 == 25 ) then
+ 3262.                            $kadd_S151 = 71
+ 3263.                         else if ( $MR_kpds_35 /= 61 ) then
+ 3263.                            $kadd_S151 = cvmg( 36, 90, $MR_kpds_35 /= 62 )
+ 3263.                         else
+ 3264.                            $kadd_S151 = 90
+ 3264.                         endif
+ 3269.                         if ( $kadd_S151 > 0 ) then
+ 3269.                            $LCS_MR_kptr_22 = $MR_kptr_S146 - $kadd_S151
+ 3269.                            $LCS_data_23 = loc( data )
+ 3269.                            $SCA_data_I2 = -1[$LCS_data_23,$LCS_MR_kptr_22]
+ 3270.                            $W0 = $SCA_data_I2
+ 3270.                            __sset_cce( 0[$LCS_data_23,$LCS_MR_kptr_22], $W0, $kadd_S151 )
+ 3270.                         endif
+ 3273.                      case 45 :
+ 3273.                      case 7 : 40 :
+ 3273.                      case 0 :
+ 3273.                         $Con_P54 = 0
+ 3273.                         call gbytesc( substr[msga,0:1], 0[int( ksave[0].L, 8 ),0], 7[$LCS_kptr_19,0], kbits, $Con_P54, knr )
+ 3274.                         $ii_S144 = 1
+ 3275.                         $MR_kptr_S141 = 9[loc( kptr ),0]
+ 3276.                         if ( $MR_kptr_S141 > 0 ) then
+ 3276.                            $I_L3276_S143 = 0
+ 3278.                            $MR_ksave_S142 = ksave[0].L
+ 3278.                            $refnce_S145 = refnce
+ 3283.                            $LIS_E6 = $MR_kptr_S141
+ 3278.                            $LIS_S38 = int( $MR_ksave_S142, 8 )
+ 3278.                            $LIS_S39 = loc( data )
+ 3278.                            $LIS_S36 = $CS_3
+ 3277.                            $LIS_S32 = loc( kbms )
+ 3276.                            do
+ 3277.                               if ( int( 0[$LIS_S32 + $I_L3276_S143].B ) /= 0 ) then
+ 3278.                                  if ( or( $CS_3 - $ii_S144, -1 + $ii_S144 ) < 0 ) then
+ 3278.                                     $LB_Y0 = 1
+ 3278.                                     $UB_Y1 = $LIS_S36
+ 3278.                                     $Subscript_Y5 = $ii_S144
+ 3278.                                     _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+ 3278.                                  endif
+ 3278.                                  0[$LIS_S39,$I_L3276_S143] = ( real( -1[$LIS_S38,$ii_S144] ) * $scale_S13 + $refnce_S145 ) * $scal10_S12
+ 3279.                                  $ii_S144 = 1 + $ii_S144
+ 3279.                               else
+ 3281.                                  0[$LIS_S39,$I_L3276_S143] = 0.0
+ 3281.                               endif
+ 3283.                               $I_L3276_S143 = 1 + $I_L3276_S143
+ 3282.                               if ( $I_L3276_S143 >= $LIS_E6 ) exit
+ 3282.                            enddo
+ 3282.                         endif
+ 3282.                   goto 10
+ 3282.                else
+ 3282.                   goto 40
+ 3282.                endif
+ 3051.             else if ( and( 1, $MR_kptr_S139 ) /= 0 ) then
+ 3055.                $MR_kbds_S162 = (16,kbds)[0]
+ 3055.                if ( $MR_kbds_S162 == 0 ) then
+ 3057.                   $MR_kbds_S163 = (13,kbds)[0]
+ 3057.                   if ( $MR_kbds_S163 == 0 ) then
+ 3067.                      call fi636( 0[loc( data ),0], substr[msga,0:1], 0[loc( kbms )].B, refnce, 0[loc( kptr ),0], 0[loc( kpds ),0], 0[loc( kgds ),0] )
+ 3067.                      goto 10
+ 3067.                   else
+ 3079.                      call fi636( 0[loc( data ),0], substr[msga,0:1], 0[loc( kbms )].B, refnce, 0[loc( kptr ),0], 0[loc( kpds ),0], 0[loc( kgds ),0] )
+ 3079.                      goto 10
+ 3079.                   endif
+ 3079.                else
+ 3079.                   goto 40
+ 3079.                endif
+ 3079.             else
+ 3079.                goto 40
+ 3079.             endif
+ 3109.          else if ( and( 4, $MR_kptr_S139 ) /= 0 ) then
+ 3109.             goto 40
+ 3109.          else if ( and( 1, $MR_kptr_S139 ) == 0 ) then
+ 3290.             $LCS_kptr_27 = loc( kptr )
+ 3290.             7[$LCS_kptr_27,0] = $MR_kptr_S104
+ 3292.             $Con_P54 = 1
+ 3292.             call gbytec( substr[msga,0:1], jsgn, 7[$LCS_kptr_27,0], $Con_P54 )
+ 3293.             $MR_kptr_S164 = 7[loc( kptr ),0]
+ 3293.             t$58 = 1 + $MR_kptr_S164
+ 3293.             $Con_P54 = 7
+ 3293.             call gbytec( substr[msga,0:1], jexp, t$58, $Con_P54 )
+ 3294.             t$58 = 8 + $MR_kptr_S164
+ 3294.             $Con_P54 = 24
+ 3294.             call gbytec( substr[msga,0:1], ifr, t$58, $Con_P54 )
+ 3295.             $MR_kptr_S165 = 32 + $MR_kptr_S164
+ 3295.             7[loc( kptr ),0] = $MR_kptr_S165
+ 3300.             $ifr_S166 = ifr
+ 3300.             if ( $ifr_S166 == 0 ) then
+ 3301.                $realkk_S169 = 0.0
+ 3301.             else
+ 3305.                $jexp_S167 = jexp
+ 3305.                $realkk_S169 = 16.0 ** ( -70 + $jexp_S167 ) * real( $ifr_S166 )
+ 3306.                $jsgn_S168 = jsgn
+ 3306.                if ( $jsgn_S168 /= 0 ) then
+ 3306.                   $realkk_S169 = -$realkk_S169
+ 3306.                endif
+ 3306.             endif
+ 3308.             0[loc( data ),0] = $realkk_S169
+ 3309.             $Con_P54 = 0
+ 3309.             call gbytesc( substr[msga,0:1], 0[int( ksave[0].L, 8 ),0], 7[loc( kptr ),0], kbits, $Con_P54, knr )
+ 3311.             if ( $kentry_S8 > 0 ) then
+ 3311.                $I_L3311_S174 = 0
+ 3312.                $MR_ksave_S171 = ksave[0].L
+ 3312.                $refnce_S170 = refnce
+ 3311.                $LCS_28 = $kentry_S8
+ 3311.                if ( $LCS_28 >= 4 ) then !  99.50%
+ 3311.                   $TC_5 = and( -4, $LCS_28 )
+ 3311.                   $LC_S172 = -$TC_5
+ 3311.                   $SI_S173 = 0
+ 3312.                   $LIS_10[0:4:1] = _bcst( $refnce_S170, 4 )
+ 3312.                   $LIS_9[0:4:1] = _bcst( $scale_S13, 4 )
+ 3312.                   $LIS_S64 = int( $MR_ksave_S171, 8 )
+ 3312.                   $LIS_S66 = loc( data )
+ 3311.                   if ( $LC_S172 < -15 ) then
+ 3311.                      do
+ 3312.                         $LCS_29 = $LIS_S64 + $SI_S173
+ 3312.                         $LCS_30 = $LIS_S66 + $SI_S173
+ 3312.                         1[$LCS_30:4:1] = real( 0[$LCS_29:4:1] ) * $LIS_9[0:4:1] + $LIS_10[0:4:1]
+ 3312.                         5[$LCS_30:4:1] = real( 4[$LCS_29:4:1] ) * $LIS_9[0:4:1] + $LIS_10[0:4:1]
+ 3312.                         9[$LCS_30:4:1] = real( 8[$LCS_29:4:1] ) * $LIS_9[0:4:1] + $LIS_10[0:4:1]
+ 3312.                         13[$LCS_30:4:1] = real( 12[$LCS_29:4:1] ) * $LIS_9[0:4:1] + $LIS_10[0:4:1]
+ 3311.                         $SI_S173 = 64 + $SI_S173
+ 3311.                         $LC_S172 = 16 + $LC_S172
+ 3311.                         if ( $LC_S172 >= -15 ) exit
+ 3311.                      enddo
+ 3311.                   endif
+ 3311.                   if ( $LC_S172 < 0 ) then
+ 3311.                      do
+ 3312.                         1[$LIS_S66 + $SI_S173:4:1] = real( 0[$LIS_S64 + $SI_S173:4:1] ) * $LIS_9[0:4:1] + $LIS_10[0:4:1]
+ 3311.                         $SI_S173 = 16 + $SI_S173
+ 3311.                         $LC_S172 = 4 + $LC_S172
+ 3311.                         if ( $LC_S172 >= 0 ) exit
+ 3311.                      enddo
+ 3311.                   endif
+ 3311.                   $I_L3311_S174 = $TC_5
+ 3311.                endif
+ 3311.                $LCS_kentry_31 = $kentry_S8
+ 3311.                if ( $LCS_kentry_31 > $I_L3311_S174 ) then !  99.50%
+ 3312.                   $LIS_S68 = int( $MR_ksave_S171, 8 )
+ 3312.                   $LIS_S69 = loc( data )
+ 3311.                   do
+ 3312.                      1[$LIS_S69,$I_L3311_S174] = real( 0[$LIS_S68,$I_L3311_S174] ) * $scale_S13 + $refnce_S170
+ 3313.                      $I_L3311_S174 = 1 + $I_L3311_S174
+ 3311.                      if ( $I_L3311_S174 >= $LCS_kentry_31 ) exit
+ 3311.                   enddo
+ 3311.                endif
+ 3311.             endif
+ 3311.    10       continue
+ 3315.             $MR_ksave_S175 = (2,ksave)[0].L
+ 3315.             if ( _lsh( $MR_ksave_S175, 63 ) < 0 ) then
+ 3315.                $_allo_P1[0].L = 0x1000000000001L
+ 3315.                (1,$_allo_P1)[0].L = loc( ksave )
+ 3315.                call __deallocate( $_allo_P1, 0, 0, _fcd( 0, 0 ) )
+ 3315.                $MR_ksave_S176 = (2,ksave)[0].L
+ 3315.                $MR_ksave_S177 = and( 0xfffffffffffffffeUL, $MR_ksave_S176 )
+ 3315.                (2,ksave)[0].L = $MR_ksave_S177
+ 3315.             endif
+ 2820.             $_allo_P2[0].L = 0x1000000000001L
+ 2820.             (1,$_allo_P2)[0].L = loc( ksave )
+ 2820.             call _dealloc( $_allo_P2, 0, 0, _fcd( 0, 0 ) )
+ 2820.          else
+ 2820.    40       continue
+ 3213.             $MR_ksave_S178 = (2,ksave)[0].L
+ 3213.             if ( _lsh( $MR_ksave_S178, 63 ) < 0 ) then
+ 3213.                $_allo_P3[0].L = 0x1000000000001L
+ 3213.                (1,$_allo_P3)[0].L = loc( ksave )
+ 3213.                call __deallocate( $_allo_P3, 0, 0, _fcd( 0, 0 ) )
+ 3213.                $MR_ksave_S179 = (2,ksave)[0].L
+ 3213.                $MR_ksave_S180 = and( 0xfffffffffffffffeUL, $MR_ksave_S179 )
+ 3213.                (2,ksave)[0].L = $MR_ksave_S180
+ 3213.             endif
+ 3215.             0[loc( kret ),0] = 11
+ 2820.             $_allo_P4[0].L = 0x1000000000001L
+ 2820.             (1,$_allo_P4)[0].L = loc( ksave )
+ 2820.             call _dealloc( $_allo_P4, 0, 0, _fcd( 0, 0 ) )
+ 2820.          endif
+ 2820.       endif
+ 3318.       return
+ 3318.       end
+ 3318.       
+ 3319.       
+ 3319.       subroutine fi636( data, msga, kbms, refnce, kptr, kpds, kgds )
+ 3397.       $LIS_3[0:4:1] = _bcst( 0, 4 )
+ 3397.       kbds[0:4:1] = $LIS_3[0:4:1]
+ 3397.       (4,kbds)[0:4:1] = $LIS_3[0:4:1]
+ 3397.       (8,kbds)[0:4:1] = $LIS_3[0:4:1]
+ 3397.       (12,kbds)[0:4:1] = $LIS_3[0:4:1]
+ 3397.       (16,kbds)[0:4:1] = $LIS_3[0:4:1]
+ 3400.       $LCS_kptr_0 = loc( kptr )
+ 3400.       $MR_kptr_S23 = 1[$LCS_kptr_0,0]
+ 3400.       $MR_kptr_S22 = 2[$LCS_kptr_0,0]
+ 3400.       $ibds_S1 = 4[$LCS_kptr_0,0] + 3[$LCS_kptr_0,0] + $MR_kptr_S22 + $MR_kptr_S23
+ 3405.       $LCS_1 = _lsh( $ibds_S1, 3 )
+ 3405.       (8,kbds)[0] = $LCS_1
+ 3408.       t$82 = 32 + $LCS_1
+ 3408.       $Con_P42 = 1
+ 3408.       call gbytec( substr[msga,0:1], isign, t$82, $Con_P42 )
+ 3409.       t$82 = 33 + _lsh( $ibds_S1, 3 )
+ 3409.       $Con_P42 = 15
+ 3409.       call gbytec( substr[msga,0:1], (10,kbds)[0], t$82, $Con_P42 )
+ 3410.       if ( isign > 0 ) then
+ 3411.          $MR_kbds_S24 = (10,kbds)[0]
+ 3411.          $MR_kbds_S25 = -$MR_kbds_S24
+ 3411.          (10,kbds)[0] = $MR_kbds_S25
+ 3411.       endif
+ 3416.       $Con_P42 = 1
+ 3416.       call gbytec( substr[msga,0:1], jsgn, 7[loc( kptr ),0], $Con_P42 )
+ 3417.       $MR_kptr_7 = 7[loc( kptr ),0]
+ 3417.       t$82 = 1 + $MR_kptr_7
+ 3417.       $Con_P42 = 7
+ 3417.       call gbytec( substr[msga,0:1], jexp, t$82, $Con_P42 )
+ 3418.       t$82 = 8 + $MR_kptr_7
+ 3418.       $Con_P42 = 24
+ 3418.       call gbytec( substr[msga,0:1], ifr, t$82, $Con_P42 )
+ 3419.       $MR_ifr_8 = ifr
+ 3419.       if ( $MR_ifr_8 == 0 ) then
+ 3420.          0[loc( refnce ),0] = 0.0
+ 3420.       else
+ 3424.          $MR_refnce_S26 = 16.0 ** ( -70 + jexp ) * real( $MR_ifr_8 )
+ 3424.          $LCS_refnce_2 = loc( refnce )
+ 3424.          0[$LCS_refnce_2,0] = $MR_refnce_S26
+ 3425.          if ( jsgn /= 0 ) then
+ 3425.             $MR_refnce_S27 = -$MR_refnce_S26
+ 3425.             0[$LCS_refnce_2,0] = $MR_refnce_S27
+ 3425.          endif
+ 3425.       endif
+ 3429.       t$82 = 80 + _lsh( $ibds_S1, 3 )
+ 3429.       $Con_P42 = 8
+ 3429.       call gbytec( substr[msga,0:1], (12,kbds)[0], t$82, $Con_P42 )
+ 3430.       $jptr_S28 = 88 + _lsh( $ibds_S1, 3 )
+ 3430.       jptr = $jptr_S28
+ 3433.       $Con_P42 = 16
+ 3433.       call gbytec( substr[msga,0:1], kbds[0], jptr, $Con_P42 )
+ 3435.       $jptr_S29 = jptr
+ 3435.       $jptr_S30 = 16 + $jptr_S29
+ 3435.       jptr = $jptr_S30
+ 3437.       $Con_P42 = 8
+ 3437.       call gbytec( substr[msga,0:1], kflag, jptr, $Con_P42 )
+ 3439.       $MR_kflag_13 = kflag
+ 3439.       $MR_kbds_S31 = int( and( 32, $MR_kflag_13 ) /= 0 )
+ 3439.       (13,kbds)[0] = $MR_kbds_S31
+ 3444.       (15,kbds)[0] = int( and( 16, $MR_kflag_13 ) /= 0 )
+ 3449.       (16,kbds)[0] = int( and( 64, $MR_kflag_13 ) /= 0 )
+ 3454.       $jptr_S32 = jptr
+ 3454.       $jptr_S33 = 8 + $jptr_S32
+ 3454.       jptr = $jptr_S33
+ 3456.       $Con_P42 = 16
+ 3456.       call gbytec( substr[msga,0:1], (1,kbds)[0], jptr, $Con_P42 )
+ 3458.       $jptr_S34 = jptr
+ 3458.       $jptr_S35 = 16 + $jptr_S34
+ 3458.       jptr = $jptr_S35
+ 3460.       $Con_P42 = 16
+ 3460.       call gbytec( substr[msga,0:1], (2,kbds)[0], jptr, $Con_P42 )
+ 3462.       $jptr_S36 = jptr
+ 3462.       $jptr_S37 = 16 + $jptr_S36
+ 3462.       jptr = $jptr_S37
+ 3464.       $Con_P42 = 16
+ 3464.       call gbytec( substr[msga,0:1], (3,kbds)[0], jptr, $Con_P42 )
+ 3470.       $jptr_S38 = jptr
+ 3470.       $MR_kbds_S39 = 24 + $jptr_S38
+ 3470.       (4,kbds)[0] = $MR_kbds_S39
+ 3472.       $MR_kbds_S40 = (13,kbds)[0]
+ 3472.       if ( $MR_kbds_S40 /= 0 ) then
+ 3474.          $jptr_S3 = $jptr_S38 + _lsh( (2,kbds)[0], 3 ) + 24
+ 3475.          (5,kbds)[0] = $jptr_S3
+ 3475.       else
+ 3478.          (5,kbds)[0] = 0
+ 3478.       endif
+ 3481.       $MR_kbds_19 = kbds[0]
+ 3481.       $MR_kbds_4 = (8,kbds)[0]
+ 3481.       $MR_kbds_S41 = $MR_kbds_4 + _lsh( $MR_kbds_19, 3 ) + -8
+ 3481.       (6,kbds)[0] = $MR_kbds_S41
+ 3484.       $MR_kbds_S42 = $MR_kbds_4 + _lsh( (1,kbds)[0], 3 ) + -8
+ 3484.       (7,kbds)[0] = $MR_kbds_S42
+ 3505.       ij = 0
+ 3507.       $MR_kbds_S43 = (13,kbds)[0]
+ 3507.       if ( $MR_kbds_S43 == 0 ) then
+ 3509.          $LCS_kgds_3 = loc( kgds )
+ 3509.          $MR_kgds_23 = 1[$LCS_kgds_3,0]
+ 3509.          if ( $MR_kgds_23 == 65535 ) then
+ 3510.             $MR_kgds_24 = 19[$LCS_kgds_3,0]
+ 3510.             if ( $MR_kgds_24 /= 255 ) then
+ 3514.                $LCS_kptr_4 = loc( kptr )
+ 3514.                $MR_kptr_S44 = 2[$LCS_kptr_4,0]
+ 3514.                $MR_kptr_S45 = 1[$LCS_kptr_4,0]
+ 3514.                $lp_S46 = 8[$LCS_kptr_4,0] + _lsh( $MR_kgds_24 + $MR_kptr_S44 + $MR_kptr_S45, 3 ) + -8
+ 3514.                lp = $lp_S46
+ 3516.                jt = 0
+ 3517.                $MR_kgds_S47 = 2[$LCS_kgds_3,0]
+ 3517.                if ( $MR_kgds_S47 > 0 ) then
+ 3517.                   $I_L3517_S53 = 0
+ 3531.                   $LIS_E0 = $MR_kgds_S47
+ 3517.                   do
+ 3519.                      $Con_P42 = 16
+ 3519.                      call gbytec( substr[msga,0:1], number, lp, $Con_P42 )
+ 3521.                      $lp_S48 = lp
+ 3521.                      $lp_S49 = 16 + $lp_S48
+ 3521.                      lp = $lp_S49
+ 3523.                      $MR_number_28 = number
+ 3523.                      if ( $MR_number_28 > 0 ) then
+ 3523.                         $I_L3523_S50 = 0
+ 3530.                         $LIS_E4 = $MR_number_28
+ 3523.                         do
+ 3524.                            if ( $I_L3523_S50 == 0 ) then
+ 3525.                               $Con_P42 = 1
+ 3525.                               $Con_P43 = 1
+ 3525.                               call sbytec( substr[bmap2,0:1], $Con_P42, jt, $Con_P43 )
+ 3525.                            else
+ 3527.                               $Con_P42 = 0
+ 3527.                               $Con_P43 = 1
+ 3527.                               call sbytec( substr[bmap2,0:1], $Con_P42, jt, $Con_P43 )
+ 3527.                            endif
+ 3529.                            $jt_S51 = jt
+ 3529.                            $jt_S52 = 1 + $jt_S51
+ 3529.                            jt = $jt_S52
+ 3530.                            $I_L3523_S50 = 1 + $I_L3523_S50
+ 3528.                            if ( $I_L3523_S50 >= $LIS_E4 ) exit
+ 3528.                         enddo
+ 3528.                      endif
+ 3531.                      $I_L3517_S53 = 1 + $I_L3517_S53
+ 3530.                      if ( $I_L3517_S53 >= $LIS_E0 ) exit
+ 3530.                   enddo
+ 3530.                endif
+ 3530.             endif
+ 3530.          else
+ 3534.             $LCS_kgds_5 = loc( kgds )
+ 3534.             if ( and( 32, 10[$LCS_kgds_5,0] ) == 0 ) then
+ 3537.                $MR_kgds_S54 = 2[$LCS_kgds_5,0]
+ 3537.                $kout_S56 = $MR_kgds_S54
+ 3538.                $kin_S57 = $MR_kgds_23
+ 3538.             else
+ 3542.                $MR_kgds_S55 = 2[loc( kgds ),0]
+ 3542.                $kin_S57 = $MR_kgds_S55
+ 3543.                $kout_S56 = $MR_kgds_23
+ 3543.             endif
+ 3546.             if ( $kout_S56 > 0 ) then
+ 3547.                if ( $kin_S57 > 0 ) then
+ 3546.                   $I_L3546_S61 = 0
+ 3555.                   $LIS_E2 = $kout_S56
+ 3554.                   $LIS_E1 = $kin_S57
+ 3546.                   do
+ 3547.                      $I_L3547_S58 = 0
+ 3547.                      do
+ 3548.                         if ( $I_L3547_S58 == 0 ) then
+ 3549.                            $Con_P42 = 1
+ 3549.                            $Con_P43 = 1
+ 3549.                            call sbytec( substr[bmap2,0:1], $Con_P42, ij, $Con_P43 )
+ 3549.                         else
+ 3551.                            $Con_P42 = 0
+ 3551.                            $Con_P43 = 1
+ 3551.                            call sbytec( substr[bmap2,0:1], $Con_P42, ij, $Con_P43 )
+ 3551.                         endif
+ 3553.                         $ij_S59 = ij
+ 3553.                         $ij_S60 = 1 + $ij_S59
+ 3553.                         ij = $ij_S60
+ 3554.                         $I_L3547_S58 = 1 + $I_L3547_S58
+ 3552.                         if ( $I_L3547_S58 >= $LIS_E1 ) exit
+ 3552.                      enddo
+ 3555.                      $I_L3546_S61 = 1 + $I_L3546_S61
+ 3554.                      if ( $I_L3546_S61 >= $LIS_E2 ) exit
+ 3554.                   enddo
+ 3554.                endif
+ 3554.             endif
+ 3554.          endif
+ 3554.       endif
+ 3564.       $MR_kbds_S62 = (10,kbds)[0]
+ 3564.       $scale2_S14 = 2.0 ** $MR_kbds_S62
+ 3565.       $scal10_S13 = 10.0 ** 21[loc( kpds ),0]
+ 3567.       $t_S11 = 9[loc( kptr ),0]
+ 3567.       if ( $t_S11 > 0 ) then
+ 3567.          $I_L3567_S63 = 0
+ 3604.          $MR_refnce_S75 = 0[loc( refnce ),0]
+ 3613.          $LIS_E7 = $t_S11
+ 3604.          $LIS_E6 = loc( data )
+ 3570.          $LIS_E5 = loc( kbms )
+ 3567.          do
+ 3570.             if ( int( 0[$LIS_E5 + $I_L3567_S63].B ) /= 0 ) then
+ 3573.                $MR_kbds_S64 = (13,kbds)[0]
+ 3573.                if ( $MR_kbds_S64 /= 0 ) then
+ 3574.                   $Con_P42 = 1
+ 3574.                   call gbytec( substr[msga,0:1], kbit, (5,kbds)[0], $Con_P42 )
+ 3574.                else
+ 3576.                   $Con_P42 = 1
+ 3576.                   call gbytec( substr[bmap2,0:1], kbit, (5,kbds)[0], $Con_P42 )
+ 3576.                endif
+ 3579.                $MR_kbds_S65 = (5,kbds)[0]
+ 3579.                $MR_kbds_S66 = 1 + $MR_kbds_S65
+ 3579.                (5,kbds)[0] = $MR_kbds_S66
+ 3580.                if ( kbit /= 0 ) then
+ 3583.                   call gbytec( substr[msga,0:1], ifoval, (6,kbds)[0], (12,kbds)[0] )
+ 3584.                   $MR_kbds_S67 = (6,kbds)[0]
+ 3584.                   $MR_kbds_S68 = (12,kbds)[0] + $MR_kbds_S67
+ 3584.                   (6,kbds)[0] = $MR_kbds_S68
+ 3587.                   $Con_P42 = 8
+ 3587.                   call gbytec( substr[msga,0:1], (14,kbds)[0], (4,kbds)[0], $Con_P42 )
+ 3588.                   $MR_kbds_S69 = (4,kbds)[0]
+ 3588.                   $MR_kbds_S70 = 8 + $MR_kbds_S69
+ 3588.                   (4,kbds)[0] = $MR_kbds_S70
+ 3588.                endif
+ 3594.                isoval = 0
+ 3595.                $MR_kbds_S71 = (14,kbds)[0]
+ 3595.                if ( $MR_kbds_S71 /= 0 ) then
+ 3601.                   call gbytec( substr[msga,0:1], isoval, (7,kbds)[0], (14,kbds)[0] )
+ 3602.                   $MR_kbds_S72 = (14,kbds)[0]
+ 3602.                   $MR_kbds_S73 = (7,kbds)[0]
+ 3602.                   $MR_kbds_S74 = $MR_kbds_S72 + $MR_kbds_S73
+ 3602.                   (7,kbds)[0] = $MR_kbds_S74
+ 3602.                endif
+ 3604.                0[$LIS_E6,$I_L3567_S63] = ( ( real( ifoval + isoval ) * $scale2_S14 ) + $MR_refnce_S75 ) / $scal10_S13
+ 3604.             else
+ 3610.                0[$LIS_E6,$I_L3567_S63] = 0.0
+ 3610.             endif
+ 3613.             $I_L3567_S63 = 1 + $I_L3567_S63
+ 3611.             if ( $I_L3567_S63 >= $LIS_E7 ) exit
+ 3611.          enddo
+ 3611.       endif
+ 3617.       return
+ 3617.       end
+ 3617.       
+ 3618.       
+ 3618.       subroutine fi637( j, kpds, kgds, kret )
+ 3664.       $LCS_kret_0 = loc( kret )
+ 3664.       0[$LCS_kret_0,0] = 0
+ 3665.       $LCS_kpds_2 = loc( kpds )
+ 3665.       if ( and( 128, 3[$LCS_kpds_2,0] ) /= 0 ) then
+ 3669.          $LCS_kgds_1 = loc( kgds )
+ 3669.          $MR_kgds_1 = 1[$LCS_kgds_1,0]
+ 3669.          if ( $MR_kgds_1 /= 65535 ) then
+ 3672.             0[$LCS_kret_0,0] = 1
+ 3673.             $i_S0 = $MR_kgds_1 * 2[$LCS_kgds_1,0]
+ 3677.             $MR_kpds_3 = 2[$LCS_kpds_2,0]
+ 3677.             if ( $MR_kpds_3 < 21 ) then
+ 3671.                goto 10
+ 3677.             else if ( $MR_kpds_3 <= 26 ) then
+ 3678.                $MR_S1 = 0[loc( j ),0]
+ 3678.                $MR_kret_S2 = int( $MR_S1 - $i_S0 /= 0 )
+ 3678.                0[$LCS_kret_0,0] = $MR_kret_S2
+ 3678.             else
+ 3678.    10          continue
+ 3681.                if ( $MR_kpds_3 < 37 ) then
+ 3681.                   goto 20
+ 3681.                else if ( $MR_kpds_3 <= 44 ) then
+ 3682.                   $MR_S3 = 0[loc( j ),0]
+ 3682.                   $MR_kret_S4 = int( $MR_S3 - $i_S0 /= 0 )
+ 3682.                   0[loc( kret ),0] = $MR_kret_S4
+ 3682.                else
+ 3682.    20             continue
+ 3685.                   if ( $MR_kpds_3 == 50 ) then
+ 3686.                      $MR_S5 = 0[loc( j ),0]
+ 3686.                      $MR_kret_S6 = int( $MR_S5 - $i_S0 /= 0 )
+ 3686.                      0[loc( kret ),0] = $MR_kret_S6
+ 3689.                   else if ( $MR_kpds_3 < 61 ) then
+ 3689.                      goto 30
+ 3689.                   else if ( $MR_kpds_3 <= 64 ) then
+ 3690.                      $MR_S7 = 0[loc( j ),0]
+ 3690.                      $MR_kret_S8 = int( $MR_S7 - $i_S0 /= 0 )
+ 3690.                      0[loc( kret ),0] = $MR_kret_S8
+ 3690.                   else
+ 3690.    30                continue
+ 3696.                      $MR_kpds_6 = 0[loc( kpds ),0]
+ 3696.                      $SW_MR_kpds_V0 = $MR_kpds_6
+ 3696.                      switch( -7 + $SW_MR_kpds_V0 + 1 )
+ 3696.                      
+ 3697.                         case 92 :
+ 3697.                            0[loc( kret ),0] = 9
+ 3698.                            if ( $MR_kpds_3 <= 0 ) then
+ 3697.                               goto 40
+ 3698.                            else if ( $MR_kpds_3 <= 16 ) then
+ 3699.                               $LCS_j_3 = loc( j )
+ 3699.                               $MR_S9 = 0[$LCS_j_3,0]
+ 3699.                               if ( $MR_S9 - $i_S0 == 0 ) then
+ 3699.                                  goto 50
+ 3700.                               else if ( $MR_kpds_3 == 2 ) then
+ 3702.                                  if ( $i_S0 == 10512 ) then
+ 3705.                                     0[$LCS_j_3,0] = 10512
+ 3705.    50                               continue
+ 3880.                                     0[loc( kret ),0] = 0
+ 3880.                                  endif
+ 3880.                               endif
+ 3880.                            else
+ 3880.    40                         continue
+ 3708.                               0[loc( kret ),0] = 5
+ 3708.                            endif
+ 3716.                         case 68 :
+ 3716.                            if ( $MR_kpds_3 >= 25 ) then
+ 3716.                               $MR_S10 = 0[loc( j ),0]
+ 3716.                               $MR_kret_S11 = cvmg( 5, cvmg( 9, 0, $MR_S10 - $i_S0 /= 0 ), $MR_kpds_3 > 26 )
+ 3716.                               0[loc( kret ),0] = $MR_kret_S11
+ 3716.                            else
+ 3721.                               0[loc( kret ),0] = 5
+ 3721.                            endif
+ 3740.                         case 52 :
+ 3740.                            if ( $MR_kpds_3 < 37 ) then
+ 3740.                               goto 60
+ 3740.                            else if ( $MR_kpds_3 <= 44 ) then
+ 3741.                               $MR_S12 = 0[loc( j ),0]
+ 3741.                               $MR_kret_S13 = int( $MR_S12 - $i_S0 /= 0 )
+ 3741.                               0[loc( kret ),0] = $MR_kret_S13
+ 3741.                            else
+ 3741.    60                         continue
+ 3744.                               if ( $MR_kpds_3 < 220 ) then
+ 3744.                                  goto 70
+ 3744.                               else if ( $MR_kpds_3 <= 221 ) then
+ 3745.                                  $MR_S14 = 0[loc( j ),0]
+ 3745.                                  $MR_kret_S15 = int( $MR_S14 - $i_S0 /= 0 )
+ 3745.                                  0[loc( kret ),0] = $MR_kret_S15
+ 3745.                               else
+ 3745.    70                            continue
+ 3748.                                  $MR_S16 = 0[loc( j ),0]
+ 3748.                                  $MR_kret_S17 = cvmg( 5, $MR_S16 - $i_S0 /= 0, $MR_kpds_3 /= 223 )
+ 3748.                                  0[loc( kret ),0] = $MR_kret_S17
+ 3748.                               endif
+ 3748.                            endif
+ 3761.                         case 1 :
+ 3761.                            if ( $MR_kpds_3 <= 0 ) then
+ 3760.                               goto 80
+ 3761.                            else if ( $MR_kpds_3 <= 6 ) then
+ 3762.                               $MR_S18 = 0[loc( j ),0]
+ 3762.                               $MR_kret_S19 = cvmg( 9, 0, $MR_S18 - $i_S0 /= 0 )
+ 3762.                               0[loc( kret ),0] = $MR_kret_S19
+ 3762.                            else
+ 3762.    80                         continue
+ 3765.                               if ( $MR_kpds_3 == 8 ) then
+ 3766.                                  $MR_S20 = 0[loc( j ),0]
+ 3766.                                  $MR_kret_S21 = cvmg( 9, 0, $MR_S20 - $i_S0 /= 0 )
+ 3766.                                  0[loc( kret ),0] = $MR_kret_S21
+ 3769.                               else if ( $MR_kpds_3 < 11 ) then
+ 3769.                                  goto 90
+ 3769.                               else if ( $MR_kpds_3 <= 18 ) then
+ 3770.                                  $MR_S22 = 0[loc( j ),0]
+ 3770.                                  $MR_kret_S23 = cvmg( 9, 0, $MR_S22 - $i_S0 /= 0 )
+ 3770.                                  0[loc( kret ),0] = $MR_kret_S23
+ 3770.                               else
+ 3770.    90                            continue
+ 3773.                                  if ( $MR_kpds_3 < 27 ) then
+ 3773.                                     goto 100
+ 3773.                                  else if ( $MR_kpds_3 <= 30 ) then
+ 3774.                                     $MR_S24 = 0[loc( j ),0]
+ 3774.                                     $MR_kret_S25 = cvmg( 9, 0, $MR_S24 - $i_S0 /= 0 )
+ 3774.                                     0[loc( kret ),0] = $MR_kret_S25
+ 3774.                                  else
+ 3774.   100                               continue
+ 3777.                                     if ( $MR_kpds_3 < 33 ) then
+ 3777.                                        goto 110
+ 3777.                                     else if ( $MR_kpds_3 <= 34 ) then
+ 3778.                                        $MR_S26 = 0[loc( j ),0]
+ 3778.                                        $MR_kret_S27 = cvmg( 9, 0, $MR_S26 - $i_S0 /= 0 )
+ 3778.                                        0[loc( kret ),0] = $MR_kret_S27
+ 3778.                                     else
+ 3778.   110                                  continue
+ 3781.                                        if ( $MR_kpds_3 < 37 ) then
+ 3781.                                           goto 120
+ 3781.                                        else if ( $MR_kpds_3 <= 44 ) then
+ 3782.                                           $MR_S28 = 0[loc( j ),0]
+ 3782.                                           $MR_kret_S29 = cvmg( 9, 0, $MR_S28 - $i_S0 /= 0 )
+ 3782.                                           0[loc( kret ),0] = $MR_kret_S29
+ 3782.                                        else
+ 3782.   120                                     continue
+ 3785.                                           if ( $MR_kpds_3 == 53 ) then
+ 3786.                                              $MR_S30 = 0[loc( j ),0]
+ 3786.                                              $MR_kret_S31 = cvmg( 9, 0, $MR_S30 - $i_S0 /= 0 )
+ 3786.                                              0[loc( kret ),0] = $MR_kret_S31
+ 3789.                                           else if ( $MR_kpds_3 < 55 ) then
+ 3789.                                              goto 130
+ 3789.                                           else if ( $MR_kpds_3 <= 56 ) then
+ 3790.                                              $MR_S32 = 0[loc( j ),0]
+ 3790.                                              $MR_kret_S33 = cvmg( 9, 0, $MR_S32 - $i_S0 /= 0 )
+ 3790.                                              0[loc( kret ),0] = $MR_kret_S33
+ 3790.                                           else
+ 3790.   130                                        continue
+ 3793.                                              if ( $MR_kpds_3 < 67 ) then
+ 3793.                                                 goto 140
+ 3793.                                              else if ( $MR_kpds_3 <= 77 ) then
+ 3794.                                                 $MR_S34 = 0[loc( j ),0]
+ 3794.                                                 $MR_kret_S35 = cvmg( 9, 0, $MR_S34 - $i_S0 /= 0 )
+ 3794.                                                 0[loc( kret ),0] = $MR_kret_S35
+ 3794.                                              else
+ 3794.   140                                           continue
+ 3797.                                                 if ( $MR_kpds_3 < 85 ) then
+ 3797.                                                    goto 150
+ 3797.                                                 else if ( $MR_kpds_3 <= 88 ) then
+ 3798.                                                    $MR_S36 = 0[loc( j ),0]
+ 3798.                                                    $MR_kret_S37 = cvmg( 9, 0, $MR_S36 - $i_S0 /= 0 )
+ 3798.                                                    0[loc( kret ),0] = $MR_kret_S37
+ 3798.                                                 else
+ 3798.   150                                              continue
+ 3801.                                                    if ( $MR_kpds_3 < 90 ) then
+ 3801.                                                       goto 160
+ 3801.                                                    else if ( $MR_kpds_3 <= 98 ) then
+ 3802.                                                       $MR_S38 = 0[loc( j ),0]
+ 3802.                                                       $MR_kret_S39 = cvmg( 9, 0, $MR_S38 - $i_S0 /= 0 )
+ 3802.                                                       0[loc( kret ),0] = $MR_kret_S39
+ 3802.                                                    else
+ 3802.   160                                                 continue
+ 3802.                                                       $SW_MR_kpds_V1 = $MR_kpds_3
+ 3805.                                                       switch( -100 + $SW_MR_kpds_V1 + 1 )
+ 3805.                                                       
+ 3806.                                                          case 1 :
+ 3806.                                                             goto 170
+ 3806.                                                          case 2 :
+ 3806.   170                                                       continue
+ 3806.                                                             $MR_S70 = 0[loc( j ),0]
+ 3806.                                                             $MR_kret_S71 = cvmg( 9, 0, $MR_S70 - $i_S0 /= 0 )
+ 3806.                                                             0[loc( kret ),0] = $MR_kret_S71
+ 3813.                                                          case 3 :
+ 3813.                                                          case 0 :
+ 3813.                                                             goto 180
+ 3813.                                                          case 9 : 10 :
+ 3813.   180                                                       continue
+ 3813.                                                             $SW_MR_kpds_V2 = $MR_kpds_3
+ 3813.                                                             switch( -110 + $SW_MR_kpds_V2 + 1 )
+ 3813.                                                             
+ 3814.                                                                case 1 :
+ 3814.                                                                   $MR_S42 = 0[loc( j ),0]
+ 3814.                                                                   $MR_kret_S43 = cvmg( 9, 0, $MR_S42 - $i_S0 /= 0 )
+ 3814.                                                                   0[loc( kret ),0] = $MR_kret_S43
+ 3818.                                                                case 11 :
+ 3818.                                                                   $MR_S44 = 0[loc( j ),0]
+ 3818.                                                                   $MR_kret_S45 = cvmg( 9, 0, $MR_S44 - $i_S0 /= 0 )
+ 3818.                                                                   0[loc( kret ),0] = $MR_kret_S45
+ 3825.                                                                case 12 :
+ 3825.                                                                case 2 : 10 :
+ 3825.                                                                case 0 :
+ 3825.                                                                   goto 190
+ 3825.                                                                case 19 : 20 :
+ 3825.   190                                                             continue
+ 3825.                                                                   $SW_MR_kpds_V3 = $MR_kpds_3
+ 3825.                                                                   switch( -130 + $SW_MR_kpds_V3 + 1 )
+ 3825.                                                                   
+ 3826.                                                                      case 1 :
+ 3826.                                                                         $MR_S48 = 0[loc( j ),0]
+ 3826.                                                                         $MR_kret_S49 = cvmg( 9, 0, $MR_S48 - $i_S0 /= 0 )
+ 3826.                                                                         0[loc( kret ),0] = $MR_kret_S49
+ 3830.                                                                      case 9 :
+ 3830.                                                                         $MR_S50 = 0[loc( j ),0]
+ 3830.                                                                         $MR_kret_S51 = cvmg( 9, 0, $MR_S50 - $i_S0 /= 0 )
+ 3830.                                                                         0[loc( kret ),0] = $MR_kret_S51
+ 3837.                                                                      case 10 : 15 :
+ 3837.                                                                      case 2 : 8 :
+ 3837.                                                                      case 0 :
+ 3837.                                                                         goto 200
+ 3837.                                                                      case 20 : 21 :
+ 3837.   200                                                                   continue
+ 3837.                                                                         $SW_MR_kpds_V4 = $MR_kpds_3
+ 3837.                                                                         switch( -160 + $SW_MR_kpds_V4 + 1 )
+ 3837.                                                                         
+ 3838.                                                                            case 1 :
+ 3838.                                                                               goto 210
+ 3838.                                                                            case 2 :
+ 3838.   210                                                                         continue
+ 3838.                                                                               $MR_S68 = 0[loc( j ),0]
+ 3838.                                                                               $MR_kret_S69 = cvmg( 9, 0, $MR_S68 - $i_S0 /= 0 )
+ 3838.                                                                               0[loc( kret ),0] = $MR_kret_S69
+ 3842.                                                                            case 4 :
+ 3842.                                                                               $MR_S54 = 0[loc( j ),0]
+ 3842.                                                                               $MR_kret_S55 = cvmg( 9, 0, $MR_S54 - $i_S0 /= 0 )
+ 3842.                                                                               0[loc( kret ),0] = $MR_kret_S55
+ 3849.                                                                            case 5 : 10 :
+ 3849.                                                                            case 3 :
+ 3849.                                                                            case 0 :
+ 3849.                                                                               goto 220
+ 3849.                                                                            case 18 : 19 :
+ 3849.   220                                                                         continue
+ 3849.                                                                               if ( $MR_kpds_3 < 180 ) then
+ 3849.                                                                                  goto 230
+ 3849.                                                                               else if ( $MR_kpds_3 <= 183 ) then
+ 3850.                                                                                  $MR_S58 = 0[loc( j ),0]
+ 3850.                                                                                  $MR_kret_S59 = cvmg( 9, 0, $MR_S58 - $i_S0 /= 0 )
+ 3850.                                                                                  0[loc( kret ),0] = $MR_kret_S59
+ 3850.                                                                               else
+ 3850.   230                                                                            continue
+ 3850.                                                                                  $SW_MR_kpds_V5 = $MR_kpds_3
+ 3853.                                                                                  switch( -190 + $SW_MR_kpds_V5 + 1 )
+ 3853.                                                                                  
+ 3854.                                                                                     case 1 :
+ 3854.                                                                                        goto 240
+ 3854.                                                                                     case 3 :
+ 3854.   240                                                                                  continue
+ 3854.                                                                                        $MR_S66 = 0[loc( j ),0]
+ 3854.                                                                                        $MR_kret_S67 = cvmg( 9, 0, $MR_S66 - $i_S0 /= 0 )
+ 3854.                                                                                        0[loc( kret ),0] = $MR_kret_S67
+ 3858.                                                                                     case 5 :
+ 3858.                                                                                        goto 250
+ 3858.                                                                                     case 7 :
+ 3858.   250                                                                                  continue
+ 3858.                                                                                        $MR_S64 = 0[loc( j ),0]
+ 3858.                                                                                        $MR_kret_S65 = cvmg( 9, 0, $MR_S64 - $i_S0 /= 0 )
+ 3858.                                                                                        0[loc( kret ),0] = $MR_kret_S65
+ 3862.                                                                                     case 9 :
+ 3862.                                                                                        $MR_S60 = 0[loc( j ),0]
+ 3862.                                                                                        $MR_kret_S61 = cvmg( 9, 0, $MR_S60 - $i_S0 /= 0 )
+ 3862.                                                                                        0[loc( kret ),0] = $MR_kret_S61
+ 3870.                                                                                     case 10 : 11 :
+ 3870.                                                                                     case 8 :
+ 3870.                                                                                     case 6 :
+ 3870.                                                                                     case 4 :
+ 3870.                                                                                     case 2 :
+ 3870.                                                                                     case 0 :
+ 3870.                                                                                        0[loc( kret ),0] = 5
+ 3865.                                                                                     case 12 :
+ 3865.                                                                                        $MR_S62 = 0[loc( j ),0]
+ 3865.                                                                                        $MR_kret_S63 = cvmg( 5, cvmg( 9, 0, $MR_S62 - $i_S0 /= 0 ), $MR_kpds_3 > 254 )
+ 3865.                                                                                        0[loc( kret ),0] = $MR_kret_S63
+ 3865.                                                                               endif
+ 3846.                                                                            case 11 : 17 :
+ 3846.                                                                               $MR_S56 = 0[loc( j ),0]
+ 3846.                                                                               $MR_kret_S57 = cvmg( 9, 0, $MR_S56 - $i_S0 /= 0 )
+ 3846.                                                                               0[loc( kret ),0] = $MR_kret_S57
+ 3834.                                                                      case 16 : 19 :
+ 3834.                                                                         $MR_S52 = 0[loc( j ),0]
+ 3834.                                                                         $MR_kret_S53 = cvmg( 9, 0, $MR_S52 - $i_S0 /= 0 )
+ 3834.                                                                         0[loc( kret ),0] = $MR_kret_S53
+ 3822.                                                                case 13 : 18 :
+ 3822.                                                                   $MR_S46 = 0[loc( j ),0]
+ 3822.                                                                   $MR_kret_S47 = cvmg( 9, 0, $MR_S46 - $i_S0 /= 0 )
+ 3822.                                                                   0[loc( kret ),0] = $MR_kret_S47
+ 3810.                                                          case 4 : 8 :
+ 3810.                                                             $MR_S40 = 0[loc( j ),0]
+ 3810.                                                             $MR_kret_S41 = cvmg( 9, 0, $MR_S40 - $i_S0 /= 0 )
+ 3810.                                                             0[loc( kret ),0] = $MR_kret_S41
+ 3810.                                                    endif
+ 3810.                                                 endif
+ 3810.                                              endif
+ 3810.                                           endif
+ 3810.                                        endif
+ 3810.                                     endif
+ 3810.                                  endif
+ 3810.                               endif
+ 3810.                            endif
+ 3874.                         case 93 :
+ 3874.                         case 69 : 91 :
+ 3874.                         case 53 : 67 :
+ 3874.                         case 49 : 51 :
+ 3874.                         case 29 : 47 :
+ 3874.                         case 2 : 27 :
+ 3874.                         case 0 :
+ 3874.                            0[loc( kret ),0] = 10
+ 3696.                         case 48 :
+ 3696.                         case 28 :
+ 3696.                   endif
+ 3696.                endif
+ 3696.             endif
+ 3696.          endif
+ 3696.       endif
+ 3882.       return
+ 3882.       end
+ 3882.       

@@ -1,0 +1,93 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getbit.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getbit.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine getbit( ibm, ibs, ids, len, mg, g, ground, gmin, gmax, nbit )
+    1.       t$1 = len
+   40.       t$2 = _zla( 0, len )
+   43.       $s_S0 = 2.0 ** ibs * 10.0 ** ids
+   44.       if ( ibm == 0 ) then
+   45.          ground(1) = ( _anint( g(1) * $s_S0 ) * 1.0/$s_S0 )
+   46.          gmax = ground(1)
+   47.          gmin = gmax
+   48.          if ( -2 + len >= 0 ) then
+   48.             $I_L48_24 = 0
+   48. !dir$ ivdep
+   48.             do
+   49.                $ground_WR0_R0 = ( _anint( g(2 + $I_L48_24) * $s_S0 ) * 1.0/$s_S0 )
+   49.                ground(2 + $I_L48_24) = $ground_WR0_R0
+   50.                gmax = max( gmax, $ground_WR0_R0 )
+   51.                gmin = min( gmin, $ground_WR0_R0 )
+   52.                $I_L48_24 = 1 + $I_L48_24
+   48.                if ( $I_L48_24 >= -1 + len ) exit
+   48.             enddo
+   48.          endif
+   48.       else
+   54.          $i1_S2 = 1
+   55.          if ( 0 < len .and. mg(1) == 0 ) then
+   55.             do
+   56.                $i1_S2 = 1 + $i1_S2
+   56.                if ( ( $i1_S2 <= len .and. mg($i1_S2) == 0 ) == 0 ) exit
+   56.             enddo
+   56.          endif
+   58.          if ( $i1_S2 <= len ) then
+   59.             if ( -1 + $i1_S2 > 0 ) then
+   59.                $I_L59_26 = 0
+   59. !dir$ ivdep
+   59.                do
+   60.                   ground(1 + $I_L59_26) = 0.0
+   61.                   $I_L59_26 = 1 + $I_L59_26
+   59.                   if ( $I_L59_26 >= -1 + $i1_S2 ) exit
+   59.                enddo
+   59.             endif
+   62.             ground($i1_S2) = ( _anint( g($i1_S2) * $s_S0 ) * 1.0/$s_S0 )
+   63.             gmax = ground($i1_S2)
+   64.             gmin = gmax
+   65.             if ( len + -$i1_S2 > 0 ) then
+   65.                $I_L65_30 = 0
+   65. !dir$ ivdep
+   65.                do
+   66.                   if ( mg($i1_S2 + $I_L65_30 + 1) /= 0 ) then
+   67.                      $ground_WR0_R1 = ( _anint( g($i1_S2 + $I_L65_30 + 1) * $s_S0 ) * 1.0/$s_S0 )
+   67.                      ground($i1_S2 + $I_L65_30 + 1) = $ground_WR0_R1
+   68.                      gmax = max( gmax, $ground_WR0_R1 )
+   69.                      gmin = min( gmin, $ground_WR0_R1 )
+   69.                   else
+   71.                      ground($i1_S2 + $I_L65_30 + 1) = 0.0
+   71.                   endif
+   73.                   $I_L65_30 = 1 + $I_L65_30
+   72.                   if ( $I_L65_30 >= ( len + -$i1_S2 ) ) exit
+   72.                enddo
+   72.             endif
+   72.          else
+   75.             if ( len > 0 ) then
+   75.                $I_L75_28 = 0
+   75. !dir$ ivdep
+   75.                do
+   76.                   ground(1 + $I_L75_28) = 0.0
+   77.                   $I_L75_28 = 1 + $I_L75_28
+   75.                   if ( $I_L75_28 >= len ) exit
+   75.                enddo
+   75.             endif
+   78.             gmax = 0.0
+   79.             gmin = 0.0
+   79.          endif
+   79.       endif
+   84.       nbit = int( 1.0 + 1.442695 * log( 8.9999998e-1 + ( gmax + -gmin ) * $s_S0 ) )
+   87.       return
+   87.       end
+   87.       

@@ -1,0 +1,68 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3utcdat.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3utcdat.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine w3utcdat( idat )
+   42. !dir$ suppress idat(1)
+   42.       t$3%base_addr = pointer to array[1] of integer( loc( idat(1) ) )
+   42.       t$3%header%el_len = 32
+   42.       t$3%header%assoc = 1
+   42.       t$3%header%ptr_alloc = 0
+   42.       t$3%header%p_or_a = 0
+   42.       t$3%header%a_contig = 1
+   42.       t$3%header%dv_versn = 2
+   42.       t$3%header%dv_smunit = 32
+   42.       t$3%header%d_type = 0
+   42.       t$3%header%n_params = 0
+   42.       t$3%header%pad_codim = 0
+   42.       t$3%header%n_codim = 0
+   42.       t$3%header%pad_dim = 0
+   42.       t$3%header%n_dim = 1
+   42.       t$3%header%d_type_idx = 10
+   42.       t$3%header%typ_code = 131074
+   42.       t$3%header%orig_base = 0
+   42.       t$3%header%orig_size = 0
+   42.       t$3%dim_1%LB = 1
+   42.       t$3%dim_1%EX = 8
+   42.       t$3%dim_1%SM = 1
+   42.       call _f90_date_and_time(  _substr(cdate,1,8),  _substr(ctime,1,10),  _substr(czone,1,5), t$3 )
+   43.       _fread( _clist( 0, 0, 3,  _substr(czone,1,5), Null_Arg, Null_Arg, t$2,  _substr(t$1,1,4), Null_Arg, Null_Arg, Null_Arg, Null_Arg, 0, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg ), _iolist( _iotype( $IOitem_O0, 0x2000200000000L ) ) )
+   43.       idat(4) = $IOitem_O0
+   47.       idat(6) = idat(6) + -mod( $IOitem_O0, 100 )
+   48.       idat(5) = idat(5) + idat(4) / -100
+   49.       idat(4) = 0
+   50.       if ( idat(6) < 0 ) then
+   51.          idat(6) = 60 + idat(6)
+   52.          idat(5) = -1 + idat(5)
+   53.       else if ( idat(6) >= 60 ) then
+   54.          idat(6) = -60 + idat(6)
+   55.          idat(5) = 1 + idat(5)
+   55.       endif
+   57.       if ( idat(5) < 0 ) then
+   58.          idat(5) = 24 + idat(5)
+   59.          $t_S0 = iw3jdn( idat(1), idat(2), idat(3) )
+   59.          jldayn = -1 + $t_S0
+   60.          call w3fs26( jldayn, idat(1), idat(2), idat(3), idaywk, idayyr )
+   61.       else if ( idat(5) >= 24 ) then
+   62.          idat(5) = -24 + idat(5)
+   63.          $t_S1 = iw3jdn( idat(1), idat(2), idat(3) )
+   63.          jldayn = 1 + $t_S1
+   64.          call w3fs26( jldayn, idat(1), idat(2), idat(3), idaywk, idayyr )
+   64.       endif
+   67.       return
+   67.       end
+   67.       

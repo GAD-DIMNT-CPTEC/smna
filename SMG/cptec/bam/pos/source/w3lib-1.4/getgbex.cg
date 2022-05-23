@@ -1,0 +1,69 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgbex.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgbex.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgbex( lugb, lugi, jf, j, jpds, jgds, jens, kf, k, kpds, kgds, kens, kprob, xprob, kclust, kmembr, lb, f, iret )
+  215.       $MR_lugi_0 = 0[loc( lugi ),0]
+  215.       if ( $MR_lugi_0 > 0 ) then
+  215.          $MR_S0 = 0[loc( j ),0]
+  215.          if ( $MR_S0 >= 0 ) then
+  215.             $lux_S1 = lux
+  215.             if ( $lux_S1 - $MR_lugi_0 /= 0 ) then
+  215.                goto 10
+  215.             else
+  215.                goto 20
+  215.             endif
+  215.          else
+  215.    10       continue
+  216.             lux = $MR_lugi_0
+  217.             $jj_S2 = min( $MR_S0, -1 - $MR_S0 )
+  217.             jj = $jj_S2
+  217.          endif
+  217.       else
+  217.    20    continue
+  218.          if ( $MR_lugi_0 <= 0 ) then
+  218.             $MR_S3 = 0[loc( j ),0]
+  218.             if ( $MR_S3 >= 0 ) then
+  218.                $lux_S4 = lux
+  218.                $MR_lugb_S5 = 0[loc( lugb ),0]
+  218.                if ( $MR_lugb_S5 - $lux_S4 /= 0 ) then
+  218.                   goto 30
+  218.                else
+  218.                   goto 40
+  218.                endif
+  218.             else
+  218.    30          continue
+  219.                $MR_lugb_S6 = 0[loc( lugb ),0]
+  219.                lux = $MR_lugb_S6
+  220.                $jj_S7 = min( $MR_S3, -1 - $MR_S3 )
+  220.                jj = $jj_S7
+  220.             endif
+  220.          else
+  220.    40       continue
+  222.             $MR_S8 = 0[loc( j ),0]
+  222.             jj = $MR_S8
+  222.          endif
+  222.       endif
+  226.       $Con_P6 = 262144
+  226.       call getgbexm( 0[loc( lugb ),0], 0[loc( lugi ),0], 0[loc( jf ),0], jj, 0[loc( jpds ),0], 0[loc( jgds ),0], 0[loc( jens ),0], $Con_P6, substr[cbuf,0:1], nlen, nnum, mnum, 0[loc( kf ),0], 0[loc( k ),0], 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kens ),0], 0[loc( kprob ),0], 0[loc( xprob ),0], 0[loc( kclust ),0], 0[loc( kmembr ),0], 0[loc( lb )].B, 0[loc( f ),0], 0[loc( iret ),0] )
+  230.       $MR_iret_5 = 0[loc( iret ),0]
+  230.       $lux_S9 = lux
+  230.       $lux_S10 = cvmg( $lux_S9, 0, $MR_iret_5 /= 96 )
+  230.       lux = $lux_S10
+  233.       return
+  233.       end
+  233.       

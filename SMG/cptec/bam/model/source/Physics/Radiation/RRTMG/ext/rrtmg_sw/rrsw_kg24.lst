@@ -1,0 +1,344 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrsw_kg24.f90
+Compiled : 12/11/20  23:54:04
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps rrsw_kg24.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrsw_kg24.f90
+Date     : 12/11/2020  23:54:04
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_29036/rrsw_kg24_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     There are no optimizations or loops to mark
+
+
+    1.          module rrsw_kg24
+    2.    
+    3.          use shr_kind_mod, only: r8 => shr_kind_r8
+    4.    
+    5.    !      use parkind ,only : jpim, jprb
+    6.          use parrrsw, only : ng24
+    7.    
+    8.          implicit none
+    9.          save
+   10.    
+   11.    !-----------------------------------------------------------------
+   12.    ! rrtmg_sw ORIGINAL abs. coefficients for interval 24
+   13.    ! band 24: 12850-16000 cm-1 (low - h2o,o2; high - o2)
+   14.    !
+   15.    ! Initial version:  JJMorcrette, ECMWF, oct1999
+   16.    ! Revised: MJIacono, AER, jul2006
+   17.    !-----------------------------------------------------------------
+   18.    !
+   19.    !  name     type     purpose
+   20.    !  ----   : ----   : ---------------------------------------------
+   21.    ! kao     : real     
+   22.    ! kbo     : real     
+   23.    ! selfrefo: real     
+   24.    ! forrefo : real
+   25.    !sfluxrefo: real     
+   26.    ! abso3ao : real     
+   27.    ! abso3bo : real     
+   28.    ! raylao  : real     
+   29.    ! raylbo  : real     
+   30.    !-----------------------------------------------------------------
+   31.    
+   32.          integer, parameter :: no24 = 16
+   33.    
+   34.          real(kind=r8) :: kao(9,5,13,no24)
+   35.          real(kind=r8) :: kbo(5,13:59,no24)
+   36.          real(kind=r8) :: selfrefo(10,no24), forrefo(3,no24)
+   37.          real(kind=r8) :: sfluxrefo(no24,9)
+   38.          real(kind=r8) :: abso3ao(no24), abso3bo(no24)
+   39.          real(kind=r8) :: raylao(no24,9), raylbo(no24)
+   40.    
+   41.          integer :: layreffr
+   42.          real(kind=r8) :: strrat
+   43.    
+   44.    !-----------------------------------------------------------------
+   45.    ! rrtmg_sw COMBINED abs. coefficients for interval 24
+   46.    ! band 24: 12850-16000 cm-1 (low - h2o,o2; high - o2)
+   47.    !
+   48.    ! Initial version:  JJMorcrette, ECMWF, oct1999
+   49.    ! Revised: MJIacono, AER, jul2006
+   50.    !-----------------------------------------------------------------
+   51.    !
+   52.    !  name     type     purpose
+   53.    !  ----   : ----   : ---------------------------------------------
+   54.    ! ka      : real     
+   55.    ! kb      : real     
+   56.    ! absa    : real
+   57.    ! absb    : real
+   58.    ! selfref : real     
+   59.    ! forref  : real
+   60.    ! sfluxref: real     
+   61.    ! abso3a  : real     
+   62.    ! abso3b  : real     
+   63.    ! rayla   : real     
+   64.    ! raylb   : real     
+   65.    !-----------------------------------------------------------------
+   66.    
+   67.          real(kind=r8) :: ka(9,5,13,ng24), absa(585,ng24)
+   68.          real(kind=r8) :: kb(5,13:59,ng24), absb(235,ng24)
+   69.          real(kind=r8) :: selfref(10,ng24), forref(3,ng24)
+   70.          real(kind=r8) :: sfluxref(ng24,9)
+   71.          real(kind=r8) :: abso3a(ng24), abso3b(ng24)
+   72.          real(kind=r8) :: rayla(ng24,9), raylb(ng24)
+   73.    
+   74.          equivalence (ka(1,1,1,1),absa(1,1)), (kb(1,13,1),absb(1,1))
+   75.    
+   76.          end module rrsw_kg24
+   77.    
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                C r o s s   R e f e r e n c e   for   RRSW_KG24
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+ABSA                            Static offset=120320              REAL(KIND=8), DIMENSION(585, 8), EQUIVALENCE, SAVE
+  Decl      67      74
+  Set 
+  Used
+
+ABSB                            Static offset=0                   REAL(KIND=8), DIMENSION(235, 8), EQUIVALENCE, SAVE
+  Decl      68      74
+  Set 
+  Used
+
+ABSO3A                          Static offset=419840              REAL(KIND=8), DIMENSION(8), SAVE
+  Decl      71
+  Set 
+  Used
+
+ABSO3AO                         Static offset=422912              REAL(KIND=8), DIMENSION(16), SAVE
+  Decl      38
+  Set 
+  Used
+
+ABSO3B                          Static offset=426496              REAL(KIND=8), DIMENSION(8), SAVE
+  Decl      71
+  Set 
+  Used
+
+ABSO3BO                         Static offset=429568              REAL(KIND=8), DIMENSION(16), SAVE
+  Decl      38
+  Set 
+  Used
+
+FORREF                          Static offset=433152              REAL(KIND=8), DIMENSION(3, 8), SAVE
+  Decl      69
+  Set 
+  Used
+
+FORREFO                         Static offset=437248              REAL(KIND=8), DIMENSION(3, 16), SAVE
+  Decl      36
+  Set 
+  Used
+
+KA                              Static offset=120320              REAL(KIND=8), DIMENSION(9, 5, 13, 8), EQUIVALENCE, SAVE
+  Decl      67      74
+  Set 
+  Used
+
+KAO                             Static offset=440832              REAL(KIND=8), DIMENSION(9, 5, 13, 16), SAVE
+  Decl      34
+  Set 
+  Used
+
+KB                              Static offset=0                   REAL(KIND=8), DIMENSION(5, 13:59, 8), EQUIVALENCE, SAVE
+  Decl      68      74
+  Set 
+  Used
+
+KBO                             Static offset=1041408             REAL(KIND=8), DIMENSION(5, 13:59, 16), SAVE
+  Decl      35
+  Set 
+  Used
+
+LAYREFFR                        Static offset=1285632             INTEGER, SAVE
+  Decl      41
+  Set 
+  Used
+
+NG24                            Use assoc                         INTEGER, PARAMETER, From module PARRRSW
+  Decl
+  Set 
+  Used      67      68      69      70      71      72
+
+NO24                                                              INTEGER, PARAMETER
+  Decl      32
+  Set 
+  Used      34      35      36      37      38      39
+
+PARRRSW                                                           Module
+  Decl
+  Set 
+  Used       6
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD
+  Decl       3
+  Set 
+  Used      34      35      36      37      38      39      42      67      68      69      70      71      72
+
+RAYLA                           Static offset=1286144             REAL(KIND=8), DIMENSION(8, 9), SAVE
+  Decl      72
+  Set 
+  Used
+
+RAYLAO                          Static offset=1291264             REAL(KIND=8), DIMENSION(16, 9), SAVE
+  Decl      39
+  Set 
+  Used
+
+RAYLB                           Static offset=1302016             REAL(KIND=8), DIMENSION(8), SAVE
+  Decl      72
+  Set 
+  Used
+
+RAYLBO                          Static offset=1305088             REAL(KIND=8), DIMENSION(16), SAVE
+  Decl      39
+  Set 
+  Used
+
+RRSW_KG24                                                         Module
+  Decl       1
+  Set 
+  Used
+
+SELFREF                         Static offset=1308672             REAL(KIND=8), DIMENSION(10, 8), SAVE
+  Decl      69
+  Set 
+  Used
+
+SELFREFO                        Static offset=1314304             REAL(KIND=8), DIMENSION(10, 16), SAVE
+  Decl      36
+  Set 
+  Used
+
+SFLUXREF                        Static offset=1325056             REAL(KIND=8), DIMENSION(8, 9), SAVE
+  Decl      70
+  Set 
+  Used
+
+SFLUXREFO                       Static offset=1330176             REAL(KIND=8), DIMENSION(16, 9), SAVE
+  Decl      37
+  Set 
+  Used
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used       3
+
+STRRAT                          Static offset=1340928             REAL(KIND=8), SAVE
+  Decl      42
+  Set 
+  Used
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+PARRRSW
+      Defined as:  No definitions.
+
+      Used By:     RRSW_KG24
+
+Name  Messages
+----  --------
+RRSW_KG24
+      Defined as:  Module (line 1, file rrsw_kg24.f90)
+
+        Uses:      SHR_KIND_MOD
+                   PARRRSW
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     RRSW_KG24
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

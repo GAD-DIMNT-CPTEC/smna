@@ -1,0 +1,186 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  ixgb.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/ixgb.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine ixgb( lugb, lskip, lgrib, nlen, nnum, mlen, cbuf )
+   60.       mlen = 112
+   61.       $I_A1 = 0
+   61.       do
+   61.           _substr(cindex(1 + $I_A1),1,1) = ''
+   61.          $I_A1 = 1 + $I_A1
+   61.          if ( $I_A1 >= 320 ) exit
+   61.       enddo
+   62.       call sbytec(  _substr(cindex(1),1,1), lskip, 0, 32 )
+   63.       call sbytec(  _substr(cindex(1),1,1), lgrib, 160, 32 )
+   66.       iskpds = 8
+   67.       ibskip = lskip
+   68.       ibread = 36
+   69.       call baread( lugb, ibskip, ibread, lbread,  _substr(cbread(1),1,1) )
+   70.       if ( lbread + -ibread == 0 ) then
+   71.           _substr(cindex(25),1,1) =  _substr(cbread(8),1,1)
+   72.          call sbytec(  _substr(cindex(1),1,1), iskpds, 32, 32 )
+   73.          t$2 = 8 * iskpds
+   73.          call gbytec(  _substr(cbread(1),1,1), lenpds, t$2, 24 )
+   74.          t$2 = 56 + 8 * iskpds
+   74.          call gbytec(  _substr(cbread(1),1,1), incgds, t$2, 1 )
+   75.          t$2 = 57 + 8 * iskpds
+   75.          call gbytec(  _substr(cbread(1),1,1), incbms, t$2, 1 )
+   77.          $F_A33 = ( min( 28, lenpds ) )
+   77.          if ( lenpds > 0 ) then
+   77.             $I_A1 = 0
+   77.             do
+   77.                 _substr(cindex(26 + $I_A1),1,1) =  _substr(cbread(iskpds + $I_A1 + 1),1,1)
+   77.                $I_A1 = 1 + $I_A1
+   77.                if ( $I_A1 >= $F_A33 ) exit
+   77.             enddo
+   77.          endif
+   78.          $isktot_S0 = iskpds + lenpds
+   81.          if ( lenpds > 28 ) then
+   84.             ibskip = lskip + iskpds + 28
+   85.             ibread = min( 12, -28 + lenpds )
+   86.             call baread( lugb, ibskip, ibread, lbread,  _substr(cbread(1),1,1) )
+   87.             if ( lbread + -ibread == 0 ) then
+   88.                $F_A34 = ( min( 12, -28 + lenpds ) )
+   88.                $I_A1 = 0
+   88.                do
+   88.                    _substr(cindex(173 + $I_A1),1,1) =  _substr(cbread(1 + $I_A1),1,1)
+   88.                   $I_A1 = 1 + $I_A1
+   88.                   if ( $I_A1 >= $F_A34 ) exit
+   88.                enddo
+   91.                ibskip = lskip + iskpds + 40
+   92.                ibread = min( 60, -40 + lenpds )
+   93.                call baread( lugb, ibskip, ibread, lbread,  _substr(cbread(1),1,1) )
+   94.                if ( lbread + -ibread == 0 ) then
+   95.                   $F_A35 = ( min( 60, -40 + lenpds ) )
+   95.                   if ( -40 + lenpds > 0 ) then
+   95.                      $I_A1 = 0
+   95.                      do
+   95.                          _substr(cindex(113 + $I_A1),1,1) =  _substr(cbread(1 + $I_A1),1,1)
+   95.                         $I_A1 = 1 + $I_A1
+   95.                         if ( $I_A1 >= $F_A35 ) exit
+   95.                      enddo
+   95.                   endif
+   96.                   mlen = max( 112, max( 172 + min( 12, -28 + lenpds ), 112 + min( 60, -40 + lenpds ) ) )
+   96.                   goto 10
+   96.                endif
+   96.             endif
+   96.          else
+   96.    10       continue
+  100.             if ( incgds /= 0 ) then
+  101.                iskgds = iskpds + lenpds
+  102.                ibskip = lskip + iskpds + lenpds
+  103.                ibread = 42
+  104.                call baread( lugb, ibskip, ibread, lbread,  _substr(cbread(1),1,1) )
+  105.                if ( lbread + -ibread == 0 ) then
+  106.                   call sbytec(  _substr(cindex(1),1,1), iskgds, 64, 32 )
+  107.                   call gbytec(  _substr(cbread(1),1,1), lengds, 0, 24 )
+  109.                   $F_A36 = ( min( 42, lengds ) )
+  109.                   if ( lengds > 0 ) then
+  109.                      $I_A1 = 0
+  109.                      do
+  109.                          _substr(cindex(54 + $I_A1),1,1) =  _substr(cbread(1 + $I_A1),1,1)
+  109.                         $I_A1 = 1 + $I_A1
+  109.                         if ( $I_A1 >= $F_A36 ) exit
+  109.                      enddo
+  109.                   endif
+  110.                   $isktot_S0 = iskgds + lengds
+  111.                   if ( lengds > 42 ) then
+  114.                      ibskip = lskip + iskgds + 42
+  115.                      ibread = min( 136, -42 + lengds )
+  116.                      call baread( lugb, ibskip, ibread, lbread,  _substr(cbread(1),1,1) )
+  117.                      if ( lbread + -ibread == 0 ) then
+  118.                         $F_A37 = ( min( 136, -42 + lengds ) )
+  118.                         $I_A1 = 0
+  118.                         do
+  118.                             _substr(cindex(185 + $I_A1),1,1) =  _substr(cbread(1 + $I_A1),1,1)
+  118.                            $I_A1 = 1 + $I_A1
+  118.                            if ( $I_A1 >= $F_A37 ) exit
+  118.                         enddo
+  119.                         mlen = max( mlen, 184 + min( 136, -42 + lengds ) )
+  119.                         goto 20
+  119.                      endif
+  119.                   else
+  119.                      goto 20
+  119.                   endif
+  119.                endif
+  119.             else
+  119.    20          continue
+  124.                if ( incbms /= 0 ) then
+  125.                   iskbms = $isktot_S0
+  126.                   ibskip = lskip + $isktot_S0
+  127.                   ibread = 6
+  128.                   call baread( lugb, ibskip, ibread, lbread,  _substr(cbread(1),1,1) )
+  129.                   if ( lbread + -ibread == 0 ) then
+  130.                      call sbytec(  _substr(cindex(1),1,1), iskbms, 96, 32 )
+  131.                      call gbytec(  _substr(cbread(1),1,1), lenbms, 0, 24 )
+  133.                      $F_A38 = ( min( 6, lenbms ) )
+  133.                      if ( lenbms > 0 ) then
+  133.                         $I_A1 = 0
+  133.                         do
+  133.                             _substr(cindex(96 + $I_A1),1,1) =  _substr(cbread(1 + $I_A1),1,1)
+  133.                            $I_A1 = 1 + $I_A1
+  133.                            if ( $I_A1 >= $F_A38 ) exit
+  133.                         enddo
+  133.                      endif
+  134.                      $isktot_S0 = iskbms + lenbms
+  134.                      goto 30
+  134.                   endif
+  134.                else
+  134.    30             continue
+  138.                   iskbds = $isktot_S0
+  139.                   ibskip = lskip + $isktot_S0
+  140.                   ibread = 11
+  141.                   call baread( lugb, ibskip, ibread, lbread,  _substr(cbread(1),1,1) )
+  142.                   if ( lbread + -ibread == 0 ) then
+  143.                      call sbytec(  _substr(cindex(1),1,1), iskbds, 128, 32 )
+  144.                      call gbytec(  _substr(cbread(1),1,1), lenbds, 0, 24 )
+  146.                      $F_A39 = ( min( 11, lenbds ) )
+  146.                      if ( lenbds > 0 ) then
+  146.                         $I_A1 = 0
+  146.                         do
+  146.                             _substr(cindex(102 + $I_A1),1,1) =  _substr(cbread(1 + $I_A1),1,1)
+  146.                            $I_A1 = 1 + $I_A1
+  146.                            if ( $I_A1 >= $F_A39 ) exit
+  146.                         enddo
+  146.                      endif
+  149.                      mlen = min( mlen, nlen )
+  151.                      $F_A40 = mlen
+  151.                      if ( mlen > 0 ) then
+  151.                         $I_A1 = 0
+  151.                         do
+  151.                             _substr(cbuf($I_A1 + -nlen + nlen * nnum + 1),1,1) =  _substr(cindex(1 + $I_A1),1,1)
+  151.                            $I_A1 = 1 + $I_A1
+  151.                            if ( $I_A1 >= $F_A40 ) exit
+  151.                         enddo
+  151.                      endif
+  152.                      $F_A41 = ( nlen + -mlen )
+  152.                      if ( nlen + -mlen > 0 ) then
+  152.                         $I_A1 = 0
+  152.                         do
+  152.                             _substr(cbuf(mlen + $I_A1 + -nlen + nlen * nnum + 1),1,1) = ''
+  152.                            $I_A1 = 1 + $I_A1
+  152.                            if ( $I_A1 >= $F_A41 ) exit
+  152.                         enddo
+  152.                      endif
+  152.                   endif
+  152.                endif
+  152.             endif
+  152.          endif
+  152.       endif
+  155.       return
+  155.       end
+  155.       

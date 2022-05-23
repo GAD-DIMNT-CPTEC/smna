@@ -1,0 +1,2450 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/cmparray_mod.f90
+Compiled : 12/11/20  23:53:55
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps cmparray_mod.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/cmparray_mod.f90
+Date     : 12/11/2020  23:53:56
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_25628/cmparray_mod_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     A - Pattern matched      a - atomic memory operation
+                              b - blocked
+     C - Collapsed            c - conditional and/or computed
+     D - Deleted               
+     E - Cloned               f - fused
+     G - Accelerated          g - partitioned
+     I - Inlined              i - interchanged
+     M - Multithreaded        m - partitioned
+                              n - non-blocking remote transfer
+                              p - partial
+                              r - unrolled
+                              s - shortloop
+     V - Vectorized           w - unwound
+
+
+    1.              module cmparray_mod
+    2.              
+    3.                use shr_kind_mod, only : r8 => shr_kind_r8
+    4.                
+    5.                implicit none
+    6.                private
+    7.                save
+    8.                
+    9.                public expdaynite, cmpdaynite
+   10.              
+   11.                interface CmpDayNite
+   12.                  module procedure CmpDayNite_1d_R
+   13.                  module procedure CmpDayNite_2d_R
+   14.                  module procedure CmpDayNite_3d_R
+   15.                  module procedure CmpDayNite_1d_R_Copy
+   16.                  module procedure CmpDayNite_2d_R_Copy
+   17.                  module procedure CmpDayNite_3d_R_Copy
+   18.                  module procedure CmpDayNite_1d_I
+   19.                  module procedure CmpDayNite_2d_I
+   20.                  module procedure CmpDayNite_3d_I
+   21.                end interface ! CmpDayNite
+   22.              
+   23.                interface ExpDayNite
+   24.                  module procedure ExpDayNite_1d_R
+   25.                  module procedure ExpDayNite_2d_R
+   26.                  module procedure ExpDayNite_3d_R
+   27.                  module procedure ExpDayNite_1d_I
+   28.                  module procedure ExpDayNite_2d_I
+   29.                  module procedure ExpDayNite_3d_I
+   30.                end interface ! ExpDayNite
+   31.              
+   32.                interface cmparray
+   33.                  module procedure cmparray_1d_R
+   34.                  module procedure cmparray_2d_R
+   35.                  module procedure cmparray_3d_R
+   36.                end interface ! cmparray
+   37.              
+   38.                interface chksum
+   39.                  module procedure chksum_1d_R
+   40.                  module procedure chksum_2d_R
+   41.                  module procedure chksum_3d_R
+   42.                  module procedure chksum_1d_I
+   43.                  module procedure chksum_2d_I
+   44.                  module procedure chksum_3d_I
+   45.                end interface ! chksum
+   46.              
+   47.                contains
+   48.              
+   49.                subroutine CmpDayNite_1d_R(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1)
+   50.                  integer, intent(in) :: Nday, Nnite
+   51.                  integer, intent(in) :: il1, iu1
+   52.                  integer, intent(in), dimension(Nday) :: IdxDay
+   53.                  integer, intent(in), dimension(Nnite) :: IdxNite
+   54.                  real(r8), intent(inout), dimension(il1:iu1) :: Array
+   55.              
+   56.                  call CmpDayNite_3d_R(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, 1, 1, 1, 1)
+   57.              
+   58.                  return
+   59.                end subroutine CmpDayNite_1d_R
+   60.              
+   61.                subroutine CmpDayNite_2d_R(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2, iu2)
+   62.                  integer, intent(in) :: Nday, Nnite
+   63.                  integer, intent(in) :: il1, iu1
+   64.                  integer, intent(in) :: il2, iu2
+   65.                  integer, intent(in), dimension(Nday) :: IdxDay
+   66.                  integer, intent(in), dimension(Nnite) :: IdxNite
+   67.                  real(r8), intent(inout), dimension(il1:iu1,il2:iu2) :: Array
+   68.              
+   69.                  call CmpDayNite_3d_R(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2, iu2, 1, 1)
+   70.              
+   71.                  return
+   72.                end subroutine CmpDayNite_2d_R
+   73.              
+   74.                subroutine CmpDayNite_3d_R(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2,iu2, il3, iu3)
+   75.                  integer, intent(in) :: Nday, Nnite
+   76.                  integer, intent(in) :: il1, iu1
+   77.                  integer, intent(in) :: il2, iu2
+   78.                  integer, intent(in) :: il3, iu3
+   79.                  integer, intent(in), dimension(Nday) :: IdxDay
+   80.                  integer, intent(in), dimension(Nnite) :: IdxNite
+   81.                  real(r8), intent(inout), dimension(il1:iu1,il2:iu2,il3:iu3) :: Array
+   82.              
+   83.                  real(r8), dimension(il1:iu1) :: tmp
+   84.                  integer :: i, j, k
+   85.              
+   86.              
+   87.  1---------<     do k = il3, iu3
+   88.  1 2-------<       do j = il2, iu2
+   89.  1 2         
+   90.  1 2                 tmp(1:Nnite) = Array(IdxNite(1:Nnite),j,k)
+   91.  1 2 Vp---<>         Array(il1:il1+Nday-1,j,k) = Array(IdxDay(1:Nday),j,k)
+   92.  1 2 V----<>         Array(il1+Nday:il1+Nday+Nnite-1,j,k) = tmp(1:Nnite)
+   93.  1 2         
+   94.  1 2------->       end do
+   95.  1--------->     end do
+   96.              
+   97.                  return
+   98.                end subroutine CmpDayNite_3d_R
+ftn-5002 ftn: NOTE File = cmparray_mod.f90, Line = 98 
+  Local variable "I" is declared but neither defined nor used.
+
+   99.              
+  100.                subroutine CmpDayNite_1d_R_Copy(InArray, OutArray, Nday, IdxDay, Nnite, IdxNite, il1, iu1)
+  101.                  integer, intent(in) :: Nday, Nnite
+  102.                  integer, intent(in) :: il1, iu1
+  103.                  integer, intent(in), dimension(Nday) :: IdxDay
+  104.                  integer, intent(in), dimension(Nnite) :: IdxNite
+  105.                  real(r8), intent(in), dimension(il1:iu1) :: InArray
+  106.                  real(r8), intent(out), dimension(il1:iu1) :: OutArray
+  107.  V--------<>     OutArray=0.0_r8
+  108.                  call CmpDayNite_3d_R_Copy(InArray, OutArray, Nday, IdxDay, Nnite, IdxNite, il1, iu1, 1, 1, 1, 1)
+  109.              
+  110.                  return
+  111.                end subroutine CmpDayNite_1d_R_Copy
+  112.              
+  113.                subroutine CmpDayNite_2d_R_Copy(InArray, OutArray, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2, iu2)
+  114.                  integer, intent(in) :: Nday, Nnite
+  115.                  integer, intent(in) :: il1, iu1
+  116.                  integer, intent(in) :: il2, iu2
+  117.                  integer, intent(in), dimension(Nday) :: IdxDay
+  118.                  integer, intent(in), dimension(Nnite) :: IdxNite
+  119.                  real(r8), intent(in), dimension(il1:iu1,il2:iu2) :: InArray
+  120.                  real(r8), intent(out), dimension(il1:iu1,il2:iu2) :: OutArray
+  121.  VC-------<>     OutArray=0.0_r8
+  122.                  call CmpDayNite_3d_R_Copy(InArray, OutArray, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2, iu2, 1, 1)
+  123.              
+  124.                  return
+  125.                end subroutine CmpDayNite_2d_R_Copy
+  126.              
+  127.                subroutine CmpDayNite_3d_R_Copy(InArray, OutArray, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2,iu2, il3, iu3)
+  128.                  integer, intent(in) :: Nday, Nnite
+  129.                  integer, intent(in) :: il1, iu1
+  130.                  integer, intent(in) :: il2, iu2
+  131.                  integer, intent(in) :: il3, iu3
+  132.                  integer, intent(in), dimension(Nday) :: IdxDay
+  133.                  integer, intent(in), dimension(Nnite) :: IdxNite
+  134.                  real(r8), intent(in), dimension(il1:iu1,il2:iu2,il3:iu3) :: InArray
+  135.                  real(r8), intent(out), dimension(il1:iu1,il2:iu2,il3:iu3) :: OutArray
+  136.              
+  137.                  integer :: i, j, k
+  138.              
+  139.  Vc-------<>     OutArray=0.0_r8
+  140.              
+  141.  ib--------<     do k = il3, iu3
+  142.  ib ib-----<       do j = il2, iu2
+  143.  ib ib       
+  144.  ib ib ib--<          do i=il1,il1+Nday-1
+  145.  ib ib ib                OutArray(i,j,k) = InArray(IdxDay(i-il1+1),j,k)
+  146.  ib ib ib-->          enddo
+  147.  ib ib ib--<          do i=il1+Nday,il1+Nday+Nnite-1
+  148.  ib ib ib                OutArray(i,j,k) = InArray(IdxNite(i-(il1+Nday)+1),j,k)
+  149.  ib ib ib-->          enddo
+  150.  ib ib               
+  151.  ib ib       
+  152.  ib ib----->       end do
+  153.  ib-------->     end do
+  154.              
+  155.                  return
+  156.                end subroutine CmpDayNite_3d_R_Copy
+  157.              
+  158.                subroutine CmpDayNite_1d_I(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1)
+  159.                  integer, intent(in) :: Nday, Nnite
+  160.                  integer, intent(in) :: il1, iu1
+  161.                  integer, intent(in), dimension(Nday) :: IdxDay
+  162.                  integer, intent(in), dimension(Nnite) :: IdxNite
+  163.                  integer, intent(inout), dimension(il1:iu1) :: Array
+  164.              
+  165.                  call CmpDayNite_3d_I(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, 1, 1, 1, 1)
+  166.              
+  167.                  return
+  168.                end subroutine CmpDayNite_1d_I
+  169.              
+  170.                subroutine CmpDayNite_2d_I(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2, iu2)
+  171.                  integer, intent(in) :: Nday, Nnite
+  172.                  integer, intent(in) :: il1, iu1
+  173.                  integer, intent(in) :: il2, iu2
+  174.                  integer, intent(in), dimension(Nday) :: IdxDay
+  175.                  integer, intent(in), dimension(Nnite) :: IdxNite
+  176.                  integer, intent(inout), dimension(il1:iu1,il2:iu2) :: Array
+  177.              
+  178.                  call CmpDayNite_3d_I(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2, iu2, 1, 1)
+  179.              
+  180.                  return
+  181.                end subroutine CmpDayNite_2d_I
+  182.              
+  183.                subroutine CmpDayNite_3d_I(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2,iu2, il3, iu3)
+  184.                  integer, intent(in) :: Nday, Nnite
+  185.                  integer, intent(in) :: il1, iu1
+  186.                  integer, intent(in) :: il2, iu2
+  187.                  integer, intent(in) :: il3, iu3
+  188.                  integer, intent(in), dimension(Nday) :: IdxDay
+  189.                  integer, intent(in), dimension(Nnite) :: IdxNite
+  190.                  integer, intent(inout), dimension(il1:iu1,il2:iu2,il3:iu3) :: Array
+  191.              
+  192.                  integer, dimension(il1:iu1) :: tmp
+  193.                  integer :: i, j, k
+  194.              
+  195.              
+  196.  1---------<     do k = il3, iu3
+  197.  1 2-------<       do j = il2, iu2
+  198.  1 2         
+  199.  1 2                 tmp(1:Nnite) = Array(IdxNite(1:Nnite),j,k)
+  200.  1 2 Vp---<>         Array(il1:il1+Nday-1,j,k) = Array(IdxDay(1:Nday),j,k)
+  201.  1 2 V----<>         Array(il1+Nday:il1+Nday+Nnite-1,j,k) = tmp(1:Nnite)
+  202.  1 2         
+  203.  1 2------->       end do
+  204.  1--------->     end do
+  205.              
+  206.                  return
+  207.                end subroutine CmpDayNite_3d_I
+ftn-5002 ftn: NOTE File = cmparray_mod.f90, Line = 207 
+  Local variable "I" is declared but neither defined nor used.
+
+  208.              
+  209.                subroutine ExpDayNite_1d_R(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1)
+  210.                  integer, intent(in) :: Nday, Nnite
+  211.                  integer, intent(in) :: il1, iu1
+  212.                  integer, intent(in), dimension(Nday) :: IdxDay
+  213.                  integer, intent(in), dimension(Nnite) :: IdxNite
+  214.                  real(r8), intent(inout), dimension(il1:iu1) :: Array
+  215.              
+  216.                  call ExpDayNite_3d_R(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, 1, 1, 1, 1)
+  217.              
+  218.                  return
+  219.                end subroutine ExpDayNite_1d_R
+  220.              
+  221.                subroutine ExpDayNite_2d_R(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2, iu2)
+  222.                  integer, intent(in) :: Nday, Nnite
+  223.                  integer, intent(in) :: il1, iu1
+  224.                  integer, intent(in) :: il2, iu2
+  225.                  integer, intent(in), dimension(Nday) :: IdxDay
+  226.                  integer, intent(in), dimension(Nnite) :: IdxNite
+  227.                  real(r8), intent(inout), dimension(il1:iu1,il2:iu2) :: Array
+  228.              
+  229.                  call ExpDayNite_3d_R(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2, iu2, 1, 1)
+  230.              
+  231.                  return
+  232.                end subroutine ExpDayNite_2d_R
+  233.              
+  234.                subroutine ExpDayNite_3d_R(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2,iu2, il3, iu3)
+  235.                  integer, intent(in) :: Nday, Nnite
+  236.                  integer, intent(in) :: il1, iu1
+  237.                  integer, intent(in) :: il2, iu2
+  238.                  integer, intent(in) :: il3, iu3
+  239.                  integer, intent(in), dimension(Nday) :: IdxDay
+  240.                  integer, intent(in), dimension(Nnite) :: IdxNite
+  241.                  real(r8), intent(inout), dimension(il1:iu1,il2:iu2,il3:iu3) :: Array
+  242.              
+  243.                  real(r8), dimension(il1:iu1) :: tmp
+  244.                  integer :: i, j, k
+  245.              
+  246.              
+  247.  1---------<     do k = il3, iu3
+  248.  1 2-------<       do j = il2, iu2
+  249.  1 2         
+  250.  1 2 V----<>         tmp(1:Nday) = Array(1:Nday,j,k)
+  251.  1 2 Vp---<>         Array(IdxNite(1:Nnite),j,k) = Array(il1+Nday:il1+Nday+Nnite-1,j,k)
+  252.  1 2                 Array(IdxDay(1:Nday),j,k) = tmp(1:Nday)
+  253.  1 2         
+  254.  1 2------->       end do
+  255.  1--------->     end do
+  256.              
+  257.                  return
+  258.                end subroutine ExpDayNite_3d_R
+ftn-5002 ftn: NOTE File = cmparray_mod.f90, Line = 258 
+  Local variable "I" is declared but neither defined nor used.
+
+  259.              
+  260.                subroutine ExpDayNite_1d_I(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1)
+  261.                  integer, intent(in) :: Nday, Nnite
+  262.                  integer, intent(in) :: il1, iu1
+  263.                  integer, intent(in), dimension(Nday) :: IdxDay
+  264.                  integer, intent(in), dimension(Nnite) :: IdxNite
+  265.                  integer, intent(inout), dimension(il1:iu1) :: Array
+  266.              
+  267.                  call ExpDayNite_3d_I(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, 1, 1, 1, 1)
+  268.              
+  269.                  return
+  270.                end subroutine ExpDayNite_1d_I
+  271.              
+  272.                subroutine ExpDayNite_2d_I(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2, iu2)
+  273.                  integer, intent(in) :: Nday, Nnite
+  274.                  integer, intent(in) :: il1, iu1
+  275.                  integer, intent(in) :: il2, iu2
+  276.                  integer, intent(in), dimension(Nday) :: IdxDay
+  277.                  integer, intent(in), dimension(Nnite) :: IdxNite
+  278.                  integer, intent(inout), dimension(il1:iu1,il2:iu2) :: Array
+  279.              
+  280.                  call ExpDayNite_3d_I(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2, iu2, 1, 1)
+  281.              
+  282.                  return
+  283.                end subroutine ExpDayNite_2d_I
+  284.              
+  285.                subroutine ExpDayNite_3d_I(Array, Nday, IdxDay, Nnite, IdxNite, il1, iu1, il2,iu2, il3, iu3)
+  286.                  integer, intent(in) :: Nday, Nnite
+  287.                  integer, intent(in) :: il1, iu1
+  288.                  integer, intent(in) :: il2, iu2
+  289.                  integer, intent(in) :: il3, iu3
+  290.                  integer, intent(in), dimension(Nday) :: IdxDay
+  291.                  integer, intent(in), dimension(Nnite) :: IdxNite
+  292.                  integer, intent(inout), dimension(il1:iu1,il2:iu2,il3:iu3) :: Array
+  293.              
+  294.                  integer, dimension(il1:iu1) :: tmp
+  295.                  integer :: i, j, k
+  296.              
+  297.              
+  298.  1---------<     do k = il3, iu3
+  299.  1 2-------<       do j = il2, iu2
+  300.  1 2         
+  301.  1 2 V----<>         tmp(1:Nday) = Array(1:Nday,j,k)
+  302.  1 2 Vp---<>         Array(IdxNite(1:Nnite),j,k) = Array(il1+Nday:il1+Nday+Nnite-1,j,k)
+  303.  1 2                 Array(IdxDay(1:Nday),j,k) = tmp(1:Nday)
+  304.  1 2         
+  305.  1 2------->       end do
+  306.  1--------->     end do
+  307.              
+  308.                  return
+  309.                end subroutine ExpDayNite_3d_I
+ftn-5002 ftn: NOTE File = cmparray_mod.f90, Line = 309 
+  Local variable "I" is declared but neither defined nor used.
+
+  310.              
+  311.              !******************************************************************************!
+  312.              !                                                                              !
+  313.              !                                 DEBUG                                        !
+  314.              !                                                                              !
+  315.              !******************************************************************************!
+  316.              
+  317.                subroutine cmparray_1d_R(name, Ref, New, id1, is1, ie1)
+  318.                  character(*), intent(in) :: name
+  319.                  integer,  intent(in) :: id1, is1, ie1
+  320.                  real(r8), intent(in), dimension(id1) :: Ref
+  321.                  real(r8), intent(in), dimension(id1) :: New
+  322.              
+  323.                  call cmparray_3d_R(name, Ref, New, id1, is1, ie1, 1, 1, 1, 1, 1, 1)
+  324.                end subroutine cmparray_1d_R
+  325.              
+  326.                subroutine cmparray_2d_R(name, Ref, New, id1, is1, ie1, id2, is2, ie2)
+  327.                  character(*), intent(in) :: name
+  328.                  integer,  intent(in) :: id1, is1, ie1
+  329.                  integer,  intent(in) :: id2, is2, ie2
+  330.                  real(r8), intent(in), dimension(id1, id2) :: Ref
+  331.                  real(r8), intent(in), dimension(id1, id2) :: New
+  332.              
+  333.                  call cmparray_3d_R(name, Ref, New, id1, is1, ie1, id2, is2, ie2, 1, 1, 1)
+  334.                end subroutine cmparray_2d_R
+  335.              
+  336.                subroutine cmparray_3d_R(name, Ref, New, id1, is1, ie1, id2, is2, ie2, id3, is3, ie3)
+  337.                  character(*), intent(in) :: name
+  338.                  integer,  intent(in) :: id1, is1, ie1
+  339.                  integer,  intent(in) :: id2, is2, ie2
+  340.                  integer,  intent(in) :: id3, is3, ie3
+  341.                  real(r8), intent(in), dimension(id1, id2, id3) :: Ref
+  342.                  real(r8), intent(in), dimension(id1, id2, id3) :: New
+  343.              
+  344.                  integer :: i, j, k
+  345.                  integer :: nerr
+  346.                  logical :: found
+  347.                  real(r8):: rdiff
+  348.                  real(r8), parameter :: rtol = 1.0e-13_r8
+  349.              
+  350.                  nerr = 0
+  351.              
+  352.  1---------<     do k = is3, ie3
+  353.  1 2-------<       do j = is2, ie2
+  354.  1 2         
+  355.  1 2                 found = .false.
+  356.  1 2 3-----<         do i = is1, ie1
+  357.  1 2 3                 rdiff = abs(New(i,j,k)-Ref(i,j,k))
+  358.  1 2 3                 rdiff = rdiff / merge(abs(Ref(i,j,k)), 1.0_r8, Ref(i,j,k) /= 0.0_r8)
+  359.  1 2 3                 if ( rdiff > rtol ) then
+  360.  1 2 3                   found = .true.
+  361.  1 2 3                   exit
+  362.  1 2 3                 end if
+  363.  1 2 3----->         end do
+  364.  1 2         
+  365.  1 2                 if ( found ) then
+  366.  1 2 3-----<           do i = is1, ie1
+  367.  1 2 3                   rdiff = abs(New(i,j,k)-Ref(i,j,k))
+  368.  1 2 3                   rdiff = rdiff / merge(abs(Ref(i,j,k)), 1.0_r8, Ref(i,j,k) /= 0.0_r8)
+  369.  1 2 3                   if ( rdiff > rtol ) then
+  370.  1 2 3                     print 666, name, i, j, k, Ref(i, j, k), New(i, j, k), rdiff
+  371.  1 2 3                     nerr = nerr + 1
+  372.  1 2 3                     if ( nerr > 10 ) stop
+  373.  1 2 3                   end if
+  374.  1 2 3----->           end do
+  375.  1 2                 end if
+  376.  1 2         
+  377.  1 2------->       end do
+  378.  1--------->     end do
+  379.              
+  380.                  return
+  381.              666 format('cmp3d: ', a10, 3(1x, i4), 3(1x, e20.14))
+  382.              
+  383.                end subroutine cmparray_3d_R
+  384.              
+  385.                subroutine chksum_1d_R(name, Ref, id1, is1, ie1)
+  386.                  character(*), intent(in) :: name
+  387.                  integer,  intent(in) :: id1, is1, ie1
+  388.                  real(r8), intent(in), dimension(id1) :: Ref
+  389.              
+  390.                  call chksum_3d_R(name, Ref, id1, is1, ie1, 1, 1, 1, 1, 1, 1)
+  391.                end subroutine chksum_1d_R
+  392.              
+  393.                subroutine chksum_1d_I(name, Ref, id1, is1, ie1)
+  394.                  character(*), intent(in) :: name
+  395.                  integer,  intent(in) :: id1, is1, ie1
+  396.                  integer,  intent(in), dimension(id1) :: Ref
+  397.              
+  398.                  call chksum_3d_I(name, Ref, id1, is1, ie1, 1, 1, 1, 1, 1, 1)
+  399.                end subroutine chksum_1d_I
+  400.              
+  401.                subroutine chksum_2d_R(name, Ref, id1, is1, ie1, id2, is2, ie2)
+  402.                  character(*), intent(in) :: name
+  403.                  integer,  intent(in) :: id1, is1, ie1
+  404.                  integer,  intent(in) :: id2, is2, ie2
+  405.                  real(r8), intent(in), dimension(id1, id2) :: Ref
+  406.              
+  407.                  call chksum_3d_R(name, Ref, id1, is1, ie1, id2, is2, ie2, 1, 1, 1)
+  408.                end subroutine chksum_2d_R
+  409.              
+  410.                subroutine chksum_2d_I(name, Ref, id1, is1, ie1, id2, is2, ie2)
+  411.                  character(*), intent(in) :: name
+  412.                  integer,  intent(in) :: id1, is1, ie1
+  413.                  integer,  intent(in) :: id2, is2, ie2
+  414.                  integer,  intent(in), dimension(id1, id2) :: Ref
+  415.              
+  416.                  call chksum_3d_I(name, Ref, id1, is1, ie1, id2, is2, ie2, 1, 1, 1)
+  417.                end subroutine chksum_2d_I
+  418.              
+  419.                subroutine chksum_3d_R(name, Ref, id1, is1, ie1, id2, is2, ie2, id3, is3, ie3)
+  420.                  character(*), intent(in) :: name
+  421.                  integer,  intent(in) :: id1, is1, ie1
+  422.                  integer,  intent(in) :: id2, is2, ie2
+  423.                  integer,  intent(in) :: id3, is3, ie3
+  424.              !orig    real(r8), intent(in), dimension(id1, id2, id3) :: Ref
+  425.                  real(r8), intent(in), dimension(is1:ie1, is2:ie2, is3:ie3) :: Ref
+  426.              
+  427.                  real(r8) :: chksum
+  428.                  real(r8) :: rmin, rmax
+  429.                  integer :: i, j, k
+  430.                  integer :: imin, jmin, kmin
+  431.                  integer :: imax, jmax, kmax
+  432.              
+  433.                  imin = is1 ; jmin = is2 ; kmin = is3
+  434.                  imax = is1 ; jmax = is2 ; kmax = is3
+  435.                  rmin = Ref(is1, is2, is3) ; rmax = rmin
+  436.              
+  437.                  chksum = 0.0_r8
+  438.              
+  439.  1---------<     do k = is3, ie3
+  440.  1 2-------<       do j = is2, ie2
+  441.  1 2 3-----<         do i = is1, ie1
+  442.  1 2 3                 chksum = chksum + abs(Ref(i,j,k))
+  443.  1 2 3                 if ( Ref(i,j,k) < rmin ) then
+  444.  1 2 3                   rmin = Ref(i,j,k)
+  445.  1 2 3                   imin = i ; jmin = j ; kmin = k
+  446.  1 2 3                 end if
+  447.  1 2 3                 if ( Ref(i,j,k) > rmax ) then
+  448.  1 2 3                   rmax = Ref(i,j,k)
+  449.  1 2 3                   imax = i ; jmax = j ; kmax = k
+  450.  1 2 3                 end if
+  451.  1 2 3----->         end do
+  452.  1 2------->       end do
+  453.  1--------->     end do
+  454.              
+  455.                  print 666, name, chksum, imin, jmin, kmin, imax, jmax, kmax
+  456.              666 format('chksum: ', a8, 1x, e20.14, 6(1x, i4))
+  457.              
+  458.                end subroutine chksum_3d_R
+ftn-5004 ftn: NOTE File = cmparray_mod.f90, Line = 458 
+  Dummy Argument "ID1" is not referenced or defined.
+
+ftn-5004 ftn: NOTE File = cmparray_mod.f90, Line = 458 
+  Dummy Argument "ID2" is not referenced or defined.
+
+ftn-5004 ftn: NOTE File = cmparray_mod.f90, Line = 458 
+  Dummy Argument "ID3" is not referenced or defined.
+
+  459.              
+  460.                subroutine chksum_3d_I(name, Ref, id1, is1, ie1, id2, is2, ie2, id3, is3, ie3)
+  461.                  character(*), intent(in) :: name
+  462.                  integer,  intent(in) :: id1, is1, ie1
+  463.                  integer,  intent(in) :: id2, is2, ie2
+  464.                  integer,  intent(in) :: id3, is3, ie3
+  465.                  integer,  intent(in), dimension(id1, id2, id3) :: Ref
+  466.              
+  467.                  integer :: i, j, k
+  468.                  integer :: chksum
+  469.                  chksum = 0
+  470.              
+  471.  1---------<     do k = is3, ie3
+  472.  1 2-------<       do j = is2, ie2
+  473.  1 2 3-----<         do i = is1, ie1
+  474.  1 2 3                 chksum = chksum + abs(Ref(i,j,k))
+  475.  1 2 3----->         end do
+  476.  1 2------->       end do
+  477.  1--------->     end do
+  478.              
+  479.                  print 666, name, chksum
+  480.              666 format('chksum: ', a8, 1x, i8)
+  481.              
+  482.                end subroutine chksum_3d_I
+  483.              
+  484.              end module cmparray_mod
+
+ftn-6332 ftn: VECTOR File = cmparray_mod.f90, Line = 90 
+  A loop starting at line 90 was not vectorized because it does not map well onto the target architecture.
+
+ftn-6209 ftn: VECTOR File = cmparray_mod.f90, Line = 91 
+  A loop starting at line 91 was partially vectorized.
+
+ftn-6204 ftn: VECTOR File = cmparray_mod.f90, Line = 92 
+  A loop starting at line 92 was vectorized.
+
+ftn-6204 ftn: VECTOR File = cmparray_mod.f90, Line = 107 
+  A loop starting at line 107 was vectorized.
+
+ftn-6066 ftn: SCALAR File = cmparray_mod.f90, Line = 121 
+   A loop nest at line 121 collapsed to a single loop.
+
+ftn-6204 ftn: VECTOR File = cmparray_mod.f90, Line = 121 
+  A loop starting at line 121 was vectorized.
+
+ftn-6067 ftn: SCALAR File = cmparray_mod.f90, Line = 139 
+  A loop nest at line 139 was partially collapsed.
+
+ftn-6213 ftn: VECTOR File = cmparray_mod.f90, Line = 139 
+  A loop starting at line 139 was conditionally vectorized.
+
+ftn-6007 ftn: SCALAR File = cmparray_mod.f90, Line = 141 
+  A loop starting at line 141 was interchanged with the loop starting at line 147.
+
+ftn-6007 ftn: SCALAR File = cmparray_mod.f90, Line = 141 
+  A loop starting at line 141 was interchanged with the loop starting at line 144.
+
+ftn-6049 ftn: SCALAR File = cmparray_mod.f90, Line = 141 
+  A loop starting at line 141 was blocked with block size 8.
+
+ftn-6007 ftn: SCALAR File = cmparray_mod.f90, Line = 142 
+  A loop starting at line 142 was interchanged with the loop starting at line 147.
+
+ftn-6007 ftn: SCALAR File = cmparray_mod.f90, Line = 142 
+  A loop starting at line 142 was interchanged with the loop starting at line 144.
+
+ftn-6049 ftn: SCALAR File = cmparray_mod.f90, Line = 142 
+  A loop starting at line 142 was blocked with block size 16.
+
+ftn-6049 ftn: SCALAR File = cmparray_mod.f90, Line = 144 
+  A loop starting at line 144 was blocked with block size 4.
+
+ftn-6049 ftn: SCALAR File = cmparray_mod.f90, Line = 147 
+  A loop starting at line 147 was blocked with block size 4.
+
+ftn-6332 ftn: VECTOR File = cmparray_mod.f90, Line = 199 
+  A loop starting at line 199 was not vectorized because it does not map well onto the target architecture.
+
+ftn-6209 ftn: VECTOR File = cmparray_mod.f90, Line = 200 
+  A loop starting at line 200 was partially vectorized.
+
+ftn-6204 ftn: VECTOR File = cmparray_mod.f90, Line = 201 
+  A loop starting at line 201 was vectorized.
+
+ftn-6204 ftn: VECTOR File = cmparray_mod.f90, Line = 250 
+  A loop starting at line 250 was vectorized.
+
+ftn-6209 ftn: VECTOR File = cmparray_mod.f90, Line = 251 
+  A loop starting at line 251 was partially vectorized.
+
+ftn-6332 ftn: VECTOR File = cmparray_mod.f90, Line = 252 
+  A loop starting at line 252 was not vectorized because it does not map well onto the target architecture.
+
+ftn-6204 ftn: VECTOR File = cmparray_mod.f90, Line = 301 
+  A loop starting at line 301 was vectorized.
+
+ftn-6209 ftn: VECTOR File = cmparray_mod.f90, Line = 302 
+  A loop starting at line 302 was partially vectorized.
+
+ftn-6332 ftn: VECTOR File = cmparray_mod.f90, Line = 303 
+  A loop starting at line 303 was not vectorized because it does not map well onto the target architecture.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+               C r o s s   R e f e r e n c e   for   CMPARRAY_MOD
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+666                                                               FORMAT label
+  Decl     381
+  Set 
+  Used
+
+666                                                               FORMAT label
+  Decl     456
+  Set 
+  Used
+
+666                                                               FORMAT label
+  Decl     480
+  Set 
+  Used
+
+ABS                                                               Function, REAL, INTRINSIC
+  Decl
+  Set 
+  Used       0       0     358     368     442     474
+
+ARRAY                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>:<exp>), INTENT(INOUT)
+  Decl      49      54
+  Set 
+  Used      56
+
+ARRAY                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>:<exp>, <exp>:<exp>), INTENT(INOUT)
+  Decl      61      67
+  Set 
+  Used      69
+
+ARRAY                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>:<exp>, <exp>:<exp>, <exp>:<exp>),
+                                                        INTENT(INOUT)
+  Decl      74      81
+  Set       91      92
+  Used      90
+
+ARRAY                           Dummy Arg                         INTEGER, DIMENSION(<exp>:<exp>), INTENT(INOUT)
+  Decl     158     163
+  Set 
+  Used     165
+
+ARRAY                           Dummy Arg                         INTEGER, DIMENSION(<exp>:<exp>, <exp>:<exp>), INTENT(INOUT)
+  Decl     170     176
+  Set 
+  Used     178
+
+ARRAY                           Dummy Arg                         INTEGER, DIMENSION(<exp>:<exp>, <exp>:<exp>, <exp>:<exp>), INTENT(INOUT)
+  Decl     183     190
+  Set      200     201
+  Used     199
+
+ARRAY                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>:<exp>), INTENT(INOUT)
+  Decl     209     214
+  Set 
+  Used     216
+
+ARRAY                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>:<exp>, <exp>:<exp>), INTENT(INOUT)
+  Decl     221     227
+  Set 
+  Used     229
+
+ARRAY                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>:<exp>, <exp>:<exp>, <exp>:<exp>),
+                                                        INTENT(INOUT)
+  Decl     234     241
+  Set      251     252
+  Used     250
+
+ARRAY                           Dummy Arg                         INTEGER, DIMENSION(<exp>:<exp>), INTENT(INOUT)
+  Decl     260     265
+  Set 
+  Used     267
+
+ARRAY                           Dummy Arg                         INTEGER, DIMENSION(<exp>:<exp>, <exp>:<exp>), INTENT(INOUT)
+  Decl     272     278
+  Set 
+  Used     280
+
+ARRAY                           Dummy Arg                         INTEGER, DIMENSION(<exp>:<exp>, <exp>:<exp>, <exp>:<exp>), INTENT(INOUT)
+  Decl     285     292
+  Set      302     303
+  Used     301
+
+CHKSUM                          Stack                             REAL(KIND=8)
+  Decl     427
+  Set      437     442
+  Used     455
+
+CHKSUM                          Stack                             INTEGER
+  Decl     468
+  Set      469     474
+  Used     479
+
+CHKSUM                                                            Generic interface
+  Decl      38
+  Set 
+  Used
+
+CHKSUM_1D_I                                                       Subroutine, Module procedure, PRIVATE
+  Decl     393
+  Set 
+  Used
+
+CHKSUM_1D_R                                                       Subroutine, Module procedure, PRIVATE
+  Decl     385
+  Set 
+  Used
+
+CHKSUM_2D_I                                                       Subroutine, Module procedure, PRIVATE
+  Decl     410
+  Set 
+  Used
+
+CHKSUM_2D_R                                                       Subroutine, Module procedure, PRIVATE
+  Decl     401
+  Set 
+  Used
+
+CHKSUM_3D_I                                                       Subroutine, Module procedure, PRIVATE
+  Decl     460
+  Set 
+  Used       0     416
+
+CHKSUM_3D_R                                                       Subroutine, Module procedure, PRIVATE
+  Decl     419
+  Set 
+  Used       0     407
+
+CMPARRAY                                                          Generic interface
+  Decl      32
+  Set 
+  Used
+
+CMPARRAY_1D_R                                                     Subroutine, Module procedure, PRIVATE
+  Decl     317
+  Set 
+  Used
+
+CMPARRAY_2D_R                                                     Subroutine, Module procedure, PRIVATE
+  Decl     326
+  Set 
+  Used
+
+CMPARRAY_3D_R                                                     Subroutine, Module procedure, PRIVATE
+  Decl     336
+  Set 
+  Used       0     333
+
+CMPARRAY_MOD                                                      Module
+  Decl       1
+  Set 
+  Used
+
+CMPDAYNITE                                                        Generic interface
+  Decl       9      11
+  Set 
+  Used
+
+CMPDAYNITE_1D_I                                                   Subroutine, Module procedure, PRIVATE
+  Decl     158
+  Set 
+  Used
+
+CMPDAYNITE_1D_R                                                   Subroutine, Module procedure, PRIVATE
+  Decl      49
+  Set 
+  Used
+
+CMPDAYNITE_1D_R_COPY                                              Subroutine, Module procedure, PRIVATE
+  Decl     100
+  Set 
+  Used
+
+CMPDAYNITE_2D_I                                                   Subroutine, Module procedure, PRIVATE
+  Decl     170
+  Set 
+  Used
+
+CMPDAYNITE_2D_R                                                   Subroutine, Module procedure, PRIVATE
+  Decl      61
+  Set 
+  Used
+
+CMPDAYNITE_2D_R_COPY                                              Subroutine, Module procedure, PRIVATE
+  Decl     113
+  Set 
+  Used
+
+CMPDAYNITE_3D_I                                                   Subroutine, Module procedure, PRIVATE
+  Decl     183
+  Set 
+  Used       0     178
+
+CMPDAYNITE_3D_R                                                   Subroutine, Module procedure, PRIVATE
+  Decl      74
+  Set 
+  Used       0      69
+
+CMPDAYNITE_3D_R_COPY                                              Subroutine, Module procedure, PRIVATE
+  Decl     127
+  Set 
+  Used       0     122
+
+EXPDAYNITE                                                        Generic interface
+  Decl       9      23
+  Set 
+  Used
+
+EXPDAYNITE_1D_I                                                   Subroutine, Module procedure, PRIVATE
+  Decl     260
+  Set 
+  Used
+
+EXPDAYNITE_1D_R                                                   Subroutine, Module procedure, PRIVATE
+  Decl     209
+  Set 
+  Used
+
+EXPDAYNITE_2D_I                                                   Subroutine, Module procedure, PRIVATE
+  Decl     272
+  Set 
+  Used
+
+EXPDAYNITE_2D_R                                                   Subroutine, Module procedure, PRIVATE
+  Decl     221
+  Set 
+  Used
+
+EXPDAYNITE_3D_I                                                   Subroutine, Module procedure, PRIVATE
+  Decl     285
+  Set 
+  Used       0     280
+
+EXPDAYNITE_3D_R                                                   Subroutine, Module procedure, PRIVATE
+  Decl     234
+  Set 
+  Used       0     229
+
+FOUND                           Stack                             LOGICAL
+  Decl     346
+  Set      355     360
+  Used     365
+
+I                               Stack                             INTEGER
+  Decl      84
+  Set 
+  Used
+
+I                               Stack                             INTEGER
+  Decl     137
+  Set 
+  Used     145     148
+
+I                               Stack                             INTEGER
+  Decl     193
+  Set 
+  Used
+
+I                               Stack                             INTEGER
+  Decl     244
+  Set 
+  Used
+
+I                               Stack                             INTEGER
+  Decl     295
+  Set 
+  Used
+
+I                               Stack                             INTEGER
+  Decl     344
+  Set 
+  Used     357     358     367     368     370
+
+I                               Stack                             INTEGER
+  Decl     429
+  Set 
+  Used     442     443     444     445     447     448     449
+
+I                               Stack                             INTEGER
+  Decl     467
+  Set 
+  Used     474
+
+ID1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     317     319
+  Set 
+  Used     320     321     323
+
+ID1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     326     328
+  Set 
+  Used     330     331     333
+
+ID1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     336     338
+  Set 
+  Used     341     342
+
+ID1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     385     387
+  Set 
+  Used     388     390
+
+ID1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     393     395
+  Set 
+  Used     396     398
+
+ID1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     401     403
+  Set 
+  Used     405     407
+
+ID1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     410     412
+  Set 
+  Used     414     416
+
+ID1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     419     421
+  Set 
+  Used
+
+ID1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     460     462
+  Set 
+  Used     465
+
+ID2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     326     329
+  Set 
+  Used     330     331     333
+
+ID2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     336     339
+  Set 
+  Used     341     342
+
+ID2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     401     404
+  Set 
+  Used     405     407
+
+ID2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     410     413
+  Set 
+  Used     414     416
+
+ID2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     419     422
+  Set 
+  Used
+
+ID2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     460     463
+  Set 
+  Used     465
+
+ID3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     336     340
+  Set 
+  Used     341     342
+
+ID3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     419     423
+  Set 
+  Used
+
+ID3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     460     464
+  Set 
+  Used     465
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl      49      52
+  Set 
+  Used      56
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl      61      65
+  Set 
+  Used      69
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl      74      79
+  Set 
+  Used      91
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     100     103
+  Set 
+  Used     108
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     113     117
+  Set 
+  Used     122
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     127     132
+  Set 
+  Used     145
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     158     161
+  Set 
+  Used     165
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     170     174
+  Set 
+  Used     178
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     183     188
+  Set 
+  Used     200
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     209     212
+  Set 
+  Used     216
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     221     225
+  Set 
+  Used     229
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     234     239
+  Set 
+  Used     252
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     260     263
+  Set 
+  Used     267
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     272     276
+  Set 
+  Used     280
+
+IDXDAY                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     285     290
+  Set 
+  Used     303
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl      49      53
+  Set 
+  Used      56
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl      61      66
+  Set 
+  Used      69
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl      74      80
+  Set 
+  Used      90
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     100     104
+  Set 
+  Used     108
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     113     118
+  Set 
+  Used     122
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     127     133
+  Set 
+  Used     148
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     158     162
+  Set 
+  Used     165
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     170     175
+  Set 
+  Used     178
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     183     189
+  Set 
+  Used     199
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     209     213
+  Set 
+  Used     216
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     221     226
+  Set 
+  Used     229
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     234     240
+  Set 
+  Used     251
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     260     264
+  Set 
+  Used     267
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     272     277
+  Set 
+  Used     280
+
+IDXNITE                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     285     291
+  Set 
+  Used     302
+
+IE1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     317     319
+  Set 
+  Used     323
+
+IE1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     326     328
+  Set 
+  Used     333
+
+IE1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     336     338
+  Set 
+  Used     356     366
+
+IE1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     385     387
+  Set 
+  Used     390
+
+IE1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     393     395
+  Set 
+  Used     398
+
+IE1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     401     403
+  Set 
+  Used     407
+
+IE1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     410     412
+  Set 
+  Used     416
+
+IE1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     419     421
+  Set 
+  Used     425     441
+
+IE1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     460     462
+  Set 
+  Used     473
+
+IE2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     326     329
+  Set 
+  Used     333
+
+IE2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     336     339
+  Set 
+  Used     353
+
+IE2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     401     404
+  Set 
+  Used     407
+
+IE2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     410     413
+  Set 
+  Used     416
+
+IE2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     419     422
+  Set 
+  Used     425     440
+
+IE2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     460     463
+  Set 
+  Used     472
+
+IE3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     336     340
+  Set 
+  Used     352
+
+IE3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     419     423
+  Set 
+  Used     425     439
+
+IE3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     460     464
+  Set 
+  Used     471
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      49      51
+  Set 
+  Used      54      56
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      61      63
+  Set 
+  Used      67      69
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      74      76
+  Set 
+  Used      81      83      91      92
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     100     102
+  Set 
+  Used     105     106     108
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     113     115
+  Set 
+  Used     119     120     122
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     127     129
+  Set 
+  Used     134     135     144     145     147     148
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     158     160
+  Set 
+  Used     163     165
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     170     172
+  Set 
+  Used     176     178
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     183     185
+  Set 
+  Used     190     192     200     201
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     209     211
+  Set 
+  Used     214     216
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     221     223
+  Set 
+  Used     227     229
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     234     236
+  Set 
+  Used     241     243     251
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     260     262
+  Set 
+  Used     265     267
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     272     274
+  Set 
+  Used     278     280
+
+IL1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     285     287
+  Set 
+  Used     292     294     302
+
+IL2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      61      64
+  Set 
+  Used      67      69
+
+IL2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      74      77
+  Set 
+  Used      81
+
+IL2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     113     116
+  Set 
+  Used     119     120     122
+
+IL2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     127     130
+  Set 
+  Used     134     135
+
+IL2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     170     173
+  Set 
+  Used     176     178
+
+IL2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     183     186
+  Set 
+  Used     190
+
+IL2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     221     224
+  Set 
+  Used     227     229
+
+IL2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     234     237
+  Set 
+  Used     241
+
+IL2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     272     275
+  Set 
+  Used     278     280
+
+IL2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     285     288
+  Set 
+  Used     292
+
+IL3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      74      78
+  Set 
+  Used      81
+
+IL3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     127     131
+  Set 
+  Used     134     135
+
+IL3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     183     187
+  Set 
+  Used     190
+
+IL3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     234     238
+  Set 
+  Used     241
+
+IL3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     285     289
+  Set 
+  Used     292
+
+IMAX                            Stack                             INTEGER
+  Decl     431
+  Set      434     449
+  Used     455
+
+IMIN                            Stack                             INTEGER
+  Decl     430
+  Set      433     445
+  Used     455
+
+INARRAY                         Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>:<exp>), INTENT(IN)
+  Decl     100     105
+  Set 
+  Used     108
+
+INARRAY                         Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>:<exp>, <exp>:<exp>), INTENT(IN)
+  Decl     113     119
+  Set 
+  Used     122
+
+INARRAY                         Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>:<exp>, <exp>:<exp>, <exp>:<exp>), INTENT(IN)
+  Decl     127     134
+  Set 
+  Used     145     148
+
+IS1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     317     319
+  Set 
+  Used     323
+
+IS1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     326     328
+  Set 
+  Used     333
+
+IS1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     336     338
+  Set 
+  Used
+
+IS1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     385     387
+  Set 
+  Used     390
+
+IS1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     393     395
+  Set 
+  Used     398
+
+IS1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     401     403
+  Set 
+  Used     407
+
+IS1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     410     412
+  Set 
+  Used     416
+
+IS1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     419     421
+  Set 
+  Used     425     433     434     435
+
+IS1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     460     462
+  Set 
+  Used
+
+IS2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     326     329
+  Set 
+  Used     333
+
+IS2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     336     339
+  Set 
+  Used
+
+IS2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     401     404
+  Set 
+  Used     407
+
+IS2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     410     413
+  Set 
+  Used     416
+
+IS2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     419     422
+  Set 
+  Used     425     433     434     435
+
+IS2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     460     463
+  Set 
+  Used
+
+IS3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     336     340
+  Set 
+  Used
+
+IS3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     419     423
+  Set 
+  Used     425     433     434     435
+
+IS3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     460     464
+  Set 
+  Used
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      49      51
+  Set 
+  Used      54      56
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      61      63
+  Set 
+  Used      67      69
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      74      76
+  Set 
+  Used      81      83
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     100     102
+  Set 
+  Used     105     106     108
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     113     115
+  Set 
+  Used     119     120     122
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     127     129
+  Set 
+  Used     134     135
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     158     160
+  Set 
+  Used     163     165
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     170     172
+  Set 
+  Used     176     178
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     183     185
+  Set 
+  Used     190     192
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     209     211
+  Set 
+  Used     214     216
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     221     223
+  Set 
+  Used     227     229
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     234     236
+  Set 
+  Used     241     243
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     260     262
+  Set 
+  Used     265     267
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     272     274
+  Set 
+  Used     278     280
+
+IU1                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     285     287
+  Set 
+  Used     292     294
+
+IU2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      61      64
+  Set 
+  Used      67      69
+
+IU2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      74      77
+  Set 
+  Used      81      88
+
+IU2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     113     116
+  Set 
+  Used     119     120     122
+
+IU2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     127     130
+  Set 
+  Used     134     135     142
+
+IU2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     170     173
+  Set 
+  Used     176     178
+
+IU2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     183     186
+  Set 
+  Used     190     197
+
+IU2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     221     224
+  Set 
+  Used     227     229
+
+IU2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     234     237
+  Set 
+  Used     241     248
+
+IU2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     272     275
+  Set 
+  Used     278     280
+
+IU2                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     285     288
+  Set 
+  Used     292     299
+
+IU3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      74      78
+  Set 
+  Used      81      87
+
+IU3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     127     131
+  Set 
+  Used     134     135     141
+
+IU3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     183     187
+  Set 
+  Used     190     196
+
+IU3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     234     238
+  Set 
+  Used     241     247
+
+IU3                             Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     285     289
+  Set 
+  Used     292     298
+
+J                               Stack                             INTEGER
+  Decl      84
+  Set 
+  Used      90      91      92
+
+J                               Stack                             INTEGER
+  Decl     137
+  Set 
+  Used     145     148
+
+J                               Stack                             INTEGER
+  Decl     193
+  Set 
+  Used     199     200     201
+
+J                               Stack                             INTEGER
+  Decl     244
+  Set 
+  Used     250     251     252
+
+J                               Stack                             INTEGER
+  Decl     295
+  Set 
+  Used     301     302     303
+
+J                               Stack                             INTEGER
+  Decl     344
+  Set 
+  Used     357     358     367     368     370
+
+J                               Stack                             INTEGER
+  Decl     429
+  Set 
+  Used     442     443     444     445     447     448     449
+
+J                               Stack                             INTEGER
+  Decl     467
+  Set 
+  Used     474
+
+JMAX                            Stack                             INTEGER
+  Decl     431
+  Set      434     449
+  Used     455
+
+JMIN                            Stack                             INTEGER
+  Decl     430
+  Set      433     445
+  Used     455
+
+K                               Stack                             INTEGER
+  Decl      84
+  Set 
+  Used      90      91      92
+
+K                               Stack                             INTEGER
+  Decl     137
+  Set 
+  Used     145     148
+
+K                               Stack                             INTEGER
+  Decl     193
+  Set 
+  Used     199     200     201
+
+K                               Stack                             INTEGER
+  Decl     244
+  Set 
+  Used     250     251     252
+
+K                               Stack                             INTEGER
+  Decl     295
+  Set 
+  Used     301     302     303
+
+K                               Stack                             INTEGER
+  Decl     344
+  Set 
+  Used     357     358     367     368     370
+
+K                               Stack                             INTEGER
+  Decl     429
+  Set 
+  Used     442     443     444     445     447     448     449
+
+K                               Stack                             INTEGER
+  Decl     467
+  Set 
+  Used     474
+
+KMAX                            Stack                             INTEGER
+  Decl     431
+  Set      434     449
+  Used     455
+
+KMIN                            Stack                             INTEGER
+  Decl     430
+  Set      433     445
+  Used     455
+
+MERGE                                                             Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     368
+
+NAME                            Dummy Arg                         CHARACTER(*), INTENT(IN)
+  Decl     317     318
+  Set 
+  Used     323
+
+NAME                            Dummy Arg                         CHARACTER(*), INTENT(IN)
+  Decl     326     327
+  Set 
+  Used     333
+
+NAME                            Dummy Arg                         CHARACTER(*), INTENT(IN)
+  Decl     336     337
+  Set 
+  Used     370
+
+NAME                            Dummy Arg                         CHARACTER(*), INTENT(IN)
+  Decl     385     386
+  Set 
+  Used     390
+
+NAME                            Dummy Arg                         CHARACTER(*), INTENT(IN)
+  Decl     393     394
+  Set 
+  Used     398
+
+NAME                            Dummy Arg                         CHARACTER(*), INTENT(IN)
+  Decl     401     402
+  Set 
+  Used     407
+
+NAME                            Dummy Arg                         CHARACTER(*), INTENT(IN)
+  Decl     410     411
+  Set 
+  Used     416
+
+NAME                            Dummy Arg                         CHARACTER(*), INTENT(IN)
+  Decl     419     420
+  Set 
+  Used     455
+
+NAME                            Dummy Arg                         CHARACTER(*), INTENT(IN)
+  Decl     460     461
+  Set 
+  Used     479
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      49      50
+  Set 
+  Used      52      56
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      61      62
+  Set 
+  Used      65      69
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      74      75
+  Set 
+  Used      79      91      92
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     100     101
+  Set 
+  Used     103     108
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     113     114
+  Set 
+  Used     117     122
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     127     128
+  Set 
+  Used     132     144     147     148
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     158     159
+  Set 
+  Used     161     165
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     170     171
+  Set 
+  Used     174     178
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     183     184
+  Set 
+  Used     188     200     201
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     209     210
+  Set 
+  Used     212     216
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     221     222
+  Set 
+  Used     225     229
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     234     235
+  Set 
+  Used     239     250     251     252
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     260     261
+  Set 
+  Used     263     267
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     272     273
+  Set 
+  Used     276     280
+
+NDAY                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     285     286
+  Set 
+  Used     290     301     302     303
+
+NERR                            Stack                             INTEGER
+  Decl     345
+  Set      350     371
+  Used     372
+
+NEW                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl     317     321
+  Set 
+  Used     323
+
+NEW                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     326     331
+  Set 
+  Used     333
+
+NEW                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>, <exp>), INTENT(IN)
+  Decl     336     342
+  Set 
+  Used     357     367     370
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      49      50
+  Set 
+  Used      53      56
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      61      62
+  Set 
+  Used      66      69
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      74      75
+  Set 
+  Used      80      90      92
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     100     101
+  Set 
+  Used     104     108
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     113     114
+  Set 
+  Used     118     122
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     127     128
+  Set 
+  Used     133     147
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     158     159
+  Set 
+  Used     162     165
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     170     171
+  Set 
+  Used     175     178
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     183     184
+  Set 
+  Used     189     199     201
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     209     210
+  Set 
+  Used     213     216
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     221     222
+  Set 
+  Used     226     229
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     234     235
+  Set 
+  Used     240     251
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     260     261
+  Set 
+  Used     264     267
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     272     273
+  Set 
+  Used     277     280
+
+NNITE                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     285     286
+  Set 
+  Used     291     302
+
+OUTARRAY                        Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>:<exp>), INTENT(OUT)
+  Decl     100     106
+  Set      107
+  Used     108
+
+OUTARRAY                        Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>:<exp>, <exp>:<exp>), INTENT(OUT)
+  Decl     113     120
+  Set      121
+  Used     122
+
+OUTARRAY                        Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>:<exp>, <exp>:<exp>, <exp>:<exp>), INTENT(OUT)
+  Decl     127     135
+  Set      139     145     148
+  Used
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD, PRIVATE
+  Decl       3
+  Set 
+  Used      54      67      81      83     105     106     119     120     134     135     214     227     241     243     320
+           321     330     331     341     342     347     348     388     405     425     427     428
+
+RDIFF                           Stack                             REAL(KIND=8)
+  Decl     347
+  Set      357     358     367     368
+  Used     359     369     370
+
+REF                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl     317     320
+  Set 
+  Used     323
+
+REF                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     326     330
+  Set 
+  Used     333
+
+REF                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>, <exp>), INTENT(IN)
+  Decl     336     341
+  Set 
+  Used     357     358     367     368     370
+
+REF                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl     385     388
+  Set 
+  Used     390
+
+REF                             Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl     393     396
+  Set 
+  Used     398
+
+REF                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     401     405
+  Set 
+  Used     407
+
+REF                             Dummy Arg                         INTEGER, DIMENSION(<exp>, <exp>), INTENT(IN)
+  Decl     410     414
+  Set 
+  Used     416
+
+REF                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>:<exp>, <exp>:<exp>, <exp>:<exp>), INTENT(IN)
+  Decl     419     425
+  Set 
+  Used     435     442     443     444     447     448
+
+REF                             Dummy Arg                         INTEGER, DIMENSION(<exp>, <exp>, <exp>), INTENT(IN)
+  Decl     460     465
+  Set 
+  Used     474
+
+RMAX                            Stack                             REAL(KIND=8)
+  Decl     428
+  Set      435     448
+  Used     447
+
+RMIN                            Stack                             REAL(KIND=8)
+  Decl     428
+  Set      435     444
+  Used     435     443
+
+RTOL                                                              REAL(KIND=8), PARAMETER
+  Decl     348
+  Set 
+  Used     359     369
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used       3
+
+TMP                             Stack                             REAL(KIND=8), DIMENSION(<exp>:<exp>)
+  Decl      83
+  Set       90
+  Used      92
+
+TMP                             Stack                             INTEGER, DIMENSION(<exp>:<exp>)
+  Decl     192
+  Set      199
+  Used     201
+
+TMP                             Stack                             REAL(KIND=8), DIMENSION(<exp>:<exp>)
+  Decl     243
+  Set      250
+  Used     252
+
+TMP                             Stack                             INTEGER, DIMENSION(<exp>:<exp>)
+  Decl     294
+  Set      301
+  Used     303
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+ABS(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   CHKSUM_3D_I in CMPARRAY_MOD (Line 357, file cmparray_mod.f90)
+                   CHKSUM_3D_I in CMPARRAY_MOD (Line 358, file cmparray_mod.f90)
+                   CHKSUM_3D_I in CMPARRAY_MOD (Line 367, file cmparray_mod.f90)
+                   CHKSUM_3D_I in CMPARRAY_MOD (Line 368, file cmparray_mod.f90)
+                   CHKSUM_3D_I in CMPARRAY_MOD (Line 442, file cmparray_mod.f90)
+                   CHKSUM_3D_I in CMPARRAY_MOD (Line 474, file cmparray_mod.f90)
+
+Name  Messages
+----  --------
+CHKSUM_1D_I in CMPARRAY_MOD
+      Defined as:  Subroutine (line 393, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+CHKSUM_1D_R in CMPARRAY_MOD
+      Defined as:  Subroutine (line 385, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+CHKSUM_2D_I in CMPARRAY_MOD
+      Defined as:  Subroutine (line 410, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+CHKSUM_2D_R in CMPARRAY_MOD
+      Defined as:  Subroutine (line 401, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+CHKSUM_3D_I in CMPARRAY_MOD
+      Defined as:  Subroutine (line 460, file cmparray_mod.f90)
+
+      Interface:   None
+
+      Called By:   CHKSUM_3D_I in CMPARRAY_MOD (Line 398, file cmparray_mod.f90)
+                   CHKSUM_3D_I in CMPARRAY_MOD (Line 416, file cmparray_mod.f90)
+
+      Calls:       CHKSUM_3D_I in CMPARRAY_MOD (Line 398, file cmparray_mod.f90)
+                   CHKSUM_3D_I in CMPARRAY_MOD (Line 416, file cmparray_mod.f90)
+                   ABS(Intrinsic) (Line 357, file cmparray_mod.f90)
+                   ABS(Intrinsic) (Line 358, file cmparray_mod.f90)
+                   ABS(Intrinsic) (Line 367, file cmparray_mod.f90)
+                   ABS(Intrinsic) (Line 368, file cmparray_mod.f90)
+                   MERGE(Intrinsic) (Line 358, file cmparray_mod.f90)
+                   MERGE(Intrinsic) (Line 368, file cmparray_mod.f90)
+                   ABS(Intrinsic) (Line 442, file cmparray_mod.f90)
+                   ABS(Intrinsic) (Line 474, file cmparray_mod.f90)
+
+Name  Messages
+----  --------
+CHKSUM_3D_R in CMPARRAY_MOD
+      Defined as:  Subroutine (line 419, file cmparray_mod.f90)
+
+      Interface:   None
+
+      Called By:   CHKSUM_3D_R in CMPARRAY_MOD (Line 390, file cmparray_mod.f90)
+                   CHKSUM_3D_R in CMPARRAY_MOD (Line 407, file cmparray_mod.f90)
+
+      Calls:       CHKSUM_3D_R in CMPARRAY_MOD (Line 390, file cmparray_mod.f90)
+                   CHKSUM_3D_R in CMPARRAY_MOD (Line 407, file cmparray_mod.f90)
+
+Name  Messages
+----  --------
+CMPARRAY_1D_R in CMPARRAY_MOD
+      Defined as:  Subroutine (line 317, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+CMPARRAY_2D_R in CMPARRAY_MOD
+      Defined as:  Subroutine (line 326, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+CMPARRAY_3D_R in CMPARRAY_MOD
+      Defined as:  Subroutine (line 336, file cmparray_mod.f90)
+
+      Interface:   None
+
+      Called By:   CMPARRAY_3D_R in CMPARRAY_MOD (Line 323, file cmparray_mod.f90)
+                   CMPARRAY_3D_R in CMPARRAY_MOD (Line 333, file cmparray_mod.f90)
+
+      Calls:       CMPARRAY_3D_R in CMPARRAY_MOD (Line 323, file cmparray_mod.f90)
+                   CMPARRAY_3D_R in CMPARRAY_MOD (Line 333, file cmparray_mod.f90)
+
+Name  Messages
+----  --------
+CMPARRAY_MOD
+      Defined as:  Module (line 1, file cmparray_mod.f90)
+
+        Uses:      SHR_KIND_MOD
+
+Name  Messages
+----  --------
+CMPDAYNITE_1D_I in CMPARRAY_MOD
+      Defined as:  Subroutine (line 158, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+CMPDAYNITE_1D_R in CMPARRAY_MOD
+      Defined as:  Subroutine (line 49, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+CMPDAYNITE_1D_R_COPY in CMPARRAY_MOD
+      Defined as:  Subroutine (line 100, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+CMPDAYNITE_2D_I in CMPARRAY_MOD
+      Defined as:  Subroutine (line 170, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+CMPDAYNITE_2D_R in CMPARRAY_MOD
+      Defined as:  Subroutine (line 61, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+CMPDAYNITE_2D_R_COPY in CMPARRAY_MOD
+      Defined as:  Subroutine (line 113, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+CMPDAYNITE_3D_I in CMPARRAY_MOD
+      Defined as:  Subroutine (line 183, file cmparray_mod.f90)
+
+      Interface:   None
+
+      Called By:   CMPDAYNITE_3D_I in CMPARRAY_MOD (Line 165, file cmparray_mod.f90)
+                   CMPDAYNITE_3D_I in CMPARRAY_MOD (Line 178, file cmparray_mod.f90)
+
+      Calls:       CMPDAYNITE_3D_I in CMPARRAY_MOD (Line 165, file cmparray_mod.f90)
+                   CMPDAYNITE_3D_I in CMPARRAY_MOD (Line 178, file cmparray_mod.f90)
+
+Name  Messages
+----  --------
+CMPDAYNITE_3D_R in CMPARRAY_MOD
+      Defined as:  Subroutine (line 74, file cmparray_mod.f90)
+
+      Interface:   None
+
+      Called By:   CMPDAYNITE_3D_R in CMPARRAY_MOD (Line 56, file cmparray_mod.f90)
+                   CMPDAYNITE_3D_R in CMPARRAY_MOD (Line 69, file cmparray_mod.f90)
+
+      Calls:       CMPDAYNITE_3D_R in CMPARRAY_MOD (Line 56, file cmparray_mod.f90)
+                   CMPDAYNITE_3D_R in CMPARRAY_MOD (Line 69, file cmparray_mod.f90)
+
+Name  Messages
+----  --------
+CMPDAYNITE_3D_R_COPY in CMPARRAY_MOD
+      Defined as:  Subroutine (line 127, file cmparray_mod.f90)
+
+      Interface:   None
+
+      Called By:   CMPDAYNITE_3D_R_COPY in CMPARRAY_MOD (Line 108, file cmparray_mod.f90)
+                   CMPDAYNITE_3D_R_COPY in CMPARRAY_MOD (Line 122, file cmparray_mod.f90)
+
+      Calls:       CMPDAYNITE_3D_R_COPY in CMPARRAY_MOD (Line 108, file cmparray_mod.f90)
+                   CMPDAYNITE_3D_R_COPY in CMPARRAY_MOD (Line 122, file cmparray_mod.f90)
+
+Name  Messages
+----  --------
+EXPDAYNITE_1D_I in CMPARRAY_MOD
+      Defined as:  Subroutine (line 260, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+EXPDAYNITE_1D_R in CMPARRAY_MOD
+      Defined as:  Subroutine (line 209, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+EXPDAYNITE_2D_I in CMPARRAY_MOD
+      Defined as:  Subroutine (line 272, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+EXPDAYNITE_2D_R in CMPARRAY_MOD
+      Defined as:  Subroutine (line 221, file cmparray_mod.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+EXPDAYNITE_3D_I in CMPARRAY_MOD
+      Defined as:  Subroutine (line 285, file cmparray_mod.f90)
+
+      Interface:   None
+
+      Called By:   EXPDAYNITE_3D_I in CMPARRAY_MOD (Line 267, file cmparray_mod.f90)
+                   EXPDAYNITE_3D_I in CMPARRAY_MOD (Line 280, file cmparray_mod.f90)
+
+      Calls:       EXPDAYNITE_3D_I in CMPARRAY_MOD (Line 267, file cmparray_mod.f90)
+                   EXPDAYNITE_3D_I in CMPARRAY_MOD (Line 280, file cmparray_mod.f90)
+
+Name  Messages
+----  --------
+EXPDAYNITE_3D_R in CMPARRAY_MOD
+      Defined as:  Subroutine (line 234, file cmparray_mod.f90)
+
+      Interface:   None
+
+      Called By:   EXPDAYNITE_3D_R in CMPARRAY_MOD (Line 216, file cmparray_mod.f90)
+                   EXPDAYNITE_3D_R in CMPARRAY_MOD (Line 229, file cmparray_mod.f90)
+
+      Calls:       EXPDAYNITE_3D_R in CMPARRAY_MOD (Line 216, file cmparray_mod.f90)
+                   EXPDAYNITE_3D_R in CMPARRAY_MOD (Line 229, file cmparray_mod.f90)
+
+Name  Messages
+----  --------
+MERGE(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   CHKSUM_3D_I in CMPARRAY_MOD (Line 358, file cmparray_mod.f90)
+                   CHKSUM_3D_I in CMPARRAY_MOD (Line 368, file cmparray_mod.f90)
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     CMPARRAY_MOD
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

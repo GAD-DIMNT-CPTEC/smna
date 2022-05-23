@@ -1,0 +1,244 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getbit.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getbit.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine getbit( ibm, ibs, ids, len, mg, g, ground, gmin, gmax, nbit )
+   43.       $s_S0 = 2.0 ** 0[loc( ibs ),0] * 10.0 ** 0[loc( ids ),0]
+   44.       if ( 0[loc( ibm ),0] == 0 ) then
+   45.          $MR_len_S23 = 0[loc( len ),0]
+   45.          if ( $MR_len_S23 <= 0 ) then
+   45.             $LB_Y0 = 1
+   45.             $UB_Y1 = $MR_len_S23
+   45.             $Subscript_Y5 = 1
+   45.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+   45.          endif
+   45.          if ( $MR_len_S23 <= 0 ) then
+   45.             $LB_Y0 = 1
+   45.             $UB_Y1 = $MR_len_S23
+   45.             $Subscript_Y5 = 1
+   45.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y45 )
+   45.          endif
+   45.          $MR_ground_5 = _anint( 0[loc( g ),0] * $s_S0 ) / $s_S0
+   45.          0[loc( ground ),0] = $MR_ground_5
+   46.          if ( $MR_len_S23 <= 0 ) then
+   46.             $LB_Y0 = 1
+   46.             $UB_Y1 = $MR_len_S23
+   46.             $Subscript_Y5 = 1
+   46.             _bounds_error( $_File_Y40, $Line_Y46, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y47 )
+   46.          endif
+   46.          0[loc( gmax ),0] = $MR_ground_5
+   47.          0[loc( gmin ),0] = $MR_ground_5
+   48.          if ( -2 + $MR_len_S23 >= 0 ) then
+   48.             $I_L48_S26 = 0
+   51.             $gmin_S8 = $MR_ground_5
+   50.             $gmax_S7 = $MR_ground_5
+   48.             $LCS_0 = $MR_len_S23
+   48.             if ( -5 + $LCS_0 >= 0 ) then !  99.50%
+   48.                $TC_0 = and( -4, -1 + $LCS_0 )
+   50.                $LCS_1[0:4:1] = _bcst( $MR_ground_5, 4 )
+   50.                $VR_gmax_4[0:4:1] = $LCS_1[0:4:1]
+   51.                $VR_gmin_5[0:4:1] = $LCS_1[0:4:1]
+   48.                $LC_S24 = -$TC_0
+   48.                $SI_S25 = 0
+   49.                $LIS_1[0:4:1] = _bcst( 1.0 / $s_S0, 4 )
+   49.                $LIS_0[0:4:1] = _bcst( $s_S0, 4 )
+   48.                if ( $LC_S24 < -15 ) then
+   48.                   do
+   49.                      $LCS_2 = $SI_S25 + loc( g )
+   49.                      $V_ground_WR0_S11[0:4:1] = ( _anint( 1[$LCS_2:4:1] * $LIS_0[0:4:1] ) * $LIS_1[0:4:1] )
+   49.                      $LCS_3 = $SI_S25 + loc( ground )
+   49.                      1[$LCS_3:4:1] = $V_ground_WR0_S11[0:4:1]
+   50.                      $VR_gmax_4[0:4:1] = max( $VR_gmax_4[0:4:1], $V_ground_WR0_S11[0:4:1] )
+   51.                      $VR_gmin_5[0:4:1] = min( $VR_gmin_5[0:4:1], $V_ground_WR0_S11[0:4:1] )
+   49.                      $V_ground_WR0_S12[0:4:1] = ( _anint( 5[$LCS_2:4:1] * $LIS_0[0:4:1] ) * $LIS_1[0:4:1] )
+   49.                      5[$LCS_3:4:1] = $V_ground_WR0_S12[0:4:1]
+   50.                      $VR_gmax_4[0:4:1] = max( $VR_gmax_4[0:4:1], $V_ground_WR0_S12[0:4:1] )
+   51.                      $VR_gmin_5[0:4:1] = min( $VR_gmin_5[0:4:1], $V_ground_WR0_S12[0:4:1] )
+   49.                      $V_ground_WR0_S13[0:4:1] = ( _anint( 9[$LCS_2:4:1] * $LIS_0[0:4:1] ) * $LIS_1[0:4:1] )
+   49.                      9[$LCS_3:4:1] = $V_ground_WR0_S13[0:4:1]
+   50.                      $VR_gmax_4[0:4:1] = max( $VR_gmax_4[0:4:1], $V_ground_WR0_S13[0:4:1] )
+   51.                      $VR_gmin_5[0:4:1] = min( $VR_gmin_5[0:4:1], $V_ground_WR0_S13[0:4:1] )
+   49.                      $V_ground_WR0_S14[0:4:1] = ( _anint( 13[$LCS_2:4:1] * $LIS_0[0:4:1] ) * $LIS_1[0:4:1] )
+   49.                      13[$LCS_3:4:1] = $V_ground_WR0_S14[0:4:1]
+   50.                      $VR_gmax_4[0:4:1] = max( $VR_gmax_4[0:4:1], $V_ground_WR0_S14[0:4:1] )
+   51.                      $VR_gmin_5[0:4:1] = min( $VR_gmin_5[0:4:1], $V_ground_WR0_S14[0:4:1] )
+   48.                      $SI_S25 = 64 + $SI_S25
+   48.                      $LC_S24 = 16 + $LC_S24
+   48.                      if ( $LC_S24 >= -15 ) exit
+   48.                   enddo
+   48.                endif
+   48.                if ( $LC_S24 < 0 ) then
+   48.                   do
+   49.                      $V_ground_WR0_S15[0:4:1] = ( _anint( 1[$SI_S25 + loc( g ):4:1] * $LIS_0[0:4:1] ) * $LIS_1[0:4:1] )
+   49.                      1[$SI_S25 + loc( ground ):4:1] = $V_ground_WR0_S15[0:4:1]
+   50.                      $VR_gmax_4[0:4:1] = max( $VR_gmax_4[0:4:1], $V_ground_WR0_S15[0:4:1] )
+   51.                      $VR_gmin_5[0:4:1] = min( $VR_gmin_5[0:4:1], $V_ground_WR0_S15[0:4:1] )
+   48.                      $SI_S25 = 16 + $SI_S25
+   48.                      $LC_S24 = 4 + $LC_S24
+   48.                      if ( $LC_S24 >= 0 ) exit
+   48.                   enddo
+   48.                endif
+   50.                $gmax_S7 = _rmax( $VR_gmax_4[0:4:1], 4, 1 )
+   51.                $gmin_S8 = _rmin( $VR_gmin_5[0:4:1], 4, 1 )
+   48.                $I_L48_S26 = $TC_0
+   48.             endif
+   48.             $LCS_1_4 = -1 + $MR_len_S23
+   48.             if ( $LCS_1_4 > $I_L48_S26 ) then !  99.50%
+   49.                $LIS_E2 = 1.0 / $s_S0
+   49.                $LIS_E13 = loc( ground )
+   49.                $LIS_E12 = loc( g )
+   48.                do
+   49.                   $ground_WR0_R0 = ( _anint( 1[$LIS_E12,$I_L48_S26] * $s_S0 ) * $LIS_E2 )
+   49.                   1[$LIS_E13,$I_L48_S26] = $ground_WR0_R0
+   50.                   $gmax_S7 = max( $ground_WR0_R0, $gmax_S7 )
+   51.                   $gmin_S8 = min( $ground_WR0_R0, $gmin_S8 )
+   52.                   $I_L48_S26 = 1 + $I_L48_S26
+   48.                   if ( $I_L48_S26 >= $LCS_1_4 ) exit
+   48.                enddo
+   48.             endif
+   51.             0[loc( gmin ),0] = $gmin_S8
+   50.             0[loc( gmax ),0] = $gmax_S7
+   50.          endif
+   50.       else
+   54.          $i1_S28 = 1
+   55.          $MR_len_S27 = 0[loc( len ),0]
+   55.          if ( $MR_len_S27 <= 0 ) then
+   55.             $LB_Y0 = 1
+   55.             $UB_Y1 = $MR_len_S27
+   55.             $Subscript_Y5 = 1
+   55.             _bounds_error( $_File_Y40, $Line_Y54, $_Name_Y53, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y55 )
+   55.          endif
+   55.          $LCS_mg_5 = loc( mg )
+   55.          if ( int( 0 < $MR_len_S27 .and. 0[$LCS_mg_5,0] == 0 ) /= 0 ) then
+   57.             $LIS_S19 = $MR_len_S27
+   55.             do
+   56.                $i1_S28 = 1 + $i1_S28
+   57.                if ( or( $MR_len_S27 - $i1_S28, -1 + $i1_S28 ) < 0 ) then
+   57.                   $LB_Y0 = 1
+   57.                   $UB_Y1 = $LIS_S19
+   57.                   $Subscript_Y5 = $i1_S28
+   57.                   _bounds_error( $_File_Y40, $Line_Y57, $_Name_Y56, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y58 )
+   57.                endif
+   55.                if ( int( $i1_S28 <= $MR_len_S27 .and. -1[$LCS_mg_5,$i1_S28] == 0 ) == 0 ) exit
+   55.             enddo
+   55.          endif
+   58.          if ( $i1_S28 <= $MR_len_S27 ) then
+   59.             if ( -1 + $i1_S28 > 0 ) then
+   60.                $W0 = 0.0
+   60.                if ( $MR_len_S27 <= 0 ) then
+   60.                   $LB_Y0 = 1
+   60.                   $UB_Y1 = $MR_len_S27
+   60.                   $Subscript_Y5 = 1
+   60.                   _bounds_error( $_File_Y40, $Line_Y59, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y60 )
+   60.                endif
+   60.                __sset_cce( 0[loc( ground ),0], $W0, -1 + $i1_S28 )
+   60.             endif
+   62.             $CS_2 = or( $MR_len_S27 - $i1_S28, -1 + $i1_S28 ) >= 0
+   62.             if ( int( $CS_2 ) == 0 ) then
+   62.                $LB_Y0 = 1
+   62.                $UB_Y1 = $MR_len_S27
+   62.                $Subscript_Y5 = $i1_S28
+   62.                _bounds_error( $_File_Y40, $Line_Y62, $_Name_Y61, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y63 )
+   62.             endif
+   62.             if ( int( $CS_2 ) == 0 ) then
+   62.                $LB_Y0 = 1
+   62.                $UB_Y1 = $MR_len_S27
+   62.                $Subscript_Y5 = $i1_S28
+   62.                _bounds_error( $_File_Y40, $Line_Y62, $_Name_Y64, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y65 )
+   62.             endif
+   62.             $MR_ground_12 = _anint( -1[loc( g ),$i1_S28] * $s_S0 ) / $s_S0
+   62.             -1[loc( ground ),$i1_S28] = $MR_ground_12
+   63.             if ( int( $CS_2 ) == 0 ) then
+   63.                $LB_Y0 = 1
+   63.                $UB_Y1 = $MR_len_S27
+   63.                $Subscript_Y5 = $i1_S28
+   63.                _bounds_error( $_File_Y40, $Line_Y66, $_Name_Y64, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y67 )
+   63.             endif
+   63.             0[loc( gmax ),0] = $MR_ground_12
+   64.             0[loc( gmin ),0] = $MR_ground_12
+   65.             if ( $MR_len_S27 - $i1_S28 > 0 ) then
+   65.                $I_L65_S29 = 0
+   66.                if ( $i1_S28 < 0 ) then
+   66.                   $LB_Y0 = 1
+   66.                   $LCS_MR_len_6 = $MR_len_S27
+   66.                   $UB_Y1 = $LCS_MR_len_6
+   66.                   $Subscript_Y2 = 1 + $i1_S28
+   66.                   $Subscript_Y3 = $LCS_MR_len_6
+   66.                   $Subscript_Y4 = 1
+   66.                   _rbounds_error( $_File_Y40, $Line_Y69, $_Name_Y68, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y70 )
+   66.                endif
+   69.                $SC_gmin_I4 = $MR_ground_12
+   68.                $SC_gmax_I3 = $MR_ground_12
+   73.                $LCS_MR_len_7 = $MR_len_S27 - $i1_S28
+   73.                $LIS_E11 = $LCS_MR_len_7
+   67.                $LIS_E10 = loc( ground )
+   67.                $LIS_E9 = loc( g )
+   67.                $LIS_E8 = 1 + $i1_S28
+   67.                $LIS_S22 = $MR_len_S27
+   67.                $LIS_E7 = -1 + $LCS_MR_len_7
+   66.                $LIS_E6 = loc( mg )
+   66.                $LIS_E5 = $i1_S28
+   65.                do
+   66.                   $LCS_8 = $LIS_E5 + $I_L65_S29
+   66.                   if ( 0[$LIS_E6,$LCS_8] /= 0 ) then
+   67.                      if ( or( $LCS_8, $LIS_E7 - $I_L65_S29 ) < 0 ) then
+   67.                         $LB_Y0 = 1
+   67.                         $UB_Y1 = $LIS_S22
+   67.                         $Subscript_Y5 = $LIS_E8 + $I_L65_S29
+   67.                         _bounds_error( $_File_Y40, $Line_Y72, $_Name_Y71, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y73 )
+   67.                      endif
+   67.                      $LCS_9 = $LIS_E5 + $I_L65_S29
+   67.                      $ground_WR0_R1 = _anint( 0[$LIS_E9,$LCS_9] * $s_S0 ) / $s_S0
+   67.                      if ( or( $LCS_9, $LIS_E7 - $I_L65_S29 ) < 0 ) then
+   67.                         $LB_Y0 = 1
+   67.                         $UB_Y1 = $LIS_S22
+   67.                         $Subscript_Y5 = $LIS_E8 + $I_L65_S29
+   67.                         _bounds_error( $_File_Y40, $Line_Y72, $_Name_Y74, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y75 )
+   67.                      endif
+   67.                      0[$LIS_E10,$LIS_E5 + $I_L65_S29] = $ground_WR0_R1
+   68.                      $SC_gmax_I3 = max( $ground_WR0_R1, $SC_gmax_I3 )
+   69.                      $SC_gmin_I4 = min( $ground_WR0_R1, $SC_gmin_I4 )
+   69.                   else
+   71.                      if ( or( $LIS_E5 + $I_L65_S29, $LIS_E7 - $I_L65_S29 ) < 0 ) then
+   71.                         $LB_Y0 = 1
+   71.                         $UB_Y1 = $LIS_S22
+   71.                         $Subscript_Y5 = $LIS_E8 + $I_L65_S29
+   71.                         _bounds_error( $_File_Y40, $Line_Y76, $_Name_Y74, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y77 )
+   71.                      endif
+   71.                      0[$LIS_E10,$LIS_E5 + $I_L65_S29] = 0.0
+   71.                   endif
+   73.                   $I_L65_S29 = 1 + $I_L65_S29
+   72.                   if ( $I_L65_S29 >= $LIS_E11 ) exit
+   72.                enddo
+   69.                0[loc( gmin ),0] = $SC_gmin_I4
+   68.                0[loc( gmax ),0] = $SC_gmax_I3
+   68.             endif
+   68.          else
+   75.             if ( $MR_len_S27 > 0 ) then
+   76.                $W2 = 0.0
+   76.                __sset_cce( 0[loc( ground ),0], $W2, 0[loc( len ),0] )
+   76.             endif
+   78.             0[loc( gmax ),0] = 0.0
+   79.             0[loc( gmin ),0] = 0.0
+   79.          endif
+   79.       endif
+   84.       $MR_gmin_7 = 0[loc( gmin ),0]
+   84.       $MR_gmax_6 = 0[loc( gmax ),0]
+   84.       0[loc( nbit ),0] = int( 1.0 + 1.442695 * log( 8.9999998e-1 + ( $MR_gmax_6 - $MR_gmin_7 ) * $s_S0 ) )
+   87.       return
+   87.       end
+   87.       

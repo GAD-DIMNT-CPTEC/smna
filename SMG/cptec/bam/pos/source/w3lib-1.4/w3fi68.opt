@@ -1,0 +1,96 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi68.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi68.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi68( id, pds )
+  102.        _substr(pds(1),1,1) = character*1( mod( id(1) / 65536, 256 ) )
+  103.        _substr(pds(2),1,1) = character*1( mod( id(1) / 256, 256 ) )
+  104.        _substr(pds(3),1,1) = character*1( mod( id(1), 256 ) )
+  105.        _substr(pds(4),1,1) = character*1( id(2) )
+  106.        _substr(pds(5),1,1) = character*1( id(3) )
+  107.        _substr(pds(6),1,1) = character*1( id(4) )
+  108.        _substr(pds(7),1,1) = character*1( id(5) )
+  109.       $i_S0 = 0
+  110.       if ( id(6) /= 0 ) then
+  110.          $i_S0 = 128
+  110.       endif
+  111.       if ( id(7) /= 0 ) then
+  111.          $i_S0 = 64 + $i_S0
+  111.       endif
+  112.        _substr(pds(8),1,1) = character*1( $i_S0 )
+  114.        _substr(pds(9),1,1) = character*1( id(8) )
+  115.        _substr(pds(10),1,1) = character*1( id(9) )
+  116.       $i9_S1 = id(9)
+  121.       if ( $i9_S1 <= 0 .orelse. $i9_S1 > 100 ) then
+  121.          if ( $i9_S1 == 102 .orelse. $i9_S1 == 103 .orelse. $i9_S1 == 105 .orelse. $i9_S1 == 107 .orelse. $i9_S1 == 109 .orelse. $i9_S1 == 111 .orelse. $i9_S1 == 113 .orelse. $i9_S1 == 115 .orelse. $i9_S1 == 117 .orelse. $i9_S1 == 119 .orelse. $i9_S1 == 125 .orelse. $i9_S1 == 126 .orelse. $i9_S1 == 160 .orelse. $i9_S1 == 200 .orelse. $i9_S1 == 201 .orelse. $i9_S1 == 235 .orelse. $i9_S1 == 237 .orelse. $i9_S1 == 238 ) then
+  121.             goto 10
+  121.          else
+  136.              _substr(pds(11),1,1) = character*1( id(10) )
+  137.              _substr(pds(12),1,1) = character*1( id(11) )
+  137.          endif
+  137.       else
+  137.    10    continue
+  128.          $level_S2 = id(11)
+  129.          if ( $level_S2 < 0 ) then
+  131.             $level_S2 = or( 32768, -$level_S2 )
+  131.          endif
+  133.           _substr(pds(11),1,1) = character*1( mod( $level_S2 / 256, 256 ) )
+  134.           _substr(pds(12),1,1) = character*1( mod( $level_S2, 256 ) )
+  134.       endif
+  139.        _substr(pds(13),1,1) = character*1( id(12) )
+  140.        _substr(pds(14),1,1) = character*1( id(13) )
+  141.        _substr(pds(15),1,1) = character*1( id(14) )
+  142.        _substr(pds(16),1,1) = character*1( id(15) )
+  143.        _substr(pds(17),1,1) = character*1( id(16) )
+  144.        _substr(pds(18),1,1) = character*1( id(17) )
+  149.       if ( id(20) == 10 ) then
+  150.           _substr(pds(19),1,1) = character*1( mod( id(18) / 256, 256 ) )
+  151.           _substr(pds(20),1,1) = character*1( mod( id(18), 256 ) )
+  151.       else
+  153.           _substr(pds(19),1,1) = character*1( id(18) )
+  154.           _substr(pds(20),1,1) = character*1( id(19) )
+  154.       endif
+  156.        _substr(pds(21),1,1) = character*1( id(20) )
+  157.        _substr(pds(22),1,1) = character*1( mod( id(21) / 256, 256 ) )
+  158.        _substr(pds(23),1,1) = character*1( mod( id(21), 256 ) )
+  159.        _substr(pds(24),1,1) = character*1( id(22) )
+  160.        _substr(pds(25),1,1) = character*1( id(23) )
+  161.        _substr(pds(26),1,1) = character*1( id(24) )
+  162.       $iscale_S3 = id(25)
+  163.       if ( $iscale_S3 < 0 ) then
+  165.          $iscale_S3 = or( 32768, -$iscale_S3 )
+  165.       endif
+  167.        _substr(pds(27),1,1) = character*1( mod( $iscale_S3 / 256, 256 ) )
+  168.        _substr(pds(28),1,1) = character*1( mod( $iscale_S3, 256 ) )
+  169.       if ( id(1) > 28 ) then
+  170.           _substr(pds(29),1,1) = character*1( id(26) )
+  171.           _substr(pds(30),1,1) = character*1( id(27) )
+  171.       endif
+  176.       if ( id(1) > 30 ) then
+  177.          $k_S4 = id(1)
+  178.          if ( -31 + $k_S4 >= 0 ) then
+  178.             $I_L178_6 = 0
+  178.             do
+  179.                 _substr(pds(31 + $I_L178_6),1,1) = ''
+  180.                $I_L178_6 = 1 + $I_L178_6
+  178.                if ( $I_L178_6 >= -30 + $k_S4 ) exit
+  178.             enddo
+  178.          endif
+  178.       endif
+  184.       return
+  184.       end
+  184.       

@@ -1,0 +1,93 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  pdsens.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/pdsens.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+   39.       
+   39.       subroutine pdsens( kens, kprob, xprob, kclust, kmembr, ilast, msga )
+   43.       $MR_ilast_0 = 0[loc( ilast ),0]
+   43.       $LCS_0 = $MR_ilast_0 < 41
+   43.       if ( int( $LCS_0 ) == 0 ) then
+   50.          $il_S1 = il
+   50.          $il_S2 = cvmg( cvmg( cvmg( cvmg( $il_S1, 45, $LCS_0 ), 55, $MR_ilast_0 < 46 ), 76, $MR_ilast_0 < 61 ), 86, $MR_ilast_0 < 77 )
+   50.          il = $il_S2
+   51.          if ( -42 + $il_S2 >= 0 ) then
+   51.             $I_L51_S4 = 0
+   52.             $SR_S3 = 336
+   53.             $LIS_E1 = -41 + $il_S2
+   51.             do
+   52.                t$4 = $SR_S3
+   52.                $Con_P3 = 0
+   52.                $Con_P4 = 8
+   52.                call sbytec( substr[msga,0:1], $Con_P3, t$4, $Con_P4 )
+   52.                $SR_S3 = 8 + $SR_S3
+   53.                $I_L51_S4 = 1 + $I_L51_S4
+   53.                if ( $I_L51_S4 >= $LIS_E1 ) exit
+   53.             enddo
+   53.          endif
+   55.          $Con_P3 = 0
+   55.          $Con_P4 = 24
+   55.          call sbytec( substr[msga,0:1], il, $Con_P3, $Con_P4 )
+   57.          $il_S5 = il
+   57.          if ( $il_S5 >= 45 ) then
+   57.             $Con_P3 = 320
+   57.             $Con_P4 = 8
+   57.             $Con_P5 = 0
+   57.             $Con_P6 = 5
+   57.             call sbytesc( substr[msga,0:1], 0[loc( kens ),0], $Con_P3, $Con_P4, $Con_P5, $Con_P6 )
+   57.          endif
+   59.          if ( $il_S5 >= 55 ) then
+   60.             $Con_P3 = 360
+   60.             $Con_P4 = 8
+   60.             $Con_P5 = 0
+   60.             $Con_P6 = 2
+   60.             call sbytesc( substr[msga,0:1], 0[loc( kprob ),0], $Con_P3, $Con_P4, $Con_P5, $Con_P6 )
+   61.             call w3fi01( lw )
+   62.             $MR_lw_2 = lw
+   62.             t$4 = _lsh( $MR_lw_2, 3 )
+   62.             call w3fi76( 0[loc( xprob ),0], iexp, imant, t$4 )
+   63.             $Con_P3 = 376
+   63.             $Con_P4 = 8
+   63.             call sbytec( substr[msga,0:1], iexp, $Con_P3, $Con_P4 )
+   64.             $Con_P3 = 384
+   64.             $Con_P4 = 24
+   64.             call sbytec( substr[msga,0:1], imant, $Con_P3, $Con_P4 )
+   65.             t$4 = _lsh( $MR_lw_2, 3 )
+   65.             call w3fi76( 1[loc( xprob ),0], iexp, imant, t$4 )
+   66.             $Con_P3 = 408
+   66.             $Con_P4 = 8
+   66.             call sbytec( substr[msga,0:1], iexp, $Con_P3, $Con_P4 )
+   67.             $Con_P3 = 416
+   67.             $Con_P4 = 24
+   67.             call sbytec( substr[msga,0:1], imant, $Con_P3, $Con_P4 )
+   67.          endif
+   70.          if ( $il_S5 >= 76 ) then
+   70.             $Con_P3 = 480
+   70.             $Con_P4 = 8
+   70.             $Con_P5 = 0
+   70.             $Con_P6 = 16
+   70.             call sbytesc( substr[msga,0:1], 0[loc( kclust ),0], $Con_P3, $Con_P4, $Con_P5, $Con_P6 )
+   70.          endif
+   72.          if ( $il_S5 >= 86 ) then
+   72.             $Con_P3 = 608
+   72.             $Con_P4 = 1
+   72.             $Con_P5 = 0
+   72.             $Con_P6 = 80
+   72.             call sbytesc( substr[msga,0:1], 0[loc( kmembr ),0], $Con_P3, $Con_P4, $Con_P5, $Con_P6 )
+   72.          endif
+   72.       endif
+   76.       return
+   76.       end
+   76.       

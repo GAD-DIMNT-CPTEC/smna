@@ -1,0 +1,375 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  ixgb.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/ixgb.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine ixgb( lugb, lskip, lgrib, nlen, nnum, mlen, cbuf )
+   60.       0[loc( mlen ),0] = 112
+   61.       $I_S1 = 0
+   61.       do
+   61.          substr[cindex,$I_S1:1] = ''
+   61.          $I_S1 = 1 + $I_S1
+   61.          if ( $I_S1 >= 320 ) exit
+   61.       enddo
+   62.       $Con_P16 = 0
+   62.       $Con_P17 = 32
+   62.       call sbytec( substr[cindex,0:1], 0[loc( lskip ),0], $Con_P16, $Con_P17 )
+   63.       $Con_P16 = 160
+   63.       $Con_P17 = 32
+   63.       call sbytec( substr[cindex,0:1], 0[loc( lgrib ),0], $Con_P16, $Con_P17 )
+   66.       iskpds = 8
+   67.       $MR_lskip_0 = 0[loc( lskip ),0]
+   67.       ibskip = $MR_lskip_0
+   68.       ibread = 36
+   69.       call baread( 0[loc( lugb ),0], ibskip, ibread, lbread, substr[cbread,0:1] )
+   70.       $ibread_S2 = ibread
+   70.       $lbread_S3 = lbread
+   70.       if ( $lbread_S3 - $ibread_S2 == 0 ) then
+   71.          substr[cindex,24:1] = substr[cbread,7:1]
+   72.          $Con_P16 = 32
+   72.          $Con_P17 = 32
+   72.          call sbytec( substr[cindex,0:1], iskpds, $Con_P16, $Con_P17 )
+   73.          $MR_iskpds_4 = iskpds
+   73.          t$2 = _lsh( $MR_iskpds_4, 3 )
+   73.          $Con_P16 = 24
+   73.          call gbytec( substr[cbread,0:1], lenpds, t$2, $Con_P16 )
+   74.          t$2 = 56 + _lsh( $MR_iskpds_4, 3 )
+   74.          $Con_P16 = 1
+   74.          call gbytec( substr[cbread,0:1], incgds, t$2, $Con_P16 )
+   75.          t$2 = 57 + _lsh( $MR_iskpds_4, 3 )
+   75.          $Con_P16 = 1
+   75.          call gbytec( substr[cbread,0:1], incbms, t$2, $Con_P16 )
+   77.          $MR_lenpds_5 = lenpds
+   77.          $F_A33 = ( min( 28, $MR_lenpds_5 ) )
+   77.          if ( $MR_lenpds_5 > 0 ) then !  99.50%
+   77.             $I_S4 = 0
+   77.             $LCS_0 = $MR_iskpds_4
+   77.             $LCS_F_1 = $F_A33 + $LCS_0
+   77.             if ( int( $MR_iskpds_4 >= 0 .and. $LCS_F_1 <= 320 ) == 0 ) then
+   77.                $LB_Y0 = 1
+   77.                $UB_Y1 = 320
+   77.                $Subscript_Y2 = 1 + $LCS_0
+   77.                $Subscript_Y3 = $LCS_F_1
+   77.                $Subscript_Y4 = 1
+   77.                _rbounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y43 )
+   77.             endif
+   77.             if ( -295 + $F_A33 > 0 ) then
+   77.                $LB_Y0 = 1
+   77.                $UB_Y1 = 320
+   77.                $Subscript_Y2 = 26
+   77.                $Subscript_Y3 = 25 + $F_A33
+   77.                $Subscript_Y4 = 1
+   77.                _rbounds_error( $_File_Y40, $Line_Y42, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y45 )
+   77.             endif
+   77.             $LIS_E0 = $MR_iskpds_4
+   77.             do
+   77.                substr[cindex,25 + $I_S4:1] = substr[cbread,$LIS_E0 + $I_S4:1]
+   77.                $I_S4 = 1 + $I_S4
+   77.                if ( $I_S4 >= $F_A33 ) exit
+   77.             enddo
+   77.          endif
+   78.          $isktot_S26 = $MR_iskpds_4 + $MR_lenpds_5
+   81.          if ( $MR_lenpds_5 > 28 ) then
+   84.             $ibskip_S5 = $MR_lskip_0 + $MR_iskpds_4 + 28
+   84.             ibskip = $ibskip_S5
+   85.             $CS_0 = min( 12, -28 + $MR_lenpds_5 )
+   85.             ibread = $CS_0
+   86.             call baread( 0[loc( lugb ),0], ibskip, ibread, lbread, substr[cbread,0:1] )
+   87.             $ibread_S6 = ibread
+   87.             $lbread_S7 = lbread
+   87.             if ( $lbread_S7 - $ibread_S6 == 0 ) then
+   88.                $F_A34 = $CS_0
+   88.                $I_S8 = 0
+   88.                if ( $F_A34 > 320 ) then
+   88.                   $LB_Y0 = 1
+   88.                   $UB_Y1 = 320
+   88.                   $Subscript_Y2 = 1
+   88.                   $Subscript_Y3 = $F_A34
+   88.                   $Subscript_Y4 = 1
+   88.                   _rbounds_error( $_File_Y40, $Line_Y47, $_Name_Y46, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y48 )
+   88.                endif
+   88.                if ( -148 + $F_A34 > 0 ) then
+   88.                   $LB_Y0 = 1
+   88.                   $UB_Y1 = 320
+   88.                   $Subscript_Y2 = 173
+   88.                   $Subscript_Y3 = 172 + $F_A34
+   88.                   $Subscript_Y4 = 1
+   88.                   _rbounds_error( $_File_Y40, $Line_Y47, $_Name_Y49, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y50 )
+   88.                endif
+   88.                do
+   88.                   substr[cindex,172 + $I_S8:1] = substr[cbread,$I_S8:1]
+   88.                   $I_S8 = 1 + $I_S8
+   88.                   if ( $I_S8 >= $F_A34 ) exit
+   88.                enddo
+   91.                $ibskip_S9 = $MR_lskip_0 + $MR_iskpds_4 + 40
+   91.                ibskip = $ibskip_S9
+   92.                $CS_1 = min( 60, -40 + $MR_lenpds_5 )
+   92.                ibread = $CS_1
+   93.                call baread( 0[loc( lugb ),0], ibskip, ibread, lbread, substr[cbread,0:1] )
+   94.                $ibread_S10 = ibread
+   94.                $lbread_S11 = lbread
+   94.                if ( $lbread_S11 - $ibread_S10 == 0 ) then
+   95.                   $LCS_lenpds_2 = -40 + $MR_lenpds_5
+   95.                   $F_A35 = ( min( 60, $LCS_lenpds_2 ) )
+   95.                   if ( $LCS_lenpds_2 > 0 ) then !  99.50%
+   95.                      $I_S12 = 0
+   95.                      if ( $F_A35 > 320 ) then
+   95.                         $LB_Y0 = 1
+   95.                         $UB_Y1 = 320
+   95.                         $Subscript_Y2 = 1
+   95.                         $Subscript_Y3 = $F_A35
+   95.                         $Subscript_Y4 = 1
+   95.                         _rbounds_error( $_File_Y40, $Line_Y51, $_Name_Y46, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y52 )
+   95.                      endif
+   95.                      if ( -208 + $F_A35 > 0 ) then
+   95.                         $LB_Y0 = 1
+   95.                         $UB_Y1 = 320
+   95.                         $Subscript_Y2 = 113
+   95.                         $Subscript_Y3 = 112 + $F_A35
+   95.                         $Subscript_Y4 = 1
+   95.                         _rbounds_error( $_File_Y40, $Line_Y51, $_Name_Y53, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y54 )
+   95.                      endif
+   95.                      do
+   95.                         substr[cindex,112 + $I_S12:1] = substr[cbread,$I_S12:1]
+   95.                         $I_S12 = 1 + $I_S12
+   95.                         if ( $I_S12 >= $F_A35 ) exit
+   95.                      enddo
+   95.                   endif
+   96.                   $MR_mlen_S13 = max( 112, max( 112 + $CS_1, 172 + $CS_0 ) )
+   96.                   0[loc( mlen ),0] = $MR_mlen_S13
+   96.                   goto 10
+   96.                endif
+   96.             endif
+   96.          else
+   96.    10       continue
+  100.             if ( incgds /= 0 ) then
+  101.                $iskgds_S14 = $MR_iskpds_4 + $MR_lenpds_5
+  101.                iskgds = $iskgds_S14
+  102.                $ibskip_S15 = $MR_lskip_0 + $MR_iskpds_4 + $MR_lenpds_5
+  102.                ibskip = $ibskip_S15
+  103.                ibread = 42
+  104.                call baread( 0[loc( lugb ),0], ibskip, ibread, lbread, substr[cbread,0:1] )
+  105.                $ibread_S16 = ibread
+  105.                $lbread_S17 = lbread
+  105.                if ( $lbread_S17 - $ibread_S16 == 0 ) then
+  106.                   $Con_P16 = 64
+  106.                   $Con_P17 = 32
+  106.                   call sbytec( substr[cindex,0:1], iskgds, $Con_P16, $Con_P17 )
+  107.                   $Con_P16 = 0
+  107.                   $Con_P17 = 24
+  107.                   call gbytec( substr[cbread,0:1], lengds, $Con_P16, $Con_P17 )
+  109.                   $MR_lengds_9 = lengds
+  109.                   $F_A36 = ( min( 42, $MR_lengds_9 ) )
+  109.                   if ( $MR_lengds_9 > 0 ) then !  99.50%
+  109.                      $I_S18 = 0
+  109.                      if ( $F_A36 > 320 ) then
+  109.                         $LB_Y0 = 1
+  109.                         $UB_Y1 = 320
+  109.                         $Subscript_Y2 = 1
+  109.                         $Subscript_Y3 = $F_A36
+  109.                         $Subscript_Y4 = 1
+  109.                         _rbounds_error( $_File_Y40, $Line_Y55, $_Name_Y46, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y56 )
+  109.                      endif
+  109.                      if ( -267 + $F_A36 > 0 ) then
+  109.                         $LB_Y0 = 1
+  109.                         $UB_Y1 = 320
+  109.                         $Subscript_Y2 = 54
+  109.                         $Subscript_Y3 = 53 + $F_A36
+  109.                         $Subscript_Y4 = 1
+  109.                         _rbounds_error( $_File_Y40, $Line_Y55, $_Name_Y57, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y58 )
+  109.                      endif
+  109.                      do
+  109.                         substr[cindex,53 + $I_S18:1] = substr[cbread,$I_S18:1]
+  109.                         $I_S18 = 1 + $I_S18
+  109.                         if ( $I_S18 >= $F_A36 ) exit
+  109.                      enddo
+  109.                   endif
+  110.                   $iskgds_S19 = iskgds
+  110.                   $isktot_S26 = $MR_lengds_9 + $iskgds_S19
+  111.                   if ( $MR_lengds_9 > 42 ) then
+  114.                      $ibskip_S20 = $MR_lskip_0 + $iskgds_S19 + 42
+  114.                      ibskip = $ibskip_S20
+  115.                      $CS_2 = min( 136, -42 + $MR_lengds_9 )
+  115.                      ibread = $CS_2
+  116.                      call baread( 0[loc( lugb ),0], ibskip, ibread, lbread, substr[cbread,0:1] )
+  117.                      $ibread_S21 = ibread
+  117.                      $lbread_S22 = lbread
+  117.                      if ( $lbread_S22 - $ibread_S21 == 0 ) then
+  118.                         $F_A37 = $CS_2
+  118.                         $I_S23 = 0
+  118.                         if ( $F_A37 > 320 ) then
+  118.                            $LB_Y0 = 1
+  118.                            $UB_Y1 = 320
+  118.                            $Subscript_Y2 = 1
+  118.                            $Subscript_Y3 = $F_A37
+  118.                            $Subscript_Y4 = 1
+  118.                            _rbounds_error( $_File_Y40, $Line_Y59, $_Name_Y46, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y60 )
+  118.                         endif
+  118.                         if ( -136 + $F_A37 > 0 ) then
+  118.                            $LB_Y0 = 1
+  118.                            $UB_Y1 = 320
+  118.                            $Subscript_Y2 = 185
+  118.                            $Subscript_Y3 = 184 + $F_A37
+  118.                            $Subscript_Y4 = 1
+  118.                            _rbounds_error( $_File_Y40, $Line_Y59, $_Name_Y61, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y62 )
+  118.                         endif
+  118.                         do
+  118.                            substr[cindex,184 + $I_S23:1] = substr[cbread,$I_S23:1]
+  118.                            $I_S23 = 1 + $I_S23
+  118.                            if ( $I_S23 >= $F_A37 ) exit
+  118.                         enddo
+  119.                         $LCS_mlen_3 = loc( mlen )
+  119.                         $MR_mlen_S24 = 0[$LCS_mlen_3,0]
+  119.                         $MR_mlen_S25 = max( $MR_mlen_S24, 184 + $CS_2 )
+  119.                         0[$LCS_mlen_3,0] = $MR_mlen_S25
+  119.                         goto 20
+  119.                      endif
+  119.                   else
+  119.                      goto 20
+  119.                   endif
+  119.                endif
+  119.             else
+  119.    20          continue
+  124.                if ( incbms /= 0 ) then
+  125.                   iskbms = $isktot_S26
+  126.                   $ibskip_S27 = $MR_lskip_0 + $isktot_S26
+  126.                   ibskip = $ibskip_S27
+  127.                   ibread = 6
+  128.                   call baread( 0[loc( lugb ),0], ibskip, ibread, lbread, substr[cbread,0:1] )
+  129.                   $ibread_S28 = ibread
+  129.                   $lbread_S29 = lbread
+  129.                   if ( $lbread_S29 - $ibread_S28 == 0 ) then
+  130.                      $Con_P16 = 96
+  130.                      $Con_P17 = 32
+  130.                      call sbytec( substr[cindex,0:1], iskbms, $Con_P16, $Con_P17 )
+  131.                      $Con_P16 = 0
+  131.                      $Con_P17 = 24
+  131.                      call gbytec( substr[cbread,0:1], lenbms, $Con_P16, $Con_P17 )
+  133.                      $MR_lenbms_11 = lenbms
+  133.                      $F_A38 = ( min( 6, $MR_lenbms_11 ) )
+  133.                      if ( $MR_lenbms_11 > 0 ) then !  99.50%
+  133.                         $I_S30 = 0
+  133.                         if ( $F_A38 > 320 ) then
+  133.                            $LB_Y0 = 1
+  133.                            $UB_Y1 = 320
+  133.                            $Subscript_Y2 = 1
+  133.                            $Subscript_Y3 = $F_A38
+  133.                            $Subscript_Y4 = 1
+  133.                            _rbounds_error( $_File_Y40, $Line_Y63, $_Name_Y46, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y64 )
+  133.                         endif
+  133.                         if ( -225 + $F_A38 > 0 ) then
+  133.                            $LB_Y0 = 1
+  133.                            $UB_Y1 = 320
+  133.                            $Subscript_Y2 = 96
+  133.                            $Subscript_Y3 = 95 + $F_A38
+  133.                            $Subscript_Y4 = 1
+  133.                            _rbounds_error( $_File_Y40, $Line_Y63, $_Name_Y65, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y66 )
+  133.                         endif
+  133.                         do
+  133.                            substr[cindex,95 + $I_S30:1] = substr[cbread,$I_S30:1]
+  133.                            $I_S30 = 1 + $I_S30
+  133.                            if ( $I_S30 >= $F_A38 ) exit
+  133.                         enddo
+  133.                      endif
+  134.                      $isktot_S26 = iskbms + $MR_lenbms_11
+  134.                      goto 30
+  134.                   endif
+  134.                else
+  134.    30             continue
+  138.                   iskbds = $isktot_S26
+  139.                   $ibskip_S31 = $MR_lskip_0 + $isktot_S26
+  139.                   ibskip = $ibskip_S31
+  140.                   ibread = 11
+  141.                   call baread( 0[loc( lugb ),0], ibskip, ibread, lbread, substr[cbread,0:1] )
+  142.                   $ibread_S32 = ibread
+  142.                   $lbread_S33 = lbread
+  142.                   if ( $lbread_S33 - $ibread_S32 == 0 ) then
+  143.                      $Con_P16 = 128
+  143.                      $Con_P17 = 32
+  143.                      call sbytec( substr[cindex,0:1], iskbds, $Con_P16, $Con_P17 )
+  144.                      $Con_P16 = 0
+  144.                      $Con_P17 = 24
+  144.                      call gbytec( substr[cbread,0:1], lenbds, $Con_P16, $Con_P17 )
+  146.                      $MR_lenbds_13 = lenbds
+  146.                      $F_A39 = ( min( 11, $MR_lenbds_13 ) )
+  146.                      if ( $MR_lenbds_13 > 0 ) then !  99.50%
+  146.                         $I_S34 = 0
+  146.                         if ( $F_A39 > 320 ) then
+  146.                            $LB_Y0 = 1
+  146.                            $UB_Y1 = 320
+  146.                            $Subscript_Y2 = 1
+  146.                            $Subscript_Y3 = $F_A39
+  146.                            $Subscript_Y4 = 1
+  146.                            _rbounds_error( $_File_Y40, $Line_Y67, $_Name_Y46, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y68 )
+  146.                         endif
+  146.                         if ( -219 + $F_A39 > 0 ) then
+  146.                            $LB_Y0 = 1
+  146.                            $UB_Y1 = 320
+  146.                            $Subscript_Y2 = 102
+  146.                            $Subscript_Y3 = 101 + $F_A39
+  146.                            $Subscript_Y4 = 1
+  146.                            _rbounds_error( $_File_Y40, $Line_Y67, $_Name_Y69, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y70 )
+  146.                         endif
+  146.                         do
+  146.                            substr[cindex,101 + $I_S34:1] = substr[cbread,$I_S34:1]
+  146.                            $I_S34 = 1 + $I_S34
+  146.                            if ( $I_S34 >= $F_A39 ) exit
+  146.                         enddo
+  146.                      endif
+  149.                      $MR_nlen_14 = 0[loc( nlen ),0]
+  149.                      $LCS_mlen_4 = loc( mlen )
+  149.                      $MR_mlen_S35 = 0[$LCS_mlen_4,0]
+  149.                      $MR_mlen_S36 = min( $MR_nlen_14, $MR_mlen_S35 )
+  149.                      0[$LCS_mlen_4,0] = $MR_mlen_S36
+  151.                      $F_A40 = $MR_mlen_S36
+  151.                      if ( $MR_mlen_S36 > 0 ) then !  99.50%
+  151.                         $I_S38 = 0
+  151.                         if ( $F_A40 > 320 ) then
+  151.                            $LB_Y0 = 1
+  151.                            $UB_Y1 = 320
+  151.                            $Subscript_Y2 = 1
+  151.                            $Subscript_Y3 = $F_A40
+  151.                            $Subscript_Y4 = 1
+  151.                            _rbounds_error( $_File_Y40, $Line_Y72, $_Name_Y71, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y73 )
+  151.                         endif
+  151.                         $MR_nnum_S37 = 0[loc( nnum ),0]
+  151.                         $LIS_E1 = ( $MR_nlen_14 * ( -1 + $MR_nnum_S37 ) )
+  151.                         do
+  151.                            substr[cbuf,$LIS_E1 + $I_S38:1] = substr[cindex,$I_S38:1]
+  151.                            $I_S38 = 1 + $I_S38
+  151.                            if ( $I_S38 >= $F_A40 ) exit
+  151.                         enddo
+  151.                      endif
+  152.                      $LCS_MR_nlen_5 = $MR_nlen_14 - $MR_mlen_S36
+  152.                      $F_A41 = $LCS_MR_nlen_5
+  152.                      if ( $LCS_MR_nlen_5 > 0 ) then !  99.50%
+  152.                         $I_S40 = 0
+  152.                         $MR_nnum_S39 = 0[loc( nnum ),0]
+  152.                         $LIS_E2 = ( $MR_mlen_S36 + $MR_nlen_14 * ( -1 + $MR_nnum_S39 ) )
+  152.                         do
+  152.                            substr[cbuf,$LIS_E2 + $I_S40:1] = ''
+  152.                            $I_S40 = 1 + $I_S40
+  152.                            if ( $I_S40 >= $F_A41 ) exit
+  152.                         enddo
+  152.                      endif
+  152.                   endif
+  152.                endif
+  152.             endif
+  152.          endif
+  152.       endif
+  155.       return
+  155.       end
+  155.       

@@ -1,0 +1,59 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi59.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi59.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi59( field, npts, nbits, nwork, npfld, iscale, len, rmin )
+   70.       len = 0
+   71.       iscale = 0
+   72.       if ( nbits > 0 ) then
+   72.          if ( nbits <= 32 ) then
+   73.             if ( npts > 0 ) then
+   77.                $rmax_S0 = field(1)
+   78.                rmin = $rmax_S0
+   79.                if ( -2 + npts >= 0 ) then
+   79.                   $I_L79_8 = 0
+   79. !dir$ ivdep
+   79.                   do
+   80.                      $rmax_S0 = max( $rmax_S0, field(2 + $I_L79_8) )
+   81.                      rmin = min( rmin, field(2 + $I_L79_8) )
+   82.                      $I_L79_8 = 1 + $I_L79_8
+   79.                      if ( $I_L79_8 >= -1 + npts ) exit
+   79.                   enddo
+   79.                endif
+   86.                if ( $rmax_S0 /= rmin ) then
+   98.                   iscale = _anint( 5.0000101e-1 + 1.442695 * log( ( ( $rmax_S0 + -rmin ) * 1.0/( -5.0e-1 + 2.0 ** nbits ) ) ) )
+  102.                   $twon_S2 = 2.0 ** -iscale
+  103.                   $I_L103_10 = 0
+  103. !dir$ ivdep
+  103.                   do
+  104.                      nwork(1 + $I_L103_10) = _anint( ( field(1 + $I_L103_10) + -rmin ) * $twon_S2 )
+  105.                      $I_L103_10 = 1 + $I_L103_10
+  103.                      if ( $I_L103_10 >= npts ) exit
+  103.                   enddo
+  109.                   koff = 0
+  110.                   iskip = 0
+  114.                   call sbytesc(  _substr(npfld(1),1,1), nwork(1), koff, nbits, iskip, npts )
+  119.                   noff = nbits * npts
+  120.                   call sbytec(  _substr(npfld(1),1,1), kzero, noff, 7 )
+  124.                   len = ( 7 + noff ) / 8
+  124.                endif
+  124.             endif
+  124.          endif
+  124.       endif
+  129.       return
+  129.       end
+  129.       

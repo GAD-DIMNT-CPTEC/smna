@@ -1,0 +1,268 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgb1s.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgb1s.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgb1s( cbuf, nlen, nnum, j, jpds, jgds, jens, k, kpds, kgds, kens, lskip, lgrib, iret )
+    2.       t$1 = ( nlen * nnum )
+   62.       t$5 = _zla( 0, ( nlen * nnum ) )
+   73.       k = j
+   74.       lskip = 0
+   75.       lgrib = 0
+   76.       iret = 1
+   78.       $lpdsp_S1 = 0
+   79.       $I_L79_24 = 0
+   79. !dir$ ivdep
+   79.       do
+   80.          if ( jpds(1 + $I_L79_24) /= -1 ) then
+   81.             $lpdsp_S1 = 1 + $lpdsp_S1
+   82.             ipdsp($lpdsp_S1) = ( 1 + $I_L79_24 )
+   82.          endif
+   85.          $I_L79_24 = 1 + $I_L79_24
+   84.          if ( $I_L79_24 >= 23 ) exit
+   84.       enddo
+   87.       $lgdsp_S3 = 0
+   88.       if ( jpds(3) == 255 ) then
+   89.          $I_L89_26 = 0
+   89. !dir$ ivdep
+   89.          do
+   90.             if ( jgds(1 + $I_L89_26) /= -1 ) then
+   91.                $lgdsp_S3 = 1 + $lgdsp_S3
+   92.                igdsp($lgdsp_S3) = ( 1 + $I_L89_26 )
+   92.             endif
+   95.             $I_L89_26 = 1 + $I_L89_26
+   94.             if ( $I_L89_26 >= 22 ) exit
+   94.          enddo
+   94.       endif
+   98.       $lensp_S5 = 0
+   99.       if ( jpds(23) == 2 ) then
+  100.          $I_L100_28 = 0
+  100. !dir$ ivdep
+  100.          do
+  101.             if ( jens(1 + $I_L100_28) /= -1 ) then
+  102.                $lensp_S5 = 1 + $lensp_S5
+  103.                iensp($lensp_S5) = ( 1 + $I_L100_28 )
+  103.             endif
+  106.             $I_L100_28 = 1 + $I_L100_28
+  105.             if ( $I_L100_28 >= 5 ) exit
+  105.          enddo
+  105.       endif
+  110.       if ( j < nnum ) then
+  110.          do
+  111.             k = 1 + k
+  112.             lt = 0
+  114.             if ( $lpdsp_S1 > 0 ) then
+  115.                $I_A1 = 0
+  115.                do
+  115.                    _substr(cpds(1 + $I_A1),1,1) = ''
+  115.                   $I_A1 = 1 + $I_A1
+  115.                   if ( $I_A1 >= 400 ) exit
+  115.                enddo
+  116.                $I_A1 = 0
+  116.                do
+  116.                    _substr(cpds(1 + $I_A1),1,1) =  _substr(cbuf($I_A1 + -nlen + nlen * k + 26),1,1)
+  116.                   $I_A1 = 1 + $I_A1
+  116.                   if ( $I_A1 >= 28 ) exit
+  116.                enddo
+  118.                $F_A33 = ( 12 + -max( 0, 184 + -nlen ) )
+  118.                if ( 12 + -max( 0, 184 + -nlen ) > 0 ) then
+  118.                   $I_A1 = 0
+  118.                   do
+  118.                       _substr(cpds(29 + $I_A1),1,1) =  _substr(cbuf($I_A1 + -nlen + nlen * k + 173),1,1)
+  118.                      $I_A1 = 1 + $I_A1
+  118.                      if ( $I_A1 >= $F_A33 ) exit
+  118.                   enddo
+  118.                endif
+  119.                $I_A1 = 0
+  119. !dir$ ivdep
+  119.                do
+  119.                   kptr(1 + $I_A1) = 0
+  119.                   $I_A1 = 1 + $I_A1
+  119.                   if ( $I_A1 >= 200 ) exit
+  119.                enddo
+  120.                t$9 = -8 * nlen + nlen * k * 8 + 200
+  120.                call gbytec(  _substr(cbuf(1),1,1), kptr(3), t$9, 24 )
+  121.                kpds(18) = 1
+  122.                call gbytec(  _substr(cpds(1),1,1), kpds(4), 56, 8 )
+  123.                call fi632(  _substr(cpds(1),1,1), kptr(1), kpds(1), kret )
+  124.                $I_L124_30 = 0
+  124. !dir$ ivdep
+  124. !dir$ loop_info (automatic) cache_nt( kpds, jpds )
+  124.                do
+  125.                   $ip_S7 = ipdsp(1 + $I_L124_30)
+  126.                   lt = lt + abs( jpds($ip_S7) + -kpds($ip_S7) )
+  127.                   $I_L124_30 = 1 + $I_L124_30
+  124.                   if ( $I_L124_30 >= $lpdsp_S1 ) exit
+  124.                enddo
+  124.             endif
+  130.             if ( lt == 0 ) then
+  130.                if ( $lgdsp_S3 > 0 ) then
+  131.                   $I_A1 = 0
+  131.                   do
+  131.                       _substr(cgds(1 + $I_A1),1,1) = ''
+  131.                      $I_A1 = 1 + $I_A1
+  131.                      if ( $I_A1 >= 400 ) exit
+  131.                   enddo
+  132.                   $I_A1 = 0
+  132.                   do
+  132.                       _substr(cgds(1 + $I_A1),1,1) =  _substr(cbuf($I_A1 + -nlen + nlen * k + 54),1,1)
+  132.                      $I_A1 = 1 + $I_A1
+  132.                      if ( $I_A1 >= 42 ) exit
+  132.                   enddo
+  134.                   $F_A34 = ( 136 + -max( 0, 320 + -nlen ) )
+  134.                   if ( 136 + -max( 0, 320 + -nlen ) > 0 ) then
+  134.                      $I_A1 = 0
+  134.                      do
+  134.                          _substr(cgds(43 + $I_A1),1,1) =  _substr(cbuf($I_A1 + -nlen + nlen * k + 185),1,1)
+  134.                         $I_A1 = 1 + $I_A1
+  134.                         if ( $I_A1 >= $F_A34 ) exit
+  134.                      enddo
+  134.                   endif
+  135.                   $I_A1 = 0
+  135. !dir$ ivdep
+  135.                   do
+  135.                      kptr(1 + $I_A1) = 0
+  135.                      $I_A1 = 1 + $I_A1
+  135.                      if ( $I_A1 >= 200 ) exit
+  135.                   enddo
+  136.                   call fi633(  _substr(cgds(1),1,1), kptr(1), kgds(1), kret )
+  137.                   $I_L137_32 = 0
+  137. !dir$ ivdep
+  137. !dir$ loop_info (automatic) cache_nt( kgds, jgds )
+  137.                   do
+  138.                      $ip_S9 = igdsp(1 + $I_L137_32)
+  139.                      lt = lt + abs( jgds($ip_S9) + -kgds($ip_S9) )
+  140.                      $I_L137_32 = 1 + $I_L137_32
+  137.                      if ( $I_L137_32 >= $lgdsp_S3 ) exit
+  137.                   enddo
+  137.                endif
+  137.             endif
+  143.             if ( lt == 0 ) then
+  143.                if ( $lensp_S5 > 0 ) then
+  145.                   $F_A35 = ( 60 + -max( 0, 172 + -nlen ) )
+  145.                   if ( 60 + -max( 0, 172 + -nlen ) > 0 ) then
+  145.                      $I_A1 = 0
+  145.                      do
+  145.                          _substr(cpds(41 + $I_A1),1,1) =  _substr(cbuf($I_A1 + -nlen + nlen * k + 113),1,1)
+  145.                         $I_A1 = 1 + $I_A1
+  145.                         if ( $I_A1 >= $F_A35 ) exit
+  145.                      enddo
+  145.                   endif
+  146.                   call pdseup( kens(1), kprob, xprob, kclust, kmembr, 45,  _substr(cpds(1),1,1) )
+  147.                   $I_L147_34 = 0
+  147. !dir$ ivdep
+  147. !dir$ loop_info (automatic) cache_nt( kens, jens )
+  147.                   do
+  148.                      $ip_S11 = iensp(1 + $I_L147_34)
+  149.                      lt = lt + abs( jens($ip_S11) + -kens($ip_S11) )
+  150.                      $I_L147_34 = 1 + $I_L147_34
+  147.                      if ( $I_L147_34 >= $lensp_S5 ) exit
+  147.                   enddo
+  147.                endif
+  147.             endif
+  153.             if ( lt == 0 ) then
+  154.                t$9 = -8 * nlen + nlen * k * 8
+  154.                call gbytec(  _substr(cbuf(1),1,1), lskip, t$9, 32 )
+  155.                t$9 = -8 * nlen + nlen * k * 8 + 160
+  155.                call gbytec(  _substr(cbuf(1),1,1), lgrib, t$9, 32 )
+  156.                if ( $lpdsp_S1 == 0 ) then
+  157.                   $I_A1 = 0
+  157.                   do
+  157.                       _substr(cpds(1 + $I_A1),1,1) = ''
+  157.                      $I_A1 = 1 + $I_A1
+  157.                      if ( $I_A1 >= 400 ) exit
+  157.                   enddo
+  158.                   $I_A1 = 0
+  158.                   do
+  158.                       _substr(cpds(1 + $I_A1),1,1) =  _substr(cbuf($I_A1 + -nlen + nlen * k + 26),1,1)
+  158.                      $I_A1 = 1 + $I_A1
+  158.                      if ( $I_A1 >= 28 ) exit
+  158.                   enddo
+  160.                   $F_A36 = ( 12 + -max( 0, 184 + -nlen ) )
+  160.                   if ( 12 + -max( 0, 184 + -nlen ) > 0 ) then
+  160.                      $I_A1 = 0
+  160.                      do
+  160.                          _substr(cpds(29 + $I_A1),1,1) =  _substr(cbuf($I_A1 + -nlen + nlen * k + 173),1,1)
+  160.                         $I_A1 = 1 + $I_A1
+  160.                         if ( $I_A1 >= $F_A36 ) exit
+  160.                      enddo
+  160.                   endif
+  161.                   $I_A1 = 0
+  161. !dir$ ivdep
+  161.                   do
+  161.                      kptr(1 + $I_A1) = 0
+  161.                      $I_A1 = 1 + $I_A1
+  161.                      if ( $I_A1 >= 200 ) exit
+  161.                   enddo
+  162.                   t$9 = -8 * nlen + nlen * k * 8 + 200
+  162.                   call gbytec(  _substr(cbuf(1),1,1), kptr(3), t$9, 24 )
+  163.                   kpds(18) = 1
+  164.                   call gbytec(  _substr(cpds(1),1,1), kpds(4), 56, 8 )
+  165.                   call fi632(  _substr(cpds(1),1,1), kptr(1), kpds(1), kret )
+  165.                endif
+  167.                if ( $lgdsp_S3 == 0 ) then
+  168.                   $I_A1 = 0
+  168.                   do
+  168.                       _substr(cgds(1 + $I_A1),1,1) = ''
+  168.                      $I_A1 = 1 + $I_A1
+  168.                      if ( $I_A1 >= 400 ) exit
+  168.                   enddo
+  169.                   $I_A1 = 0
+  169.                   do
+  169.                       _substr(cgds(1 + $I_A1),1,1) =  _substr(cbuf($I_A1 + -nlen + nlen * k + 54),1,1)
+  169.                      $I_A1 = 1 + $I_A1
+  169.                      if ( $I_A1 >= 42 ) exit
+  169.                   enddo
+  171.                   $F_A37 = ( 136 + -max( 0, 320 + -nlen ) )
+  171.                   if ( 136 + -max( 0, 320 + -nlen ) > 0 ) then
+  171.                      $I_A1 = 0
+  171.                      do
+  171.                          _substr(cgds(43 + $I_A1),1,1) =  _substr(cbuf($I_A1 + -nlen + nlen * k + 185),1,1)
+  171.                         $I_A1 = 1 + $I_A1
+  171.                         if ( $I_A1 >= $F_A37 ) exit
+  171.                      enddo
+  171.                   endif
+  172.                   $I_A1 = 0
+  172. !dir$ ivdep
+  172.                   do
+  172.                      kptr(1 + $I_A1) = 0
+  172.                      $I_A1 = 1 + $I_A1
+  172.                      if ( $I_A1 >= 200 ) exit
+  172.                   enddo
+  173.                   call fi633(  _substr(cgds(1),1,1), kptr(1), kgds(1), kret )
+  173.                endif
+  175.                if ( kpds(23) == 2 ) then
+  175.                   if ( $lensp_S5 == 0 ) then
+  177.                      $F_A38 = ( 60 + -max( 0, 172 + -nlen ) )
+  177.                      if ( 60 + -max( 0, 172 + -nlen ) > 0 ) then
+  177.                         $I_A1 = 0
+  177.                         do
+  177.                             _substr(cpds(41 + $I_A1),1,1) =  _substr(cbuf($I_A1 + -nlen + nlen * k + 113),1,1)
+  177.                            $I_A1 = 1 + $I_A1
+  177.                            if ( $I_A1 >= $F_A38 ) exit
+  177.                         enddo
+  177.                      endif
+  178.                      call pdseup( kens(1), kprob, xprob, kclust, kmembr, 45,  _substr(cpds(1),1,1) )
+  178.                   endif
+  178.                endif
+  180.                iret = 0
+  180.             endif
+  181.             if ( ( iret /= 0 .and. k < nnum ) == 0 ) exit
+  181.          enddo
+  181.       endif
+  185.       return
+  185.       end
+  185.       

@@ -1,0 +1,294 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrsw_wvn.f90
+Compiled : 12/11/20  23:54:08
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps rrsw_wvn.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrsw_wvn.f90
+Date     : 12/11/2020  23:54:09
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_31135/rrsw_wvn_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     There are no optimizations or loops to mark
+
+
+    1.          module rrsw_wvn
+    2.    
+    3.          use shr_kind_mod, only: r8 => shr_kind_r8
+    4.    
+    5.    !      use parkind, only : jpim, jprb
+    6.          use parrrsw, only : nbndsw, mg, ngptsw, jpb1, jpb2
+    7.    
+    8.          implicit none
+    9.          save
+   10.    
+   11.    !------------------------------------------------------------------
+   12.    ! rrtmg_sw spectral information
+   13.    
+   14.    ! Initial version:  JJMorcrette, ECMWF, jul1998
+   15.    ! Revised: MJIacono, AER, jul2006
+   16.    !------------------------------------------------------------------
+   17.    
+   18.    !  name     type     purpose
+   19.    ! -----  :  ----   : ----------------------------------------------
+   20.    ! ng     :  integer: Number of original g-intervals in each spectral band
+   21.    ! nspa   :  integer: 
+   22.    ! nspb   :  integer: 
+   23.    !wavenum1:  real   : Spectral band lower boundary in wavenumbers
+   24.    !wavenum2:  real   : Spectral band upper boundary in wavenumbers
+   25.    ! delwave:  real   : Spectral band width in wavenumbers
+   26.    !
+   27.    ! ngc    :  integer: The number of new g-intervals in each band
+   28.    ! ngs    :  integer: The cumulative sum of new g-intervals for each band
+   29.    ! ngm    :  integer: The index of each new g-interval relative to the
+   30.    !                    original 16 g-intervals in each band
+   31.    ! ngn    :  integer: The number of original g-intervals that are 
+   32.    !                    combined to make each new g-intervals in each band
+   33.    ! ngb    :  integer: The band index for each new g-interval
+   34.    ! wt     :  real   : RRTM weights for the original 16 g-intervals
+   35.    ! rwgt   :  real   : Weights for combining original 16 g-intervals 
+   36.    !                    (224 total) into reduced set of g-intervals 
+   37.    !                    (112 total)
+   38.    !------------------------------------------------------------------
+   39.    
+   40.          integer :: ng(jpb1:jpb2)
+   41.          integer :: nspa(jpb1:jpb2)
+   42.          integer :: nspb(jpb1:jpb2)
+   43.    
+   44.          real(kind=r8) :: wavenum1(jpb1:jpb2)
+   45.          real(kind=r8) :: wavenum2(jpb1:jpb2)
+   46.          real(kind=r8) :: delwave(jpb1:jpb2)
+   47.    
+   48.          integer :: ngc(nbndsw)
+   49.          integer :: ngs(nbndsw)
+   50.          integer :: ngn(ngptsw)
+   51.          integer :: ngb(ngptsw)
+   52.          integer :: ngm(nbndsw*mg)
+   53.    
+   54.          real(kind=r8) :: wt(mg)
+   55.          real(kind=r8) :: rwgt(nbndsw*mg)
+   56.    
+   57.          end module rrsw_wvn
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                 C r o s s   R e f e r e n c e   for   RRSW_WVN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+DELWAVE                         Static offset=0                   REAL(KIND=8), DIMENSION(16:29), SAVE
+  Decl      46
+  Set 
+  Used
+
+JPB1                            Use assoc                         INTEGER, PARAMETER, From module PARRRSW
+  Decl
+  Set 
+  Used      40      41      42      44      45      46
+
+JPB2                            Use assoc                         INTEGER, PARAMETER, From module PARRRSW
+  Decl
+  Set 
+  Used      40      41      42      44      45      46
+
+MG                              Use assoc                         INTEGER, PARAMETER, From module PARRRSW
+  Decl
+  Set 
+  Used      52      54      55
+
+NBNDSW                          Use assoc                         INTEGER, PARAMETER, From module PARRRSW
+  Decl
+  Set 
+  Used      48      49      52      55
+
+NG                              Static offset=3584                INTEGER, DIMENSION(16:29), SAVE
+  Decl      40
+  Set 
+  Used
+
+NGB                             Static offset=4096                INTEGER, DIMENSION(112), SAVE
+  Decl      51
+  Set 
+  Used
+
+NGC                             Static offset=8192                INTEGER, DIMENSION(14), SAVE
+  Decl      48
+  Set 
+  Used
+
+NGM                             Static offset=8704                INTEGER, DIMENSION(224), SAVE
+  Decl      52
+  Set 
+  Used
+
+NGN                             Static offset=16384               INTEGER, DIMENSION(112), SAVE
+  Decl      50
+  Set 
+  Used
+
+NGPTSW                          Use assoc                         INTEGER, PARAMETER, From module PARRRSW
+  Decl
+  Set 
+  Used      50      51
+
+NGS                             Static offset=20480               INTEGER, DIMENSION(14), SAVE
+  Decl      49
+  Set 
+  Used
+
+NSPA                            Static offset=20992               INTEGER, DIMENSION(16:29), SAVE
+  Decl      41
+  Set 
+  Used
+
+NSPB                            Static offset=21504               INTEGER, DIMENSION(16:29), SAVE
+  Decl      42
+  Set 
+  Used
+
+PARRRSW                                                           Module
+  Decl
+  Set 
+  Used       6
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD
+  Decl       3
+  Set 
+  Used      44      45      46      54      55
+
+RRSW_WVN                                                          Module
+  Decl       1
+  Set 
+  Used
+
+RWGT                            Static offset=22016               REAL(KIND=8), DIMENSION(224), SAVE
+  Decl      55
+  Set 
+  Used
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used       3
+
+WAVENUM1                        Static offset=36864               REAL(KIND=8), DIMENSION(16:29), SAVE
+  Decl      44
+  Set 
+  Used
+
+WAVENUM2                        Static offset=40448               REAL(KIND=8), DIMENSION(16:29), SAVE
+  Decl      45
+  Set 
+  Used
+
+WT                              Static offset=44032               REAL(KIND=8), DIMENSION(16), SAVE
+  Decl      54
+  Set 
+  Used
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+PARRRSW
+      Defined as:  No definitions.
+
+      Used By:     RRSW_WVN
+
+Name  Messages
+----  --------
+RRSW_WVN
+      Defined as:  Module (line 1, file rrsw_wvn.f90)
+
+        Uses:      SHR_KIND_MOD
+                   PARRRSW
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     RRSW_WVN
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

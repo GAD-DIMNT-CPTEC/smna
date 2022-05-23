@@ -1,0 +1,814 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  baciof.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/baciof.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       module bacio_module
+    2.       end
+    2.       
+   24.       
+   24.       subroutine baseto( nopt, vopt )
+   56.       $MR_nopt_0 = 0[loc( nopt ),0]
+   56.       if ( $MR_nopt_0 > 0 ) then
+   56.          if ( $MR_nopt_0 <= 20 ) then
+   56.             if ( or( 20 - $MR_nopt_0, -1 + $MR_nopt_0 ) < 0 ) then
+   56.                $LB_Y0 = 1
+   56.                $UB_Y1 = 20
+   56.                $Subscript_Y5 = $MR_nopt_0
+   56.                _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+   56.             endif
+   56.             (-1,baopts)[$MR_nopt_0] = 0[loc( vopt ),0]
+   56.          endif
+   56.       endif
+   58.       return
+   58.       end
+   58.       
+   60.       
+   60.       subroutine baopen( lu, cfn, iret )
+   93.       $MR_lu_0 = 0[loc( lu ),0]
+   93.       if ( $MR_lu_0 <= 0 .orelse. $MR_lu_0 > 999 ) then
+   94.          0[loc( iret ),0] = 6
+   94.       else
+   98.          t$6 = int( _alloc( 1 + _len( cfn ) ), 8 )
+   98.          $LCS_0 = _len( cfn )
+   98.          substr[0,t$6:( 1 + $LCS_0 )] = //( substr[cfn,0:$LCS_0], '' )
+   98.          if ( or( 999 - $MR_lu_0, -1 + $MR_lu_0 ) < 0 ) then
+   98.             $LB_Y0 = 1
+   98.             $UB_Y1 = 999
+   98.             $Subscript_Y5 = $MR_lu_0
+   98.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+   98.          endif
+   98.          $Con_P1 = 4
+   98.          $Con_P2 = 1
+   98.          0[loc( iret ),0] = bacio( $Con_P1, ib, jb, $Con_P2, nb, ka, (-1,fd)[0[loc( lu ),0]], substr[0,t$6:( 1 + _len( cfn ) )], a )
+   98.          _free( t$6 )
+   98.       endif
+  100.       return
+  100.       end
+  100.       
+  102.       
+  102.       subroutine baopenr( lu, cfn, iret )
+  134.       $MR_lu_0 = 0[loc( lu ),0]
+  134.       if ( $MR_lu_0 <= 0 .orelse. $MR_lu_0 > 999 ) then
+  135.          0[loc( iret ),0] = 6
+  135.       else
+  139.          t$12 = int( _alloc( 1 + _len( cfn ) ), 8 )
+  139.          $LCS_0 = _len( cfn )
+  139.          substr[0,t$12:( 1 + $LCS_0 )] = //( substr[cfn,0:$LCS_0], '' )
+  139.          if ( or( 999 - $MR_lu_0, -1 + $MR_lu_0 ) < 0 ) then
+  139.             $LB_Y0 = 1
+  139.             $UB_Y1 = 999
+  139.             $Subscript_Y5 = $MR_lu_0
+  139.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+  139.          endif
+  139.          $Con_P1 = 1
+  139.          $Con_P2 = 1
+  139.          0[loc( iret ),0] = bacio( $Con_P1, ib, jb, $Con_P2, nb, ka, (-1,fd)[0[loc( lu ),0]], substr[0,t$12:( 1 + _len( cfn ) )], a )
+  139.          _free( t$12 )
+  139.       endif
+  141.       return
+  141.       end
+  141.       
+  143.       
+  143.       subroutine baopenw( lu, cfn, iret )
+  175.       $MR_lu_0 = 0[loc( lu ),0]
+  175.       if ( $MR_lu_0 <= 0 .orelse. $MR_lu_0 > 999 ) then
+  176.          0[loc( iret ),0] = 6
+  176.       else
+  180.          t$18 = int( _alloc( 1 + _len( cfn ) ), 8 )
+  180.          $LCS_0 = _len( cfn )
+  180.          substr[0,t$18:( 1 + $LCS_0 )] = //( substr[cfn,0:$LCS_0], '' )
+  180.          if ( or( 999 - $MR_lu_0, -1 + $MR_lu_0 ) < 0 ) then
+  180.             $LB_Y0 = 1
+  180.             $UB_Y1 = 999
+  180.             $Subscript_Y5 = $MR_lu_0
+  180.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+  180.          endif
+  180.          $Con_P1 = 2
+  180.          $Con_P2 = 1
+  180.          0[loc( iret ),0] = bacio( $Con_P1, ib, jb, $Con_P2, nb, ka, (-1,fd)[0[loc( lu ),0]], substr[0,t$18:( 1 + _len( cfn ) )], a )
+  180.          _free( t$18 )
+  180.       endif
+  182.       return
+  182.       end
+  182.       
+  184.       
+  184.       subroutine baopenwt( lu, cfn, iret )
+  216.       $MR_lu_0 = 0[loc( lu ),0]
+  216.       if ( $MR_lu_0 <= 0 .orelse. $MR_lu_0 > 999 ) then
+  217.          0[loc( iret ),0] = 6
+  217.       else
+  221.          t$24 = int( _alloc( 1 + _len( cfn ) ), 8 )
+  221.          $LCS_0 = _len( cfn )
+  221.          substr[0,t$24:( 1 + $LCS_0 )] = //( substr[cfn,0:$LCS_0], '' )
+  221.          if ( or( 999 - $MR_lu_0, -1 + $MR_lu_0 ) < 0 ) then
+  221.             $LB_Y0 = 1
+  221.             $UB_Y1 = 999
+  221.             $Subscript_Y5 = $MR_lu_0
+  221.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+  221.          endif
+  221.          $Con_P1 = 128
+  221.          $Con_P2 = 1
+  221.          0[loc( iret ),0] = bacio( $Con_P1, ib, jb, $Con_P2, nb, ka, (-1,fd)[0[loc( lu ),0]], substr[0,t$24:( 1 + _len( cfn ) )], a )
+  221.          _free( t$24 )
+  221.       endif
+  223.       return
+  223.       end
+  223.       
+  225.       
+  225.       subroutine baopenwa( lu, cfn, iret )
+  257.       $MR_lu_0 = 0[loc( lu ),0]
+  257.       if ( $MR_lu_0 <= 0 .orelse. $MR_lu_0 > 999 ) then
+  258.          0[loc( iret ),0] = 6
+  258.       else
+  262.          t$30 = int( _alloc( 1 + _len( cfn ) ), 8 )
+  262.          $LCS_0 = _len( cfn )
+  262.          substr[0,t$30:( 1 + $LCS_0 )] = //( substr[cfn,0:$LCS_0], '' )
+  262.          if ( or( 999 - $MR_lu_0, -1 + $MR_lu_0 ) < 0 ) then
+  262.             $LB_Y0 = 1
+  262.             $UB_Y1 = 999
+  262.             $Subscript_Y5 = $MR_lu_0
+  262.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+  262.          endif
+  262.          $Con_P1 = 256
+  262.          $Con_P2 = 1
+  262.          0[loc( iret ),0] = bacio( $Con_P1, ib, jb, $Con_P2, nb, ka, (-1,fd)[0[loc( lu ),0]], substr[0,t$30:( 1 + _len( cfn ) )], a )
+  262.          _free( t$30 )
+  262.       endif
+  264.       return
+  264.       end
+  264.       
+  266.       
+  266.       subroutine baclose( lu, iret )
+  297.       $MR_lu_0 = 0[loc( lu ),0]
+  297.       if ( $MR_lu_0 <= 0 .orelse. $MR_lu_0 > 999 ) then
+  298.          0[loc( iret ),0] = 6
+  298.       else
+  302.          $CS_0 = or( 999 - $MR_lu_0, -1 + $MR_lu_0 ) >= 0
+  302.          if ( int( $CS_0 ) == 0 ) then
+  302.             $LB_Y0 = 1
+  302.             $UB_Y1 = 999
+  302.             $Subscript_Y5 = $MR_lu_0
+  302.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+  302.          endif
+  302.          $Con_P2 = 8
+  302.          $Con_P3 = 1
+  302.          $LCS_iret_0 = bacio( $Con_P2, ib, jb, $Con_P3, nb, ka, (-1,fd)[0[loc( lu ),0]], cfn, a )
+  302.          0[loc( iret ),0] = $LCS_iret_0
+  303.          if ( $LCS_iret_0 == 0 ) then
+  303.             if ( int( $CS_0 ) == 0 ) then
+  303.                $LB_Y0 = 1
+  303.                $UB_Y1 = 999
+  303.                $Subscript_Y5 = $MR_lu_0
+  303.                _bounds_error( $_File_Y40, $Line_Y44, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y45 )
+  303.             endif
+  303.             (-1,fd)[$MR_lu_0] = 0
+  303.          endif
+  303.       endif
+  305.       return
+  305.       end
+  305.       
+  307.       
+  307.       subroutine baread( lu, ib, nb, ka, a )
+  353.       $MR_lu_7 = 0[loc( lu ),0]
+  353.       $CS_0 = or( 999 - $MR_lu_7, -1 + $MR_lu_7 ) >= 0
+  353.       if ( int( $CS_0 ) == 0 ) then
+  353.          $LB_Y0 = 1
+  353.          $UB_Y1 = 999
+  353.          $Subscript_Y5 = $MR_lu_7
+  353.          _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+  353.       endif
+  353.       if ( (-1,fd)[$MR_lu_7] <= 0 ) then
+  354.          0[loc( ka ),0] = 0
+  354.       else
+  357.          $MR_ib_9 = 0[loc( ib ),0]
+  357.          if ( $MR_ib_9 < 0 ) then
+  357.             $MR_baopts_S5 = baopts[0]
+  357.             if ( $MR_baopts_S5 == 1 ) then
+  358.                0[loc( ka ),0] = 0
+  358.             else
+  358.                goto 10
+  358.             endif
+  358.          else
+  358.    10       continue
+  361.             $MR_nb_11 = 0[loc( nb ),0]
+  361.             if ( $MR_nb_11 <= 0 ) then
+  362.                0[loc( ka ),0] = 0
+  362.             else
+  367.                $MR_baopts_S6 = baopts[0]
+  367.                if ( $MR_baopts_S6 == 1 ) then
+  377.                   0[loc( ka ),0] = 0
+  378.                   $lux_S7 = lux
+  378.                   if ( $lux_S7 - $MR_lu_7 /= 0 ) then
+  379.                      jy = 0
+  380.                      $LCS_0[0:4:1] = _bcst( 0, 4 )
+  380.                      ns[0:4:1] = $LCS_0[0:4:1]
+  381.                      nn[0:4:1] = $LCS_0[0:4:1]
+  381.                   else
+  385.                      $jy_S8 = jy
+  385.                      $CS_jy_1 = $jy_S8 - and( -4, $jy_S8 + _rsh( _ash( $jy_S8, 1 ), 30 ) )
+  385.                      if ( or( $CS_jy_1, 3 - $CS_jy_1 ) < 0 ) then
+  385.                         $LB_Y0 = 1
+  385.                         $UB_Y1 = 4
+  385.                         $Subscript_Y5 = ( 1 + $CS_jy_1 )
+  385.                         _bounds_error( $_File_Y40, $Line_Y49, $_Name_Y48, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y50 )
+  385.                      endif
+  385.                      $SCF_S9 = $MR_ib_9 - ns[$CS_jy_1]
+  386.                      if ( $SCF_S9 >= 0 ) then
+  386.                         if ( or( $CS_jy_1, 3 - $CS_jy_1 ) < 0 ) then
+  386.                            $LB_Y0 = 1
+  386.                            $UB_Y1 = 4
+  386.                            $Subscript_Y5 = ( 1 + $CS_jy_1 )
+  386.                            _bounds_error( $_File_Y40, $Line_Y52, $_Name_Y51, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y53 )
+  386.                         endif
+  386.                         $MR_nn_15 = nn[$CS_jy_1]
+  386.                         if ( $SCF_S9 < $MR_nn_15 ) then
+  387.                            if ( or( $CS_jy_1, 3 - $CS_jy_1 ) < 0 ) then
+  387.                               $LB_Y0 = 1
+  387.                               $UB_Y1 = 4
+  387.                               $Subscript_Y5 = ( 1 + $CS_jy_1 )
+  387.                               _bounds_error( $_File_Y40, $Line_Y54, $_Name_Y51, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y55 )
+  387.                            endif
+  387.                            $k_S10 = min( $MR_nb_11, $MR_nn_15 - $SCF_S9 )
+  388.                            $F_S11 = $k_S10
+  388.                            if ( $F_S11 > 0 ) then
+  388.                               $I_L388_S12 = 0
+  388.                               if ( or( $CS_jy_1, 3 - $CS_jy_1 ) < 0 ) then
+  388.                                  $LB_Y0 = 1
+  388.                                  $UB_Y1 = 4
+  388.                                  $Subscript_Y5 = ( 1 + $CS_jy_1 )
+  388.                                  _bounds_error( $_File_Y40, $Line_Y57, $_Name_Y56, $Dim_Y9, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y58 )
+  388.                               endif
+  388.                               $LCS_5 = $SCF_S9
+  388.                               $LCS_F_6 = $LCS_5 + $F_S11
+  388.                               if ( int( $SCF_S9 >= 0 .and. $LCS_F_6 <= 4096 ) == 0 ) then
+  388.                                  $LB_Y0 = 1
+  388.                                  $UB_Y1 = 4096
+  388.                                  $Subscript_Y2 = 1 + $LCS_5
+  388.                                  $Subscript_Y3 = $LCS_F_6
+  388.                                  $Subscript_Y4 = 1
+  388.                                  _rbounds_error( $_File_Y40, $Line_Y57, $_Name_Y59, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y60 )
+  388.                               endif
+  388.                               if ( $F_S11 > $MR_nb_11 ) then
+  388.                                  $LB_Y0 = 1
+  388.                                  $UB_Y1 = $MR_nb_11
+  388.                                  $Subscript_Y2 = 1
+  388.                                  $Subscript_Y3 = $F_S11
+  388.                                  $Subscript_Y4 = 1
+  388.                                  _rbounds_error( $_File_Y40, $Line_Y57, $_Name_Y61, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y62 )
+  388.                               endif
+  388.                               $LIS_E2 = $SCF_S9 + _lsh( $CS_jy_1, 12 )
+  388.                               do
+  388.                                  substr[a,$I_L388_S12:1] = substr[y,$LIS_E2 + $I_L388_S12:1]
+  388.                                  $I_L388_S12 = 1 + $I_L388_S12
+  388.                                  if ( $I_L388_S12 >= $F_S11 ) exit
+  388.                               enddo
+  388.                            endif
+  389.                            0[loc( ka ),0] = $k_S10
+  389.                         endif
+  389.                      endif
+  385.                      $PRT_P25 = ( 1 + $jy_S8 )
+  385.                      $CS_PRT_2 = $PRT_P25 - and( -4, $PRT_P25 + _rsh( _ash( $PRT_P25, 1 ), 30 ) )
+  385.                      if ( or( $CS_PRT_2, 3 - $CS_PRT_2 ) < 0 ) then
+  385.                         $LB_Y0 = 1
+  385.                         $UB_Y1 = 4
+  385.                         $Subscript_Y5 = ( 1 + $CS_PRT_2 )
+  385.                         _bounds_error( $_File_Y40, $Line_Y64, $_Name_Y63, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y65 )
+  385.                      endif
+  385.                      $SCF_S14 = $MR_ib_9 - ns[$CS_PRT_2]
+  386.                      $MR_ka_S13 = 0[loc( ka ),0]
+  386.                      if ( $MR_ka_S13 < $MR_nb_11 ) then
+  386.                         if ( $MR_ka_S13 + $SCF_S14 >= 0 ) then
+  386.                            if ( or( $CS_PRT_2, 3 - $CS_PRT_2 ) < 0 ) then
+  386.                               $LB_Y0 = 1
+  386.                               $UB_Y1 = 4
+  386.                               $Subscript_Y5 = ( 1 + $CS_PRT_2 )
+  386.                               _bounds_error( $_File_Y40, $Line_Y67, $_Name_Y66, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y68 )
+  386.                            endif
+  386.                            $MR_nn_18 = nn[$CS_PRT_2]
+  386.                            if ( $MR_ka_S13 + $SCF_S14 < $MR_nn_18 ) then
+  387.                               if ( or( $CS_PRT_2, 3 - $CS_PRT_2 ) < 0 ) then
+  387.                                  $LB_Y0 = 1
+  387.                                  $UB_Y1 = 4
+  387.                                  $Subscript_Y5 = ( 1 + $CS_PRT_2 )
+  387.                                  _bounds_error( $_File_Y40, $Line_Y69, $_Name_Y66, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y70 )
+  387.                               endif
+  387.                               $k_S15 = min( $MR_nb_11 - $MR_ka_S13, $MR_nn_18 - ( $MR_ka_S13 + $SCF_S14 ) )
+  388.                               $F_S16 = $k_S15
+  388.                               if ( $F_S16 > 0 ) then
+  388.                                  $I_L388_S17 = 0
+  388.                                  if ( or( $CS_PRT_2, 3 - $CS_PRT_2 ) < 0 ) then
+  388.                                     $LB_Y0 = 1
+  388.                                     $UB_Y1 = 4
+  388.                                     $Subscript_Y5 = ( 1 + $CS_PRT_2 )
+  388.                                     _bounds_error( $_File_Y40, $Line_Y72, $_Name_Y71, $Dim_Y9, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y73 )
+  388.                                  endif
+  388.                                  $LCS_11 = $MR_ka_S13 + $SCF_S14
+  388.                                  $LCS_12 = $F_S16 + ( $MR_ka_S13 + $SCF_S14 )
+  388.                                  if ( int( $LCS_11 >= 0 .and. $LCS_12 <= 4096 ) == 0 ) then
+  388.                                     $LB_Y0 = 1
+  388.                                     $UB_Y1 = 4096
+  388.                                     $Subscript_Y2 = 1 + $LCS_11
+  388.                                     $Subscript_Y3 = $LCS_12
+  388.                                     $Subscript_Y4 = 1
+  388.                                     _rbounds_error( $_File_Y40, $Line_Y72, $_Name_Y74, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y75 )
+  388.                                  endif
+  388.                                  $LCS_13 = $MR_ka_S13
+  388.                                  $LCS_F_14 = $LCS_13 + $F_S16
+  388.                                  if ( int( $MR_ka_S13 >= 0 .and. $LCS_F_14 <= $MR_nb_11 ) == 0 ) then
+  388.                                     $LB_Y0 = 1
+  388.                                     $UB_Y1 = $MR_nb_11
+  388.                                     $Subscript_Y2 = 1 + $LCS_13
+  388.                                     $Subscript_Y3 = $LCS_F_14
+  388.                                     $Subscript_Y4 = 1
+  388.                                     _rbounds_error( $_File_Y40, $Line_Y72, $_Name_Y76, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y77 )
+  388.                                  endif
+  388.                                  $LIS_E4 = _lsh( $CS_PRT_2, 12 ) + ( $MR_ka_S13 + $SCF_S14 )
+  388.                                  $LIS_S18 = $MR_ka_S13
+  388.                                  do
+  388.                                     substr[a,$I_L388_S17 + $LIS_S18:1] = substr[y,$LIS_E4 + $I_L388_S17:1]
+  388.                                     $I_L388_S17 = 1 + $I_L388_S17
+  388.                                     if ( $I_L388_S17 >= $F_S16 ) exit
+  388.                                  enddo
+  388.                               endif
+  389.                               $MR_ka_S19 = $MR_ka_S13 + $k_S15
+  389.                               0[loc( ka ),0] = $MR_ka_S19
+  389.                            endif
+  389.                         endif
+  389.                      endif
+  385.                      $PRT_P26 = ( 2 + $jy_S8 )
+  385.                      $CS_PRT_3 = $PRT_P26 - and( -4, $PRT_P26 + _rsh( _ash( $PRT_P26, 1 ), 30 ) )
+  385.                      if ( or( $CS_PRT_3, 3 - $CS_PRT_3 ) < 0 ) then
+  385.                         $LB_Y0 = 1
+  385.                         $UB_Y1 = 4
+  385.                         $Subscript_Y5 = ( 1 + $CS_PRT_3 )
+  385.                         _bounds_error( $_File_Y40, $Line_Y79, $_Name_Y78, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y80 )
+  385.                      endif
+  385.                      $SCF_S21 = $MR_ib_9 - ns[$CS_PRT_3]
+  386.                      $MR_ka_S20 = 0[loc( ka ),0]
+  386.                      if ( $MR_ka_S20 < $MR_nb_11 ) then
+  386.                         if ( $MR_ka_S20 + $SCF_S21 >= 0 ) then
+  386.                            if ( or( $CS_PRT_3, 3 - $CS_PRT_3 ) < 0 ) then
+  386.                               $LB_Y0 = 1
+  386.                               $UB_Y1 = 4
+  386.                               $Subscript_Y5 = ( 1 + $CS_PRT_3 )
+  386.                               _bounds_error( $_File_Y40, $Line_Y82, $_Name_Y81, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y83 )
+  386.                            endif
+  386.                            $MR_nn_20 = nn[$CS_PRT_3]
+  386.                            if ( $MR_ka_S20 + $SCF_S21 < $MR_nn_20 ) then
+  387.                               if ( or( $CS_PRT_3, 3 - $CS_PRT_3 ) < 0 ) then
+  387.                                  $LB_Y0 = 1
+  387.                                  $UB_Y1 = 4
+  387.                                  $Subscript_Y5 = ( 1 + $CS_PRT_3 )
+  387.                                  _bounds_error( $_File_Y40, $Line_Y84, $_Name_Y81, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y85 )
+  387.                               endif
+  387.                               $k_S22 = min( $MR_nb_11 - $MR_ka_S20, $MR_nn_20 - ( $MR_ka_S20 + $SCF_S21 ) )
+  388.                               $F_S23 = $k_S22
+  388.                               if ( $F_S23 > 0 ) then
+  388.                                  $I_L388_S24 = 0
+  388.                                  if ( or( $CS_PRT_3, 3 - $CS_PRT_3 ) < 0 ) then
+  388.                                     $LB_Y0 = 1
+  388.                                     $UB_Y1 = 4
+  388.                                     $Subscript_Y5 = ( 1 + $CS_PRT_3 )
+  388.                                     _bounds_error( $_File_Y40, $Line_Y87, $_Name_Y86, $Dim_Y9, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y88 )
+  388.                                  endif
+  388.                                  $LCS_19 = $MR_ka_S20 + $SCF_S21
+  388.                                  $LCS_20 = $F_S23 + ( $MR_ka_S20 + $SCF_S21 )
+  388.                                  if ( int( $LCS_19 >= 0 .and. $LCS_20 <= 4096 ) == 0 ) then
+  388.                                     $LB_Y0 = 1
+  388.                                     $UB_Y1 = 4096
+  388.                                     $Subscript_Y2 = 1 + $LCS_19
+  388.                                     $Subscript_Y3 = $LCS_20
+  388.                                     $Subscript_Y4 = 1
+  388.                                     _rbounds_error( $_File_Y40, $Line_Y87, $_Name_Y89, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y90 )
+  388.                                  endif
+  388.                                  $LCS_21 = $MR_ka_S20
+  388.                                  $LCS_F_22 = $LCS_21 + $F_S23
+  388.                                  if ( int( $MR_ka_S20 >= 0 .and. $LCS_F_22 <= $MR_nb_11 ) == 0 ) then
+  388.                                     $LB_Y0 = 1
+  388.                                     $UB_Y1 = $MR_nb_11
+  388.                                     $Subscript_Y2 = 1 + $LCS_21
+  388.                                     $Subscript_Y3 = $LCS_F_22
+  388.                                     $Subscript_Y4 = 1
+  388.                                     _rbounds_error( $_File_Y40, $Line_Y87, $_Name_Y76, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y91 )
+  388.                                  endif
+  388.                                  $LIS_E5 = _lsh( $CS_PRT_3, 12 ) + ( $MR_ka_S20 + $SCF_S21 )
+  388.                                  $LIS_S25 = $MR_ka_S20
+  388.                                  do
+  388.                                     substr[a,$I_L388_S24 + $LIS_S25:1] = substr[y,$LIS_E5 + $I_L388_S24:1]
+  388.                                     $I_L388_S24 = 1 + $I_L388_S24
+  388.                                     if ( $I_L388_S24 >= $F_S23 ) exit
+  388.                                  enddo
+  388.                               endif
+  389.                               $MR_ka_S26 = $MR_ka_S20 + $k_S22
+  389.                               0[loc( ka ),0] = $MR_ka_S26
+  389.                            endif
+  389.                         endif
+  389.                      endif
+  385.                      $PRT_P27 = ( 3 + $jy_S8 )
+  385.                      $CS_PRT_4 = $PRT_P27 - and( -4, $PRT_P27 + _rsh( _ash( $PRT_P27, 1 ), 30 ) )
+  385.                      if ( or( $CS_PRT_4, 3 - $CS_PRT_4 ) < 0 ) then
+  385.                         $LB_Y0 = 1
+  385.                         $UB_Y1 = 4
+  385.                         $Subscript_Y5 = ( 1 + $CS_PRT_4 )
+  385.                         _bounds_error( $_File_Y40, $Line_Y93, $_Name_Y92, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y94 )
+  385.                      endif
+  385.                      $SCF_S28 = $MR_ib_9 - ns[$CS_PRT_4]
+  386.                      $MR_ka_S27 = 0[loc( ka ),0]
+  386.                      if ( $MR_ka_S27 < $MR_nb_11 ) then
+  386.                         if ( $MR_ka_S27 + $SCF_S28 >= 0 ) then
+  386.                            if ( or( $CS_PRT_4, 3 - $CS_PRT_4 ) < 0 ) then
+  386.                               $LB_Y0 = 1
+  386.                               $UB_Y1 = 4
+  386.                               $Subscript_Y5 = ( 1 + $CS_PRT_4 )
+  386.                               _bounds_error( $_File_Y40, $Line_Y96, $_Name_Y95, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y97 )
+  386.                            endif
+  386.                            $MR_nn_22 = nn[$CS_PRT_4]
+  386.                            if ( $MR_ka_S27 + $SCF_S28 < $MR_nn_22 ) then
+  387.                               if ( or( $CS_PRT_4, 3 - $CS_PRT_4 ) < 0 ) then
+  387.                                  $LB_Y0 = 1
+  387.                                  $UB_Y1 = 4
+  387.                                  $Subscript_Y5 = ( 1 + $CS_PRT_4 )
+  387.                                  _bounds_error( $_File_Y40, $Line_Y98, $_Name_Y95, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y99 )
+  387.                               endif
+  387.                               $k_S29 = min( $MR_nb_11 - $MR_ka_S27, $MR_nn_22 - ( $MR_ka_S27 + $SCF_S28 ) )
+  388.                               $F_S30 = $k_S29
+  388.                               if ( $F_S30 > 0 ) then
+  388.                                  $I_L388_S31 = 0
+  388.                                  if ( or( $CS_PRT_4, 3 - $CS_PRT_4 ) < 0 ) then
+  388.                                     $LB_Y0 = 1
+  388.                                     $UB_Y1 = 4
+  388.                                     $Subscript_Y5 = ( 1 + $CS_PRT_4 )
+  388.                                     _bounds_error( $_File_Y40, $Line_Y101, $_Name_Y100, $Dim_Y9, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y102 )
+  388.                                  endif
+  388.                                  $LCS_27 = $MR_ka_S27 + $SCF_S28
+  388.                                  $LCS_28 = $F_S30 + ( $MR_ka_S27 + $SCF_S28 )
+  388.                                  if ( int( $LCS_27 >= 0 .and. $LCS_28 <= 4096 ) == 0 ) then
+  388.                                     $LB_Y0 = 1
+  388.                                     $UB_Y1 = 4096
+  388.                                     $Subscript_Y2 = 1 + $LCS_27
+  388.                                     $Subscript_Y3 = $LCS_28
+  388.                                     $Subscript_Y4 = 1
+  388.                                     _rbounds_error( $_File_Y40, $Line_Y101, $_Name_Y103, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y104 )
+  388.                                  endif
+  388.                                  $LCS_29 = $MR_ka_S27
+  388.                                  $LCS_F_30 = $LCS_29 + $F_S30
+  388.                                  if ( int( $MR_ka_S27 >= 0 .and. $LCS_F_30 <= $MR_nb_11 ) == 0 ) then
+  388.                                     $LB_Y0 = 1
+  388.                                     $UB_Y1 = $MR_nb_11
+  388.                                     $Subscript_Y2 = 1 + $LCS_29
+  388.                                     $Subscript_Y3 = $LCS_F_30
+  388.                                     $Subscript_Y4 = 1
+  388.                                     _rbounds_error( $_File_Y40, $Line_Y101, $_Name_Y76, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y105 )
+  388.                                  endif
+  388.                                  $LIS_E6 = _lsh( $CS_PRT_4, 12 ) + ( $MR_ka_S27 + $SCF_S28 )
+  388.                                  $LIS_S32 = $MR_ka_S27
+  388.                                  do
+  388.                                     substr[a,$I_L388_S31 + $LIS_S32:1] = substr[y,$LIS_E6 + $I_L388_S31:1]
+  388.                                     $I_L388_S31 = 1 + $I_L388_S31
+  388.                                     if ( $I_L388_S31 >= $F_S30 ) exit
+  388.                                  enddo
+  388.                               endif
+  389.                               $MR_ka_S33 = $MR_ka_S27 + $k_S29
+  389.                               0[loc( ka ),0] = $MR_ka_S33
+  389.                            endif
+  389.                         endif
+  389.                      endif
+  389.                   endif
+  395.                   $MR_ka_S34 = 0[loc( ka ),0]
+  395.                   if ( $MR_ka_S34 < $MR_nb_11 ) then
+  396.                      $lux_S35 = abs( $MR_lu_7 )
+  396.                      lux = $lux_S35
+  397.                      $jy_S36 = jy
+  397.                      $jy_S37 = 1 + ( $jy_S36 - and( -4, $jy_S36 + _rsh( _ash( $jy_S36, 1 ), 30 ) ) )
+  397.                      jy = $jy_S37
+  398.                      $CS_S38 = or( -1 + $jy_S37, 4 - $jy_S37 ) >= 0
+  398.                      if ( int( $CS_S38 ) == 0 ) then
+  398.                         $LB_Y0 = 1
+  398.                         $UB_Y1 = 4
+  398.                         $Subscript_Y5 = $jy_S37
+  398.                         _bounds_error( $_File_Y40, $Line_Y107, $_Name_Y106, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y108 )
+  398.                      endif
+  398.                      $MR_ns_S39 = $MR_ib_9 + $MR_ka_S34
+  398.                      (-1,ns)[$jy_S37] = $MR_ns_S39
+  399.                      if ( int( $CS_S38 ) == 0 ) then
+  399.                         $LB_Y0 = 1
+  399.                         $UB_Y1 = 4
+  399.                         $Subscript_Y5 = $jy_S37
+  399.                         _bounds_error( $_File_Y40, $Line_Y109, $_Name_Y106, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y110 )
+  399.                      endif
+  399.                      if ( int( $CS_S38 ) == 0 ) then
+  399.                         $LB_Y0 = 1
+  399.                         $UB_Y1 = 4
+  399.                         $Subscript_Y5 = $jy_S37
+  399.                         _bounds_error( $_File_Y40, $Line_Y109, $_Name_Y111, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y112 )
+  399.                      endif
+  399.                      $LCS_31 = abs( $MR_lu_7 )
+  399.                      if ( or( 999 - $LCS_31, -1 + $LCS_31 ) < 0 ) then
+  399.                         $LB_Y0 = 1
+  399.                         $UB_Y1 = 999
+  399.                         $Subscript_Y5 = $LCS_31
+  399.                         _bounds_error( $_File_Y40, $Line_Y109, $_Name_Y113, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y114 )
+  399.                      endif
+  399.                      if ( int( $CS_S38 ) == 0 ) then
+  399.                         $LB_Y0 = 1
+  399.                         $UB_Y1 = 4
+  399.                         $Subscript_Y5 = $jy_S37
+  399.                         _bounds_error( $_File_Y40, $Line_Y109, $_Name_Y115, $Dim_Y9, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y116 )
+  399.                      endif
+  399.                      $Con_P28 = 16
+  399.                      $Con_P29 = 1
+  399.                      $Con_P30 = 4096
+  399.                      t$39 = bacio( $Con_P28, (-1,ns)[jy], jb, $Con_P29, $Con_P30, (-1,nn)[jy], (-1,fd)[abs( 0[loc( lu ),0] )], substr[cfn,0:1], substr[y,-4096 + _lsh( jy, 12 ):1] )
+  401.                      $jy_S40 = jy
+  401.                      $CS_S41 = or( -1 + $jy_S40, 4 - $jy_S40 ) >= 0
+  401.                      if ( int( $CS_S41 ) == 0 ) then
+  401.                         $LB_Y0 = 1
+  401.                         $UB_Y1 = 4
+  401.                         $Subscript_Y5 = $jy_S40
+  401.                         _bounds_error( $_File_Y40, $Line_Y117, $_Name_Y111, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y118 )
+  401.                      endif
+  401.                      $MR_nn_S42 = (-1,nn)[$jy_S40]
+  401.                      if ( $MR_nn_S42 > 0 ) then
+  402.                         if ( int( $CS_S41 ) == 0 ) then
+  402.                            $LB_Y0 = 1
+  402.                            $UB_Y1 = 4
+  402.                            $Subscript_Y5 = $jy_S40
+  402.                            _bounds_error( $_File_Y40, $Line_Y119, $_Name_Y111, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y120 )
+  402.                         endif
+  402.                         $k_S3 = min( $MR_nn_S42, $MR_nb_11 - $MR_ka_S34 )
+  403.                         $F_A34 = $k_S3
+  403.                         if ( $k_S3 > 0 ) then !  99.50%
+  403.                            $I_L403_S44 = 0
+  403.                            if ( int( $CS_S41 ) == 0 ) then
+  403.                               $LB_Y0 = 1
+  403.                               $UB_Y1 = 4
+  403.                               $Subscript_Y5 = $jy_S40
+  403.                               _bounds_error( $_File_Y40, $Line_Y121, $_Name_Y115, $Dim_Y9, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y122 )
+  403.                            endif
+  403.                            if ( $F_A34 > 4096 ) then
+  403.                               $LB_Y0 = 1
+  403.                               $UB_Y1 = 4096
+  403.                               $Subscript_Y2 = 1
+  403.                               $Subscript_Y3 = $F_A34
+  403.                               $Subscript_Y4 = 1
+  403.                               _rbounds_error( $_File_Y40, $Line_Y121, $_Name_Y123, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y124 )
+  403.                            endif
+  403.                            $LCS_32 = $MR_ka_S34
+  403.                            $LCS_F_33 = $F_A34 + $LCS_32
+  403.                            if ( int( $MR_ka_S34 >= 0 .and. $LCS_F_33 <= $MR_nb_11 ) == 0 ) then
+  403.                               $LB_Y0 = 1
+  403.                               $UB_Y1 = $MR_nb_11
+  403.                               $Subscript_Y2 = 1 + $LCS_32
+  403.                               $Subscript_Y3 = $LCS_F_33
+  403.                               $Subscript_Y4 = 1
+  403.                               _rbounds_error( $_File_Y40, $Line_Y121, $_Name_Y125, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y126 )
+  403.                            endif
+  403.                            $LIS_S43 = -4096 + _lsh( $jy_S40, 12 )
+  403.                            $LIS_S45 = $MR_ka_S34
+  403.                            do
+  403.                               substr[a,$I_L403_S44 + $LIS_S45:1] = substr[y,$LIS_S43 + $I_L403_S44:1]
+  403.                               $I_L403_S44 = 1 + $I_L403_S44
+  403.                               if ( $I_L403_S44 >= $F_A34 ) exit
+  403.                            enddo
+  403.                         endif
+  404.                         $MR_ka_S46 = $k_S3 + $MR_ka_S34
+  404.                         0[loc( ka ),0] = $MR_ka_S46
+  404.                      endif
+  408.                      if ( int( $CS_S41 ) == 0 ) then
+  408.                         $LB_Y0 = 1
+  408.                         $UB_Y1 = 4
+  408.                         $Subscript_Y5 = $jy_S40
+  408.                         _bounds_error( $_File_Y40, $Line_Y127, $_Name_Y111, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y128 )
+  408.                      endif
+  408.                      $MR_ka_S47 = 0[loc( ka ),0]
+  408.                      if ( int( $MR_nn_S42 == 4096 .and. $MR_ka_S47 < $MR_nb_11 ) /= 0 ) then
+  414.                         $ka_S56 = $MR_ka_S47
+  415.                         $LCS_MR_nb_34 = $MR_nb_11
+  408.                         do
+  409.                            $jy_S48 = 1 + ( $jy_S40 - and( -4, $jy_S40 + _rsh( _ash( $jy_S40, 1 ), 30 ) ) )
+  409.                            jy = $jy_S48
+  410.                            $CS_S49 = or( -1 + $jy_S48, 4 - $jy_S48 ) >= 0
+  410.                            if ( int( $CS_S49 ) == 0 ) then
+  410.                               $LB_Y0 = 1
+  410.                               $UB_Y1 = 4
+  410.                               $Subscript_Y5 = $jy_S48
+  410.                               _bounds_error( $_File_Y40, $Line_Y129, $_Name_Y111, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y130 )
+  410.                            endif
+  410.                            if ( int( $CS_S49 ) == 0 ) then
+  410.                               $LB_Y0 = 1
+  410.                               $UB_Y1 = 4
+  410.                               $Subscript_Y5 = $jy_S48
+  410.                               _bounds_error( $_File_Y40, $Line_Y129, $_Name_Y106, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y131 )
+  410.                            endif
+  410.                            if ( int( $CS_S49 ) == 0 ) then
+  410.                               $LB_Y0 = 1
+  410.                               $UB_Y1 = 4
+  410.                               $Subscript_Y5 = $jy_S48
+  410.                               _bounds_error( $_File_Y40, $Line_Y129, $_Name_Y106, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y131 )
+  410.                            endif
+  410.                            $MR_nn_S50 = (-1,nn)[$jy_S48]
+  410.                            $MR_ns_S51 = (-1,ns)[$jy_S48]
+  410.                            $MR_ns_S52 = $MR_nn_S50 + $MR_ns_S51
+  410.                            (-1,ns)[$jy_S48] = $MR_ns_S52
+  411.                            if ( int( $CS_S49 ) == 0 ) then
+  411.                               $LB_Y0 = 1
+  411.                               $UB_Y1 = 4
+  411.                               $Subscript_Y5 = $jy_S48
+  411.                               _bounds_error( $_File_Y40, $Line_Y133, $_Name_Y106, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y134 )
+  411.                            endif
+  411.                            if ( int( $CS_S49 ) == 0 ) then
+  411.                               $LB_Y0 = 1
+  411.                               $UB_Y1 = 4
+  411.                               $Subscript_Y5 = $jy_S48
+  411.                               _bounds_error( $_File_Y40, $Line_Y133, $_Name_Y111, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y135 )
+  411.                            endif
+  411.                            $lux_S53 = lux
+  411.                            if ( or( -1 + $lux_S53, 999 - $lux_S53 ) < 0 ) then
+  411.                               $LB_Y0 = 1
+  411.                               $UB_Y1 = 999
+  411.                               $Subscript_Y5 = $lux_S53
+  411.                               _bounds_error( $_File_Y40, $Line_Y133, $_Name_Y136, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y137 )
+  411.                            endif
+  411.                            if ( int( $CS_S49 ) == 0 ) then
+  411.                               $LB_Y0 = 1
+  411.                               $UB_Y1 = 4
+  411.                               $Subscript_Y5 = $jy_S48
+  411.                               _bounds_error( $_File_Y40, $Line_Y133, $_Name_Y115, $Dim_Y9, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y138 )
+  411.                            endif
+  411.                            $Con_P28 = 80
+  411.                            $Con_P29 = 1
+  411.                            $Con_P30 = 4096
+  411.                            t$39 = bacio( $Con_P28, (-1,ns)[jy], jb, $Con_P29, $Con_P30, (-1,nn)[jy], (-1,fd)[lux], substr[cfn,0:1], substr[y,-4096 + _lsh( jy, 12 ):1] )
+  413.                            $jy_S40 = jy
+  413.                            $CS_S54 = or( -1 + $jy_S40, 4 - $jy_S40 ) >= 0
+  413.                            if ( int( $CS_S54 ) == 0 ) then
+  413.                               $LB_Y0 = 1
+  413.                               $UB_Y1 = 4
+  413.                               $Subscript_Y5 = $jy_S40
+  413.                               _bounds_error( $_File_Y40, $Line_Y139, $_Name_Y111, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y140 )
+  413.                            endif
+  413.                            $MR_nn_S55 = (-1,nn)[$jy_S40]
+  413.                            if ( $MR_nn_S55 > 0 ) then
+  414.                               if ( int( $CS_S54 ) == 0 ) then
+  414.                                  $LB_Y0 = 1
+  414.                                  $UB_Y1 = 4
+  414.                                  $Subscript_Y5 = $jy_S40
+  414.                                  _bounds_error( $_File_Y40, $Line_Y141, $_Name_Y111, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y142 )
+  414.                               endif
+  414.                               $k_S4 = min( $MR_nn_S55, $MR_nb_11 - $ka_S56 )
+  415.                               $F_A35 = $k_S4
+  415.                               if ( $k_S4 > 0 ) then !  99.50%
+  415.                                  $I_L415_S58 = 0
+  415.                                  if ( int( $CS_S54 ) == 0 ) then
+  415.                                     $LB_Y0 = 1
+  415.                                     $UB_Y1 = 4
+  415.                                     $Subscript_Y5 = $jy_S40
+  415.                                     _bounds_error( $_File_Y40, $Line_Y143, $_Name_Y115, $Dim_Y9, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y144 )
+  415.                                  endif
+  415.                                  if ( $F_A35 > 4096 ) then
+  415.                                     $LB_Y0 = 1
+  415.                                     $UB_Y1 = 4096
+  415.                                     $Subscript_Y2 = 1
+  415.                                     $Subscript_Y3 = $F_A35
+  415.                                     $Subscript_Y4 = 1
+  415.                                     _rbounds_error( $_File_Y40, $Line_Y143, $_Name_Y145, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y146 )
+  415.                                  endif
+  415.                                  $LCS_35 = $ka_S56
+  415.                                  $LCS_F_36 = $F_A35 + $LCS_35
+  415.                                  if ( int( $ka_S56 >= 0 .and. $LCS_F_36 <= $LCS_MR_nb_34 ) == 0 ) then
+  415.                                     $LB_Y0 = 1
+  415.                                     $UB_Y1 = $LCS_MR_nb_34
+  415.                                     $Subscript_Y2 = 1 + $LCS_35
+  415.                                     $Subscript_Y3 = $LCS_F_36
+  415.                                     $Subscript_Y4 = 1
+  415.                                     _rbounds_error( $_File_Y40, $Line_Y143, $_Name_Y147, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y2, $Subscript_Y3, $Subscript_Y4, $Err_count_Y148 )
+  415.                                  endif
+  415.                                  $LIS_S57 = -4096 + _lsh( $jy_S40, 12 )
+  415.                                  $LIS_S59 = $ka_S56
+  415.                                  do
+  415.                                     substr[a,$I_L415_S58 + $LIS_S59:1] = substr[y,$LIS_S57 + $I_L415_S58:1]
+  415.                                     $I_L415_S58 = 1 + $I_L415_S58
+  415.                                     if ( $I_L415_S58 >= $F_A35 ) exit
+  415.                                  enddo
+  415.                               endif
+  416.                               $ka_S56 = $k_S4 + $ka_S56
+  416.                            endif
+  418.                            if ( int( $CS_S54 ) == 0 ) then
+  418.                               $LB_Y0 = 1
+  418.                               $UB_Y1 = 4
+  418.                               $Subscript_Y5 = $jy_S40
+  418.                               _bounds_error( $_File_Y40, $Line_Y149, $_Name_Y111, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y150 )
+  418.                            endif
+  417.                            if ( int( $MR_nn_S55 == 4096 .and. $ka_S56 < $MR_nb_11 ) == 0 ) exit
+  417.                         enddo
+  416.                         0[loc( ka ),0] = $ka_S56
+  416.                      endif
+  416.                   endif
+  368.                else if ( $MR_ib_9 >= 0 ) then
+  369.                   if ( int( $CS_0 ) == 0 ) then
+  369.                      $LB_Y0 = 1
+  369.                      $UB_Y1 = 999
+  369.                      $Subscript_Y5 = $MR_lu_7
+  369.                      _bounds_error( $_File_Y40, $Line_Y44, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y45 )
+  369.                   endif
+  369.                   $Con_P28 = 16
+  369.                   $Con_P29 = 1
+  369.                   t$39 = bacio( $Con_P28, 0[loc( ib ),0], jb, $Con_P29, 0[loc( nb ),0], 0[loc( ka ),0], (-1,fd)[0[loc( lu ),0]], substr[cfn,0:1], substr[a,0:1] )
+  369.                else
+  371.                   if ( int( $CS_0 ) == 0 ) then
+  371.                      $LB_Y0 = 1
+  371.                      $UB_Y1 = 999
+  371.                      $Subscript_Y5 = $MR_lu_7
+  371.                      _bounds_error( $_File_Y40, $Line_Y46, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y47 )
+  371.                   endif
+  371.                   $Con_P28 = 80
+  371.                   $Con_P29 = 0
+  371.                   $Con_P30 = 1
+  371.                   t$39 = bacio( $Con_P28, $Con_P29, jb, $Con_P30, 0[loc( nb ),0], 0[loc( ka ),0], (-1,fd)[0[loc( lu ),0]], substr[cfn,0:1], substr[a,0:1] )
+  371.                endif
+  371.             endif
+  371.          endif
+  371.       endif
+  422.       return
+  422.       end
+  422.       
+  424.       
+  424.       subroutine bawrite( lu, ib, nb, ka, a )
+  462.       $MR_lu_0 = 0[loc( lu ),0]
+  462.       $CS_0 = or( 999 - $MR_lu_0, -1 + $MR_lu_0 ) >= 0
+  462.       if ( int( $CS_0 ) == 0 ) then
+  462.          $LB_Y0 = 1
+  462.          $UB_Y1 = 999
+  462.          $Subscript_Y5 = $MR_lu_0
+  462.          _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+  462.       endif
+  462.       if ( (-1,fd)[$MR_lu_0] <= 0 ) then
+  463.          0[loc( ka ),0] = 0
+  465.       else if ( 0[loc( nb ),0] <= 0 ) then
+  467.          0[loc( ka ),0] = 0
+  467.       else if ( 0[loc( ib ),0] >= 0 ) then
+  472.          if ( int( $CS_0 ) == 0 ) then
+  472.             $LB_Y0 = 1
+  472.             $UB_Y1 = 999
+  472.             $Subscript_Y5 = $MR_lu_0
+  472.             _bounds_error( $_File_Y40, $Line_Y44, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y45 )
+  472.          endif
+  472.          $Con_P4 = 32
+  472.          $Con_P5 = 1
+  472.          t$44 = bacio( $Con_P4, 0[loc( ib ),0], jb, $Con_P5, 0[loc( nb ),0], 0[loc( ka ),0], (-1,fd)[0[loc( lu ),0]], substr[cfn,0:1], substr[a,0:1] )
+  472.       else
+  474.          if ( int( $CS_0 ) == 0 ) then
+  474.             $LB_Y0 = 1
+  474.             $UB_Y1 = 999
+  474.             $Subscript_Y5 = $MR_lu_0
+  474.             _bounds_error( $_File_Y40, $Line_Y46, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y47 )
+  474.          endif
+  474.          $Con_P4 = 96
+  474.          $Con_P5 = 0
+  474.          $Con_P6 = 1
+  474.          t$44 = bacio( $Con_P4, $Con_P5, jb, $Con_P6, 0[loc( nb ),0], 0[loc( ka ),0], (-1,fd)[0[loc( lu ),0]], substr[cfn,0:1], substr[a,0:1] )
+  474.       endif
+  477.       return
+  477.       end
+  477.       
+  479.       
+  479.       subroutine wryte( lu, nb, a )
+  514.       $MR_lu_0 = 0[loc( lu ),0]
+  514.       $CS_0 = or( 999 - $MR_lu_0, -1 + $MR_lu_0 ) >= 0
+  514.       if ( int( $CS_0 ) == 0 ) then
+  514.          $LB_Y0 = 1
+  514.          $UB_Y1 = 999
+  514.          $Subscript_Y5 = $MR_lu_0
+  514.          _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+  514.       endif
+  514.       if ( (-1,fd)[$MR_lu_0] > 0 ) then
+  517.          if ( 0[loc( nb ),0] > 0 ) then
+  521.             if ( int( $CS_0 ) == 0 ) then
+  521.                $LB_Y0 = 1
+  521.                $UB_Y1 = 999
+  521.                $Subscript_Y5 = $MR_lu_0
+  521.                _bounds_error( $_File_Y40, $Line_Y44, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y45 )
+  521.             endif
+  521.             $Con_P3 = 96
+  521.             $Con_P4 = 0
+  521.             $Con_P5 = 1
+  521.             t$48 = bacio( $Con_P3, $Con_P4, jb, $Con_P5, 0[loc( nb ),0], ka, (-1,fd)[0[loc( lu ),0]], substr[cfn,0:1], substr[a,0:1] )
+  521.          endif
+  521.       endif
+  524.       return
+  524.       end
+  524.       

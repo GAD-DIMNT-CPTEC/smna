@@ -1,0 +1,258 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrsw_cld.f90
+Compiled : 12/11/20  23:53:58
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps rrsw_cld.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrsw_cld.f90
+Date     : 12/11/2020  23:53:58
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_26851/rrsw_cld_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     There are no optimizations or loops to mark
+
+
+    1.          module rrsw_cld
+    2.    
+    3.          use shr_kind_mod, only: r8 => shr_kind_r8
+    4.    
+    5.    !      use parkind, only : jpim, jprb
+    6.    
+    7.          implicit none
+    8.          save
+    9.    
+   10.    !------------------------------------------------------------------
+   11.    ! rrtmg_sw cloud property coefficients
+   12.    !
+   13.    ! Initial: J.-J. Morcrette, ECMWF, oct1999
+   14.    ! Revised: J. Delamere/MJIacono, AER, aug2005
+   15.    ! Revised: MJIacono, AER, nov2005
+   16.    ! Revised: MJIacono, AER, jul2006
+   17.    !------------------------------------------------------------------
+   18.    !
+   19.    !  name     type     purpose
+   20.    ! -----  :  ----   : ----------------------------------------------
+   21.    ! xxxliq1 : real   : optical properties (extinction coefficient, single 
+   22.    !                    scattering albedo, assymetry factor) from
+   23.    !                    Hu & Stamnes, j. clim., 6, 728-742, 1993.  
+   24.    ! xxxice2 : real   : optical properties (extinction coefficient, single 
+   25.    !                    scattering albedo, assymetry factor) from streamer v3.0,
+   26.    !                    Key, streamer user's guide, cooperative institude 
+   27.    !                    for meteorological studies, 95 pp., 2001.
+   28.    ! xxxice3 : real   : optical properties (extinction coefficient, single 
+   29.    !                    scattering albedo, assymetry factor) from
+   30.    !                    Fu, j. clim., 9, 1996.
+   31.    ! xbari   : real   : optical property coefficients for five spectral 
+   32.    !                    intervals (2857-4000, 4000-5263, 5263-7692, 7692-14285,
+   33.    !                    and 14285-40000 wavenumbers) following 
+   34.    !                    Ebert and Curry, jgr, 97, 3831-3836, 1992.
+   35.    !------------------------------------------------------------------
+   36.    
+   37.          real(kind=r8) :: extliq1(58,16:29), ssaliq1(58,16:29), asyliq1(58,16:29)
+   38.          real(kind=r8) :: extice2(43,16:29), ssaice2(43,16:29), asyice2(43,16:29)
+   39.          real(kind=r8) :: extice3(46,16:29), ssaice3(46,16:29), asyice3(46,16:29)
+   40.          real(kind=r8) :: fdlice3(46,16:29)
+   41.          real(kind=r8) :: abari(5),bbari(5),cbari(5),dbari(5),ebari(5),fbari(5)
+   42.    
+   43.          end module rrsw_cld
+   44.    
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                 C r o s s   R e f e r e n c e   for   RRSW_CLD
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+ABARI                           Static offset=0                   REAL(KIND=8), DIMENSION(5), SAVE
+  Decl      41
+  Set 
+  Used
+
+ASYICE2                         Static offset=512                 REAL(KIND=8), DIMENSION(43, 16:29), SAVE
+  Decl      38
+  Set 
+  Used
+
+ASYICE3                         Static offset=39936               REAL(KIND=8), DIMENSION(46, 16:29), SAVE
+  Decl      39
+  Set 
+  Used
+
+ASYLIQ1                         Static offset=81920               REAL(KIND=8), DIMENSION(58, 16:29), SAVE
+  Decl      37
+  Set 
+  Used
+
+BBARI                           Static offset=135680              REAL(KIND=8), DIMENSION(5), SAVE
+  Decl      41
+  Set 
+  Used
+
+CBARI                           Static offset=136192              REAL(KIND=8), DIMENSION(5), SAVE
+  Decl      41
+  Set 
+  Used
+
+DBARI                           Static offset=136704              REAL(KIND=8), DIMENSION(5), SAVE
+  Decl      41
+  Set 
+  Used
+
+EBARI                           Static offset=137216              REAL(KIND=8), DIMENSION(5), SAVE
+  Decl      41
+  Set 
+  Used
+
+EXTICE2                         Static offset=137728              REAL(KIND=8), DIMENSION(43, 16:29), SAVE
+  Decl      38
+  Set 
+  Used
+
+EXTICE3                         Static offset=177152              REAL(KIND=8), DIMENSION(46, 16:29), SAVE
+  Decl      39
+  Set 
+  Used
+
+EXTLIQ1                         Static offset=219136              REAL(KIND=8), DIMENSION(58, 16:29), SAVE
+  Decl      37
+  Set 
+  Used
+
+FBARI                           Static offset=272896              REAL(KIND=8), DIMENSION(5), SAVE
+  Decl      41
+  Set 
+  Used
+
+FDLICE3                         Static offset=273408              REAL(KIND=8), DIMENSION(46, 16:29), SAVE
+  Decl      40
+  Set 
+  Used
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD
+  Decl       3
+  Set 
+  Used      37      38      39      40      41
+
+RRSW_CLD                                                          Module
+  Decl       1
+  Set 
+  Used
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used       3
+
+SSAICE2                         Static offset=315392              REAL(KIND=8), DIMENSION(43, 16:29), SAVE
+  Decl      38
+  Set 
+  Used
+
+SSAICE3                         Static offset=354816              REAL(KIND=8), DIMENSION(46, 16:29), SAVE
+  Decl      39
+  Set 
+  Used
+
+SSALIQ1                         Static offset=396800              REAL(KIND=8), DIMENSION(58, 16:29), SAVE
+  Decl      37
+  Set 
+  Used
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+RRSW_CLD
+      Defined as:  Module (line 1, file rrsw_cld.f90)
+
+        Uses:      SHR_KIND_MOD
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     RRSW_CLD
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

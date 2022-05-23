@@ -1,0 +1,60 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgir.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgir.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgir( lugb, msk1, msk2, mnum, mbuf, cbuf, nlen, nnum, iret )
+    2.       t$1 = mbuf
+   57.       t$2 = _zla( 0, mbuf )
+   61.       iseek = 0
+   62.       call skgb( lugb, iseek, msk1, lskip, lgrib )
+   63.       if ( lgrib <= 0 ) then
+   63.          goto 10
+   63.       else if ( 320 <= mbuf ) then
+   64.          call ixgb( lugb, lskip, lgrib, 320, 1, nlen,  _substr(cbuf(1),1,1) )
+   64.       else
+   64.    10    continue
+   66.          nlen = 320
+   66.       endif
+   68.       if ( mnum > 0 ) then
+   68.          $I_L68_4 = 0
+   68.          do
+   69.             if ( lgrib > 0 ) then
+   70.                iseek = lskip + lgrib
+   71.                call skgb( lugb, iseek, msk2, lskip, lgrib )
+   71.             endif
+   73.             $I_L68_4 = 1 + $I_L68_4
+   72.             if ( $I_L68_4 >= mnum ) exit
+   72.          enddo
+   72.       endif
+   76.       nnum = 0
+   77.       iret = 0
+   78.       if ( lgrib > 0 ) then
+   78.          do
+   79.             if ( nlen + nlen * nnum <= mbuf ) then
+   80.                nnum = 1 + nnum
+   81.                call ixgb( lugb, lskip, lgrib, nlen, nnum, mlen,  _substr(cbuf(1),1,1) )
+   82.                iseek = lskip + lgrib
+   83.                call skgb( lugb, iseek, msk2, lskip, lgrib )
+   83.             else
+   85.                iret = 1
+   85.             endif
+   86.             if ( ( iret == 0 .and. lgrib > 0 ) == 0 ) exit
+   86.          enddo
+   86.       endif
+   90.       return
+   90.       end
+   90.       

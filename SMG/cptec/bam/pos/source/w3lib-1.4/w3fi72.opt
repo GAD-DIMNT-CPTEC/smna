@@ -1,0 +1,339 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi72.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi72.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+  190.       
+  190.       subroutine w3fi72( itype, fld, ifld, ibitl, ipflag, id, pds, igflag, igrid, igds, icomp, ibflag, ibmap, iblen, ibdsfl, npts, kbuf, itot, jerr )
+  192.       bms%header%el_len = 1
+  192.       bms%header%assoc = 0
+  192.       bms%header%ptr_alloc = 0
+  192.       bms%header%p_or_a = 2
+  192.       bms%header%a_contig = 1
+  192.       bms%header%dv_versn = 2
+  192.       bms%header%dv_smunit = 8
+  192.       bms%header%d_type = 0
+  192.       bms%header%n_params = 0
+  192.       bms%header%pad_codim = 0
+  192.       bms%header%n_codim = 0
+  192.       bms%header%pad_dim = 0
+  192.       bms%header%n_dim = 1
+  192.       bms%header%d_type_idx = 23
+  192.       bms%header%typ_code = 32774
+  192.       bms%header%orig_base = 0
+  192.       bms%header%orig_size = 0
+  192.       bms%dim_1%LB = 1
+  192.       bms%dim_1%EX = 0
+  192.       bms%dim_1%SM = 1
+  191.       ipfld%header%el_len = 1
+  191.       ipfld%header%assoc = 0
+  191.       ipfld%header%ptr_alloc = 0
+  191.       ipfld%header%p_or_a = 2
+  191.       ipfld%header%a_contig = 1
+  191.       ipfld%header%dv_versn = 2
+  191.       ipfld%header%dv_smunit = 8
+  191.       ipfld%header%d_type = 0
+  191.       ipfld%header%n_params = 0
+  191.       ipfld%header%pad_codim = 0
+  191.       ipfld%header%n_codim = 0
+  191.       ipfld%header%pad_dim = 0
+  191.       ipfld%header%n_dim = 1
+  191.       ipfld%header%d_type_idx = 23
+  191.       ipfld%header%typ_code = 32774
+  191.       ipfld%header%orig_base = 0
+  191.       ipfld%header%orig_size = 0
+  191.       ipfld%dim_1%LB = 1
+  191.       ipfld%dim_1%EX = 0
+  191.       ipfld%dim_1%SM = 1
+    1.       pfld%header%el_len = 1
+    1.       pfld%header%assoc = 0
+    1.       pfld%header%ptr_alloc = 0
+    1.       pfld%header%p_or_a = 2
+    1.       pfld%header%a_contig = 1
+    1.       pfld%header%dv_versn = 2
+    1.       pfld%header%dv_smunit = 8
+    1.       pfld%header%d_type = 0
+    1.       pfld%header%n_params = 0
+    1.       pfld%header%pad_codim = 0
+    1.       pfld%header%n_codim = 0
+    1.       pfld%header%pad_dim = 0
+    1.       pfld%header%n_dim = 1
+    1.       pfld%header%d_type_idx = 23
+    1.       pfld%header%typ_code = 32774
+    1.       pfld%header%orig_base = 0
+    1.       pfld%header%orig_size = 0
+    1.       pfld%dim_1%LB = 1
+    1.       pfld%dim_1%EX = 0
+    1.       pfld%dim_1%SM = 1
+  201.       ier = 0
+  202.       iberr = 0
+  203.       jerr = 0
+  206.       lengds = 0
+  207.       lenbms = 0
+  208.       lenbds = 0
+  209.       itoss = 0
+  217.       if ( ipflag == 0 ) then
+  218.          id(6) = 1
+  219.          call w3fi68( id(1),  _substr(pds(1),1,1) )
+  219.          goto 10
+  220.       else if ( ipflag == 1 ) then
+  221.          $t_S0 = mova2i(  _substr(pds(8),1,1) )
+  221.          if ( and( 64, $t_S0 ) == 64 ) then
+  223.              _substr(pds(8),1,1) = 'À'
+  223.          else
+  224.             $t_S1 = mova2i(  _substr(pds(8),1,1) )
+  224.             if ( $t_S1 == 0 ) then
+  226.                 _substr(pds(8),1,1) = '€'
+  226.             endif
+  226.          endif
+  226.    10    continue
+  237.          $t_S2 = mova2i(  _substr(pds(1),1,1) )
+  237.          $t_S4 = mova2i(  _substr(pds(2),1,1) )
+  238.          $t_S3 = mova2i(  _substr(pds(3),1,1) )
+  244.          if ( igflag == 0 ) then
+  245.             call w3fi71( igrid, igds(1), igerr )
+  246.             if ( igerr == 1 ) then
+  248.                jerr = 4
+  248.             else
+  248.                goto 20
+  248.             endif
+  248.          else
+  248.    20       continue
+  252.             if ( igflag == 0 .orelse. igflag == 1 ) then
+  253.                call w3fi74( igds(1), icomp,  _substr(gds(1),1,1), lengds, npts, igerr )
+  254.                if ( igerr == 1 ) then
+  256.                   jerr = 5
+  256.                else
+  272.                   $t_S5 = mova2i(  _substr(pds(8),1,1) )
+  272.                   if ( $t_S5 /= 64 ) then
+  273.                      $t_S6 = mova2i(  _substr(pds(8),1,1) )
+  272.                      if ( $t_S6 == 192 ) then
+  272.                         goto 30
+  272.                      else
+  272.                         goto 40
+  272.                      endif
+  272.                   else
+  272.    30                continue
+  274.                      itoss = 1
+  275.                      if ( ibflag /= 0 ) then
+  272.                         goto 40
+  272.                      else if ( iblen + -npts /= 0 ) then
+  278.                         jerr = 7
+  278.                      else
+  281.                         bms%header%a_contig = 1
+  281.                         bms%dim_1%LB = 1
+  281.                         bms%dim_1%EX = ( max( 0, 8 + npts / 8 ) )
+  281.                         bms%dim_1%SM = 1
+  281.                         $_allo_P0(0) = 0x1000000000001L
+  281.                         $_allo_P0(1) = loc( bms )
+  281.                         call __allocate( $_allo_P0, 0, 0, _fcd( 0, 0 ) )
+  282.                         call w3fi73( ibflag, ibmap(1), iblen,  _substr((bms%base_addr)(_dv_lb( bms, 1 ), 0),1,1), lenbms, ier )
+  283.                         if ( ier /= 0 ) then
+  285.                            jerr = 8
+  285.                         else
+  285.    40                      continue
+  297.                            $t_S7 = mova2i(  _substr(pds(27),1,1) )
+  297.                            $t_S8 = mova2i(  _substr(pds(28),1,1) )
+  301.                            $scale_S9 = 10.0 ** cvmg( $t_S8 + 256 * $t_S7, -and( 32767, $t_S8 + 256 * $t_S7 ), and( 32768, $t_S8 + 256 * $t_S7 ) == 0 )
+  302.                            if ( itype == 0 ) then
+  303.                               if ( npts > 0 ) then
+  303.                                  $I_L303_50 = 0
+  303. !dir$ ivdep
+  303.                                  do
+  304.                                     fld(1 + $I_L303_50) = fld(1 + $I_L303_50) * $scale_S9
+  305.                                     $I_L303_50 = 1 + $I_L303_50
+  303.                                     if ( $I_L303_50 >= npts ) exit
+  303.                                  enddo
+  303.                               endif
+  306.                            else if ( npts > 0 ) then
+  307.                               $I_L307_48 = 0
+  307. !dir$ ivdep
+  307.                               do
+  308.                                  ifld(1 + $I_L307_48) = _anint( real( ifld(1 + $I_L307_48) ) * $scale_S9 )
+  309.                                  $I_L307_48 = 1 + $I_L307_48
+  307.                                  if ( $I_L307_48 >= npts ) exit
+  307.                               enddo
+  307.                            endif
+  314.                            pfld%header%a_contig = 1
+  314.                            pfld%dim_1%LB = 1
+  314.                            pfld%dim_1%EX = ( max( 0, 4 * npts ) )
+  314.                            pfld%dim_1%SM = 1
+  314.                            $_allo_P1(0) = 0x1000000000001L
+  314.                            $_allo_P1(1) = loc( pfld )
+  314.                            call __allocate( $_allo_P1, 0, 0, _fcd( 0, 0 ) )
+  316.                            if ( ibdsfl(2) /= 0 ) then
+  317.                               ipfld%header%a_contig = 1
+  317.                               ipfld%dim_1%LB = 1
+  317.                               ipfld%dim_1%EX = ( max( 0, 4 * npts ) )
+  317.                               ipfld%dim_1%SM = 1
+  317.                               $_allo_P2(0) = 0x1000000000001L
+  317.                               $_allo_P2(1) = loc( ipfld )
+  317.                               call __allocate( $_allo_P2, 0, 0, _fcd( 0, 0 ) )
+  318.                               $F_A33 = _dv_ex( ipfld, 1 )
+  318.                               if ( _dv_ex( ipfld, 1 ) > 0 ) then
+  318.                                  $I_A1 = 0
+  318.                                  do
+  318.                                      _substr((ipfld%base_addr)($I_A1 + _dv_lb( ipfld, 1 ), 0),1,1) = ''
+  318.                                     $I_A1 = 1 + $I_A1
+  318.                                     if ( $I_A1 >= $F_A33 ) exit
+  318.                                  enddo
+  318.                               endif
+  318.                            else
+  320.                               ipfld%header%a_contig = 1
+  320.                               ipfld%dim_1%LB = 1
+  320.                               ipfld%dim_1%EX = 1
+  320.                               ipfld%dim_1%SM = 1
+  320.                               $_allo_P3(0) = 0x1000000000001L
+  320.                               $_allo_P3(1) = loc( ipfld )
+  320.                               call __allocate( $_allo_P3, 0, 0, _fcd( 0, 0 ) )
+  320.                            endif
+  323.                            call w3fi75( ibitl, itype, itoss, fld(1), ifld(1), ibmap(1), ibdsfl(1), npts,  _substr(bds11(1),1,1),  _substr((ipfld%base_addr)(_dv_lb( ipfld, 1 ), 0),1,1),  _substr((pfld%base_addr)(_dv_lb( pfld, 1 ), 0),1,1), len, lenbds, iberr,  _substr(pds(1),1,1), igds(1) )
+  326.                            if ( ibdsfl(2) /= 0 ) then
+  328.                               if ( 4 * npts > 0 ) then
+  328.                                  $I_L328_52 = 0
+  328.                                  do
+  329.                                      _substr((pfld%base_addr)(1 + $I_L328_52, 0),1,1) =  _substr((ipfld%base_addr)(1 + $I_L328_52, 0),1,1)
+  330.                                     $I_L328_52 = 1 + $I_L328_52
+  328.                                     if ( $I_L328_52 >= ( 4 * npts ) ) exit
+  328.                                  enddo
+  328.                               endif
+  328.                            endif
+  332.                            $_allo_P4(0) = 0x1000000000001L
+  332.                            $_allo_P4(1) = loc( ipfld )
+  332.                            call __deallocate( $_allo_P4, 0, 0, _fcd( 0, 0 ) )
+  332.                            ipfld%header%assoc = 0
+  334.                            if ( iberr == 1 ) then
+  335.                               jerr = 3
+  335.                            else
+  341.                               if ( cvmg( $t_S8 + 256 * $t_S7, -and( 32767, $t_S8 + 256 * $t_S7 ), and( 32768, $t_S8 + 256 * $t_S7 ) == 0 ) /= 0 ) then
+  342.                                  $dscale_S13 = 1.0/$scale_S9
+  343.                                  if ( itype == 0 ) then
+  344.                                     if ( npts > 0 ) then
+  344.                                        $I_L344_56 = 0
+  344. !dir$ ivdep
+  344.                                        do
+  345.                                           fld(1 + $I_L344_56) = fld(1 + $I_L344_56) * $dscale_S13
+  346.                                           $I_L344_56 = 1 + $I_L344_56
+  344.                                           if ( $I_L344_56 >= npts ) exit
+  344.                                        enddo
+  344.                                     endif
+  347.                                  else if ( npts > 0 ) then
+  348.                                     $I_L348_54 = 0
+  348. !dir$ ivdep
+  348.                                     do
+  349.                                        fld(1 + $I_L348_54) = _anint( real( ifld(1 + $I_L348_54) ) * $dscale_S13 )
+  350.                                        $I_L348_54 = 1 + $I_L348_54
+  348.                                        if ( $I_L348_54 >= npts ) exit
+  348.                                     enddo
+  348.                                  endif
+  348.                               endif
+  358.                                _substr(zero,1,1) = ''
+  359.                               itot = lengds + lenbms + lenbds + $t_S3 + 65536 * $t_S2 + 256 * $t_S4 + 12
+  366.                               $F_A34 = ( lengds + lenbms + lenbds + $t_S3 + 65536 * $t_S2 + 256 * $t_S4 + 12 )
+  366.                               if ( lengds + lenbms + lenbds + $t_S3 + 65536 * $t_S2 + 256 * $t_S4 + 12 > 0 ) then
+  366.                                  $I_A1 = 0
+  366.                                  do
+  366.                                      _substr(kbuf(1 + $I_A1),1,1) =  _substr(zero,1,1)
+  366.                                     $I_A1 = 1 + $I_A1
+  366.                                     if ( $I_A1 >= $F_A34 ) exit
+  366.                                  enddo
+  366.                               endif
+  371.                               $I_L371_58 = 0
+  371.                               do
+  372.                                   _substr(kbuf(1 + $I_L371_58),1,1) = character*1( ib(1 + $I_L371_58) )
+  373.                                  $I_L371_58 = 1 + $I_L371_58
+  371.                                  if ( $I_L371_58 >= 4 ) exit
+  371.                               enddo
+  375.                                _substr(kbuf(5),1,1) = character*1( mod( ( lengds + lenbms + lenbds + $t_S3 + 65536 * $t_S2 + 256 * $t_S4 + 12 ) / 65536, 256 ) )
+  376.                                _substr(kbuf(6),1,1) = character*1( mod( ( lengds + lenbms + lenbds + $t_S3 + 65536 * $t_S2 + 256 * $t_S4 + 12 ) / 256, 256 ) )
+  377.                                _substr(kbuf(7),1,1) = character*1( mod( lengds + lenbms + lenbds + $t_S3 + 65536 * $t_S2 + 256 * $t_S4 + 12, 256 ) )
+  378.                                _substr(kbuf(8),1,1) = ''
+  383.                               if ( $t_S3 + 65536 * $t_S2 + 256 * $t_S4 > 0 ) then
+  385.                                  $I_L385_60 = 0
+  385.                                  do
+  386.                                      _substr(kbuf(9 + $I_L385_60),1,1) =  _substr(pds(1 + $I_L385_60),1,1)
+  387.                                     $I_L385_60 = 1 + $I_L385_60
+  385.                                     if ( $I_L385_60 >= ( $t_S3 + 65536 * $t_S2 + 256 * $t_S4 ) ) exit
+  385.                                  enddo
+  385.                               endif
+  395.                               if ( lengds > 0 ) then
+  397.                                  $I_L397_62 = 0
+  397.                                  do
+  398.                                      _substr(kbuf($t_S3 + $I_L397_62 + 65536 * $t_S2 + 256 * $t_S4 + 9),1,1) =  _substr(gds(1 + $I_L397_62),1,1)
+  399.                                     $I_L397_62 = 1 + $I_L397_62
+  397.                                     if ( $I_L397_62 >= lengds ) exit
+  397.                                  enddo
+  397.                               endif
+  405.                               if ( lenbms > 0 ) then
+  407.                                  $I_L407_64 = 0
+  407.                                  do
+  408.                                      _substr(kbuf(lengds + $t_S3 + $I_L407_64 + 65536 * $t_S2 + 256 * $t_S4 + 9),1,1) =  _substr((bms%base_addr)(1 + $I_L407_64, 0),1,1)
+  409.                                     $I_L407_64 = 1 + $I_L407_64
+  407.                                     if ( $I_L407_64 >= lenbms ) exit
+  407.                                  enddo
+  407.                               endif
+  418.                               $I_L418_66 = 0
+  418.                               do
+  419.                                   _substr(kbuf(lengds + lenbms + $t_S3 + $I_L418_66 + 65536 * $t_S2 + 256 * $t_S4 + 9),1,1) =  _substr(bds11(1 + $I_L418_66),1,1)
+  420.                                  $I_L418_66 = 1 + $I_L418_66
+  418.                                  if ( $I_L418_66 >= 11 ) exit
+  418.                               enddo
+  425.                               if ( len > 0 ) then
+  427.                                  $I_L427_68 = 0
+  427.                                  do
+  428.                                      _substr(kbuf(lengds + lenbms + $t_S3 + $I_L427_68 + 65536 * $t_S2 + 256 * $t_S4 + 20),1,1) =  _substr((pfld%base_addr)(1 + $I_L427_68, 0),1,1)
+  429.                                     $I_L427_68 = 1 + $I_L427_68
+  427.                                     if ( $I_L427_68 >= len ) exit
+  427.                                  enddo
+  427.                               endif
+  435.                                _substr(seven,1,1) = '7'
+  437.                               $I_L437_70 = 0
+  437.                               do
+  438.                                   _substr(kbuf(lengds + lenbms + lenbds + $t_S3 + $I_L437_70 + 65536 * $t_S2 + 256 * $t_S4 + 9),1,1) =  _substr(seven,1,1)
+  439.                                  $I_L437_70 = 1 + $I_L437_70
+  437.                                  if ( $I_L437_70 >= 4 ) exit
+  437.                               enddo
+  437.                            endif
+  437.                         endif
+  437.                      endif
+  437.                   endif
+  437.                endif
+  437.             else
+  262.                jerr = 2
+  262.             endif
+  262.          endif
+  262.       else
+  231.          jerr = 1
+  231.       endif
+  442.       if ( bms%header%assoc == 1 ) then
+  442.          $_allo_P5(0) = 0x1000000000001L
+  442.          $_allo_P5(1) = loc( bms )
+  442.          call __deallocate( $_allo_P5, 0, 0, _fcd( 0, 0 ) )
+  442.          bms%header%assoc = 0
+  442.       endif
+  443.       if ( pfld%header%assoc == 1 ) then
+  443.          $_allo_P6(0) = 0x1000000000001L
+  443.          $_allo_P6(1) = loc( pfld )
+  443.          call __deallocate( $_allo_P6, 0, 0, _fcd( 0, 0 ) )
+  443.          pfld%header%assoc = 0
+  443.       endif
+  190.       $_allo_P7(0) = 0x3000000000001L
+  190.       $_allo_P7(1) = loc( pfld )
+  190.       $_allo_P7(2) = loc( ipfld )
+  190.       $_allo_P7(3) = loc( bms )
+  190.       call _dealloc( $_allo_P7, 0, 0, _fcd( 0, 0 ) )
+  445.       return
+  445.       end
+  445.       

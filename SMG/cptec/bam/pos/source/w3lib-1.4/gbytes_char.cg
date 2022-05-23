@@ -1,0 +1,339 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  gbytes_char.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/gbytes_char.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine gbytec( in, iout, iskip, nbyte )
+    4.       $PRT_P4 = 0[loc( iskip ),0]
+    4.       $t_S3 = mova2i( substr[in,_ash( $PRT_P4 + _rsh( _ash( $PRT_P4, 2 ), 29 ), 3 ):1] )
+    4.       $MR_iskip_0 = 0[loc( iskip ),0]
+    4.       $CS_MR_iskip_5 = $MR_iskip_0 + _rsh( _ash( $MR_iskip_0, 2 ), 29 )
+    4.       $CS_6 = and( -8, $CS_MR_iskip_5 )
+    4.       $LCS_MR_iskip_0 = $MR_iskip_0 - $CS_6
+    4.       if ( or( $LCS_MR_iskip_0, 7 - $LCS_MR_iskip_0 ) < 0 ) then
+    4.          $LB_Y0 = 1
+    4.          $UB_Y1 = 8
+    4.          $Subscript_Y5 = 8 - $LCS_MR_iskip_0
+    4.          _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+    4.       endif
+    4.       $LCS_MR_iskip_2 = $MR_iskip_0 - $CS_6
+    4.       $itmp_S10 = and( $t_S3, (7,ones)[-$LCS_MR_iskip_2] )
+    4.       $MR_nbyte_2 = 0[loc( nbyte ),0]
+    4.       $LCS_3 = min( $MR_nbyte_2, 8 - $LCS_MR_iskip_2 ) + $MR_iskip_0 - $CS_6
+    4.       $CS_0 = $LCS_3
+    4.       if ( $CS_0 /= 8 ) then
+    4.          $LCS_8_5 = -8 + $LCS_3
+    4.          $LCS_4 = abs( $LCS_8_5 )
+    4.          $itmp_S10 = cvmg( lshift_ec( $itmp_S10, $LCS_4 ), rshift_ec( $itmp_S10, $LCS_4 ), $LCS_8_5 > 0 )
+    4.       endif
+    4.       $LCS_7 = _ash( $CS_MR_iskip_5, 3 )
+    4.       $index_S14 = 2 + $LCS_7
+    4.       $CS_MR_nbyte_3 = $MR_nbyte_2 - min( $MR_nbyte_2, 8 - $MR_iskip_0 - and( -8, $CS_MR_iskip_5 ) )
+    4.       $bitcnt_S13 = $CS_MR_nbyte_3
+    4.       if ( $CS_MR_nbyte_3 >= 8 ) then
+    4.          $bitcnt_S11 = 0
+    4.          $LIS_E1 = 1 + $LCS_7
+    4.          $Induc01_S12 = -7 + $CS_MR_nbyte_3
+    4.          do
+    4.             $t_S6 = mova2i( substr[in,$LIS_E1 + $bitcnt_S11:1] )
+    4.             $itmp_S10 = or( $t_S6, _lsh( $itmp_S10, 8 ) )
+    4.             $bitcnt_S11 = 1 + $bitcnt_S11
+    4.             $Induc01_S12 = -8 + $Induc01_S12
+    4.             if ( $Induc01_S12 <= 0 ) exit
+    4.          enddo
+    4.          $LCS_10 = min( $MR_nbyte_2, 8 - $MR_iskip_0 - and( -8, $CS_MR_iskip_5 ) )
+    4.          $CS_4 = $LCS_10 - $MR_nbyte_2
+    4.          $LCS_9 = _ash( $CS_4 + _rsh( _ash( $CS_4, 2 ), 29 ), 3 )
+    4.          $index_S14 = 2 + ( _ash( $CS_MR_iskip_5, 3 ) - $LCS_9 )
+    4.          $bitcnt_S13 = $MR_nbyte_2 - ( $LCS_10 + _lsh( -$LCS_9, 3 ) )
+    4.       endif
+    4.       if ( $bitcnt_S13 > 0 ) then
+    4.          $t_S8 = mova2i( substr[in,-1 + $index_S14:1] )
+    4.          if ( or( 8 - $bitcnt_S13, -1 + $bitcnt_S13 ) < 0 ) then
+    4.             $LB_Y0 = 1
+    4.             $UB_Y1 = 8
+    4.             $Subscript_Y5 = $bitcnt_S13
+    4.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y45 )
+    4.          endif
+    4.          $LCS_bitcnt_12 = -8 + $bitcnt_S13
+    4.          $LCS_11 = abs( $LCS_bitcnt_12 )
+    4.          $LCS_13 = abs( $bitcnt_S13 )
+    4.          $itmp_S10 = or( and( (-1,ones)[$bitcnt_S13], cvmg( lshift_ec( $t_S8, $LCS_11 ), rshift_ec( $t_S8, $LCS_11 ), $LCS_bitcnt_12 > 0 ) ), cvmg( lshift_ec( $itmp_S10, $LCS_13 ), rshift_ec( $itmp_S10, $LCS_13 ), $bitcnt_S13 > 0 ) )
+    4.       endif
+    4.       0[loc( iout ),0] = $itmp_S10
+    6.       return
+    6.       end
+    6.       
+    8.       
+    8.       subroutine sbytec( out, in, iskip, nbyte )
+   11.       $itmp_S11 = 0[loc( in ),0]
+   11.       $MR_nbyte_1 = 0[loc( nbyte ),0]
+   11.       $bitcnt_S12 = $MR_nbyte_1
+   11.       $MR_iskip_2 = 0[loc( iskip ),0]
+   11.       $PRT_P5 = $MR_nbyte_1 + $MR_iskip_2 + -1
+   11.       $CS_PRT_3 = $PRT_P5 + _rsh( _ash( $PRT_P5, 2 ), 29 )
+   11.       $index_S13 = 1 + _ash( $CS_PRT_3, 3 )
+   11.       $LCS_PRT_1 = $PRT_P5 - and( -8, $CS_PRT_3 )
+   11.       if ( $LCS_PRT_1 /= 7 ) then
+   11.          $LCS_2 = min( $MR_nbyte_1, 1 + $LCS_PRT_1 )
+   11.          $CS_0 = or( 8 - $LCS_2, -1 + $LCS_2 ) >= 0
+   11.          if ( int( $CS_0 ) == 0 ) then
+   11.             $LB_Y0 = 1
+   11.             $UB_Y1 = 8
+   11.             $Subscript_Y5 = $LCS_2
+   11.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+   11.          endif
+   11.          $CS_PRT_4 = $PRT_P5 - and( -8, $CS_PRT_3 )
+   11.          $LCS_3 = min( $MR_nbyte_1, 1 + $CS_PRT_4 )
+   11.          if ( or( 8 - $LCS_3, -1 + $LCS_3 ) < 0 ) then
+   11.             $LB_Y0 = 1
+   11.             $UB_Y1 = 8
+   11.             $Subscript_Y5 = $LCS_3
+   11.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+   11.          endif
+   11.          $LCS_ones_5 = (-1,ones)[min( $MR_nbyte_1, 1 + $CS_PRT_4 )]
+   11.          $LCS_7_7 = 7 - $CS_PRT_4
+   11.          $LCS_6 = abs( $LCS_7_7 )
+   11.          $imask_S4 = cvmg( lshift_ec( $LCS_ones_5, $LCS_6 ), rshift_ec( $LCS_ones_5, $LCS_6 ), $LCS_7_7 > 0 )
+   11.          $PRT_P6 = 0[loc( iskip ),0] + $MR_nbyte_1 + -1
+   11.          $t_S5 = mova2i( substr[out,_ash( $PRT_P6 + _rsh( _ash( $PRT_P6, 2 ), 29 ), 3 ):1] )
+   11.          $LCS_PRT_11 = $PRT_P5 - and( -8, $CS_PRT_3 )
+   11.          $LCS_7_9 = 7 - $LCS_PRT_11
+   11.          $LCS_8 = abs( $LCS_7_9 )
+   11.          $LCS_14 = _ash( $CS_PRT_3, 3 )
+   11.          substr[out,$LCS_14:1] = character*1( or( and( $imask_S4, cvmg( lshift_ec( $itmp_S11, $LCS_8 ), rshift_ec( $itmp_S11, $LCS_8 ), $LCS_7_9 > 0 ) ), and( $t_S5, 255 - $imask_S4 ) ) )
+   11.          $LCS_12 = min( $MR_nbyte_1, 1 + $LCS_PRT_11 )
+   11.          $bitcnt_S12 = $MR_nbyte_1 - $LCS_12
+   11.          $LCS_13 = abs( $LCS_12 )
+   11.          $itmp_S11 = cvmg( lshift_ec( $itmp_S11, $LCS_13 ), rshift_ec( $itmp_S11, $LCS_13 ), $LCS_12 < 0 )
+   11.          $index_S13 = $LCS_14
+   11.       endif
+   11.       if ( $bitcnt_S12 >= 8 ) then
+   11.          $CS_5 = _ash( $bitcnt_S12 + _rsh( _ash( $bitcnt_S12, 2 ), 29 ), 3 )
+   11.          $bitcnt_S15 = 0
+   11.          $SR_S14 = 0
+   11.          $LIS_E2 = -1 + $index_S13
+   11.          $Induc01_S16 = -7 + $bitcnt_S12
+   11.          do
+   11.             substr[out,$LIS_E2 - $bitcnt_S15:1] = character*1( and( 255, _rsh( $itmp_S11, $SR_S14 ) ) )
+   11.             $SR_S14 = 8 + $SR_S14
+   11.             $bitcnt_S15 = 1 + $bitcnt_S15
+   11.             $Induc01_S16 = -8 + $Induc01_S16
+   11.             if ( $Induc01_S16 <= 0 ) exit
+   11.          enddo
+   11.          $LCS_bitcnt_16 = $bitcnt_S12
+   11.          $index_S13 = $index_S13 - _ash( $LCS_bitcnt_16 + _rsh( _ash( $LCS_bitcnt_16, 2 ), 61 ), 3 )
+   11.          $LCS_17 = _lsh( $CS_5, 3 )
+   11.          $bitcnt_S12 = $LCS_bitcnt_16 - $LCS_17
+   11.          $itmp_S11 = _rsh( $itmp_S11, $LCS_17 )
+   11.       endif
+   11.       if ( $bitcnt_S12 > 0 ) then
+   11.          $CS_6 = or( 8 - $bitcnt_S12, -1 + $bitcnt_S12 ) >= 0
+   11.          if ( int( $CS_6 ) == 0 ) then
+   11.             $LB_Y0 = 1
+   11.             $UB_Y1 = 8
+   11.             $Subscript_Y5 = $bitcnt_S12
+   11.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y45, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y46 )
+   11.          endif
+   11.          $MR_ones_S17 = (-1,ones)[$bitcnt_S12]
+   11.          $itmp2_S10 = and( $itmp_S11, $MR_ones_S17 )
+   11.          $t_S8 = mova2i( substr[out,-1 + $index_S13:1] )
+   11.          if ( int( $CS_6 ) == 0 ) then
+   11.             $LB_Y0 = 1
+   11.             $UB_Y1 = 8
+   11.             $Subscript_Y5 = $bitcnt_S12
+   11.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y45, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y46 )
+   11.          endif
+   11.          $MR_ones_S18 = (-1,ones)[$bitcnt_S12]
+   11.          $itmp3_S9 = and( $t_S8, 255 - $MR_ones_S18 )
+   11.          substr[out,-1 + $index_S13:1] = character*1( or( $itmp3_S9, $itmp2_S10 ) )
+   11.       endif
+   13.       return
+   13.       end
+   13.       
+   15.       
+   15.       subroutine gbytesc( in, iout, iskip, nbyte, nskip, n )
+   35.       $MR_n_0 = 0[loc( n ),0]
+   35.       if ( $MR_n_0 > 0 ) then
+   35.          $I_L35_S16 = 0
+   43.          $SC_nskip_I2 = 0[loc( nskip ),0]
+   43.          $SC_nbyte_I0 = 0[loc( nbyte ),0]
+   43.          $SC_iskip_I1 = 0[loc( iskip ),0]
+   43.          $SR_S10 = $SC_iskip_I1
+   43.          $LIS_E2 = ( $SC_nbyte_I0 + $SC_nskip_I2 )
+   62.          $LIS_E1 = $MR_n_0
+   51.          $LIS_E5 = $SC_nbyte_I0
+   35.          do
+   43.             $PRT_P6 = $SR_S10
+   43.             $CS_PRT_5 = $PRT_P6 + _rsh( _ash( $PRT_P6, 2 ), 29 )
+   43.             $t_S3 = mova2i( substr[in,_ash( $CS_PRT_5, 3 ):1] )
+   43.             $CS_6 = and( -8, $CS_PRT_5 )
+   43.             $LCS_PRT_0 = $PRT_P6 - $CS_6
+   43.             if ( or( $LCS_PRT_0, 7 - $LCS_PRT_0 ) < 0 ) then
+   43.                $LB_Y0 = 1
+   43.                $UB_Y1 = 8
+   43.                $Subscript_Y5 = 8 - $LCS_PRT_0
+   43.                _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+   43.             endif
+   43.             $LCS_PRT_2 = $PRT_P6 - $CS_6
+   43.             $itmp_S11 = and( $t_S3, (7,ones)[-$LCS_PRT_2] )
+   44.             $LCS_3 = min( $SC_nbyte_I0, 8 - $LCS_PRT_2 ) + $PRT_P6 - $CS_6
+   44.             if ( $LCS_3 /= 8 ) then
+   44.                $LCS_8_5 = -8 + $LCS_3
+   44.                $LCS_4 = abs( $LCS_8_5 )
+   44.                $itmp_S11 = cvmg( lshift_ec( $itmp_S11, $LCS_4 ), rshift_ec( $itmp_S11, $LCS_4 ), $LCS_8_5 > 0 )
+   44.             endif
+   45.             $LCS_8 = _ash( $CS_PRT_5, 3 )
+   45.             $index_S15 = 2 + $LCS_8
+   46.             $LCS_nbyte_7 = $SC_nbyte_I0 - min( $SC_nbyte_I0, 8 - $PRT_P6 - and( -8, $CS_PRT_5 ) )
+   46.             $bitcnt_S14 = $LCS_nbyte_7
+   49.             if ( $LCS_nbyte_7 >= 8 ) then
+   49.                $bitcnt_S12 = 0
+   50.                $LIS_E4 = 1 + $LCS_8
+   49.                $Induc01_S13 = -7 + $LCS_nbyte_7
+   49.                do
+   50.                   $t_S6 = mova2i( substr[in,$LIS_E4 + $bitcnt_S12:1] )
+   50.                   $itmp_S11 = or( $t_S6, _lsh( $itmp_S11, 8 ) )
+   53.                   $bitcnt_S12 = 1 + $bitcnt_S12
+   49.                   $Induc01_S13 = -8 + $Induc01_S13
+   50.                   if ( $Induc01_S13 <= 0 ) exit
+   50.                enddo
+   52.                $LCS_11 = min( $SC_nbyte_I0, 8 - $PRT_P6 - and( -8, $CS_PRT_5 ) )
+   52.                $PRT_P7 = $LCS_11 - $SC_nbyte_I0
+   52.                $LCS_10 = _ash( $PRT_P7 + _rsh( _ash( $PRT_P7, 2 ), 29 ), 3 )
+   52.                $index_S15 = 2 + ( _ash( $CS_PRT_5, 3 ) - $LCS_10 )
+   51.                $bitcnt_S14 = $LIS_E5 - ( $LCS_11 + _lsh( -$LCS_10, 3 ) )
+   51.             endif
+   56.             if ( $bitcnt_S14 > 0 ) then
+   57.                $t_S8 = mova2i( substr[in,-1 + $index_S15:1] )
+   57.                if ( or( 8 - $bitcnt_S14, -1 + $bitcnt_S14 ) < 0 ) then
+   57.                   $LB_Y0 = 1
+   57.                   $UB_Y1 = 8
+   57.                   $Subscript_Y5 = $bitcnt_S14
+   57.                   _bounds_error( $_File_Y40, $Line_Y45, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y46 )
+   57.                endif
+   57.                $LCS_bitcnt_13 = -8 + $bitcnt_S14
+   57.                $LCS_12 = abs( $LCS_bitcnt_13 )
+   57.                $LCS_14 = abs( $bitcnt_S14 )
+   57.                $itmp_S11 = or( and( (-1,ones)[$bitcnt_S14], cvmg( lshift_ec( $t_S8, $LCS_12 ), rshift_ec( $t_S8, $LCS_12 ), $LCS_bitcnt_13 > 0 ) ), cvmg( lshift_ec( $itmp_S11, $LCS_14 ), rshift_ec( $itmp_S11, $LCS_14 ), $bitcnt_S14 > 0 ) )
+   57.             endif
+   61.             0[loc( iout ),$I_L35_S16] = $itmp_S11
+   43.             $SR_S10 = $LIS_E2 + $SR_S10
+   62.             $I_L35_S16 = 1 + $I_L35_S16
+   59.             if ( $I_L35_S16 >= $LIS_E1 ) exit
+   59.          enddo
+   59.       endif
+   65.       return
+   65.       end
+   65.       
+   67.       
+   67.       subroutine sbytesc( out, in, iskip, nbyte, nskip, n )
+   88.       $MR_n_0 = 0[loc( n ),0]
+   88.       if ( $MR_n_0 > 0 ) then
+   88.          $I_L88_S11 = 0
+   91.          $SC_nskip_I2 = 0[loc( nskip ),0]
+   90.          $SC_nbyte_I0 = 0[loc( nbyte ),0]
+   91.          $SC_iskip_I1 = 0[loc( iskip ),0]
+   91.          $SR_S12 = -1 + ( $SC_nbyte_I0 + $SC_iskip_I1 )
+   91.          $LIS_E3 = ( $SC_nbyte_I0 + $SC_nskip_I2 )
+  124.          $LIS_E2 = $MR_n_0
+   88.          do
+   89.             $itmp_S13 = 0[loc( in ),$I_L88_S11]
+   90.             $bitcnt_S14 = $SC_nbyte_I0
+   91.             $PRT_P7 = $SR_S12
+   91.             $CS_PRT_3 = $PRT_P7 + _rsh( _ash( $PRT_P7, 2 ), 29 )
+   91.             $index_S15 = 1 + _ash( $CS_PRT_3, 3 )
+   96.             $LCS_PRT_1 = $PRT_P7 - and( -8, $CS_PRT_3 )
+   96.             if ( $LCS_PRT_1 /= 7 ) then
+   98.                $LCS_2 = min( $SC_nbyte_I0, 1 + $LCS_PRT_1 )
+   98.                $CS_0 = or( -1 + $LCS_2, 8 - $LCS_2 ) >= 0
+   98.                if ( int( $CS_0 ) == 0 ) then
+   98.                   $LB_Y0 = 1
+   98.                   $UB_Y1 = 8
+   98.                   $Subscript_Y5 = $LCS_2
+   98.                   _bounds_error( $_File_Y40, $Line_Y45, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y46 )
+   98.                endif
+   98.                $LCS_3 = min( $SC_nbyte_I0, 1 + ( $PRT_P7 - and( -8, $CS_PRT_3 ) ) )
+   98.                if ( or( -1 + $LCS_3, 8 - $LCS_3 ) < 0 ) then
+   98.                   $LB_Y0 = 1
+   98.                   $UB_Y1 = 8
+   98.                   $Subscript_Y5 = $LCS_3
+   98.                   _bounds_error( $_File_Y40, $Line_Y45, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y46 )
+   98.                endif
+   98.                $LCS_PRT_4 = $PRT_P7 - and( -8, $CS_PRT_3 )
+   98.                $LCS_ones_5 = (-1,ones)[min( $SC_nbyte_I0, 1 + $LCS_PRT_4 )]
+   98.                $LCS_7_7 = 7 - $LCS_PRT_4
+   98.                $LCS_6 = abs( $LCS_7_7 )
+   98.                $imask_S4 = cvmg( lshift_ec( $LCS_ones_5, $LCS_6 ), rshift_ec( $LCS_ones_5, $LCS_6 ), $LCS_7_7 > 0 )
+  100.                $t_S5 = mova2i( substr[out,_ash( $CS_PRT_3, 3 ):1] )
+  101.                $LCS_PRT_11 = $PRT_P7 - and( -8, $CS_PRT_3 )
+  101.                $LCS_7_10 = 7 - $LCS_PRT_11
+  101.                $LCS_9 = abs( $LCS_7_10 )
+  101.                substr[out,_ash( $SR_S12 + _rsh( _ash( $SR_S12, 2 ), 61 ), 3 ):1] = character*1( or( and( $imask_S4, cvmg( lshift_ec( $itmp_S13, $LCS_9 ), rshift_ec( $itmp_S13, $LCS_9 ), $LCS_7_10 > 0 ) ), and( $t_S5, 255 - $imask_S4 ) ) )
+  102.                $LCS_12 = min( $SC_nbyte_I0, 1 + $LCS_PRT_11 )
+  102.                $bitcnt_S14 = $SC_nbyte_I0 - $LCS_12
+  103.                $LCS_13 = abs( $LCS_12 )
+  103.                $itmp_S13 = cvmg( lshift_ec( $itmp_S13, $LCS_13 ), rshift_ec( $itmp_S13, $LCS_13 ), $LCS_12 < 0 )
+  104.                $index_S15 = _ash( $CS_PRT_3, 3 )
+  104.             endif
+  110.             if ( $bitcnt_S14 >= 8 ) then
+  110.                $CS_4 = _ash( $bitcnt_S14 + _rsh( _ash( $bitcnt_S14, 2 ), 29 ), 3 )
+  110.                $bitcnt_S17 = 0
+  111.                $SR_S16 = 0
+  111.                $LIS_E5 = -1 + $index_S15
+  110.                $Induc01_S18 = -7 + $bitcnt_S14
+  110.                do
+  111.                   substr[out,$LIS_E5 - $bitcnt_S17:1] = character*1( and( 255, _rsh( $itmp_S13, $SR_S16 ) ) )
+  111.                   $SR_S16 = 8 + $SR_S16
+  115.                   $bitcnt_S17 = 1 + $bitcnt_S17
+  110.                   $Induc01_S18 = -8 + $Induc01_S18
+  110.                   if ( $Induc01_S18 <= 0 ) exit
+  110.                enddo
+  114.                $LCS_bitcnt_16 = $bitcnt_S14
+  114.                $index_S15 = $index_S15 - _ash( $LCS_bitcnt_16 + _rsh( _ash( $LCS_bitcnt_16, 2 ), 61 ), 3 )
+  113.                $LCS_17 = _lsh( $CS_4, 3 )
+  113.                $bitcnt_S14 = $LCS_bitcnt_16 - $LCS_17
+  112.                $itmp_S13 = _rsh( $itmp_S13, $LCS_17 )
+  112.             endif
+  119.             if ( $bitcnt_S14 > 0 ) then
+  120.                $CS_5 = or( 8 - $bitcnt_S14, -1 + $bitcnt_S14 ) >= 0
+  120.                if ( int( $CS_5 ) == 0 ) then
+  120.                   $LB_Y0 = 1
+  120.                   $UB_Y1 = 8
+  120.                   $Subscript_Y5 = $bitcnt_S14
+  120.                   _bounds_error( $_File_Y40, $Line_Y49, $_Name_Y48, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y50 )
+  120.                endif
+  120.                $MR_ones_S19 = (-1,ones)[$bitcnt_S14]
+  120.                $itmp2_S10 = and( $itmp_S13, $MR_ones_S19 )
+  121.                $t_S8 = mova2i( substr[out,-1 + $index_S15:1] )
+  121.                if ( int( $CS_5 ) == 0 ) then
+  121.                   $LB_Y0 = 1
+  121.                   $UB_Y1 = 8
+  121.                   $Subscript_Y5 = $bitcnt_S14
+  121.                   _bounds_error( $_File_Y40, $Line_Y51, $_Name_Y48, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y52 )
+  121.                endif
+  121.                $MR_ones_S20 = (-1,ones)[$bitcnt_S14]
+  121.                $itmp3_S9 = and( $t_S8, 255 - $MR_ones_S20 )
+  122.                substr[out,-1 + $index_S15:1] = character*1( or( $itmp3_S9, $itmp2_S10 ) )
+  122.             endif
+   91.             $SR_S12 = $LIS_E3 + $SR_S12
+  124.             $I_L88_S11 = 1 + $I_L88_S11
+  123.             if ( $I_L88_S11 >= $LIS_E2 ) exit
+  123.          enddo
+  123.       endif
+  127.       return
+  127.       end
+  127.       

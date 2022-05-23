@@ -1,0 +1,51 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi76.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi76.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi76( pval, kexp, kmant, kbits )
+   68.       $MR_pval_0 = 0[loc( pval ),0]
+   68.       if ( $MR_pval_0 == 0.0 ) then
+   69.          0[loc( kexp ),0] = 0
+   70.          0[loc( kmant ),0] = 0
+   70.       else
+   82.          $zref_S4 = $MR_pval_0
+   86.          $isign_S7 = 0
+   87.          if ( $MR_pval_0 < 0.0 ) then
+   88.             $isign_S7 = 128
+   89.             $zref_S4 = -$MR_pval_0
+   89.          endif
+   94.          $iexp_S1 = int( 65.0 + 3.6067376e-1 * log( $zref_S4 ) + cvmg( 1.0e-12, 9.9999999e-9, 0[loc( kbits ),0] /= 32 ) )
+   97.          $LCS_0 = min( 127, max( 0, $iexp_S1 ) )
+   97.          $iexp_S8 = $LCS_0
+  104.          $MR_kmant_S5 = _anint( 16.0 ** ( 70 - $LCS_0 ) * $zref_S4 )
+  104.          $LCS_kmant_1 = loc( kmant )
+  104.          0[$LCS_kmant_1,0] = $MR_kmant_S5
+  109.          if ( $MR_kmant_S5 > 0xffffff ) then
+  110.             $iexp_S8 = 1 + $LCS_0
+  115.             $MR_kmant_S6 = _anint( 16.0 ** ( 69 - $LCS_0 ) * $zref_S4 )
+  115.             0[$LCS_kmant_1,0] = $MR_kmant_S6
+  119.             if ( $MR_kmant_S6 > 0xffffff ) then
+  120.                $_StackIolist_O3 = $_StaticIolist_O1
+  120.                0[int( pointer to c_union Pointer_union( loc( (7,$_StackIolist_O3)[0].L ) ), 8 ),0].L = loc( 0[loc( pval ),0] )
+  120.                _fwf( pointer to integer (kind=8)( loc( $_StaticCntrl_O0 ) ), pointer to integer (kind=8)( loc( $_StackIolist_O3[0].L ) ), pointer to integer (kind=8)( loc( $_IO_Lib_Stack_O4 ) ) )
+  120.             endif
+  120.          endif
+  126.          0[loc( kexp ),0] = $isign_S7 + $iexp_S8
+  126.       endif
+  131.       return
+  131.       end
+  131.       

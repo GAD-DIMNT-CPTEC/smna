@@ -1,0 +1,200 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  idsdef.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/idsdef.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine idsdef( iptv, ids )
+   26.       if ( iptv == 1 ) then
+    1.          goto 10
+   26.       else if ( iptv == 2 ) then
+   26.    10    continue
+   27.          ids(1) = -1
+   28.          ids(2) = -1
+   29.          ids(3) = 3
+   32.          ids(6) = -1
+   33.          ids(7) = 0
+   34.          ids(8) = 0
+   35.          ids(9) = 0
+   37.          ids(11) = 1
+   38.          ids(12) = 1
+   39.          ids(13) = 1
+   40.          ids(14) = 1
+   41.          ids(15) = 1
+   42.          ids(16) = 1
+   43.          ids(17) = 1
+   44.          ids(18) = 1
+   45.          ids(19) = 4
+   46.          ids(20) = 0
+   51.          ids(25) = 1
+   52.          ids(26) = -1
+   53.          ids(27) = 0
+   57.          ids(31) = 0
+   58.          ids(32) = 1
+   59.          ids(33) = 1
+   60.          ids(34) = 1
+   61.          ids(35) = -4
+   62.          ids(36) = -4
+   63.          ids(37) = -1
+   64.          ids(38) = 8
+   65.          ids(39) = 3
+   66.          ids(40) = 4
+   67.          ids(41) = 6
+   68.          ids(42) = 6
+   69.          ids(43) = 6
+   70.          ids(44) = 6
+   71.          ids(45) = 4
+   72.          ids(46) = 4
+   73.          ids(47) = 0
+   77.          ids(51) = 4
+   78.          ids(52) = 0
+   79.          ids(53) = 4
+   80.          ids(54) = 1
+   81.          ids(55) = -1
+   82.          ids(56) = -1
+   83.          ids(57) = 1
+   84.          ids(58) = 1
+   85.          ids(59) = 6
+   86.          ids(60) = 0
+   87.          ids(61) = 1
+   88.          ids(62) = 1
+   89.          ids(63) = 1
+   90.          ids(64) = 6
+   91.          ids(65) = 0
+   92.          ids(66) = 2
+   97.          ids(71) = 0
+   98.          ids(72) = 0
+   99.          ids(73) = 0
+  100.          ids(74) = 0
+  101.          ids(75) = 0
+  102.          ids(76) = 1
+  104.          ids(78) = 1
+  105.          ids(79) = 1
+  106.          ids(80) = 1
+  107.          ids(81) = 0
+  109.          ids(83) = 5
+  110.          ids(84) = 1
+  111.          ids(85) = 1
+  112.          ids(86) = 0
+  113.          ids(87) = 0
+  115.          ids(89) = 4
+  116.          ids(90) = 1
+  117.          ids(91) = 0
+  119.          ids(93) = 0
+  125.          ids(99) = 1
+  127.          ids(101) = 0
+  130.          ids(104) = 0
+  133.          ids(107) = 0
+  135.          ids(109) = 0
+  137.          ids(111) = 0
+  138.          ids(112) = 0
+  139.          ids(113) = 0
+  140.          ids(114) = 0
+  141.          ids(115) = 0
+  142.          ids(116) = 0
+  143.          ids(117) = 0
+  147.          ids(121) = 0
+  148.          ids(122) = 0
+  149.          ids(123) = 0
+  150.          ids(124) = 3
+  151.          ids(125) = 3
+  154.          ids(128) = -1
+  155.          ids(129) = -1
+  156.          ids(130) = -1
+  157.          ids(131) = 1
+  158.          ids(132) = 1
+  159.          ids(133) = 1
+  160.          ids(134) = 1
+  161.          ids(135) = 10
+  162.          ids(136) = 4
+  163.          ids(137) = 3
+  164.          ids(138) = 6
+  165.          ids(139) = 11
+  166.          ids(140) = 0
+  167.          ids(141) = 0
+  168.          ids(142) = 0
+  169.          ids(143) = 0
+  170.          ids(144) = 3
+  171.          ids(145) = 0
+  172.          ids(146) = 0
+  173.          ids(147) = 3
+  174.          ids(148) = 3
+  175.          ids(149) = 10
+  181.          ids(155) = 0
+  182.          ids(156) = 0
+  183.          ids(157) = 0
+  184.          ids(158) = 0
+  185.          ids(159) = -1
+  186.          ids(160) = 0
+  187.          ids(161) = 0
+  188.          ids(162) = 0
+  189.          ids(163) = 0
+  190.          ids(164) = 0
+  191.          ids(165) = 0
+  192.          ids(166) = 0
+  193.          ids(167) = 0
+  194.          ids(168) = 0
+  195.          ids(169) = 0
+  198.          ids(172) = 3
+  199.          ids(173) = 0
+  200.          ids(174) = 0
+  201.          ids(175) = 0
+  202.          ids(176) = 2
+  203.          ids(177) = 2
+  207.          ids(181) = 9
+  208.          ids(182) = 9
+  209.          ids(183) = 5
+  210.          ids(184) = 5
+  227.          ids(201) = 0
+  230.          ids(204) = 0
+  231.          ids(205) = 0
+  233.          ids(207) = 0
+  235.          ids(209) = 0
+  237.          ids(211) = 0
+  238.          ids(212) = 0
+  239.          ids(213) = 0
+  240.          ids(214) = 6
+  241.          ids(215) = 7
+  242.          ids(216) = 7
+  243.          ids(217) = 7
+  244.          ids(218) = 2
+  245.          ids(219) = 1
+  246.          ids(220) = 4
+  248.          ids(222) = 0
+  249.          ids(223) = 1
+  254.          ids(228) = 1
+  255.          ids(229) = 0
+  257.          ids(231) = 3
+  258.          ids(232) = 0
+  259.          ids(233) = 0
+  260.          ids(224) = 1
+  261.          ids(225) = 1
+  264.          ids(238) = 0
+  265.          ids(239) = 1
+  267.          ids(241) = 7
+  268.          ids(242) = 7
+  269.          ids(243) = 10
+  270.          ids(244) = 7
+  271.          ids(245) = 10
+  272.          ids(246) = 7
+  273.          ids(247) = 7
+  274.          ids(248) = 7
+  275.          ids(249) = 10
+  276.          ids(250) = 7
+  277.          ids(251) = 7
+  277.       endif
+  285.       return
+  285.       end
+  285.       

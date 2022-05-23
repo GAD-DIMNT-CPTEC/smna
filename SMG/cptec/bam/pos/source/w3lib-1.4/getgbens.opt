@@ -1,0 +1,26 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgbens.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgbens.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgbens( lugb, lugi, jf, j, jpds, jgds, jens, kf, k, kpds, kgds, kens, lb, f, iret )
+    2.       t$1 = jf
+  199.       t$2 = _zla( 0, jf )
+  202.       _fwrite( _clist( 0, 0, 3, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, 0, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg ), _iolist( _iotype( 'PLEASE USE GETGBE RATHER THAN GETGBENS', 0x800600000000L ) ) )
+  203.       call getgbe( lugb, lugi, jf, j, jpds(1), jgds(1), jens(1), kf, k, kpds(1), kgds(1), kens(1), lb(1), f(1), iret )
+  207.       return
+  207.       end
+  207.       

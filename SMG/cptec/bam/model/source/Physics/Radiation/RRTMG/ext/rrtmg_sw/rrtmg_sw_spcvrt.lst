@@ -1,0 +1,1947 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrtmg_sw_spcvrt.f90
+Compiled : 12/12/20  00:22:32
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps rrtmg_sw_spcvrt.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrtmg_sw_spcvrt.f90
+Date     : 12/12/2020  00:22:32
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_9769/rrtmg_sw_spcvrt_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     A - Pattern matched      a - atomic memory operation
+                              b - blocked
+     C - Collapsed            c - conditional and/or computed
+     D - Deleted               
+     E - Cloned               f - fused
+     G - Accelerated          g - partitioned
+     I - Inlined              i - interchanged
+     M - Multithreaded        m - partitioned
+                              n - non-blocking remote transfer
+                              p - partial
+                              r - unrolled
+                              s - shortloop
+     V - Vectorized           w - unwound
+
+
+    1.           !     path:      $Source: /storm/rc1/cvsroot/rc/rrtmg_sw/src/rrtmg_sw_spcvrt.f90,v $
+    2.           !     author:    $Author: mike $
+    3.           !     revision:  $Revision: 1.2 $
+    4.           !     created:   $Date: 2007/08/23 20:40:14 $
+    5.           
+    6.                 module rrtmg_sw_spcvrt
+    7.           
+    8.           !  --------------------------------------------------------------------------
+    9.           ! |                                                                          |
+   10.           ! |  Copyright 2002-2007, Atmospheric & Environmental Research, Inc. (AER).  |
+   11.           ! |  This software may be used, copied, or redistributed as long as it is    |
+   12.           ! |  not sold and this copyright notice is reproduced on each copy made.     |
+   13.           ! |  This model is provided as is without any express or implied warranties. |
+   14.           ! |                       (http://www.rtweb.aer.com/)                        |
+   15.           ! |                                                                          |
+   16.           !  --------------------------------------------------------------------------
+   17.           
+   18.           ! ------- Modules -------
+   19.           
+   20.                 use shr_kind_mod, only: r8 => shr_kind_r8
+   21.           
+   22.           !      use ppgrid,       only: pcols, begchunk, endchunk
+   23.           
+   24.           !      use parkind, only : jpim, jprb
+   25.                 use parrrsw, only : nbndsw, ngptsw, mxmol, jpband
+   26.                 use rrsw_tbl, only : tblint, bpade, od_lo, exp_tbl
+   27.                 use rrsw_vsn, only : hvrspv, hnamspv
+   28.                 use rrsw_wvn, only : ngc, ngs
+   29.                 use rrtmg_sw_reftra, only: reftra_sw
+   30.                 use rrtmg_sw_taumol, only: taumol_sw
+   31.                 use rrtmg_sw_vrtqdr, only: vrtqdr_sw
+   32.           
+   33.                 implicit none
+   34.           !      INTEGER, PARAMETER :: pcols=1
+   35.           !      INTEGER, PARAMETER :: begchunk=1
+   36.           !      INTEGER, PARAMETER :: endchunk=1
+   37.           !      real(kind=r8), allocatable, save :: ztaugst(:,:,:,:)      ! Gaseous optical depth storage array
+   38.           !      real(kind=r8), allocatable, save :: ztaurst(:,:,:,:)      ! Rayleigh optical depth storage array
+   39.           !      real(kind=r8), allocatable, save :: zsflxzenst(:,:,:)     ! Solar source function storage array
+   40.           
+   41.                 contains
+   42.           
+   43.           ! ---------------------------------------------------------------------------
+   44.                 subroutine spcvrt_sw(   & !           call spcvrt_sw (&
+   45.                        nlayers        , & !             nlayers                                  , &! nlay                                ,&!
+   46.                        istart         , & !             istart                                   , &! istart                              ,&!
+   47.                        iend           , & !             iend                                     , &! iend                                ,&!
+   48.                        icpr           , & !             icpr                                     , &! icpr                                ,&!
+   49.                        idelm          , & !             idelm                                    , &! idelm                               ,&!
+   50.                        iout           , & !             iout                                     , &! iout                                ,&!
+   51.                        pavel          , & !             pavel         (1:nlayers)                , &! pavel         (1:nlay)              ,&!
+   52.                        tavel          , & !             tavel         (1:nlayers)                , &! tavel         (1:nlay)              ,&!
+   53.                        pz             , & !             pz            (0:nlayers)                , &! pz            (0:nlay)              ,&!
+   54.                        tz             , & !             tz            (0:nlayers)                , &! tz            (0:nlay)              ,&!
+   55.                        tbound         , & !             tbound                                   , &! tbound                              ,&!
+   56.                        palbd          , & !             albdif        (1:nbndsw)                 , &! albdif        (1:nbndsw)            ,&!
+   57.                        palbp          , & !             albdir        (1:nbndsw)                 , &! albdir        (1:nbndsw)            ,&!
+   58.                        pclfr          , & !             cldfrac       (1:nlayers)                , &! zcldfmc       (1:nlay,1:ngptsw)     ,&!
+   59.                        ptauc          , & !             ztauc         (1:nlayers,1:nbndsw)       , &! ztaucmc       (1:nlay,1:ngptsw)     ,&!
+   60.                        pasyc          , & !             zasyc         (1:nlayers,1:nbndsw)       , &! zasycmc       (1:nlay,1:ngptsw)     ,&!
+   61.                        pomgc          , & !             zomgc         (1:nlayers,1:nbndsw)       , &! zomgcmc       (1:nlay,1:ngptsw)     ,&!
+   62.                        ptaucorig      , & !             ztaucorig     (1:nlayers,1:nbndsw)       , &! ztaormc       (1:nlay,1:ngptsw)     ,&!
+   63.                        ptaua          , & !             ztaua         (1:nlayers,1:nbndsw)       , &! ztaua         (1:nlay,1:nbndsw)     ,&!
+   64.                        pasya          , & !             zasya         (1:nlayers,1:nbndsw)       , &! zasya         (1:nlay,1:nbndsw)     ,&!
+   65.                        pomga          , & !             zomga         (1:nlayers,1:nbndsw)       , &! zomga         (1:nlay,1:nbndsw)     ,&!
+   66.                        prmu0          , & !             cossza                                   , &! cossza                              ,&!
+   67.                        coldry         , & !             coldry        (1:nlayers)                , &! coldry        (1:nlay)              ,&!
+   68.                        wkl            , & !             wkl           (1:mxmol,1:nlayers)        , &! wkl           (1:mxmol,1:nlay)      ,&!
+   69.                        adjflux        , & !             adjflux       (1:jpband)                 , &! adjflux       (1:jpband)            ,&!
+   70.                        laytrop        , & !             laytrop                                  , &! laytrop                             ,&!
+   71.                        layswtch       , & !             layswtch                                 , &! layswtch                            ,&!
+   72.                        laylow         , & !             laylow                                   , &! laylow                              ,&!
+   73.                        jp             , & !             jp            (1:nlayers)                , &! jp            (1:nlay)              ,&!
+   74.                        jt             , & !             jt            (1:nlayers)                , &! jt            (1:nlay)              ,&!
+   75.                        jt1            , & !             jt1           (1:nlayers)                , &! jt1           (1:nlay)              ,&!
+   76.                        co2mult        , & !             co2mult       (1:nlayers)                , &! co2mult       (1:nlay)              ,&!
+   77.                        colch4         , & !             colch4        (1:nlayers)                , &! colch4        (1:nlay)               ,&!
+   78.                        colco2         , & !             colco2        (1:nlayers)                , &! colco2        (1:nlay)               ,&!
+   79.                        colh2o         , & !             colh2o        (1:nlayers)                , &! colh2o        (1:nlay)               ,&!
+   80.                        colmol         , & !             colmol        (1:nlayers)                , &! colmol        (1:nlay)               ,&!
+   81.                        coln2o         , & !             coln2o        (1:nlayers)                , &! coln2o        (1:nlay)               ,&!
+   82.                        colo2          , & !             colo2         (1:nlayers)                , &! colo2         (1:nlay)                ,&!
+   83.                        colo3          , & !             colo3         (1:nlayers)                , &! colo3         (1:nlay)                ,&!
+   84.                        fac00          , & !             fac00         (1:nlayers)                , &! fac00         (1:nlay)                ,&!
+   85.                        fac01          , & !             fac01         (1:nlayers)                , &! fac01         (1:nlay)                ,&!
+   86.                        fac10          , & !             fac10         (1:nlayers)                , &! fac10         (1:nlay)                ,&!
+   87.                        fac11          , & !             fac11         (1:nlayers)                , &! fac11         (1:nlay)                ,&!
+   88.                        selffac        , & !             selffac       (1:nlayers)                , &! selffac       (1:nlay)                ,&!
+   89.                        selffrac       , & !             selffrac      (1:nlayers)                , &! selffrac      (1:nlay)                ,&!
+   90.                        indself        , & !             indself       (1:nlayers)                , &! indself       (1:nlay)                ,&!
+   91.                        forfac         , & !             forfac        (1:nlayers)                , &! forfac        (1:nlay)                ,&!
+   92.                        forfrac        , & !             forfrac       (1:nlayers)                , &! forfrac       (1:nlay)                ,&!
+   93.                        indfor         , & !             indfor        (1:nlayers)                , &! indfor        (1:nlay)                ,&!
+   94.                        pbbfd          , & !             zbbfd         (1:nlayers+2)              , &! zbbfd         (1:nlay+2)              ,&!
+   95.                        pbbfu          , & !             zbbfu         (1:nlayers+2)              , &! zbbfu         (1:nlay+2)              ,&!
+   96.                        pbbcd          , & !             zbbcd         (1:nlayers+2)              , &! zbbcd         (1:nlay+2)              ,&!
+   97.                        pbbcu          , & !             zbbcu         (1:nlayers+2)              , &! zbbcu         (1:nlay+2)              ,&!
+   98.                        puvfd          , & !             zuvfd         (1:nlayers+2)              , &! zuvfd         (1:nlay+2)              ,&!
+   99.                        puvcd          , & !             zuvcd         (1:nlayers+2)              , &! zuvcd         (1:nlay+2)              ,&!
+  100.                        pnifd          , & !             znifd         (1:nlayers+2)              , &! znifd         (1:nlay+2)              ,&!
+  101.                        pnicd          , & !             znicd         (1:nlayers+2)              , &! znicd         (1:nlay+2)              ,&!
+  102.                        pnifu          , & !             znifu         (1:nlayers+2)              , &! znifu         (1:nlay+2)              ,&!
+  103.                        pnicu          , & !             znicu         (1:nlayers+2)              , &! znicu         (1:nlay+2)              ,&!
+  104.                        pbbfddir       , & !             zbbfddir      (1:nlayers+2)              , &! zbbfddir      (1:nlay+2)              ,&!
+  105.                        pbbcddir       , & !             zbbcddir      (1:nlayers+2)              , &! zbbcddir      (1:nlay+2)              ,&!
+  106.                        puvfddir       , & !             zuvfddir      (1:nlayers+2)              , &! zuvfddir      (1:nlay+2)              ,&!
+  107.                        puvcddir       , & !             zuvcddir      (1:nlayers+2)              , &! zuvcddir      (1:nlay+2)              ,&!
+  108.                        pnifddir       , & !             znifddir      (1:nlayers+2)              , &! znifddir      (1:nlay+2)              ,&!
+  109.                        pnicddir         ) !            znicddir       (1:nlayers+2)                )! znicddir      (1:nlay+2)              ,&!
+  110.           ! ---------------------------------------------------------------------------
+  111.           !
+  112.           ! Purpose: Contains spectral loop to compute the shortwave radiative fluxes, 
+  113.           !          using the two-stream method of H. Barker. 
+  114.           !
+  115.           ! Interface:  *spcvrt_sw* is called from *rrtmg_sw.F90* or rrtmg_sw.1col.F90*
+  116.           !
+  117.           ! Method:
+  118.           !    Adapted from two-stream model of H. Barker;
+  119.           !    Two-stream model options (selected with kmodts in rrtmg_sw_reftra.F90):
+  120.           !        1: Eddington, 2: PIFM, Zdunkowski et al., 3: discret ordinates
+  121.           !
+  122.           ! Modifications:
+  123.           !
+  124.           ! Original: H. Barker
+  125.           ! Revision: Merge with RRTMG_SW: J.-J.Morcrette, ECMWF, Feb 2003
+  126.           ! Revision: Add adjustment for Earth/Sun distance : MJIacono, AER, Oct 2003
+  127.           ! Revision: Bug fix for use of PALBP and PALBD: MJIacono, AER, Nov 2003
+  128.           ! Revision: Bug fix to apply delta scaling to clear sky: AER, Dec 2004
+  129.           ! Revision: Code modified so that delta scaling is not done in cloudy profiles
+  130.           !           if routine cldprop is used; delta scaling can be applied by swithcing
+  131.           !           code below if cldprop is not used to get cloud properties. 
+  132.           !           AER, Jan 2005
+  133.           ! Revision: Uniform formatting for RRTMG: MJIacono, AER, Jul 2006 
+  134.           ! Revision: Use exponential lookup table for transmittance: MJIacono, AER, 
+  135.           !           Aug 2007 
+  136.           !
+  137.           ! ------------------------------------------------------------------
+  138.           
+  139.           ! ------- Declarations ------
+  140.           
+  141.           ! -------- Input -------
+  142.           
+  143.           !      integer, intent(in) :: lchnk
+  144.           !      integer, intent(in) :: iplon                      ! column loop index
+  145.                 integer, intent(in) :: nlayers
+  146.                 integer, intent(in) :: istart
+  147.                 integer, intent(in) :: iend
+  148.                 integer, intent(in) :: icpr
+  149.                 integer, intent(in) :: idelm     ! delta-m scaling flag
+  150.                                                  ! [0 = direct and diffuse fluxes are unscaled]
+  151.                                                  ! [1 = direct and diffuse fluxes are scaled]
+  152.                 integer, intent(in) :: iout
+  153.           
+  154.                 integer, intent(in) :: laytrop
+  155.                 integer, intent(in) :: layswtch
+  156.                 integer, intent(in) :: laylow
+  157.           
+  158.                 integer, intent(in) :: indfor (1:nlayers)
+  159.                                                                            !   Dimensions: (nlayers)
+  160.                 integer, intent(in) :: indself (1:nlayers)
+  161.                                                                            !   Dimensions: (nlayers)
+  162.                 integer, intent(in) :: jp (1:nlayers)
+  163.                                                                            !   Dimensions: (nlayers)
+  164.                 integer, intent(in) :: jt (1:nlayers)
+  165.                                                                            !   Dimensions: (nlayers)
+  166.                 integer, intent(in) :: jt1 (1:nlayers)
+  167.                                                                            !   Dimensions: (nlayers)
+  168.           
+  169.                 real(kind=r8), intent(in) :: pavel(1:nlayers)                    ! layer pressure (hPa, mb) 
+  170.                                                                            !   Dimensions: (nlayers)
+  171.                 real(kind=r8), intent(in) :: tavel(1:nlayers)                   ! layer temperature (K)
+  172.                                                                            !   Dimensions: (nlayers)
+  173.                 real(kind=r8), intent(in) :: pz(0:nlayers)                       ! level (interface) pressure (hPa, mb)
+  174.                                                                            !   Dimensions: (0:nlayers)
+  175.                 real(kind=r8), intent(in) :: tz(0:nlayers)                       ! level temperatures (hPa, mb)
+  176.                                                                            !   Dimensions: (0:nlayers)
+  177.                 real(kind=r8), intent(in) :: tbound                      ! surface temperature (K)
+  178.                 real(kind=r8), intent(in) :: wkl(1:mxmol,1:nlayers)                    ! molecular amounts (mol/cm2) 
+  179.                                                                            !   Dimensions: (mxmol,nlayers)
+  180.                 real(kind=r8), intent(in) :: coldry(1:nlayers)                    ! dry air column density (mol/cm2)
+  181.                                                                            !   Dimensions: (nlayers)
+  182.                 real(kind=r8), intent(in) :: colmol(1:nlayers) 
+  183.                                                                            !   Dimensions: (nlayers)
+  184.                 real(kind=r8), intent(in) :: adjflux(1:jpband)                   ! Earth/Sun distance adjustment
+  185.                                                                            !   Dimensions: (jpband)
+  186.           
+  187.                 real(kind=r8), intent(in) :: palbd(1:nbndsw)                    ! surface albedo (diffuse)
+  188.                                                                            !   Dimensions: (nbndsw)
+  189.                 real(kind=r8), intent(in) :: palbp(1:nbndsw)                    ! surface albedo (direct)
+  190.                                                                            !   Dimensions: (nbndsw)
+  191.                 real(kind=r8), intent(in) :: prmu0                       ! cosine of solar zenith angle
+  192.                 real(kind=r8), intent(in) :: pclfr(1:nlayers)                    ! cloud fraction
+  193.                                                                            !   Dimensions: (nlayers)
+  194.                 real(kind=r8), intent(in) :: ptauc(1:nlayers,1:nbndsw)                   ! cloud optical depth
+  195.                                                                            !   Dimensions: (nlayers,nbndsw)
+  196.                 real(kind=r8), intent(in) :: pasyc(1:nlayers,1:nbndsw)                  ! cloud asymmetry parameter
+  197.                                                                            !   Dimensions: (nlayers,nbndsw)
+  198.                 real(kind=r8), intent(in) :: pomgc(1:nlayers,1:nbndsw)                   ! cloud single scattering albedo
+  199.                                                                            !   Dimensions: (nlayers,nbndsw)
+  200.                 real(kind=r8), intent(in) :: ptaucorig(1:nlayers,1:nbndsw)               ! cloud optical depth, non-delta scaled
+  201.                                                                            !   Dimensions: (nlayers,nbndsw)
+  202.                 real(kind=r8), intent(in) :: ptaua(1:nlayers,1:nbndsw)                   ! aerosol optical depth
+  203.                                                                            !   Dimensions: (nlayers,nbndsw)
+  204.                 real(kind=r8), intent(in) :: pasya(1:nlayers,1:nbndsw)                  ! aerosol asymmetry parameter
+  205.                                                                            !   Dimensions: (nlayers,nbndsw)
+  206.                 real(kind=r8), intent(in) :: pomga(1:nlayers,1:nbndsw)                   ! aerosol single scattering albedo
+  207.                                                                            !   Dimensions: (nlayers,nbndsw)
+  208.           
+  209.                 real(kind=r8), intent(in) :: colh2o(1:nlayers)
+  210.                                                                            !   Dimensions: (nlayers)
+  211.                 real(kind=r8), intent(in) :: colco2(1:nlayers)
+  212.                                                                            !   Dimensions: (nlayers)
+  213.                 real(kind=r8), intent(in) :: colch4(1:nlayers)
+  214.                                                                            !   Dimensions: (nlayers)
+  215.                 real(kind=r8), intent(in) :: co2mult(1:nlayers)
+  216.                                                                            !   Dimensions: (nlayers)
+  217.                 real(kind=r8), intent(in) :: colo3(1:nlayers)
+  218.                                                                            !   Dimensions: (nlayers)
+  219.                 real(kind=r8), intent(in) :: colo2(1:nlayers)
+  220.                                                                            !   Dimensions: (nlayers)
+  221.                 real(kind=r8), intent(in) :: coln2o(1:nlayers)
+  222.                                                                            !   Dimensions: (nlayers)
+  223.           
+  224.                 real(kind=r8), intent(in) :: forfac(1:nlayers)
+  225.                                                                            !   Dimensions: (nlayers)
+  226.                 real(kind=r8), intent(in) :: forfrac(1:nlayers)
+  227.                                                                            !   Dimensions: (nlayers)
+  228.                 real(kind=r8), intent(in) :: selffac(1:nlayers)
+  229.                                                                            !   Dimensions: (nlayers)
+  230.                 real(kind=r8), intent(in) :: selffrac(1:nlayers)
+  231.                                                                            !   Dimensions: (nlayers)
+  232.                 real(kind=r8), intent(in) :: fac00(1:nlayers)
+  233.                                                                            !   Dimensions: (nlayers)
+  234.                 real(kind=r8), intent(in) :: fac01(1:nlayers)
+  235.                                                                            !   Dimensions: (nlayers)
+  236.                 real(kind=r8), intent(in) :: fac10(1:nlayers)
+  237.                                                                            !   Dimensions: (nlayers)
+  238.                 real(kind=r8), intent(in) :: fac11(1:nlayers)
+  239.                                                                            !   Dimensions: (nlayers)
+  240.           
+  241.           ! ------- Output -------
+  242.                                                                            !   All Dimensions: (nlayers+1)
+  243.                 real(kind=r8), intent(out) :: pbbcd(1:nlayers+2)
+  244.                 real(kind=r8), intent(out) :: pbbcu(1:nlayers+2)
+  245.                 real(kind=r8), intent(out) :: pbbfd(1:nlayers+2)
+  246.                 real(kind=r8), intent(out) :: pbbfu(1:nlayers+2)
+  247.                 real(kind=r8), intent(out) :: pbbfddir(1:nlayers+2)
+  248.                 real(kind=r8), intent(out) :: pbbcddir(1:nlayers+2)
+  249.           
+  250.                 real(kind=r8), intent(out) :: puvcd(1:nlayers+2)
+  251.                 real(kind=r8), intent(out) :: puvfd(1:nlayers+2)
+  252.                 real(kind=r8), intent(out) :: puvcddir(1:nlayers+2)
+  253.                 real(kind=r8), intent(out) :: puvfddir(1:nlayers+2)
+  254.           
+  255.                 real(kind=r8), intent(out) :: pnicd(1:nlayers+2)
+  256.                 real(kind=r8), intent(out) :: pnifd(1:nlayers+2)
+  257.                 real(kind=r8), intent(out) :: pnicddir(1:nlayers+2)
+  258.                 real(kind=r8), intent(out) :: pnifddir(1:nlayers+2)
+  259.           
+  260.           ! Added for net near-IR flux diagnostic
+  261.                 real(kind=r8), intent(out) :: pnicu(1:nlayers+2)
+  262.                 real(kind=r8), intent(out) :: pnifu(1:nlayers+2)
+  263.           
+  264.           ! Output - inactive                                              !   All Dimensions: (nlayers+1)
+  265.           !      real(kind=r8), intent(out) :: puvcu(:)
+  266.           !      real(kind=r8), intent(out) :: puvfu(:)
+  267.           !      real(kind=r8), intent(out) :: pnicu(:)
+  268.           !      real(kind=r8), intent(out) :: pnifu(:)
+  269.           !      real(kind=r8), intent(out) :: pvscd(:)
+  270.           !      real(kind=r8), intent(out) :: pvscu(:)
+  271.           !      real(kind=r8), intent(out) :: pvsfd(:)
+  272.           !      real(kind=r8), intent(out) :: pvsfu(:)
+  273.           
+  274.           
+  275.           ! ------- Local -------
+  276.           
+  277.                 logical :: lrtchkclr(nlayers),lrtchkcld(nlayers)
+  278.           
+  279.                 integer  :: klev
+  280.                 integer :: ib1, ib2, ibm, igt, ikl, ikp, ikx
+  281.                 integer :: iw, jb, jg, jl, jk
+  282.           !      integer, parameter :: nuv = ?? 
+  283.           !      integer, parameter :: nvs = ?? 
+  284.                 integer :: itind
+  285.           
+  286.                 real(kind=r8) :: tblind, ze1
+  287.                 real(kind=r8) :: zclear, zcloud
+  288.                 real(kind=r8) :: zdbt(nlayers+1), zdbt_nodel(nlayers+1)
+  289.                 real(kind=r8) :: zgc(nlayers), zgcc(nlayers), zgco(nlayers)
+  290.                 real(kind=r8) :: zomc(nlayers), zomcc(nlayers), zomco(nlayers)
+  291.                 real(kind=r8) :: zrdnd(nlayers+1), zrdndc(nlayers+1)
+  292.                 real(kind=r8) :: zref(nlayers+1), zrefc(nlayers+1), zrefo(nlayers+1)
+  293.                 real(kind=r8) :: zrefd(nlayers+1), zrefdc(nlayers+1), zrefdo(nlayers+1)
+  294.                 real(kind=r8) :: zrup(nlayers+1), zrupd(nlayers+1)
+  295.                 real(kind=r8) :: zrupc(nlayers+1), zrupdc(nlayers+1)
+  296.                 real(kind=r8) :: zs1(nlayers+1)
+  297.                 real(kind=r8) :: ztauc(nlayers), ztauo(nlayers)
+  298.                 real(kind=r8) :: ztdn(nlayers+1), ztdnd(nlayers+1), ztdbt(nlayers+1)
+  299.                 real(kind=r8) :: ztoc(nlayers), ztor(nlayers)
+  300.                 real(kind=r8) :: ztra(nlayers+1), ztrac(nlayers+1), ztrao(nlayers+1)
+  301.                 real(kind=r8) :: ztrad(nlayers+1), ztradc(nlayers+1), ztrado(nlayers+1)
+  302.                 real(kind=r8) :: zdbtc(nlayers+1), ztdbtc(nlayers+1)
+  303.                 real(kind=r8) :: zincflx(ngptsw), zdbtc_nodel(nlayers+1) 
+  304.                 real(kind=r8) :: ztdbt_nodel(nlayers+1), ztdbtc_nodel(nlayers+1)
+  305.           
+  306.                 real(kind=r8) :: zdbtmc, zdbtmo, zf, zgw, zreflect
+  307.                 real(kind=r8) :: zwf, tauorig, repclc
+  308.           !     real(kind=r8) :: zincflux                                   ! inactive
+  309.           
+  310.           ! Arrays from rrtmg_sw_taumoln routines
+  311.           
+  312.           !      real(kind=r8) :: ztaug(nlayers,16), ztaur(nlayers,16)
+  313.           !      real(kind=r8) :: zsflxzen(16)
+  314.                 real(kind=r8) :: ztaug(nlayers,ngptsw), ztaur(nlayers,ngptsw)
+  315.                 real(kind=r8) :: zsflxzen(ngptsw)
+  316.           
+  317.           ! Arrays from rrtmg_sw_vrtqdr routine
+  318.           
+  319.                 real(kind=r8) :: zcd(nlayers+1,ngptsw), zcu(nlayers+1,ngptsw)
+  320.                 real(kind=r8) :: zfd(nlayers+1,ngptsw), zfu(nlayers+1,ngptsw)
+  321.           
+  322.           ! Inactive arrays
+  323.           !     real(kind=r8) :: zbbcd(nlayers+1), zbbcu(nlayers+1)
+  324.           !     real(kind=r8) :: zbbfd(nlayers+1), zbbfu(nlayers+1)
+  325.           !     real(kind=r8) :: zbbfddir(nlayers+1), zbbcddir(nlayers+1)
+  326.           
+  327.           ! Local storage arrays for zsflxzen, ztaug, and ztaur 
+  328.           
+  329.           !PK      real(kind=r8), allocatable, save :: ztaugst(:,:,:,:)      ! Gaseous optical depth storage array
+  330.           !PK      real(kind=r8), allocatable, save :: ztaurst(:,:,:,:)      ! Rayleigh optical depth storage array
+  331.           !PK      real(kind=r8), allocatable, save :: zsflxzenst(:,:,:)     ! Solar source function storage array
+  332.           
+  333.           ! Allocate storage arrays
+  334.           !      if (.not.allocated(ztaugst)) allocate (ztaugst(pcols,nlayers,ngptsw,begchunk:endchunk))
+  335.           !      if (.not.allocated(ztaurst)) allocate (ztaurst(pcols,nlayers,ngptsw,begchunk:endchunk))
+  336.           !      if (.not.allocated(zsflxzenst)) allocate (zsflxzenst(pcols,ngptsw,begchunk:endchunk))
+  337.                  
+  338.           ! ------------------------------------------------------------------
+  339.           
+  340.           ! Initializations
+  341.           
+  342.                 ib1 = istart
+  343.                 ib2 = iend
+  344.                 klev = nlayers
+  345.                 iw = 0
+  346.                 repclc = 1.e-12_r8
+  347.           !      zincflux = 0.0_r8
+  348.           
+  349.  1------<       do jk=1,klev+1
+  350.  1                 pbbcd(jk)=0._r8
+  351.  1                 pbbcu(jk)=0._r8
+  352.  1                 pbbfd(jk)=0._r8
+  353.  1                 pbbfu(jk)=0._r8
+  354.  1                 pbbcddir(jk)=0._r8
+  355.  1                 pbbfddir(jk)=0._r8
+  356.  1                 puvcd(jk)=0._r8
+  357.  1                 puvfd(jk)=0._r8
+  358.  1                 puvcddir(jk)=0._r8
+  359.  1                 puvfddir(jk)=0._r8
+  360.  1                 pnicd(jk)=0._r8
+  361.  1                 pnifd(jk)=0._r8
+  362.  1                 pnicddir(jk)=0._r8
+  363.  1                 pnifddir(jk)=0._r8
+  364.  1                 pnicu(jk)=0._r8
+  365.  1                 pnifu(jk)=0._r8
+  366.  1------>       enddo
+  367.           
+  368.           
+  369.           ! Perform calculations of optical depth and solar source function at interval
+  370.           ! specified by dotau and store output arrays zsflxzen, ztaug, and ztaur in memory.
+  371.           ! In intervening time steps, obtain zsflxzen, ztaug, and ztaur from stored arrays. 
+  372.           ! Memory storage should be replaced with I/O to netCDF file.
+  373.           
+  374.           !PK         if (dotau) then
+  375.            
+  376.           ! Calculate the optical depths for gaseous absorption and Rayleigh scattering
+  377.           
+  378.                       call taumol_sw(&
+  379.                                nlayers                       , &
+  380.                                ngptsw                        , &
+  381.                                colh2o    (1:nlayers)         , &
+  382.                                colco2    (1:nlayers)         , &
+  383.                                colch4    (1:nlayers)         , &
+  384.                                colo2     (1:nlayers)         , &
+  385.                                colo3     (1:nlayers)         , &
+  386.                                colmol    (1:nlayers)         , &
+  387.                                laytrop                       , &
+  388.                                jp        (1:nlayers)         , &
+  389.                                jt        (1:nlayers)         , &
+  390.                                jt1       (1:nlayers)         , &
+  391.                                fac00     (1:nlayers)         , &
+  392.                                fac01     (1:nlayers)         , &
+  393.                                fac10     (1:nlayers)         , &
+  394.                                fac11     (1:nlayers)         , &
+  395.                                selffac   (1:nlayers)         , &
+  396.                                selffrac  (1:nlayers)         , &
+  397.                                indself   (1:nlayers)         , &
+  398.                                forfac    (1:nlayers)         , &
+  399.                                forfrac   (1:nlayers)         , &
+  400.                                indfor    (1:nlayers)         , &
+  401.                                zsflxzen  (1:ngptsw)          , &
+  402.                                ztaug     (1:nlayers,1:ngptsw), &
+  403.                                ztaur     (1:nlayers,1:ngptsw))
+  404.           
+  405.           ! Store ztaug, ztaur, and zsflxzen for use when dotau is false
+  406.           !PK            ztaugst(iplon,:nlayers,:ngptsw,lchnk) = ztaug(:nlayers,:ngptsw)
+  407.           !PK            ztaurst(iplon,:nlayers,:ngptsw,lchnk) = ztaur(:nlayers,:ngptsw)
+  408.           !PK            zsflxzenst(iplon,:ngptsw,lchnk) = zsflxzen(:ngptsw)
+  409.           
+  410.           !PK         else
+  411.           
+  412.           ! Restore ztaug, ztaur, and zsflxzen from storage when dotau is false
+  413.           !PK            ztaug(:nlayers,:ngptsw) = ztaugst(iplon,:nlayers,:ngptsw,lchnk)
+  414.           !PK            ztaur(:nlayers,:ngptsw) = ztaurst(iplon,:nlayers,:ngptsw,lchnk)
+  415.           !PK            zsflxzen(:ngptsw) = zsflxzenst(iplon,:ngptsw,lchnk)
+  416.           
+  417.           !PK         endif
+  418.           
+  419.           ! Top of shortwave spectral band loop, jb = 16 -> 29; ibm = 1 -> 14
+  420.           
+  421.                 jb = ib1-1                  ! ???
+  422.  1------<       do jb = ib1, ib2
+  423.  1                 ibm = jb-15
+  424.  1                 igt = ngc(ibm)
+  425.  1        
+  426.  1        ! Reinitialize g-point counter for each band if output for each band is requested.
+  427.  1                 if (iout.gt.0.and.ibm.ge.2) iw = ngs(ibm-1)
+  428.  1        
+  429.  1        !        do jk=1,klev+1
+  430.  1        !           zbbcd(jk)=0.0_r8
+  431.  1        !           zbbcu(jk)=0.0_r8
+  432.  1        !           zbbfd(jk)=0.0_r8
+  433.  1        !           zbbfu(jk)=0.0_r8
+  434.  1        !        enddo
+  435.  1        
+  436.  1        ! Top of g-point interval loop within each band (iw is cumulative counter) 
+  437.  1 2----<          do jg = 1,igt
+  438.  1 2                  iw = iw+1
+  439.  1 2      
+  440.  1 2      ! Apply adjustments for correct Earth/Sun distance and zenith angle to incoming solar flux
+  441.  1 2                  zincflx(iw) = adjflux(jb) * zsflxzen(iw) * prmu0
+  442.  1 2      !             zincflux = zincflux + adjflux(jb) * zsflxzen(iw) * prmu0           ! inactive
+  443.  1 2      
+  444.  1 2      ! Compute layer reflectances and transmittances for direct and diffuse sources, 
+  445.  1 2      ! first clear then cloudy
+  446.  1 2      
+  447.  1 2      ! zrefc(jk)  direct albedo for clear
+  448.  1 2      ! zrefo(jk)  direct albedo for cloud
+  449.  1 2      ! zrefdc(jk) diffuse albedo for clear
+  450.  1 2      ! zrefdo(jk) diffuse albedo for cloud
+  451.  1 2      ! ztrac(jk)  direct transmittance for clear
+  452.  1 2      ! ztrao(jk)  direct transmittance for cloudy
+  453.  1 2      ! ztradc(jk) diffuse transmittance for clear
+  454.  1 2      ! ztrado(jk) diffuse transmittance for cloudy
+  455.  1 2      !  
+  456.  1 2      ! zref(jk)   direct reflectance
+  457.  1 2      ! zrefd(jk)  diffuse reflectance
+  458.  1 2      ! ztra(jk)   direct transmittance
+  459.  1 2      ! ztrad(jk)  diffuse transmittance
+  460.  1 2      !
+  461.  1 2      ! zdbtc(jk)  clear direct beam transmittance
+  462.  1 2      ! zdbto(jk)  cloudy direct beam transmittance
+  463.  1 2      ! zdbt(jk)   layer mean direct beam transmittance
+  464.  1 2      ! ztdbt(jk)  total direct beam transmittance at levels
+  465.  1 2      
+  466.  1 2      ! Clear-sky    
+  467.  1 2      !   TOA direct beam    
+  468.  1 2                  ztdbtc(1)=1.0_r8
+  469.  1 2                  ztdbtc_nodel(1)=1.0_r8
+  470.  1 2      !   Surface values
+  471.  1 2                  zdbtc(klev+1) =0.0_r8
+  472.  1 2                  ztrac(klev+1) =0.0_r8
+  473.  1 2                  ztradc(klev+1)=0.0_r8
+  474.  1 2                  zrefc(klev+1) =palbp(ibm)
+  475.  1 2                  zrefdc(klev+1)=palbd(ibm)
+  476.  1 2                  zrupc(klev+1) =palbp(ibm)
+  477.  1 2                  zrupdc(klev+1)=palbd(ibm)
+  478.  1 2                 
+  479.  1 2      ! Total sky    
+  480.  1 2      !   TOA direct beam    
+  481.  1 2                  ztdbt(1)=1.0_r8
+  482.  1 2                  ztdbt_nodel(1)=1.0_r8
+  483.  1 2      !   Surface values
+  484.  1 2                  zdbt(klev+1) =0.0_r8
+  485.  1 2                  ztra(klev+1) =0.0_r8
+  486.  1 2                  ztrad(klev+1)=0.0_r8
+  487.  1 2                  zref(klev+1) =palbp(ibm)
+  488.  1 2                  zrefd(klev+1)=palbd(ibm)
+  489.  1 2                  zrup(klev+1) =palbp(ibm)
+  490.  1 2                  zrupd(klev+1)=palbd(ibm)
+  491.  1 2          
+  492.  1 2          
+  493.  1 2      ! Top of layer loop
+  494.  1 2 3--<             do jk=1,klev
+  495.  1 2 3    
+  496.  1 2 3    ! Note: two-stream calculations proceed from top to bottom; 
+  497.  1 2 3    !   RRTMG_SW quantities are given bottom to top and are reversed here
+  498.  1 2 3    
+  499.  1 2 3                   ikl=klev+1-jk
+  500.  1 2 3    
+  501.  1 2 3    ! Set logical flag to do REFTRA calculation
+  502.  1 2 3    !   Do REFTRA for all clear layers
+  503.  1 2 3                   lrtchkclr(jk)=.true.
+  504.  1 2 3    
+  505.  1 2 3    !   Do REFTRA only for cloudy layers in profile, since already done for clear layers
+  506.  1 2 3                   lrtchkcld(jk)=.false.
+  507.  1 2 3                   lrtchkcld(jk)=(pclfr(ikl) > repclc)
+  508.  1 2 3    
+  509.  1 2 3    ! Clear-sky optical parameters - this section inactive     
+  510.  1 2 3    !   Original
+  511.  1 2 3    !               ztauc(jk) = ztaur(ikl,iw) + ztaug(ikl,iw)
+  512.  1 2 3    !               zomcc(jk) = ztaur(ikl,iw) / ztauc(jk)
+  513.  1 2 3    !               zgcc(jk) = 0.0001_r8
+  514.  1 2 3    !   Total sky optical parameters        
+  515.  1 2 3    !               ztauo(jk) = ztaur(ikl,iw) + ztaug(ikl,iw) + ptauc(ikl,ibm)
+  516.  1 2 3    !               zomco(jk) = ptauc(ikl,ibm) * pomgc(ikl,ibm) + ztaur(ikl,iw)
+  517.  1 2 3    !               zgco (jk) = (ptauc(ikl,ibm) * pomgc(ikl,ibm) * pasyc(ikl,ibm) + &
+  518.  1 2 3    !                           ztaur(ikl,iw) * 0.0001_r8) / zomco(jk)
+  519.  1 2 3    !               zomco(jk) = zomco(jk) / ztauo(jk)
+  520.  1 2 3    
+  521.  1 2 3    ! Clear-sky optical parameters including aerosols
+  522.  1 2 3                   ztauc(jk) = ztaur(ikl,iw) + ztaug(ikl,iw) + ptaua(ikl,ibm)
+  523.  1 2 3                   zomcc(jk) = ztaur(ikl,iw) * 1.0_r8 + ptaua(ikl,ibm) * pomga(ikl,ibm)
+  524.  1 2 3                   zgcc(jk) = pasya(ikl,ibm) * pomga(ikl,ibm) * ptaua(ikl,ibm) / zomcc(jk)
+  525.  1 2 3                   zomcc(jk) = zomcc(jk) / ztauc(jk)
+  526.  1 2 3    
+  527.  1 2 3    ! Pre-delta-scaling clear and cloudy direct beam transmittance (must use 'orig', unscaled cloud OD)       
+  528.  1 2 3    !   \/\/\/ This block of code is only needed for unscaled direct beam calculation
+  529.  1 2 3                   if (idelm .eq. 0) then
+  530.  1 2 3    !     
+  531.  1 2 3                      zclear = 1.0_r8 - pclfr(ikl)
+  532.  1 2 3                      zcloud = pclfr(ikl)
+  533.  1 2 3    
+  534.  1 2 3    ! Clear
+  535.  1 2 3    !                   zdbtmc = exp(-ztauc(jk) / prmu0)
+  536.  1 2 3     
+  537.  1 2 3    ! Use exponential lookup table for transmittance, or expansion of exponential for low tau
+  538.  1 2 3                      ze1 = ztauc(jk) / prmu0
+  539.  1 2 3                      if (ze1 .le. od_lo) then
+  540.  1 2 3                         zdbtmc = 1._r8 - ze1 + 0.5_r8 * ze1 * ze1
+  541.  1 2 3                      else 
+  542.  1 2 3                         tblind = ze1 / (bpade + ze1)
+  543.  1 2 3                         itind = tblint * tblind + 0.5_r8
+  544.  1 2 3                         zdbtmc = exp_tbl(itind)
+  545.  1 2 3                      endif
+  546.  1 2 3    
+  547.  1 2 3                      zdbtc_nodel(jk) = zdbtmc
+  548.  1 2 3                      ztdbtc_nodel(jk+1) = zdbtc_nodel(jk) * ztdbtc_nodel(jk)
+  549.  1 2 3    
+  550.  1 2 3    ! Clear + Cloud
+  551.  1 2 3                      tauorig = ztauc(jk) + ptaucorig(ikl,ibm)
+  552.  1 2 3    !                   zdbtmo = exp(-tauorig / prmu0)
+  553.  1 2 3    
+  554.  1 2 3    ! Use exponential lookup table for transmittance, or expansion of exponential for low tau
+  555.  1 2 3                      ze1 = tauorig / prmu0
+  556.  1 2 3                      if (ze1 .le. od_lo) then
+  557.  1 2 3                         zdbtmo = 1._r8 - ze1 + 0.5_r8 * ze1 * ze1
+  558.  1 2 3                      else
+  559.  1 2 3                         tblind = ze1 / (bpade + ze1)
+  560.  1 2 3                         itind = tblint * tblind + 0.5_r8
+  561.  1 2 3                         zdbtmo = exp_tbl(itind)
+  562.  1 2 3                      endif
+  563.  1 2 3    
+  564.  1 2 3                      zdbt_nodel(jk) = zclear * zdbtmc + zcloud * zdbtmo
+  565.  1 2 3                      ztdbt_nodel(jk+1) = zdbt_nodel(jk) * ztdbt_nodel(jk)
+  566.  1 2 3    
+  567.  1 2 3                   endif
+  568.  1 2 3    !   /\/\/\ Above code only needed for unscaled direct beam calculation
+  569.  1 2 3    
+  570.  1 2 3    
+  571.  1 2 3    ! Delta scaling - clear   
+  572.  1 2 3                   zf = zgcc(jk) * zgcc(jk)
+  573.  1 2 3                   zwf = zomcc(jk) * zf
+  574.  1 2 3                   ztauc(jk) = (1.0_r8 - zwf) * ztauc(jk)
+  575.  1 2 3                   zomcc(jk) = (zomcc(jk) - zwf) / (1.0_r8 - zwf)
+  576.  1 2 3                   zgcc (jk) = (zgcc(jk) - zf) / (1.0_r8 - zf)
+  577.  1 2 3    
+  578.  1 2 3    ! Total sky optical parameters (cloud properties already delta-scaled)
+  579.  1 2 3    !   Use this code if cloud properties are derived in rrtmg_sw_cldprop       
+  580.  1 2 3                   if (icpr .ge. 1) then
+  581.  1 2 3                      ztauo(jk) = ztauc(jk) + ptauc(ikl,ibm)
+  582.  1 2 3                      zomco(jk) = ztauc(jk) * zomcc(jk) + ptauc(ikl,ibm) * pomgc(ikl,ibm) 
+  583.  1 2 3                      zgco (jk) = (ptauc(ikl,ibm) * pomgc(ikl,ibm) * pasyc(ikl,ibm) + &
+  584.  1 2 3                                  ztauc(jk) * zomcc(jk) * zgcc(jk)) / zomco(jk)
+  585.  1 2 3                      zomco(jk) = zomco(jk) / ztauo(jk)
+  586.  1 2 3    
+  587.  1 2 3    ! Total sky optical parameters (if cloud properties not delta scaled)
+  588.  1 2 3    !   Use this code if cloud properties are not derived in rrtmg_sw_cldprop       
+  589.  1 2 3                   elseif (icpr .eq. 0) then
+  590.  1 2 3                      ztauo(jk) = ztaur(ikl,iw) + ztaug(ikl,iw) + ptaua(ikl,ibm) + ptauc(ikl,ibm)
+  591.  1 2 3                      zomco(jk) = ptaua(ikl,ibm) * pomga(ikl,ibm) + ptauc(ikl,ibm) * pomgc(ikl,ibm) + &
+  592.  1 2 3                                  ztaur(ikl,iw) * 1.0_r8
+  593.  1 2 3                      zgco (jk) = (ptauc(ikl,ibm) * pomgc(ikl,ibm) * pasyc(ikl,ibm) + &
+  594.  1 2 3                                  ptaua(ikl,ibm)*pomga(ikl,ibm)*pasya(ikl,ibm)) / zomco(jk)
+  595.  1 2 3                      zomco(jk) = zomco(jk) / ztauo(jk)
+  596.  1 2 3    
+  597.  1 2 3    ! Delta scaling - clouds 
+  598.  1 2 3    !   Use only if subroutine rrtmg_sw_cldprop is not used to get cloud properties and to apply delta scaling
+  599.  1 2 3                      zf = zgco(jk) * zgco(jk)
+  600.  1 2 3                      zwf = zomco(jk) * zf
+  601.  1 2 3                      ztauo(jk) = (1._r8 - zwf) * ztauo(jk)
+  602.  1 2 3                      zomco(jk) = (zomco(jk) - zwf) / (1.0_r8 - zwf)
+  603.  1 2 3                      zgco (jk) = (zgco(jk) - zf) / (1.0_r8 - zf)
+  604.  1 2 3                   endif 
+  605.  1 2 3    
+  606.  1 2 3    ! End of layer loop
+  607.  1 2 3-->             enddo    
+  608.  1 2      
+  609.  1 2      
+  610.  1 2      ! Clear sky reflectivities
+  611.  1 2                  call reftra_sw ( &
+  612.  1 2                                  nlayers               , &
+  613.  1 2                                  lrtchkclr(1:nlayers)  , &
+  614.  1 2                                  zgcc     (1:nlayers)  , &
+  615.  1 2                                  prmu0                 , &
+  616.  1 2                                  ztauc    (1:nlayers)  , &
+  617.  1 2                                  zomcc    (1:nlayers)  , &
+  618.  1 2                                  zrefc    (1:nlayers+1), &
+  619.  1 2                                  zrefdc   (1:nlayers+1), &
+  620.  1 2                                  ztrac    (1:nlayers+1), &
+  621.  1 2                                  ztradc   (1:nlayers+1)  )
+  622.  1 2      
+  623.  1 2      ! Total sky reflectivities      
+  624.  1 2                  call reftra_sw ( &
+  625.  1 2                                  nlayers               , &
+  626.  1 2                                  lrtchkcld(1:nlayers)  , &
+  627.  1 2                                  zgco     (1:nlayers)  , &
+  628.  1 2                                  prmu0                 , &
+  629.  1 2                                  ztauo    (1:nlayers)  , &
+  630.  1 2                                  zomco    (1:nlayers)  , &
+  631.  1 2                                  zrefo    (1:nlayers+1), &
+  632.  1 2                                  zrefdo   (1:nlayers+1), &
+  633.  1 2                                  ztrao    (1:nlayers+1), &
+  634.  1 2                                  ztrado   (1:nlayers+1)  )
+  635.  1 2      
+  636.  1 2      
+  637.  1 2 3--<             do jk=1,klev
+  638.  1 2 3    
+  639.  1 2 3    ! Combine clear and cloudy contributions for total sky
+  640.  1 2 3                   ikl = klev+1-jk 
+  641.  1 2 3                   zclear = 1.0_r8 - pclfr(ikl)
+  642.  1 2 3                   zcloud = pclfr(ikl)
+  643.  1 2 3    
+  644.  1 2 3                   zref(jk) = zclear*zrefc(jk) + zcloud*zrefo(jk)
+  645.  1 2 3                   zrefd(jk)= zclear*zrefdc(jk) + zcloud*zrefdo(jk)
+  646.  1 2 3                   ztra(jk) = zclear*ztrac(jk) + zcloud*ztrao(jk)
+  647.  1 2 3                   ztrad(jk)= zclear*ztradc(jk) + zcloud*ztrado(jk)
+  648.  1 2 3    
+  649.  1 2 3    ! Direct beam transmittance        
+  650.  1 2 3    
+  651.  1 2 3    ! Clear
+  652.  1 2 3    !                zdbtmc = exp(-ztauc(jk) / prmu0)
+  653.  1 2 3    
+  654.  1 2 3    ! Use exponential lookup table for transmittance, or expansion of 
+  655.  1 2 3    ! exponential for low tau
+  656.  1 2 3                   ze1 = ztauc(jk) / prmu0
+  657.  1 2 3                   if (ze1 .le. od_lo) then
+  658.  1 2 3                      zdbtmc = 1._r8 - ze1 + 0.5_r8 * ze1 * ze1
+  659.  1 2 3                   else
+  660.  1 2 3                      tblind = ze1 / (bpade + ze1)
+  661.  1 2 3                      itind = tblint * tblind + 0.5_r8
+  662.  1 2 3                      zdbtmc = exp_tbl(itind)
+  663.  1 2 3                   endif
+  664.  1 2 3    
+  665.  1 2 3                   zdbtc(jk) = zdbtmc
+  666.  1 2 3                   ztdbtc(jk+1) = zdbtc(jk)*ztdbtc(jk)
+  667.  1 2 3    
+  668.  1 2 3    ! Clear + Cloud
+  669.  1 2 3    !                zdbtmo = exp(-ztauo(jk) / prmu0)
+  670.  1 2 3    
+  671.  1 2 3    ! Use exponential lookup table for transmittance, or expansion of 
+  672.  1 2 3    ! exponential for low tau
+  673.  1 2 3                   ze1 = ztauo(jk) / prmu0
+  674.  1 2 3                   if (ze1 .le. od_lo) then
+  675.  1 2 3                      zdbtmo = 1._r8 - ze1 + 0.5_r8 * ze1 * ze1
+  676.  1 2 3                   else
+  677.  1 2 3                      tblind = ze1 / (bpade + ze1)
+  678.  1 2 3                      itind = tblint * tblind + 0.5_r8
+  679.  1 2 3                      zdbtmo = exp_tbl(itind)
+  680.  1 2 3                   endif
+  681.  1 2 3    
+  682.  1 2 3                   zdbt(jk) = zclear*zdbtmc + zcloud*zdbtmo
+  683.  1 2 3                   ztdbt(jk+1) = zdbt(jk)*ztdbt(jk)
+  684.  1 2 3            
+  685.  1 2 3-->             enddo           
+  686.  1 2                       
+  687.  1 2      ! Vertical quadrature for clear-sky fluxes
+  688.  1 2      
+  689.  1 2                  call vrtqdr_sw ( &
+  690.  1 2                                  ngptsw                        , &
+  691.  1 2                                  nlayers                       , &
+  692.  1 2                                  iw                            , &
+  693.  1 2                                  zrefc   (1:nlayers+1)         , &
+  694.  1 2                                  zrefdc  (1:nlayers+1)         , &
+  695.  1 2                                  ztrac   (1:nlayers+1)         , &
+  696.  1 2                                  ztradc  (1:nlayers+1)         , &
+  697.  1 2                                  zdbtc   (1:nlayers+1)         , &
+  698.  1 2                                  zrdndc  (1:nlayers+1)         , &
+  699.  1 2                                  zrupc   (1:nlayers+1)         , &
+  700.  1 2                                  zrupdc  (1:nlayers+1)         , &
+  701.  1 2                                  ztdbtc  (1:nlayers+1)         , &
+  702.  1 2                                  zcd     (1:nlayers+1,1:ngptsw), &
+  703.  1 2                                  zcu     (1:nlayers+1,1:ngptsw)  )
+  704.  1 2            
+  705.  1 2      ! Vertical quadrature for cloudy fluxes
+  706.  1 2      
+  707.  1 2                  call vrtqdr_sw ( &
+  708.  1 2                                  ngptsw                        , &
+  709.  1 2                                  nlayers                       , &
+  710.  1 2                                  iw                            , &
+  711.  1 2                                  zref    (1:nlayers+1)         , &
+  712.  1 2                                  zrefd   (1:nlayers+1)         , &
+  713.  1 2                                  ztra    (1:nlayers+1)         , &
+  714.  1 2                                  ztrad   (1:nlayers+1)         , &
+  715.  1 2                                  zdbt    (1:nlayers+1)         , &
+  716.  1 2                                  zrdnd   (1:nlayers+1)         , &
+  717.  1 2                                  zrup    (1:nlayers+1)         , &
+  718.  1 2                                  zrupd   (1:nlayers+1)         , &
+  719.  1 2                                  ztdbt   (1:nlayers+1)         , &
+  720.  1 2                                  zfd     (1:nlayers+1,1:ngptsw), &
+  721.  1 2                                  zfu     (1:nlayers+1,1:ngptsw)  )
+  722.  1 2      
+  723.  1 2      ! Upwelling and downwelling fluxes at levels
+  724.  1 2      !   Two-stream calculations go from top to bottom; 
+  725.  1 2      !   layer indexing is reversed to go bottom to top for output arrays
+  726.  1 2      
+  727.  1 2 3--<             do jk=1,klev+1
+  728.  1 2 3                   ikl=klev+2-jk
+  729.  1 2 3    
+  730.  1 2 3    ! Accumulate spectral fluxes over bands - inactive
+  731.  1 2 3    !               zbbfu(ikl) = zbbfu(ikl) + zincflx(iw)*zfu(jk,iw)  
+  732.  1 2 3    !               zbbfd(ikl) = zbbfd(ikl) + zincflx(iw)*zfd(jk,iw)
+  733.  1 2 3    !               zbbcu(ikl) = zbbcu(ikl) + zincflx(iw)*zcu(jk,iw)
+  734.  1 2 3    !               zbbcd(ikl) = zbbcd(ikl) + zincflx(iw)*zcd(jk,iw)
+  735.  1 2 3    !               zbbfddir(ikl) = zbbfddir(ikl) + zincflx(iw)*ztdbt_nodel(jk)
+  736.  1 2 3    !               zbbcddir(ikl) = zbbcddir(ikl) + zincflx(iw)*ztdbtc_nodel(jk)
+  737.  1 2 3    
+  738.  1 2 3    ! Accumulate spectral fluxes over whole spectrum  
+  739.  1 2 3                   pbbfu(ikl) = pbbfu(ikl) + zincflx(iw)*zfu(jk,iw)
+  740.  1 2 3                   pbbfd(ikl) = pbbfd(ikl) + zincflx(iw)*zfd(jk,iw)
+  741.  1 2 3                   pbbcu(ikl) = pbbcu(ikl) + zincflx(iw)*zcu(jk,iw)
+  742.  1 2 3                   pbbcd(ikl) = pbbcd(ikl) + zincflx(iw)*zcd(jk,iw)
+  743.  1 2 3                   if (idelm .eq. 0) then
+  744.  1 2 3                      pbbfddir(ikl) = pbbfddir(ikl) + zincflx(iw)*ztdbt_nodel(jk)
+  745.  1 2 3                      pbbcddir(ikl) = pbbcddir(ikl) + zincflx(iw)*ztdbtc_nodel(jk)
+  746.  1 2 3                   elseif (idelm .eq. 1) then
+  747.  1 2 3                      pbbfddir(ikl) = pbbfddir(ikl) + zincflx(iw)*ztdbt(jk)
+  748.  1 2 3                      pbbcddir(ikl) = pbbcddir(ikl) + zincflx(iw)*ztdbtc(jk)
+  749.  1 2 3                   endif
+  750.  1 2 3    
+  751.  1 2 3    ! Accumulate direct fluxes for UV/visible bands
+  752.  1 2 3                   if (ibm >= 10 .and. ibm <= 13) then
+  753.  1 2 3                      puvcd(ikl) = puvcd(ikl) + zincflx(iw)*zcd(jk,iw)
+  754.  1 2 3                      puvfd(ikl) = puvfd(ikl) + zincflx(iw)*zfd(jk,iw)
+  755.  1 2 3                      if (idelm .eq. 0) then
+  756.  1 2 3                         puvfddir(ikl) = puvfddir(ikl) + zincflx(iw)*ztdbt_nodel(jk)
+  757.  1 2 3                         puvcddir(ikl) = puvcddir(ikl) + zincflx(iw)*ztdbtc_nodel(jk)
+  758.  1 2 3                      elseif (idelm .eq. 1) then
+  759.  1 2 3                         puvfddir(ikl) = puvfddir(ikl) + zincflx(iw)*ztdbt(jk)
+  760.  1 2 3                         puvcddir(ikl) = puvcddir(ikl) + zincflx(iw)*ztdbtc(jk)
+  761.  1 2 3                      endif
+  762.  1 2 3    ! Accumulate direct fluxes for near-IR bands
+  763.  1 2 3                   else if (ibm == 14 .or. ibm <= 9) then  
+  764.  1 2 3                      pnicd(ikl) = pnicd(ikl) + zincflx(iw)*zcd(jk,iw)
+  765.  1 2 3                      pnifd(ikl) = pnifd(ikl) + zincflx(iw)*zfd(jk,iw)
+  766.  1 2 3                      if (idelm .eq. 0) then
+  767.  1 2 3                         pnifddir(ikl) = pnifddir(ikl) + zincflx(iw)*ztdbt_nodel(jk)
+  768.  1 2 3                         pnicddir(ikl) = pnicddir(ikl) + zincflx(iw)*ztdbtc_nodel(jk)
+  769.  1 2 3                      elseif (idelm .eq. 1) then
+  770.  1 2 3                         pnifddir(ikl) = pnifddir(ikl) + zincflx(iw)*ztdbt(jk)
+  771.  1 2 3                         pnicddir(ikl) = pnicddir(ikl) + zincflx(iw)*ztdbtc(jk)
+  772.  1 2 3                      endif
+  773.  1 2 3    ! Added for net near-IR flux diagnostic 
+  774.  1 2 3                      pnicu(ikl) = pnicu(ikl) + zincflx(iw)*zcu(jk,iw)
+  775.  1 2 3                      pnifu(ikl) = pnifu(ikl) + zincflx(iw)*zfu(jk,iw)
+  776.  1 2 3                   endif
+  777.  1 2 3    
+  778.  1 2 3-->             enddo
+  779.  1 2      
+  780.  1 2      ! End loop on jg, g-point interval
+  781.  1 2---->          enddo             
+  782.  1        
+  783.  1        ! End loop on jb, spectral band
+  784.  1------>       enddo                    
+  785.           
+  786.                 end subroutine spcvrt_sw
+ftn-5002 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Local variable "ZTOC" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Local variable "ZGC" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Local variable "ZGW" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Local variable "ZOMC" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Local variable "ZTOR" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Local variable "IKP" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Local variable "ZREFLECT" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Local variable "JL" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Local variable "IKX" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Local variable "ZS1" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Local variable "ZTDN" is declared but neither defined nor used.
+
+ftn-5002 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Local variable "ZTDND" is declared but neither defined nor used.
+
+ftn-5004 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Dummy Argument "CO2MULT" is not referenced or defined.
+
+ftn-5004 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Dummy Argument "TBOUND" is not referenced or defined.
+
+ftn-5004 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Dummy Argument "COLN2O" is not referenced or defined.
+
+ftn-5004 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Dummy Argument "COLDRY" is not referenced or defined.
+
+ftn-5004 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Dummy Argument "WKL" is not referenced or defined.
+
+ftn-5004 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Dummy Argument "LAYLOW" is not referenced or defined.
+
+ftn-5004 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Dummy Argument "TZ" is not referenced or defined.
+
+ftn-5004 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Dummy Argument "LAYSWTCH" is not referenced or defined.
+
+ftn-5004 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Dummy Argument "PAVEL" is not referenced or defined.
+
+ftn-5004 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Dummy Argument "PZ" is not referenced or defined.
+
+ftn-5004 ftn: NOTE File = rrtmg_sw_spcvrt.f90, Line = 786 
+  Dummy Argument "TAVEL" is not referenced or defined.
+
+  787.           
+  788.                 end module rrtmg_sw_spcvrt
+
+  789.           
+  790.           
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+             C r o s s   R e f e r e n c e   for   RRTMG_SW_SPCVRT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+ADJFLUX                         Dummy Arg                         REAL(KIND=8), DIMENSION(29), INTENT(IN)
+  Decl      69     184
+  Set 
+  Used     441
+
+BPADE                           Use assoc                         REAL(KIND=8), From module RRSW_TBL, SAVE
+  Decl
+  Set 
+  Used     542     559     660     677
+
+CO2MULT                         Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      76     215
+  Set 
+  Used
+
+COLCH4                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      77     213
+  Set 
+  Used     383
+
+COLCO2                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      78     211
+  Set 
+  Used     382
+
+COLDRY                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      67     180
+  Set 
+  Used
+
+COLH2O                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      79     209
+  Set 
+  Used     381
+
+COLMOL                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      80     182
+  Set 
+  Used     386
+
+COLN2O                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      81     221
+  Set 
+  Used
+
+COLO2                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      82     219
+  Set 
+  Used     384
+
+COLO3                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      83     217
+  Set 
+  Used     385
+
+EXP_TBL                         Use assoc                         REAL(KIND=8), From module RRSW_TBL, DIMENSION(0:10000), SAVE
+  Decl
+  Set 
+  Used     544     561     662     679
+
+FAC00                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      84     232
+  Set 
+  Used     391
+
+FAC01                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      85     234
+  Set 
+  Used     392
+
+FAC10                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      86     236
+  Set 
+  Used     393
+
+FAC11                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      87     238
+  Set 
+  Used     394
+
+FORFAC                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      91     224
+  Set 
+  Used     398
+
+FORFRAC                         Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      92     226
+  Set 
+  Used     399
+
+IB1                             Stack                             INTEGER
+  Decl     280
+  Set      342
+  Used     421
+
+IB2                             Stack                             INTEGER
+  Decl     280
+  Set      343
+  Used     422
+
+IBM                             Stack                             INTEGER
+  Decl     280
+  Set      423
+  Used     424     427     474     475     476     477     487     488     489     490     522     523     524     551     581
+           582     583     590     591     593     594     752     763
+
+ICPR                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      48     148
+  Set 
+  Used     580     589
+
+IDELM                           Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      49     149
+  Set 
+  Used     529     743     746     755     758     766     769
+
+IEND                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      47     147
+  Set 
+  Used     343
+
+IGT                             Stack                             INTEGER
+  Decl     280
+  Set      424
+  Used     437
+
+IKL                             Stack                             INTEGER
+  Decl     280
+  Set      499     640     728
+  Used     507     522     523     524     531     532     551     581     582     583     590     591     592     593     594
+           641     642     739     740     741     742     744     745     747     748     753     754     756     757     759
+           760     764     765     767     768     770     771     774     775
+
+IKP                             Stack                             INTEGER
+  Decl     280
+  Set 
+  Used
+
+IKX                             Stack                             INTEGER
+  Decl     280
+  Set 
+  Used
+
+INDFOR                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl      93     158
+  Set 
+  Used     400
+
+INDSELF                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl      90     160
+  Set 
+  Used     397
+
+IOUT                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      50     152
+  Set 
+  Used
+
+ISTART                          Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      46     146
+  Set 
+  Used     342
+
+ITIND                           Stack                             INTEGER
+  Decl     284
+  Set      543     560     661     678
+  Used     544     561     662     679
+
+IW                              Stack                             INTEGER
+  Decl     281
+  Set      345     427     438
+  Used     441     522     523     590     592     692     710     739     740     741     742     744     745     747     748
+           753     754     756     757     759     760     764     765     767     768     770     771     774     775
+
+JB                              Stack                             INTEGER
+  Decl     281
+  Set      421
+  Used     423     441
+
+JG                              Stack                             INTEGER
+  Decl     281
+  Set 
+  Used
+
+JK                              Stack                             INTEGER
+  Decl     281
+  Set 
+  Used     350     351     352     353     354     355     356     357     358     359     360     361     362     363     364
+           365     499     503     506     507     522     523     524     525     538     547     548     551     564     565
+           572     573     574     575     576     581     582     583     584     585     590     591     593     594     595
+           599     600     601     602     603     640     644     645     646     647     656     665     666     673     682
+           683     728     739     740     741     742     744     745     747     748     753     754     756     757     759
+           760     764     765     767     768     770     771     774     775
+
+JL                              Stack                             INTEGER
+  Decl     281
+  Set 
+  Used
+
+JP                              Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl      73     162
+  Set 
+  Used     388
+
+JPBAND                          Use assoc                         INTEGER, PARAMETER, From module PARRRSW
+  Decl
+  Set 
+  Used     184
+
+JT                              Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl      74     164
+  Set 
+  Used     389
+
+JT1                             Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(IN)
+  Decl      75     166
+  Set 
+  Used     390
+
+KLEV                            Stack                             INTEGER
+  Decl     279
+  Set      344
+  Used     349     471     472     473     474     475     476     477     484     485     486     487     488     489     490
+           494     499     637     640     727     728
+
+LAYLOW                          Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      72     156
+  Set 
+  Used
+
+LAYSWTCH                        Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      71     155
+  Set 
+  Used
+
+LAYTROP                         Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      70     154
+  Set 
+  Used     387
+
+LRTCHKCLD                       Stack                             LOGICAL, DIMENSION(<exp>)
+  Decl     277
+  Set      506     507
+  Used     626
+
+LRTCHKCLR                       Stack                             LOGICAL, DIMENSION(<exp>)
+  Decl     277
+  Set      503
+  Used     613
+
+MXMOL                           Use assoc                         INTEGER, PARAMETER, From module PARRRSW
+  Decl
+  Set 
+  Used     178
+
+NBNDSW                          Use assoc                         INTEGER, PARAMETER, From module PARRRSW
+  Decl
+  Set 
+  Used     187     189     194     196     198     200     202     204     206
+
+NGC                             Use assoc                         INTEGER, From module RRSW_WVN, DIMENSION(14), SAVE
+  Decl
+  Set 
+  Used     424
+
+NGPTSW                          Use assoc                         INTEGER, PARAMETER, From module PARRRSW
+  Decl
+  Set 
+  Used     303     314     315     319     320     380     401     402     403     690     702     703     708     720     721
+
+NGS                             Use assoc                         INTEGER, From module RRSW_WVN, DIMENSION(14), SAVE
+  Decl
+  Set 
+  Used     427
+
+NLAYERS                         Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      45     145
+  Set 
+  Used     158     160     162     164     166     169     171     173     175     178     180     182     192     194     196
+           198     200     202     204     206     209     211     213     215     217     219     221     224     226     228
+           230     232     234     236     238     243     244     245     246     247     248     250     251     252     253
+           255     256     257     258     261     262     277     288     289     290     291     292     293     294     295
+           296     297     298     299     300     301     302     303     304     314     319     320     344     379     612
+           625     691     709
+
+OD_LO                           Use assoc                         REAL(KIND=8), PARAMETER, From module RRSW_TBL
+  Decl
+  Set 
+  Used     539     556     657     674
+
+PALBD                           Dummy Arg                         REAL(KIND=8), DIMENSION(14), INTENT(IN)
+  Decl      56     187
+  Set 
+  Used     475     477     488     490
+
+PALBP                           Dummy Arg                         REAL(KIND=8), DIMENSION(14), INTENT(IN)
+  Decl      57     189
+  Set 
+  Used     474     476     487     489
+
+PARRRSW                                                           Module
+  Decl
+  Set 
+  Used      25
+
+PASYA                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, 14), INTENT(IN)
+  Decl      64     204
+  Set 
+  Used     524     594
+
+PASYC                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, 14), INTENT(IN)
+  Decl      60     196
+  Set 
+  Used     583     593
+
+PAVEL                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      51     169
+  Set 
+  Used
+
+PBBCD                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      96     243
+  Set      350     742
+  Used
+
+PBBCDDIR                        Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     105     248
+  Set      354     745     748
+  Used
+
+PBBCU                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      97     244
+  Set      351     741
+  Used
+
+PBBFD                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      94     245
+  Set      352     740
+  Used
+
+PBBFDDIR                        Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     104     247
+  Set      355     744     747
+  Used
+
+PBBFU                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      95     246
+  Set      353     739
+  Used
+
+PCLFR                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      58     192
+  Set 
+  Used     507     531     532     641     642
+
+PNICD                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     101     255
+  Set      360     764
+  Used
+
+PNICDDIR                        Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     109     257
+  Set      362     768     771
+  Used
+
+PNICU                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     103     261
+  Set      364     774
+  Used
+
+PNIFD                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     100     256
+  Set      361     765
+  Used
+
+PNIFDDIR                        Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     108     258
+  Set      363     767     770
+  Used
+
+PNIFU                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     102     262
+  Set      365     775
+  Used
+
+POMGA                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, 14), INTENT(IN)
+  Decl      65     206
+  Set 
+  Used     523     524     591     594
+
+POMGC                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, 14), INTENT(IN)
+  Decl      61     198
+  Set 
+  Used     582     583     591     593
+
+PRMU0                           Dummy Arg                         REAL(KIND=8), INTENT(IN)
+  Decl      66     191
+  Set 
+  Used     441     538     555     615     628     656     673
+
+PTAUA                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, 14), INTENT(IN)
+  Decl      63     202
+  Set 
+  Used     522     523     524     590     591     594
+
+PTAUC                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, 14), INTENT(IN)
+  Decl      59     194
+  Set 
+  Used     581     582     583     590     591     593
+
+PTAUCORIG                       Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, 14), INTENT(IN)
+  Decl      62     200
+  Set 
+  Used     551
+
+PUVCD                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      99     250
+  Set      356     753
+  Used
+
+PUVCDDIR                        Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     107     252
+  Set      358     757     760
+  Used
+
+PUVFD                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      98     251
+  Set      357     754
+  Used
+
+PUVFDDIR                        Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl     106     253
+  Set      359     756     759
+  Used
+
+PZ                              Dummy Arg                         REAL(KIND=8), DIMENSION(0:<exp>), INTENT(IN)
+  Decl      53     173
+  Set 
+  Used
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD
+  Decl      20
+  Set 
+  Used     169     171     173     175     177     178     180     182     184     187     189     191     192     194     196
+           198     200     202     204     206     209     211     213     215     217     219     221     224     226     228
+           230     232     234     236     238     243     244     245     246     247     248     250     251     252     253
+           255     256     257     258     261     262     286     287     288     289     290     291     292     293     294
+           295     296     297     298     299     300     301     302     303     304     306     307     314     315     319
+           320
+
+REFTRA_SW                       Use assoc                         Subroutine, From module RRTMG_SW_REFTRA, Module procedure
+  Decl
+  Set 
+  Used       0     624
+
+REFTRA_SW                       Use assoc                         Subroutine, From module RRTMG_SW_REFTRA, Module procedure
+  Decl
+  Set 
+  Used       0     624
+
+REPCLC                          Stack                             REAL(KIND=8)
+  Decl     307
+  Set      346
+  Used     507
+
+RRSW_TBL                                                          Module
+  Decl
+  Set 
+  Used      26
+
+RRSW_VSN                                                          Module
+  Decl
+  Set 
+  Used      27
+
+RRSW_WVN                                                          Module
+  Decl
+  Set 
+  Used      28
+
+RRTMG_SW_REFTRA                                                   Module
+  Decl
+  Set 
+  Used      29
+
+RRTMG_SW_SPCVRT                                                   Module
+  Decl       6
+  Set 
+  Used
+
+RRTMG_SW_TAUMOL                                                   Module
+  Decl
+  Set 
+  Used      30
+
+RRTMG_SW_VRTQDR                                                   Module
+  Decl
+  Set 
+  Used      31
+
+SELFFAC                         Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      88     228
+  Set 
+  Used     395
+
+SELFFRAC                        Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      89     230
+  Set 
+  Used     396
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used      20
+
+SPCVRT_SW                                                         Subroutine, Module procedure
+  Decl      44
+  Set 
+  Used
+
+TAUMOL_SW                       Use assoc                         Subroutine, From module RRTMG_SW_TAUMOL, Module procedure
+  Decl
+  Set 
+  Used     378
+
+TAUMOL_SW                       Use assoc                         Subroutine, From module RRTMG_SW_TAUMOL, Module procedure
+  Decl
+  Set 
+  Used     378
+
+TAUORIG                         Stack                             REAL(KIND=8)
+  Decl     307
+  Set      551
+  Used     555
+
+TAVEL                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      52     171
+  Set 
+  Used
+
+TBLIND                          Stack                             REAL(KIND=8)
+  Decl     286
+  Set      542     559     660     677
+  Used     543     560     661     678
+
+TBLINT                          Use assoc                         REAL(KIND=8), PARAMETER, From module RRSW_TBL
+  Decl
+  Set 
+  Used     543     560     661     678
+
+TBOUND                          Dummy Arg                         REAL(KIND=8), INTENT(IN)
+  Decl      55     177
+  Set 
+  Used
+
+TZ                              Dummy Arg                         REAL(KIND=8), DIMENSION(0:<exp>), INTENT(IN)
+  Decl      54     175
+  Set 
+  Used
+
+VRTQDR_SW                       Use assoc                         Subroutine, From module RRTMG_SW_VRTQDR, Module procedure
+  Decl
+  Set 
+  Used       0     707
+
+VRTQDR_SW                       Use assoc                         Subroutine, From module RRTMG_SW_VRTQDR, Module procedure
+  Decl
+  Set 
+  Used       0     707
+
+WKL                             Dummy Arg                         REAL(KIND=8), DIMENSION(38, <exp>), INTENT(IN)
+  Decl      68     178
+  Set 
+  Used
+
+ZCD                             Stack                             REAL(KIND=8), DIMENSION(<exp>, 112)
+  Decl     319
+  Set 
+  Used     742     753     764
+
+ZCLEAR                          Stack                             REAL(KIND=8)
+  Decl     287
+  Set      531     641
+  Used     564     644     645     646     647     682
+
+ZCLOUD                          Stack                             REAL(KIND=8)
+  Decl     287
+  Set      532     642
+  Used     564     644     645     646     647     682
+
+ZCU                             Stack                             REAL(KIND=8), DIMENSION(<exp>, 112)
+  Decl     319
+  Set 
+  Used     741     774
+
+ZDBT                            Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     288
+  Set      484     682
+  Used     683     715
+
+ZDBTC                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     302
+  Set      471     665
+  Used     666     697
+
+ZDBTC_NODEL                     Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     303
+  Set      547
+  Used     548
+
+ZDBTMC                          Stack                             REAL(KIND=8)
+  Decl     306
+  Set      540     544     658     662
+  Used     547     564     665     682
+
+ZDBTMO                          Stack                             REAL(KIND=8)
+  Decl     306
+  Set      557     561     675     679
+  Used     564     682
+
+ZDBT_NODEL                      Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     288
+  Set      564
+  Used     565
+
+ZE1                             Stack                             REAL(KIND=8)
+  Decl     286
+  Set      538     555     656     673
+  Used     539     540     542     556     557     559     657     658     660     674     675     677
+
+ZF                              Stack                             REAL(KIND=8)
+  Decl     306
+  Set      572     599
+  Used     573     576     600     603
+
+ZFD                             Stack                             REAL(KIND=8), DIMENSION(<exp>, 112)
+  Decl     320
+  Set 
+  Used     740     754     765
+
+ZFU                             Stack                             REAL(KIND=8), DIMENSION(<exp>, 112)
+  Decl     320
+  Set 
+  Used     739     775
+
+ZGC                             Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     289
+  Set 
+  Used
+
+ZGCC                            Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     289
+  Set      524     576
+  Used     572     584     614
+
+ZGCO                            Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     289
+  Set      583     593     603
+  Used     599     627
+
+ZGW                             Stack                             REAL(KIND=8)
+  Decl     306
+  Set 
+  Used
+
+ZINCFLX                         Stack                             REAL(KIND=8), DIMENSION(112)
+  Decl     303
+  Set      441
+  Used     739     740     741     742     744     745     747     748     753     754     756     757     759     760     764
+           765     767     768     770     771     774     775
+
+ZOMC                            Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     290
+  Set 
+  Used
+
+ZOMCC                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     290
+  Set      523     525     575
+  Used     524     573     582     584     617
+
+ZOMCO                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     290
+  Set      582     585     591     595     602
+  Used     584     594     600     630
+
+ZRDND                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     291
+  Set 
+  Used     716
+
+ZRDNDC                          Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     291
+  Set 
+  Used     698
+
+ZREF                            Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     292
+  Set      487     644
+  Used     711
+
+ZREFC                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     292
+  Set      474
+  Used     618     644     693
+
+ZREFD                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     293
+  Set      488     645
+  Used     712
+
+ZREFDC                          Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     293
+  Set      475
+  Used     619     645     694
+
+ZREFDO                          Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     293
+  Set 
+  Used     632     645
+
+ZREFLECT                        Stack                             REAL(KIND=8)
+  Decl     306
+  Set 
+  Used
+
+ZREFO                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     292
+  Set 
+  Used     631     644
+
+ZRUP                            Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     294
+  Set      489
+  Used     717
+
+ZRUPC                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     295
+  Set      476
+  Used     699
+
+ZRUPD                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     294
+  Set      490
+  Used     718
+
+ZRUPDC                          Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     295
+  Set      477
+  Used     700
+
+ZS1                             Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     296
+  Set 
+  Used
+
+ZSFLXZEN                        Stack                             REAL(KIND=8), DIMENSION(112)
+  Decl     315
+  Set 
+  Used     401     441
+
+ZTAUC                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     297
+  Set      522     574
+  Used     525     538     551     581     582     584     616     656
+
+ZTAUG                           Stack                             REAL(KIND=8), DIMENSION(<exp>, 112)
+  Decl     314
+  Set 
+  Used     522     590
+
+ZTAUO                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     297
+  Set      581     590     601
+  Used     585     595     629     673
+
+ZTAUR                           Stack                             REAL(KIND=8), DIMENSION(<exp>, 112)
+  Decl     314
+  Set 
+  Used     522     523     590     592
+
+ZTDBT                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     298
+  Set      481     683
+  Used     719     747     759     770
+
+ZTDBTC                          Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     302
+  Set      468     666
+  Used     701     748     760     771
+
+ZTDBTC_NODEL                    Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     304
+  Set      469     548
+  Used     745     757     768
+
+ZTDBT_NODEL                     Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     304
+  Set      482     565
+  Used     744     756     767
+
+ZTDN                            Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     298
+  Set 
+  Used
+
+ZTDND                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     298
+  Set 
+  Used
+
+ZTOC                            Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     299
+  Set 
+  Used
+
+ZTOR                            Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     299
+  Set 
+  Used
+
+ZTRA                            Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     300
+  Set      485     646
+  Used     713
+
+ZTRAC                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     300
+  Set      472
+  Used     620     646     695
+
+ZTRAD                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     301
+  Set      486     647
+  Used     714
+
+ZTRADC                          Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     301
+  Set      473
+  Used     621     647     696
+
+ZTRADO                          Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     301
+  Set 
+  Used     634     647
+
+ZTRAO                           Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl     300
+  Set 
+  Used     633     646
+
+ZWF                             Stack                             REAL(KIND=8)
+  Decl     307
+  Set      573     600
+  Used     574     575     601     602
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+PARRRSW
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_SPCVRT
+
+Name  Messages
+----  --------
+REFTRA_SW in RRTMG_SW_REFTRA
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   RRTMG_SW_SPCVRT (Line 611, file rrtmg_sw_spcvrt.f90)
+                   RRTMG_SW_SPCVRT (Line 624, file rrtmg_sw_spcvrt.f90)
+
+Name  Messages
+----  --------
+RRSW_TBL
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_SPCVRT
+
+Name  Messages
+----  --------
+RRSW_VSN
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_SPCVRT
+
+Name  Messages
+----  --------
+RRSW_WVN
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_SPCVRT
+
+Name  Messages
+----  --------
+RRTMG_SW_REFTRA
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_SPCVRT
+
+Name  Messages
+----  --------
+RRTMG_SW_SPCVRT
+      Defined as:  Module (line 6, file rrtmg_sw_spcvrt.f90)
+
+      Calls:       REFTRA_SW in RRTMG_SW_REFTRA (Line 611, file rrtmg_sw_spcvrt.f90)
+                   REFTRA_SW in RRTMG_SW_REFTRA (Line 624, file rrtmg_sw_spcvrt.f90)
+                   TAUMOL_SW in RRTMG_SW_TAUMOL (Line 378, file rrtmg_sw_spcvrt.f90)
+                   VRTQDR_SW in RRTMG_SW_VRTQDR (Line 689, file rrtmg_sw_spcvrt.f90)
+                   VRTQDR_SW in RRTMG_SW_VRTQDR (Line 707, file rrtmg_sw_spcvrt.f90)
+
+        Uses:      SHR_KIND_MOD
+                   PARRRSW
+                   RRSW_TBL
+                   RRSW_VSN
+                   RRSW_WVN
+                   RRTMG_SW_REFTRA
+                   RRTMG_SW_TAUMOL
+                   RRTMG_SW_VRTQDR
+
+Name  Messages
+----  --------
+RRTMG_SW_TAUMOL
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_SPCVRT
+
+Name  Messages
+----  --------
+RRTMG_SW_VRTQDR
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_SPCVRT
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_SPCVRT
+
+Name  Messages
+----  --------
+SPCVRT_SW in RRTMG_SW_SPCVRT
+      Defined as:  Subroutine (line 44, file rrtmg_sw_spcvrt.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+TAUMOL_SW in RRTMG_SW_TAUMOL
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   RRTMG_SW_SPCVRT (Line 378, file rrtmg_sw_spcvrt.f90)
+
+Name  Messages
+----  --------
+VRTQDR_SW in RRTMG_SW_VRTQDR
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   RRTMG_SW_SPCVRT (Line 689, file rrtmg_sw_spcvrt.f90)
+                   RRTMG_SW_SPCVRT (Line 707, file rrtmg_sw_spcvrt.f90)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

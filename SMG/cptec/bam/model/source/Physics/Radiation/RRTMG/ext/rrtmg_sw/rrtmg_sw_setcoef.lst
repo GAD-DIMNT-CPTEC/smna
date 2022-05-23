@@ -1,0 +1,1005 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrtmg_sw_setcoef.f90
+Compiled : 12/11/20  23:54:10
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps rrtmg_sw_setcoef.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/rrtmg_sw_setcoef.f90
+Date     : 12/11/2020  23:54:10
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_32730/rrtmg_sw_setcoef_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     A - Pattern matched      a - atomic memory operation
+                              b - blocked
+     C - Collapsed            c - conditional and/or computed
+     D - Deleted               
+     E - Cloned               f - fused
+     G - Accelerated          g - partitioned
+     I - Inlined              i - interchanged
+     M - Multithreaded        m - partitioned
+                              n - non-blocking remote transfer
+                              p - partial
+                              r - unrolled
+                              s - shortloop
+     V - Vectorized           w - unwound
+
+
+    1.        !     path:      $Source: /storm/rc1/cvsroot/rc/rrtmg_sw/src/rrtmg_sw_setcoef.f90,v $
+    2.        !     author:    $Author: mike $
+    3.        !     revision:  $Revision: 1.2 $
+    4.        !     created:   $Date: 2007/08/23 20:40:14 $
+    5.        
+    6.              module rrtmg_sw_setcoef
+    7.        
+    8.        !  --------------------------------------------------------------------------
+    9.        ! |                                                                          |
+   10.        ! |  Copyright 2002-2007, Atmospheric & Environmental Research, Inc. (AER).  |
+   11.        ! |  This software may be used, copied, or redistributed as long as it is    |
+   12.        ! |  not sold and this copyright notice is reproduced on each copy made.     |
+   13.        ! |  This model is provided as is without any express or implied warranties. |
+   14.        ! |                       (http://www.rtweb.aer.com/)                        |
+   15.        ! |                                                                          |
+   16.        !  --------------------------------------------------------------------------
+   17.        
+   18.        ! ------- Modules -------
+   19.        
+   20.              use shr_kind_mod, only: r8 => shr_kind_r8
+   21.        
+   22.        !      use parkind, only : jpim, jprb
+   23.              use parrrsw, only : mxmol
+   24.              use rrsw_ref, only : pref, preflog, tref
+   25.              use rrsw_vsn, only : hvrset, hnamset
+   26.        
+   27.              implicit none
+   28.        
+   29.              contains
+   30.        
+   31.        !----------------------------------------------------------------------------
+   32.              subroutine setcoef_sw( &         !      setcoef_sw( &
+   33.                                    nlayers,  &!                   nlay                   , &
+   34.                                    pavel   , &!                   pavel          (1:nlayers), &
+   35.                                    tavel   , &!                   tavel          (1:nlayers), &
+   36.                                    pz      , &!                   pz             (0:nlayers), &
+   37.                                    tz      , &!                   tz             (0:nlayers), &
+   38.                                    tbound  , &!                   tbound                    , &
+   39.                                    coldry  , &!                   coldry         (1:nlayers)             , &
+   40.                                    wkl     , &!                   wkl            (1:mxmol,1:nlayers), &
+   41.                                    laytrop , &!                   laytrop                   , &
+   42.                                    layswtch, &!                   layswtch                  , &
+   43.                                    laylow  , &!                   laylow                    , &
+   44.                                    jp      , &!                   jp             (1:nlayers), &
+   45.                                    jt      , &!                   jt             (1:nlayers), &
+   46.                                    jt1     , &!                   jt1            (1:nlayers), &
+   47.                                    co2mult , &!                   co2mult        (1:nlayers), &
+   48.                                    colch4  , &!                   colch4         (1:nlayers), &
+   49.                                    colco2  , &!                   colco2         (1:nlayers), &
+   50.                                    colh2o  , &!                   colh2o         (1:nlayers), &
+   51.                                    colmol  , &!                   colmol         (1:nlayers), &
+   52.                                    coln2o  , &!                   coln2o         (1:nlayers), &
+   53.                                    colo2   , &!                   colo2          (1:nlayers), &
+   54.                                    colo3   , &!                   colo3          (1:nlayers), &
+   55.                                    fac00   , &!                   fac00          (1:nlayers), &
+   56.                                    fac01   , &!                   fac01          (1:nlayers), &
+   57.                                    fac10   , &!                   fac10          (1:nlayers), &
+   58.                                    fac11   , &!                   fac11          (1:nlayers), &
+   59.                                    selffac , &!                   selffac        (1:nlayers), &
+   60.                                    selffrac, &!                   selffrac       (1:nlayers), &
+   61.                                    indself , &!                   indself        (1:nlayers), &
+   62.                                    forfac  , &!                   forfac         (1:nlayers), &
+   63.                                    forfrac , &!                   forfrac        (1:nlayers), &
+   64.                                    indfor    )!                   indfor         (1:nlayers)  )
+   65.        !----------------------------------------------------------------------------
+   66.        !
+   67.        ! Purpose:  For a given atmosphere, calculate the indices and
+   68.        ! fractions related to the pressure and temperature interpolations.
+   69.        
+   70.        ! Modifications:
+   71.        ! Original: J. Delamere, AER, Inc. (version 2.5, 02/04/01)
+   72.        ! Revised: Rewritten and adapted to ECMWF F90, JJMorcrette 030224
+   73.        ! Revised: For uniform rrtmg formatting, MJIacono, Jul 2006
+   74.        
+   75.        ! ------ Declarations -------
+   76.        
+   77.        ! ----- Input -----
+   78.              integer, intent(in) :: nlayers         ! total number of layers
+   79.        
+   80.              real(kind=r8), intent(in) :: pavel(1:nlayers)           ! layer pressures (mb) 
+   81.                                                                !    Dimensions: (nlayers)
+   82.              real(kind=r8), intent(in) :: tavel(1:nlayers)          ! layer temperatures (K)
+   83.                                                                !    Dimensions: (nlayers)
+   84.              real(kind=r8), intent(in) :: pz(0:nlayers)             ! level (interface) pressures (hPa, mb)
+   85.                                                                !    Dimensions: (0:nlayers)
+   86.              real(kind=r8), intent(in) :: tz(0:nlayers)             ! level (interface) temperatures (K)
+   87.                                                                !    Dimensions: (0:nlayers)
+   88.              real(kind=r8), intent(in) :: tbound             ! surface temperature (K)
+   89.              real(kind=r8), intent(in) :: coldry(1:nlayers)          ! dry air column density (mol/cm2)
+   90.                                                                !    Dimensions: (nlayers)
+   91.              real(kind=r8), intent(in) :: wkl(1:mxmol,1:nlayers)           ! molecular amounts (mol/cm-2)
+   92.                                                                !    Dimensions: (mxmol,nlayers)
+   93.        
+   94.        ! ----- Output -----
+   95.              integer, intent(out) :: laytrop        ! tropopause layer index
+   96.              integer, intent(out) :: layswtch       ! 
+   97.              integer, intent(out) :: laylow         ! 
+   98.        
+   99.              integer, intent(out) :: jp(1:nlayers)          ! 
+  100.                                                                !    Dimensions: (nlayers)
+  101.              integer, intent(out) :: jt(1:nlayers)          !
+  102.                                                                !    Dimensions: (nlayers)
+  103.              integer, intent(out) :: jt1(1:nlayers)         !
+  104.                                                                !    Dimensions: (nlayers)
+  105.        
+  106.              real(kind=r8), intent(out) :: colh2o(1:nlayers)         ! column amount (h2o)
+  107.                                                                !    Dimensions: (nlayers)
+  108.              real(kind=r8), intent(out) :: colco2(1:nlayers)         ! column amount (co2)
+  109.                                                                !    Dimensions: (nlayers)
+  110.              real(kind=r8), intent(out) :: colo3(1:nlayers)          ! column amount (o3)
+  111.                                                                !    Dimensions: (nlayers)
+  112.              real(kind=r8), intent(out) :: coln2o(1:nlayers)         ! column amount (n2o)
+  113.                                                                !    Dimensions: (nlayers)
+  114.              real(kind=r8), intent(out) :: colch4(1:nlayers)         ! column amount (ch4)
+  115.                                                                !    Dimensions: (nlayers)
+  116.              real(kind=r8), intent(out) :: colo2(1:nlayers)         ! column amount (o2)
+  117.                                                                !    Dimensions: (nlayers)
+  118.              real(kind=r8), intent(out) :: colmol(1:nlayers)         ! 
+  119.                                                                !    Dimensions: (nlayers)
+  120.              real(kind=r8), intent(out) :: co2mult(1:nlayers)       !
+  121.                                                                !    Dimensions: (nlayers)
+  122.        
+  123.              integer, intent(out) :: indself(1:nlayers)
+  124.                                                                !    Dimensions: (nlayers)
+  125.              integer, intent(out) :: indfor(1:nlayers)
+  126.                                                                !    Dimensions: (nlayers)
+  127.              real(kind=r8), intent(out) :: selffac(1:nlayers)
+  128.                                                                !    Dimensions: (nlayers)
+  129.              real(kind=r8), intent(out) :: selffrac(1:nlayers)
+  130.                                                                !    Dimensions: (nlayers)
+  131.              real(kind=r8), intent(out) :: forfac(1:nlayers)
+  132.                                                                !    Dimensions: (nlayers)
+  133.              real(kind=r8), intent(out) :: forfrac(1:nlayers)
+  134.                                                                !    Dimensions: (nlayers)
+  135.        
+  136.              real(kind=r8), intent(out) :: &                 !
+  137.                                 fac00(1:nlayers), fac01(1:nlayers), &          !    Dimensions: (nlayers)
+  138.                                 fac10(1:nlayers), fac11(1:nlayers) 
+  139.        
+  140.        ! ----- Local -----
+  141.        
+  142.              integer :: indbound
+  143.              integer :: indlev0
+  144.              integer :: lay
+  145.              integer :: jp1
+  146.        
+  147.              real(kind=r8) :: stpfac
+  148.              real(kind=r8) :: tbndfrac
+  149.              real(kind=r8) :: t0frac
+  150.              real(kind=r8) :: plog
+  151.              real(kind=r8) :: fp
+  152.              real(kind=r8) :: ft
+  153.              real(kind=r8) :: ft1
+  154.              real(kind=r8) :: water
+  155.              real(kind=r8) :: scalefac
+  156.              real(kind=r8) :: factor
+  157.              real(kind=r8) :: co2reg
+  158.              real(kind=r8) :: compfp
+  159.        
+  160.        
+  161.        ! Initializations
+  162.              stpfac = 296._r8/1013._r8
+  163.        
+  164.              indbound = tbound - 159._r8
+  165.              tbndfrac = tbound - int(tbound)
+  166.              indlev0  = tz(0) - 159._r8
+  167.              t0frac   = tz(0) - int(tz(0))
+  168.        
+  169.              laytrop  = 0
+  170.              layswtch = 0
+  171.              laylow   = 0
+  172.        
+  173.        ! Begin layer loop
+  174.  1---<       do lay = 1, nlayers
+  175.  1     ! Find the two reference pressures on either side of the
+  176.  1     ! layer pressure.  Store them in JP and JP1.  Store in FP the
+  177.  1     ! fraction of the difference (in ln(pressure)) between these
+  178.  1     ! two values that the layer pressure lies.
+  179.  1     
+  180.  1              plog = log(pavel(lay))
+  181.  1              jp(lay) = int(36._r8 - 5*(plog+0.04_r8))
+  182.  1              if (jp(lay) .lt. 1) then
+  183.  1                 jp(lay) = 1
+  184.  1              elseif (jp(lay) .gt. 58) then
+  185.  1                 jp(lay) = 58
+  186.  1              endif
+  187.  1              jp1 = jp(lay) + 1
+  188.  1              fp = 5._r8 * (preflog(jp(lay)) - plog)
+  189.  1     
+  190.  1     ! Determine, for each reference pressure (JP and JP1), which
+  191.  1     ! reference temperature (these are different for each  
+  192.  1     ! reference pressure) is nearest the layer temperature but does
+  193.  1     ! not exceed it.  Store these indices in JT and JT1, resp.
+  194.  1     ! Store in FT (resp. FT1) the fraction of the way between JT
+  195.  1     ! (JT1) and the next highest reference temperature that the 
+  196.  1     ! layer temperature falls.
+  197.  1     
+  198.  1              jt(lay) = int(3._r8 + (tavel(lay)-tref(jp(lay)))/15._r8)
+  199.  1              if (jt(lay) .lt. 1) then
+  200.  1                 jt(lay) = 1
+  201.  1              elseif (jt(lay) .gt. 4) then
+  202.  1                 jt(lay) = 4
+  203.  1              endif
+  204.  1              ft = ((tavel(lay)-tref(jp(lay)))/15._r8) - float(jt(lay)-3)
+  205.  1              jt1(lay) = int(3._r8 + (tavel(lay)-tref(jp1))/15._r8)
+  206.  1              if (jt1(lay) .lt. 1) then
+  207.  1                 jt1(lay) = 1
+  208.  1              elseif (jt1(lay) .gt. 4) then
+  209.  1                 jt1(lay) = 4
+  210.  1              endif
+  211.  1              ft1 = ((tavel(lay)-tref(jp1))/15._r8) - float(jt1(lay)-3)
+  212.  1     
+  213.  1              water = wkl(1,lay)/coldry(lay)
+  214.  1              scalefac = pavel(lay) * stpfac / tavel(lay)
+  215.  1     
+  216.  1     ! If the pressure is less than ~100mb, perform a different
+  217.  1     ! set of species interpolations.
+  218.  1     
+  219.  1              if (plog .le. 4.56_r8) go to 5300
+  220.  1              laytrop =  laytrop + 1
+  221.  1              if (plog .ge. 6.62_r8) laylow = laylow + 1
+  222.  1     
+  223.  1     ! Set up factors needed to separately include the water vapor
+  224.  1     ! foreign-continuum in the calculation of absorption coefficient.
+  225.  1     
+  226.  1              forfac(lay) = scalefac / (1.+water)
+  227.  1              factor = (332.0_r8-tavel(lay))/36.0_r8
+  228.  1              indfor(lay) = min(2, max(1, int(factor)))
+  229.  1              forfrac(lay) = factor - float(indfor(lay))
+  230.  1     
+  231.  1     ! Set up factors needed to separately include the water vapor
+  232.  1     ! self-continuum in the calculation of absorption coefficient.
+  233.  1     
+  234.  1              selffac(lay) = water * forfac(lay)
+  235.  1              factor = (tavel(lay)-188.0_r8)/7.2_r8
+  236.  1              indself(lay) = min(9, max(1, int(factor)-7))
+  237.  1              selffrac(lay) = factor - float(indself(lay) + 7)
+  238.  1     
+  239.  1     ! Calculate needed column amounts.
+  240.  1     
+  241.  1              colh2o(lay) = 1.e-20_r8 * wkl(1,lay)
+  242.  1              colco2(lay) = 1.e-20_r8 * wkl(2,lay)
+  243.  1              colo3(lay) = 1.e-20_r8 * wkl(3,lay)
+  244.  1     !           colo3(lay) = 0._r8
+  245.  1     !           colo3(lay) = colo3(lay)/1.16_r8
+  246.  1              coln2o(lay) = 1.e-20_r8 * wkl(4,lay)
+  247.  1              colch4(lay) = 1.e-20_r8 * wkl(6,lay)
+  248.  1              colo2(lay) = 1.e-20_r8 * wkl(7,lay)
+  249.  1              colmol(lay) = 1.e-20_r8 * coldry(lay) + colh2o(lay)
+  250.  1     !           colco2(lay) = 0._r8
+  251.  1     !           colo3(lay) = 0._r8
+  252.  1     !           coln2o(lay) = 0._r8
+  253.  1     !           colch4(lay) = 0._r8
+  254.  1     !           colo2(lay) = 0._r8
+  255.  1     !           colmol(lay) = 0._r8
+  256.  1              if (colco2(lay) .eq. 0._r8) colco2(lay) = 1.e-32_r8 * coldry(lay)
+  257.  1              if (coln2o(lay) .eq. 0._r8) coln2o(lay) = 1.e-32_r8 * coldry(lay)
+  258.  1              if (colch4(lay) .eq. 0._r8) colch4(lay) = 1.e-32_r8 * coldry(lay)
+  259.  1              if (colo2(lay) .eq. 0._r8) colo2(lay) = 1.e-32_r8 * coldry(lay)
+  260.  1     ! Using E = 1334.2 cm-1.
+  261.  1              co2reg = 3.55e-24_r8 * coldry(lay)
+  262.  1              co2mult(lay)= (colco2(lay) - co2reg) * &
+  263.  1                    272.63_r8*exp(-1919.4_r8/tavel(lay))/(8.7604e-4_r8*tavel(lay))
+  264.  1              goto 5400
+  265.  1     
+  266.  1     ! Above laytrop.
+  267.  1      5300    continue
+  268.  1     
+  269.  1     ! Set up factors needed to separately include the water vapor
+  270.  1     ! foreign-continuum in the calculation of absorption coefficient.
+  271.  1     
+  272.  1              forfac(lay) = scalefac / (1.+water)
+  273.  1              factor = (tavel(lay)-188.0_r8)/36.0_r8
+  274.  1              indfor(lay) = 3
+  275.  1              forfrac(lay) = factor - 1.0_r8
+  276.  1     
+  277.  1     ! Calculate needed column amounts.
+  278.  1     
+  279.  1              colh2o(lay) = 1.e-20_r8 * wkl(1,lay)
+  280.  1              colco2(lay) = 1.e-20_r8 * wkl(2,lay)
+  281.  1              colo3(lay)  = 1.e-20_r8 * wkl(3,lay)
+  282.  1              coln2o(lay) = 1.e-20_r8 * wkl(4,lay)
+  283.  1              colch4(lay) = 1.e-20_r8 * wkl(6,lay)
+  284.  1              colo2(lay)  = 1.e-20_r8 * wkl(7,lay)
+  285.  1              colmol(lay) = 1.e-20_r8 * coldry(lay) + colh2o(lay)
+  286.  1              if (colco2(lay) .eq. 0._r8) colco2(lay) = 1.e-32_r8 * coldry(lay)
+  287.  1              if (coln2o(lay) .eq. 0._r8) coln2o(lay) = 1.e-32_r8 * coldry(lay)
+  288.  1              if (colch4(lay) .eq. 0._r8) colch4(lay) = 1.e-32_r8 * coldry(lay)
+  289.  1              if (colo2(lay)  .eq. 0._r8) colo2(lay)  = 1.e-32_r8 * coldry(lay)
+  290.  1              co2reg = 3.55e-24_r8 * coldry(lay)
+  291.  1              co2mult(lay)= (colco2(lay) - co2reg) * &
+  292.  1                    272.63_r8*exp(-1919.4_r8/tavel(lay))/(8.7604e-4_r8*tavel(lay))
+  293.  1     
+  294.  1              selffac(lay) = 0._r8
+  295.  1              selffrac(lay)= 0._r8
+  296.  1              indself(lay) = 0
+  297.  1     
+  298.  1      5400    continue
+  299.  1     
+  300.  1     ! We have now isolated the layer ln pressure and temperature,
+  301.  1     ! between two reference pressures and two reference temperatures 
+  302.  1     ! (for each reference pressure).  We multiply the pressure 
+  303.  1     ! fraction FP with the appropriate temperature fractions to get 
+  304.  1     ! the factors that will be needed for the interpolation that yields
+  305.  1     ! the optical depths (performed in routines TAUGBn for band n).
+  306.  1     
+  307.  1              compfp = 1._r8 - fp
+  308.  1              fac10(lay) = compfp * ft
+  309.  1              fac00(lay) = compfp * (1._r8 - ft)
+  310.  1              fac11(lay) = fp * ft1
+  311.  1              fac01(lay) = fp * (1._r8 - ft1)
+  312.  1     
+  313.  1     ! End layer loop
+  314.  1--->       enddo
+  315.        
+  316.              end subroutine setcoef_sw
+ftn-5001 ftn: NOTE File = rrtmg_sw_setcoef.f90, Line = 316 
+  Local variable "T0FRAC" is assigned a value but never used.
+
+ftn-5001 ftn: NOTE File = rrtmg_sw_setcoef.f90, Line = 316 
+  Local variable "TBNDFRAC" is assigned a value but never used.
+
+ftn-5001 ftn: NOTE File = rrtmg_sw_setcoef.f90, Line = 316 
+  Local variable "INDBOUND" is assigned a value but never used.
+
+ftn-5001 ftn: NOTE File = rrtmg_sw_setcoef.f90, Line = 316 
+  Local variable "INDLEV0" is assigned a value but never used.
+
+ftn-5004 ftn: NOTE File = rrtmg_sw_setcoef.f90, Line = 316 
+  Dummy Argument "PZ" is not referenced or defined.
+
+  317.        
+  318.        !***************************************************************************
+  319.              subroutine swatmref
+  320.        !***************************************************************************
+  321.        
+  322.              save
+  323.         
+  324.        ! These pressures are chosen such that the ln of the first pressure
+  325.        ! has only a few non-zero digits (i.e. ln(PREF(1)) = 6.96000) and
+  326.        ! each subsequent ln(pressure) differs from the previous one by 0.2.
+  327.        
+  328.  V--<>       pref(:) = (/ &
+  329.                  1.05363e+03_r8,8.62642e+02_r8,7.06272e+02_r8,5.78246e+02_r8,4.73428e+02_r8, &
+  330.                  3.87610e+02_r8,3.17348e+02_r8,2.59823e+02_r8,2.12725e+02_r8,1.74164e+02_r8, &
+  331.                  1.42594e+02_r8,1.16746e+02_r8,9.55835e+01_r8,7.82571e+01_r8,6.40715e+01_r8, &
+  332.                  5.24573e+01_r8,4.29484e+01_r8,3.51632e+01_r8,2.87892e+01_r8,2.35706e+01_r8, &
+  333.                  1.92980e+01_r8,1.57998e+01_r8,1.29358e+01_r8,1.05910e+01_r8,8.67114e+00_r8, &
+  334.                  7.09933e+00_r8,5.81244e+00_r8,4.75882e+00_r8,3.89619e+00_r8,3.18993e+00_r8, &
+  335.                  2.61170e+00_r8,2.13828e+00_r8,1.75067e+00_r8,1.43333e+00_r8,1.17351e+00_r8, &
+  336.                  9.60789e-01_r8,7.86628e-01_r8,6.44036e-01_r8,5.27292e-01_r8,4.31710e-01_r8, &
+  337.                  3.53455e-01_r8,2.89384e-01_r8,2.36928e-01_r8,1.93980e-01_r8,1.58817e-01_r8, &
+  338.                  1.30029e-01_r8,1.06458e-01_r8,8.71608e-02_r8,7.13612e-02_r8,5.84256e-02_r8, &
+  339.                  4.78349e-02_r8,3.91639e-02_r8,3.20647e-02_r8,2.62523e-02_r8,2.14936e-02_r8, &
+  340.                  1.75975e-02_r8,1.44076e-02_r8,1.17959e-02_r8,9.65769e-03_r8 /)
+  341.        
+  342.  V--<>       preflog(:) = (/ &
+  343.                   6.9600e+00_r8, 6.7600e+00_r8, 6.5600e+00_r8, 6.3600e+00_r8, 6.1600e+00_r8, &
+  344.                   5.9600e+00_r8, 5.7600e+00_r8, 5.5600e+00_r8, 5.3600e+00_r8, 5.1600e+00_r8, &
+  345.                   4.9600e+00_r8, 4.7600e+00_r8, 4.5600e+00_r8, 4.3600e+00_r8, 4.1600e+00_r8, &
+  346.                   3.9600e+00_r8, 3.7600e+00_r8, 3.5600e+00_r8, 3.3600e+00_r8, 3.1600e+00_r8, &
+  347.                   2.9600e+00_r8, 2.7600e+00_r8, 2.5600e+00_r8, 2.3600e+00_r8, 2.1600e+00_r8, &
+  348.                   1.9600e+00_r8, 1.7600e+00_r8, 1.5600e+00_r8, 1.3600e+00_r8, 1.1600e+00_r8, &
+  349.                   9.6000e-01_r8, 7.6000e-01_r8, 5.6000e-01_r8, 3.6000e-01_r8, 1.6000e-01_r8, &
+  350.                  -4.0000e-02_r8,-2.4000e-01_r8,-4.4000e-01_r8,-6.4000e-01_r8,-8.4000e-01_r8, &
+  351.                  -1.0400e+00_r8,-1.2400e+00_r8,-1.4400e+00_r8,-1.6400e+00_r8,-1.8400e+00_r8, &
+  352.                  -2.0400e+00_r8,-2.2400e+00_r8,-2.4400e+00_r8,-2.6400e+00_r8,-2.8400e+00_r8, &
+  353.                  -3.0400e+00_r8,-3.2400e+00_r8,-3.4400e+00_r8,-3.6400e+00_r8,-3.8400e+00_r8, &
+  354.                  -4.0400e+00_r8,-4.2400e+00_r8,-4.4400e+00_r8,-4.6400e+00_r8 /)
+  355.        
+  356.        ! These are the temperatures associated with the respective 
+  357.        ! pressures for the MLS standard atmosphere. 
+  358.        
+  359.  V--<>       tref(:) = (/ &
+  360.                   2.9420e+02_r8, 2.8799e+02_r8, 2.7894e+02_r8, 2.6925e+02_r8, 2.5983e+02_r8, &
+  361.                   2.5017e+02_r8, 2.4077e+02_r8, 2.3179e+02_r8, 2.2306e+02_r8, 2.1578e+02_r8, &
+  362.                   2.1570e+02_r8, 2.1570e+02_r8, 2.1570e+02_r8, 2.1706e+02_r8, 2.1858e+02_r8, &
+  363.                   2.2018e+02_r8, 2.2174e+02_r8, 2.2328e+02_r8, 2.2479e+02_r8, 2.2655e+02_r8, &
+  364.                   2.2834e+02_r8, 2.3113e+02_r8, 2.3401e+02_r8, 2.3703e+02_r8, 2.4022e+02_r8, &
+  365.                   2.4371e+02_r8, 2.4726e+02_r8, 2.5085e+02_r8, 2.5457e+02_r8, 2.5832e+02_r8, &
+  366.                   2.6216e+02_r8, 2.6606e+02_r8, 2.6999e+02_r8, 2.7340e+02_r8, 2.7536e+02_r8, &
+  367.                   2.7568e+02_r8, 2.7372e+02_r8, 2.7163e+02_r8, 2.6955e+02_r8, 2.6593e+02_r8, &
+  368.                   2.6211e+02_r8, 2.5828e+02_r8, 2.5360e+02_r8, 2.4854e+02_r8, 2.4348e+02_r8, & 
+  369.                   2.3809e+02_r8, 2.3206e+02_r8, 2.2603e+02_r8, 2.2000e+02_r8, 2.1435e+02_r8, &
+  370.                   2.0887e+02_r8, 2.0340e+02_r8, 1.9792e+02_r8, 1.9290e+02_r8, 1.8809e+02_r8, &
+  371.                   1.8329e+02_r8, 1.7849e+02_r8, 1.7394e+02_r8, 1.7212e+02_r8 /)
+  372.        
+  373.              end subroutine swatmref
+  374.        
+  375.              end module rrtmg_sw_setcoef
+
+ftn-6204 ftn: VECTOR File = rrtmg_sw_setcoef.f90, Line = 328 
+  A loop starting at line 328 was vectorized.
+
+ftn-6204 ftn: VECTOR File = rrtmg_sw_setcoef.f90, Line = 342 
+  A loop starting at line 342 was vectorized.
+
+ftn-6204 ftn: VECTOR File = rrtmg_sw_setcoef.f90, Line = 359 
+  A loop starting at line 359 was vectorized.
+
+  376.        
+  377.        
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+             C r o s s   R e f e r e n c e   for   RRTMG_SW_SETCOEF
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+5300                                                              Statement label
+  Decl     267
+  Set 
+  Used     219
+
+5400                                                              Statement label
+  Decl     298
+  Set 
+  Used     264
+
+CO2MULT                         Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      47     120
+  Set      262     291
+  Used
+
+CO2REG                          Stack                             REAL(KIND=8)
+  Decl     157
+  Set      261     290
+  Used     262     291
+
+COLCH4                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      48     114
+  Set      247     258     283     288
+  Used     258     288
+
+COLCO2                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      49     108
+  Set      242     256     280     286
+  Used     256     262     286     291
+
+COLDRY                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      39      89
+  Set 
+  Used     213     249     256     257     258     259     261     285     286     287     288     289     290
+
+COLH2O                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      50     106
+  Set      241     279
+  Used     249     285
+
+COLMOL                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      51     118
+  Set      249     285
+  Used
+
+COLN2O                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      52     112
+  Set      246     257     282     287
+  Used     257     287
+
+COLO2                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      53     116
+  Set      248     259     284     289
+  Used     259     289
+
+COLO3                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      54     110
+  Set      243     281
+  Used
+
+COMPFP                          Stack                             REAL(KIND=8)
+  Decl     158
+  Set      307
+  Used     308     309
+
+EXP                                                               Function, REAL, INTRINSIC
+  Decl
+  Set 
+  Used       0     292
+
+FAC00                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      55     137
+  Set      309
+  Used
+
+FAC01                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      56     137
+  Set      311
+  Used
+
+FAC10                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      57     138
+  Set      308
+  Used
+
+FAC11                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      58     138
+  Set      310
+  Used
+
+FACTOR                          Stack                             REAL(KIND=8)
+  Decl     156
+  Set      227     235     273
+  Used     228     229     236     237     275
+
+FLOAT                                                             Function, REAL, INTRINSIC
+  Decl
+  Set 
+  Used       0     204     229     237
+
+FORFAC                          Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      62     131
+  Set      226     272
+  Used     234
+
+FORFRAC                         Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      63     133
+  Set      229     275
+  Used
+
+FP                              Stack                             REAL(KIND=8)
+  Decl     151
+  Set      188
+  Used     307     310     311
+
+FT                              Stack                             REAL(KIND=8)
+  Decl     152
+  Set      204
+  Used     308     309
+
+FT1                             Stack                             REAL(KIND=8)
+  Decl     153
+  Set      211
+  Used     310     311
+
+INDBOUND                        Stack                             INTEGER
+  Decl     142
+  Set      164
+  Used
+
+INDFOR                          Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(OUT)
+  Decl      64     125
+  Set      228     274
+  Used     229
+
+INDLEV0                         Stack                             INTEGER
+  Decl     143
+  Set      166
+  Used
+
+INDSELF                         Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(OUT)
+  Decl      61     123
+  Set      236     296
+  Used     237
+
+INT                                                               Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0       0     167     198     205     228     236
+
+JP                              Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(OUT)
+  Decl      44      99
+  Set      181     183     185
+  Used     182     184     187     188     198     204
+
+JP1                             Stack                             INTEGER
+  Decl     145
+  Set      187
+  Used     205     211
+
+JT                              Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(OUT)
+  Decl      45     101
+  Set      198     200     202
+  Used     199     201     204
+
+JT1                             Dummy Arg                         INTEGER, DIMENSION(<exp>), INTENT(OUT)
+  Decl      46     103
+  Set      205     207     209
+  Used     206     208     211
+
+LAY                             Stack                             INTEGER
+  Decl     144
+  Set 
+  Used     180     181     182     183     184     185     187     188     198     199     200     201     202     204     205
+           206     207     208     209     211     213     214     226     227     228     229     234     235     236     237
+           241     242     243     246     247     248     249     256     257     258     259     261     262     263     272
+           273     274     275     279     280     281     282     283     284     285     286     287     288     289     290
+           291     292     294     295     296     308     309     310     311
+
+LAYLOW                          Dummy Arg                         INTEGER, INTENT(OUT)
+  Decl      43      97
+  Set      171     221
+  Used
+
+LAYSWTCH                        Dummy Arg                         INTEGER, INTENT(OUT)
+  Decl      42      96
+  Set      170
+  Used
+
+LAYTROP                         Dummy Arg                         INTEGER, INTENT(OUT)
+  Decl      41      95
+  Set      169     220
+  Used
+
+LOG                                                               Function, REAL, INTRINSIC
+  Decl
+  Set 
+  Used     180
+
+MAX                                                               Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     236
+
+MIN                                                               Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     236
+
+MXMOL                           Use assoc                         INTEGER, PARAMETER, From module PARRRSW
+  Decl
+  Set 
+  Used      91
+
+NLAYERS                         Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      33      78
+  Set 
+  Used      80      82      84      86      89      91      99     101     103     106     108     110     112     114     116
+           118     120     123     125     127     129     131     133     137     138     174
+
+PARRRSW                                                           Module
+  Decl
+  Set 
+  Used      23
+
+PAVEL                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      34      80
+  Set 
+  Used     180     214
+
+PLOG                            Stack                             REAL(KIND=8)
+  Decl     150
+  Set      180
+  Used     181     188     219     221
+
+PREF                            Use assoc                         REAL(KIND=8), From module RRSW_REF, DIMENSION(59), SAVE
+  Decl
+  Set      328
+  Used
+
+PREFLOG                         Use assoc                         REAL(KIND=8), From module RRSW_REF, DIMENSION(59), SAVE
+  Decl
+  Set      342
+  Used     188
+
+PZ                              Dummy Arg                         REAL(KIND=8), DIMENSION(0:<exp>), INTENT(IN)
+  Decl      36      84
+  Set 
+  Used
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD
+  Decl      20
+  Set 
+  Used      80      82      84      86      88      89      91     106     108     110     112     114     116     118     120
+           127     129     131     133     136     147     148     149     150     151     152     153     154     155     156
+           157     158
+
+RRSW_REF                                                          Module
+  Decl
+  Set 
+  Used      24
+
+RRSW_VSN                                                          Module
+  Decl
+  Set 
+  Used      25
+
+RRTMG_SW_SETCOEF                                                  Module
+  Decl       6
+  Set 
+  Used
+
+SCALEFAC                        Stack                             REAL(KIND=8)
+  Decl     155
+  Set      214
+  Used     226     272
+
+SELFFAC                         Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      59     127
+  Set      234     294
+  Used
+
+SELFFRAC                        Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(OUT)
+  Decl      60     129
+  Set      237     295
+  Used
+
+SETCOEF_SW                                                        Subroutine, Module procedure
+  Decl      32
+  Set 
+  Used
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used      20
+
+STPFAC                          Stack                             REAL(KIND=8)
+  Decl     147
+  Set      162
+  Used     214
+
+SWATMREF                                                          Subroutine, Module procedure
+  Decl     319
+  Set 
+  Used
+
+T0FRAC                          Stack                             REAL(KIND=8)
+  Decl     149
+  Set      167
+  Used
+
+TAVEL                           Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      35      82
+  Set 
+  Used     198     204     205     211     214     227     235     263     273     292
+
+TBNDFRAC                        Stack                             REAL(KIND=8)
+  Decl     148
+  Set      165
+  Used
+
+TBOUND                          Dummy Arg                         REAL(KIND=8), INTENT(IN)
+  Decl      38      88
+  Set 
+  Used     164     165
+
+TREF                            Use assoc                         REAL(KIND=8), From module RRSW_REF, DIMENSION(59), SAVE
+  Decl
+  Set      359
+  Used     198     204     205     211
+
+TZ                              Dummy Arg                         REAL(KIND=8), DIMENSION(0:<exp>), INTENT(IN)
+  Decl      37      86
+  Set 
+  Used     166     167
+
+WATER                           Stack                             REAL(KIND=8)
+  Decl     154
+  Set      213
+  Used     226     234     272
+
+WKL                             Dummy Arg                         REAL(KIND=8), DIMENSION(38, <exp>), INTENT(IN)
+  Decl      40      91
+  Set 
+  Used     213     241     242     243     246     247     248     279     280     281     282     283     284
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+EXP(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   SWATMREF in RRTMG_SW_SETCOEF (Line 263, file rrtmg_sw_setcoef.f90)
+                   SWATMREF in RRTMG_SW_SETCOEF (Line 292, file rrtmg_sw_setcoef.f90)
+
+Name  Messages
+----  --------
+FLOAT(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   SWATMREF in RRTMG_SW_SETCOEF (Line 204, file rrtmg_sw_setcoef.f90)
+                   SWATMREF in RRTMG_SW_SETCOEF (Line 211, file rrtmg_sw_setcoef.f90)
+                   SWATMREF in RRTMG_SW_SETCOEF (Line 229, file rrtmg_sw_setcoef.f90)
+                   SWATMREF in RRTMG_SW_SETCOEF (Line 237, file rrtmg_sw_setcoef.f90)
+
+Name  Messages
+----  --------
+INT(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   SWATMREF in RRTMG_SW_SETCOEF (Line 165, file rrtmg_sw_setcoef.f90)
+                   SWATMREF in RRTMG_SW_SETCOEF (Line 167, file rrtmg_sw_setcoef.f90)
+                   SWATMREF in RRTMG_SW_SETCOEF (Line 181, file rrtmg_sw_setcoef.f90)
+                   SWATMREF in RRTMG_SW_SETCOEF (Line 198, file rrtmg_sw_setcoef.f90)
+                   SWATMREF in RRTMG_SW_SETCOEF (Line 205, file rrtmg_sw_setcoef.f90)
+                   SWATMREF in RRTMG_SW_SETCOEF (Line 228, file rrtmg_sw_setcoef.f90)
+                   SWATMREF in RRTMG_SW_SETCOEF (Line 236, file rrtmg_sw_setcoef.f90)
+
+Name  Messages
+----  --------
+LOG(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   SWATMREF in RRTMG_SW_SETCOEF (Line 180, file rrtmg_sw_setcoef.f90)
+
+Name  Messages
+----  --------
+MAX(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   SWATMREF in RRTMG_SW_SETCOEF (Line 228, file rrtmg_sw_setcoef.f90)
+                   SWATMREF in RRTMG_SW_SETCOEF (Line 236, file rrtmg_sw_setcoef.f90)
+
+Name  Messages
+----  --------
+MIN(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   SWATMREF in RRTMG_SW_SETCOEF (Line 228, file rrtmg_sw_setcoef.f90)
+                   SWATMREF in RRTMG_SW_SETCOEF (Line 236, file rrtmg_sw_setcoef.f90)
+
+Name  Messages
+----  --------
+PARRRSW
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_SETCOEF
+
+Name  Messages
+----  --------
+RRSW_REF
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_SETCOEF
+
+Name  Messages
+----  --------
+RRSW_VSN
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_SETCOEF
+
+Name  Messages
+----  --------
+RRTMG_SW_SETCOEF
+      Defined as:  Module (line 6, file rrtmg_sw_setcoef.f90)
+
+        Uses:      SHR_KIND_MOD
+                   PARRRSW
+                   RRSW_REF
+                   RRSW_VSN
+
+Name  Messages
+----  --------
+SETCOEF_SW in RRTMG_SW_SETCOEF
+      Defined as:  Subroutine (line 32, file rrtmg_sw_setcoef.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_SW_SETCOEF
+
+Name  Messages
+----  --------
+SWATMREF in RRTMG_SW_SETCOEF
+      Defined as:  Subroutine (line 319, file rrtmg_sw_setcoef.f90)
+
+      Interface:   None
+
+      Calls:       INT(Intrinsic) (Line 165, file rrtmg_sw_setcoef.f90)
+                   INT(Intrinsic) (Line 167, file rrtmg_sw_setcoef.f90)
+                   INT(Intrinsic) (Line 181, file rrtmg_sw_setcoef.f90)
+                   INT(Intrinsic) (Line 198, file rrtmg_sw_setcoef.f90)
+                   INT(Intrinsic) (Line 205, file rrtmg_sw_setcoef.f90)
+                   INT(Intrinsic) (Line 228, file rrtmg_sw_setcoef.f90)
+                   INT(Intrinsic) (Line 236, file rrtmg_sw_setcoef.f90)
+                   LOG(Intrinsic) (Line 180, file rrtmg_sw_setcoef.f90)
+                   FLOAT(Intrinsic) (Line 204, file rrtmg_sw_setcoef.f90)
+                   FLOAT(Intrinsic) (Line 211, file rrtmg_sw_setcoef.f90)
+                   FLOAT(Intrinsic) (Line 229, file rrtmg_sw_setcoef.f90)
+                   FLOAT(Intrinsic) (Line 237, file rrtmg_sw_setcoef.f90)
+                   MAX(Intrinsic) (Line 228, file rrtmg_sw_setcoef.f90)
+                   MAX(Intrinsic) (Line 236, file rrtmg_sw_setcoef.f90)
+                   MIN(Intrinsic) (Line 228, file rrtmg_sw_setcoef.f90)
+                   MIN(Intrinsic) (Line 236, file rrtmg_sw_setcoef.f90)
+                   EXP(Intrinsic) (Line 263, file rrtmg_sw_setcoef.f90)
+                   EXP(Intrinsic) (Line 292, file rrtmg_sw_setcoef.f90)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

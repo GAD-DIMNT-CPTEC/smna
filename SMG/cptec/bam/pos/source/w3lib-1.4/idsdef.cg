@@ -1,0 +1,202 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  idsdef.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/idsdef.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine idsdef( iptv, ids )
+   26.       $MR_iptv_0 = 0[loc( iptv ),0]
+   26.       if ( $MR_iptv_0 == 1 ) then
+    1.          goto 10
+   26.       else if ( $MR_iptv_0 == 2 ) then
+   26.    10    continue
+   27.          $LCS_ids_0 = loc( ids )
+   27.          0[$LCS_ids_0,0] = -1
+   28.          1[$LCS_ids_0,0] = -1
+   29.          2[$LCS_ids_0,0] = 3
+   32.          5[$LCS_ids_0,0] = -1
+   33.          6[$LCS_ids_0,0] = 0
+   34.          7[$LCS_ids_0,0] = 0
+   35.          8[$LCS_ids_0,0] = 0
+   37.          10[$LCS_ids_0,0] = 1
+   38.          11[$LCS_ids_0,0] = 1
+   39.          12[$LCS_ids_0,0] = 1
+   40.          13[$LCS_ids_0,0] = 1
+   41.          14[$LCS_ids_0,0] = 1
+   42.          15[$LCS_ids_0,0] = 1
+   43.          16[$LCS_ids_0,0] = 1
+   44.          17[$LCS_ids_0,0] = 1
+   45.          18[$LCS_ids_0,0] = 4
+   46.          19[$LCS_ids_0,0] = 0
+   51.          24[$LCS_ids_0,0] = 1
+   52.          25[$LCS_ids_0,0] = -1
+   53.          26[$LCS_ids_0,0] = 0
+   57.          30[$LCS_ids_0,0] = 0
+   58.          31[$LCS_ids_0,0] = 1
+   59.          32[$LCS_ids_0,0] = 1
+   60.          33[$LCS_ids_0,0] = 1
+   61.          34[$LCS_ids_0,0] = -4
+   62.          35[$LCS_ids_0,0] = -4
+   63.          36[$LCS_ids_0,0] = -1
+   64.          37[$LCS_ids_0,0] = 8
+   65.          38[$LCS_ids_0,0] = 3
+   66.          39[$LCS_ids_0,0] = 4
+   67.          40[$LCS_ids_0,0] = 6
+   68.          41[$LCS_ids_0,0] = 6
+   69.          42[$LCS_ids_0,0] = 6
+   70.          43[$LCS_ids_0,0] = 6
+   71.          44[$LCS_ids_0,0] = 4
+   72.          45[$LCS_ids_0,0] = 4
+   73.          46[$LCS_ids_0,0] = 0
+   77.          50[$LCS_ids_0,0] = 4
+   78.          51[$LCS_ids_0,0] = 0
+   79.          52[$LCS_ids_0,0] = 4
+   80.          53[$LCS_ids_0,0] = 1
+   81.          54[$LCS_ids_0,0] = -1
+   82.          55[$LCS_ids_0,0] = -1
+   83.          56[$LCS_ids_0,0] = 1
+   84.          57[$LCS_ids_0,0] = 1
+   85.          58[$LCS_ids_0,0] = 6
+   86.          59[$LCS_ids_0,0] = 0
+   87.          60[$LCS_ids_0,0] = 1
+   88.          61[$LCS_ids_0,0] = 1
+   89.          62[$LCS_ids_0,0] = 1
+   90.          63[$LCS_ids_0,0] = 6
+   91.          64[$LCS_ids_0,0] = 0
+   92.          65[$LCS_ids_0,0] = 2
+   97.          70[$LCS_ids_0,0] = 0
+   98.          71[$LCS_ids_0,0] = 0
+   99.          72[$LCS_ids_0,0] = 0
+  100.          73[$LCS_ids_0,0] = 0
+  101.          74[$LCS_ids_0,0] = 0
+  102.          75[$LCS_ids_0,0] = 1
+  104.          77[$LCS_ids_0,0] = 1
+  105.          78[$LCS_ids_0,0] = 1
+  106.          79[$LCS_ids_0,0] = 1
+  107.          80[$LCS_ids_0,0] = 0
+  109.          82[$LCS_ids_0,0] = 5
+  110.          83[$LCS_ids_0,0] = 1
+  111.          84[$LCS_ids_0,0] = 1
+  112.          85[$LCS_ids_0,0] = 0
+  113.          86[$LCS_ids_0,0] = 0
+  115.          88[$LCS_ids_0,0] = 4
+  116.          89[$LCS_ids_0,0] = 1
+  117.          90[$LCS_ids_0,0] = 0
+  119.          92[$LCS_ids_0,0] = 0
+  125.          98[$LCS_ids_0,0] = 1
+  127.          100[$LCS_ids_0,0] = 0
+  130.          103[$LCS_ids_0,0] = 0
+  133.          106[$LCS_ids_0,0] = 0
+  135.          108[$LCS_ids_0,0] = 0
+  137.          110[$LCS_ids_0,0] = 0
+  138.          111[$LCS_ids_0,0] = 0
+  139.          112[$LCS_ids_0,0] = 0
+  140.          113[$LCS_ids_0,0] = 0
+  141.          114[$LCS_ids_0,0] = 0
+  142.          115[$LCS_ids_0,0] = 0
+  143.          116[$LCS_ids_0,0] = 0
+  147.          120[$LCS_ids_0,0] = 0
+  148.          121[$LCS_ids_0,0] = 0
+  149.          122[$LCS_ids_0,0] = 0
+  150.          123[$LCS_ids_0,0] = 3
+  151.          124[$LCS_ids_0,0] = 3
+  154.          127[$LCS_ids_0,0] = -1
+  155.          128[$LCS_ids_0,0] = -1
+  156.          129[$LCS_ids_0,0] = -1
+  157.          130[$LCS_ids_0,0] = 1
+  158.          131[$LCS_ids_0,0] = 1
+  159.          132[$LCS_ids_0,0] = 1
+  160.          133[$LCS_ids_0,0] = 1
+  161.          134[$LCS_ids_0,0] = 10
+  162.          135[$LCS_ids_0,0] = 4
+  163.          136[$LCS_ids_0,0] = 3
+  164.          137[$LCS_ids_0,0] = 6
+  165.          138[$LCS_ids_0,0] = 11
+  166.          139[$LCS_ids_0,0] = 0
+  167.          140[$LCS_ids_0,0] = 0
+  168.          141[$LCS_ids_0,0] = 0
+  169.          142[$LCS_ids_0,0] = 0
+  170.          143[$LCS_ids_0,0] = 3
+  171.          144[$LCS_ids_0,0] = 0
+  172.          145[$LCS_ids_0,0] = 0
+  173.          146[$LCS_ids_0,0] = 3
+  174.          147[$LCS_ids_0,0] = 3
+  175.          148[$LCS_ids_0,0] = 10
+  181.          154[$LCS_ids_0,0] = 0
+  182.          155[$LCS_ids_0,0] = 0
+  183.          156[$LCS_ids_0,0] = 0
+  184.          157[$LCS_ids_0,0] = 0
+  185.          158[$LCS_ids_0,0] = -1
+  186.          159[$LCS_ids_0,0] = 0
+  187.          160[$LCS_ids_0,0] = 0
+  188.          161[$LCS_ids_0,0] = 0
+  189.          162[$LCS_ids_0,0] = 0
+  190.          163[$LCS_ids_0,0] = 0
+  191.          164[$LCS_ids_0,0] = 0
+  192.          165[$LCS_ids_0,0] = 0
+  193.          166[$LCS_ids_0,0] = 0
+  194.          167[$LCS_ids_0,0] = 0
+  195.          168[$LCS_ids_0,0] = 0
+  198.          171[$LCS_ids_0,0] = 3
+  199.          172[$LCS_ids_0,0] = 0
+  200.          173[$LCS_ids_0,0] = 0
+  201.          174[$LCS_ids_0,0] = 0
+  202.          175[$LCS_ids_0,0] = 2
+  203.          176[$LCS_ids_0,0] = 2
+  207.          180[$LCS_ids_0,0] = 9
+  208.          181[$LCS_ids_0,0] = 9
+  209.          182[$LCS_ids_0,0] = 5
+  210.          183[$LCS_ids_0,0] = 5
+  227.          200[$LCS_ids_0,0] = 0
+  230.          203[$LCS_ids_0,0] = 0
+  231.          204[$LCS_ids_0,0] = 0
+  233.          206[$LCS_ids_0,0] = 0
+  235.          208[$LCS_ids_0,0] = 0
+  237.          210[$LCS_ids_0,0] = 0
+  238.          211[$LCS_ids_0,0] = 0
+  239.          212[$LCS_ids_0,0] = 0
+  240.          213[$LCS_ids_0,0] = 6
+  241.          214[$LCS_ids_0,0] = 7
+  242.          215[$LCS_ids_0,0] = 7
+  243.          216[$LCS_ids_0,0] = 7
+  244.          217[$LCS_ids_0,0] = 2
+  245.          218[$LCS_ids_0,0] = 1
+  246.          219[$LCS_ids_0,0] = 4
+  248.          221[$LCS_ids_0,0] = 0
+  249.          222[$LCS_ids_0,0] = 1
+  254.          227[$LCS_ids_0,0] = 1
+  255.          228[$LCS_ids_0,0] = 0
+  257.          230[$LCS_ids_0,0] = 3
+  258.          231[$LCS_ids_0,0] = 0
+  259.          232[$LCS_ids_0,0] = 0
+  260.          223[$LCS_ids_0,0] = 1
+  261.          224[$LCS_ids_0,0] = 1
+  264.          237[$LCS_ids_0,0] = 0
+  265.          238[$LCS_ids_0,0] = 1
+  267.          240[$LCS_ids_0,0] = 7
+  268.          241[$LCS_ids_0,0] = 7
+  269.          242[$LCS_ids_0,0] = 10
+  270.          243[$LCS_ids_0,0] = 7
+  271.          244[$LCS_ids_0,0] = 10
+  272.          245[$LCS_ids_0,0] = 7
+  273.          246[$LCS_ids_0,0] = 7
+  274.          247[$LCS_ids_0,0] = 7
+  275.          248[$LCS_ids_0,0] = 10
+  276.          249[$LCS_ids_0,0] = 7
+  277.          250[$LCS_ids_0,0] = 7
+  277.       endif
+  285.       return
+  285.       end
+  285.       
