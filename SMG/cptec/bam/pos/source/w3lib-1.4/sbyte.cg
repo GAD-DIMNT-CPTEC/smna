@@ -1,0 +1,101 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  sbyte.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/sbyte.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine sbyte( iout, in, iskip, nbyte )
+   41.       $MR_nbyte_0 = 0[loc( nbyte ),0]
+   41.       $LCS_32_0 = 32 - $MR_nbyte_0
+   41.       icon = $LCS_32_0
+   42.       if ( $LCS_32_0 >= 0 ) then
+   43.          if ( or( 32 - $MR_nbyte_0, -1 + $MR_nbyte_0 ) < 0 ) then
+   43.             $LB_Y0 = 1
+   43.             $UB_Y1 = 32
+   43.             $Subscript_Y5 = $MR_nbyte_0
+   43.             _bounds_error( $_File_Y40, $Line_Y42, $_Name_Y41, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y43 )
+   43.          endif
+   43.          $MR_mask_3 = (-1,masks)[$MR_nbyte_0]
+   43.          mask = $MR_mask_3
+   47.          $MR_iskip_4 = 0[loc( iskip ),0]
+   47.          $LCS_4 = _rsh( $MR_iskip_4, 5 )
+   47.          index = $LCS_4
+   51.          $CS_0 = and( -32, $MR_iskip_4 + _rsh( _ash( $MR_iskip_4, 4 ), 27 ) )
+   51.          ii = $MR_iskip_4 - $CS_0
+   53.          $MR_in_7 = 0[loc( in ),0]
+   53.          $LCS_6 = and( $MR_mask_3, $MR_in_7 )
+   53.          j = $LCS_6
+   54.          $LCS_32_2 = 32 - $MR_nbyte_0 + $MR_iskip_4 - $CS_0
+   54.          movel = $LCS_32_2
+   58.          if ( $LCS_32_2 > 0 ) then
+   59.             $LCS_3 = abs( $LCS_32_2 )
+   59.             $LCS_7 = $LCS_32_2 > 0
+   59.             $LCS_5 = cvmg( lshift_ec( $MR_mask_3, $LCS_3 ), rshift_ec( $MR_mask_3, $LCS_3 ), $LCS_7 )
+   59.             msk = $LCS_5
+   60.             $LCS_iout_8 = loc( iout )
+   60.             $MR_iout_S0 = 0[$LCS_iout_8,$LCS_4]
+   60.             $MR_iout_S1 = or( notand( $LCS_5, $MR_iout_S0 ), cvmg( lshift_ec( $LCS_6, $LCS_3 ), rshift_ec( $LCS_6, $LCS_3 ), $LCS_7 ) )
+   60.             0[$LCS_iout_8,$LCS_4] = $MR_iout_S1
+   65.          else if ( 32 - $MR_nbyte_0 + $MR_iskip_4 - $CS_0 < 0 ) then
+   66.             $LCS_MR_iskip_10 = $MR_iskip_4 - $CS_0
+   66.             if ( or( $LCS_MR_iskip_10, 31 - $LCS_MR_iskip_10 ) < 0 ) then
+   66.                $LB_Y0 = 1
+   66.                $UB_Y1 = 32
+   66.                $Subscript_Y5 = 32 - $LCS_MR_iskip_10
+   66.                _bounds_error( $_File_Y40, $Line_Y45, $_Name_Y44, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y46 )
+   66.             endif
+   66.             $MR_msk_10 = (31,masks)[-( $MR_iskip_4 - $CS_0 )]
+   66.             msk = $MR_msk_10
+   67.             $LCS_15 = _rsh( $MR_iskip_4, 5 )
+   67.             $LCS_iout_16 = loc( iout )
+   67.             $MR_iout_S2 = 0[$LCS_iout_16,$LCS_15]
+   67.             $LCS_12 = and( $MR_mask_3, $MR_in_7 )
+   67.             $LCS_17 = $MR_nbyte_0 + $MR_iskip_4
+   67.             $LCS_18 = $LCS_17 - $CS_0
+   67.             $LCS_32_14 = 32 - $LCS_18
+   67.             $LCS_13 = abs( $LCS_32_14 )
+   67.             $MR_iout_S3 = or( notand( $MR_msk_10, $MR_iout_S2 ), cvmg( lshift_ec( $LCS_12, $LCS_13 ), rshift_ec( $LCS_12, $LCS_13 ), $LCS_32_14 > 0 ) )
+   67.             0[$LCS_iout_16,$LCS_15] = $MR_iout_S3
+   69.             $MR_nbitsw_13 = nbitsw
+   69.             $LCS_nbitsw_19 = $MR_nbitsw_13 - $LCS_18
+   69.             if ( or( 31 + $LCS_nbitsw_19, $LCS_17 - ( $MR_nbitsw_13 + $CS_0 ) ) < 0 ) then
+   69.                $LB_Y0 = 1
+   69.                $UB_Y1 = 32
+   69.                $Subscript_Y5 = ( 32 + $LCS_nbitsw_19 )
+   69.                _bounds_error( $_File_Y40, $Line_Y48, $_Name_Y47, $Dim_Y8, $LB_Y0, $UB_Y1, $Subscript_Y5, $Err_count_Y49 )
+   69.             endif
+   69.             $LCS_20 = $MR_nbyte_0 + $MR_iskip_4 - $CS_0
+   69.             $MR_masks_14 = (31,masks)[$MR_nbitsw_13 - $LCS_20]
+   69.             $LCS_24 = _rsh( $MR_iskip_4, 5 )
+   69.             $LCS_iout_25 = loc( iout )
+   69.             $MR_iout_S4 = 1[$LCS_iout_25,$LCS_24]
+   69.             $MR_itemp_16 = and( $MR_masks_14, $MR_iout_S4 )
+   69.             itemp = $MR_itemp_16
+   70.             $LCS_21 = and( $MR_mask_3, $MR_in_7 )
+   70.             $LCS_64_23 = 64 - $LCS_20
+   70.             $LCS_22 = abs( $LCS_64_23 )
+   70.             $MR_iout_S5 = or( $MR_itemp_16, cvmg( lshift_ec( $LCS_21, $LCS_22 ), rshift_ec( $LCS_21, $LCS_22 ), $LCS_64_23 > 0 ) )
+   70.             1[$LCS_iout_25,$LCS_24] = $MR_iout_S5
+   70.          else
+   75.             $LCS_26 = _rsh( $MR_iskip_4, 5 )
+   75.             $LCS_iout_27 = loc( iout )
+   75.             $MR_iout_S6 = 0[$LCS_iout_27,$LCS_26]
+   75.             $MR_iout_S7 = or( and( $MR_mask_3, $MR_in_7 ), notand( $MR_mask_3, $MR_iout_S6 ) )
+   75.             0[$LCS_iout_27,$LCS_26] = $MR_iout_S7
+   75.          endif
+   75.       endif
+   79.       return
+   79.       end
+   79.       

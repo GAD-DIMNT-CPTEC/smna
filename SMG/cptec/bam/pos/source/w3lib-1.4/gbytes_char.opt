@@ -1,0 +1,159 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  gbytes_char.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/gbytes_char.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine gbytec( in, iout, iskip, nbyte )
+    4.       $t_S3 = mova2i(  _substr(in(1 + iskip / 8),1,1) )
+    4.       $itmp_S4 = and( $t_S3, ones(8 + -mod( iskip, 8 )) )
+    4.       if ( -mod( iskip, 8 ) + -min( nbyte, 8 + -mod( iskip, 8 ) ) /= -8 ) then
+    4.          $itmp_S4 = cvmg( lshift_ec( $itmp_S4, abs( mod( iskip, 8 ) + min( nbyte, 8 + -mod( iskip, 8 ) ) + -8 ) ), rshift_ec( $itmp_S4, abs( mod( iskip, 8 ) + min( nbyte, 8 + -mod( iskip, 8 ) ) + -8 ) ), mod( iskip, 8 ) + min( nbyte, 8 + -mod( iskip, 8 ) ) + -8 > 0 )
+    4.       endif
+    4.       $index_S5 = 2 + iskip / 8
+    4.       $bitcnt_S7 = nbyte + -min( nbyte, 8 + -mod( iskip, 8 ) )
+    4.       if ( nbyte + -min( nbyte, 8 + -mod( iskip, 8 ) ) >= 8 ) then
+    4.          $I_bitcnt_6 = 0
+    4.          do
+    4.             $t_S6 = mova2i(  _substr(in($I_bitcnt_6 + iskip / 8 + 2),1,1) )
+    4.             $itmp_S4 = or( $t_S6, 256 * _fsb( $itmp_S4, 256 ) )
+    4.             $I_bitcnt_6 = 1 + $I_bitcnt_6
+    4.             if ( $I_bitcnt_6 >= ( min( nbyte, 8 + -mod( iskip, 8 ) ) + -nbyte ) / -8 ) exit
+    4.          enddo
+    4.          $index_S5 = iskip / 8 + ( min( nbyte, 8 + -mod( iskip, 8 ) ) + -nbyte ) / -8 + 2
+    4.          $bitcnt_S7 = ( nbyte + -min( nbyte, 8 + -mod( iskip, 8 ) ) + -8 * ( ( min( nbyte, 8 + -mod( iskip, 8 ) ) + -nbyte ) / -8 ) )
+    4.       endif
+    4.       if ( $bitcnt_S7 > 0 ) then
+    4.          $t_S8 = mova2i(  _substr(in($index_S5),1,1) )
+    4.          $itmp_S4 = or( and( ones($bitcnt_S7), cvmg( lshift_ec( $t_S8, abs( -8 + $bitcnt_S7 ) ), rshift_ec( $t_S8, abs( -8 + $bitcnt_S7 ) ), -8 + $bitcnt_S7 > 0 ) ), cvmg( lshift_ec( $itmp_S4, abs( $bitcnt_S7 ) ), rshift_ec( $itmp_S4, abs( $bitcnt_S7 ) ), $bitcnt_S7 > 0 ) )
+    4.       endif
+    4.       iout(1) = $itmp_S4
+    6.       return
+    6.       end
+    6.       
+    8.       
+    8.       subroutine sbytec( out, in, iskip, nbyte )
+   11.       t$5 = 1
+   11.       t$6 = 1
+   11.       $itmp_S6 = in(1)
+   11.       $bitcnt_S7 = nbyte
+   11.       $index_S3 = 1 + ( iskip + nbyte + -1 ) / 8
+   11.       if ( mod( iskip + nbyte + -1, 8 ) /= 7 ) then
+   11.          $imask_S4 = cvmg( lshift_ec( ones(min( nbyte, 1 + mod( iskip + nbyte + -1, 8 ) )), abs( 7 + -mod( iskip + nbyte + -1, 8 ) ) ), rshift_ec( ones(min( nbyte, 1 + mod( iskip + nbyte + -1, 8 ) )), abs( 7 + -mod( iskip + nbyte + -1, 8 ) ) ), 7 + -mod( iskip + nbyte + -1, 8 ) > 0 )
+   11.          $t_S5 = mova2i(  _substr(out(1 + ( iskip + nbyte + -1 ) / 8),1,1) )
+   11.           _substr(out(1 + ( iskip + nbyte + -1 ) / 8),1,1) = character*1( or( and( $t_S5, 255 + -$imask_S4 ), and( $imask_S4, cvmg( lshift_ec( $itmp_S6, abs( 7 + -mod( iskip + nbyte + -1, 8 ) ) ), rshift_ec( $itmp_S6, abs( 7 + -mod( iskip + nbyte + -1, 8 ) ) ), 7 + -mod( iskip + nbyte + -1, 8 ) > 0 ) ) ) )
+   11.          $bitcnt_S7 = nbyte + -min( nbyte, 1 + mod( iskip + nbyte + -1, 8 ) )
+   11.          $itmp_S6 = cvmg( lshift_ec( $itmp_S6, abs( min( nbyte, 1 + mod( iskip + nbyte + -1, 8 ) ) ) ), rshift_ec( $itmp_S6, abs( min( nbyte, 1 + mod( iskip + nbyte + -1, 8 ) ) ) ), min( nbyte, 1 + mod( iskip + nbyte + -1, 8 ) ) < 0 )
+   11.          $index_S3 = ( iskip + nbyte + -1 ) / 8
+   11.       endif
+   11.       if ( $bitcnt_S7 >= 8 ) then
+   11.          $Trips01_N1 = $bitcnt_S7 / 8
+   11.          $I_bitcnt_7 = 0
+   11.          do
+   11.              _substr(out($index_S3 + -$I_bitcnt_7),1,1) = character*1( and( 255, _rsh( $itmp_S6, 8 * $I_bitcnt_7 ) ) )
+   11.             $I_bitcnt_7 = 1 + $I_bitcnt_7
+   11.             if ( $I_bitcnt_7 >= $bitcnt_S7 / 8 ) exit
+   11.          enddo
+   11.          $index_S3 = ( $index_S3 + $bitcnt_S7 / -8 )
+   11.          $bitcnt_S7 = ( $bitcnt_S7 + -8 * ( $bitcnt_S7 / 8 ) )
+   11.          $itmp_S6 = _rsh( $itmp_S6, 8 * $Trips01_N1 )
+   11.       endif
+   11.       if ( $bitcnt_S7 > 0 ) then
+   11.          $itmp2_S10 = and( $itmp_S6, ones($bitcnt_S7) )
+   11.          $t_S8 = mova2i(  _substr(out($index_S3),1,1) )
+   11.          $itmp3_S9 = and( $t_S8, 255 + -ones($bitcnt_S7) )
+   11.           _substr(out($index_S3),1,1) = character*1( or( $itmp3_S9, $itmp2_S10 ) )
+   11.       endif
+   13.       return
+   13.       end
+   13.       
+   15.       
+   15.       subroutine gbytesc( in, iout, iskip, nbyte, nskip, n )
+   35.       if ( n > 0 ) then
+   35.          $I_L35_12 = 0
+   35.          do
+   43.             $t_S3 = mova2i(  _substr(in(1 + ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ) / 8),1,1) )
+   43.             $itmp_S4 = and( $t_S3, ones(8 + -mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 )) )
+   44.             if ( -mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) + -min( nbyte, 8 + -mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) ) /= -8 ) then
+   44.                $itmp_S4 = cvmg( lshift_ec( $itmp_S4, abs( mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) + min( nbyte, 8 + -mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) ) + -8 ) ), rshift_ec( $itmp_S4, abs( mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) + min( nbyte, 8 + -mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) ) + -8 ) ), mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) + min( nbyte, 8 + -mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) ) + -8 > 0 )
+   44.             endif
+   45.             $index_S5 = 2 + ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ) / 8
+   46.             $bitcnt_S7 = nbyte + -min( nbyte, 8 + -mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) )
+   49.             if ( nbyte + -min( nbyte, 8 + -mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) ) >= 8 ) then
+   49.                $I_bitcnt_10 = 0
+   49.                do
+   50.                   $t_S6 = mova2i(  _substr(in($I_bitcnt_10 + ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ) / 8 + 2),1,1) )
+   50.                   $itmp_S4 = or( $t_S6, 256 * _fsb( $itmp_S4, 256 ) )
+   53.                   $I_bitcnt_10 = 1 + $I_bitcnt_10
+   50.                   if ( $I_bitcnt_10 >= ( min( nbyte, 8 + -mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) ) + -nbyte ) / -8 ) exit
+   50.                enddo
+   52.                $index_S5 = ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ) / 8 + ( min( nbyte, 8 + -mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) ) + -nbyte ) / -8 + 2
+   51.                $bitcnt_S7 = ( nbyte + -min( nbyte, 8 + -mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) ) + -8 * ( ( min( nbyte, 8 + -mod( ( iskip + nbyte * $I_L35_12 + nskip * $I_L35_12 ), 8 ) ) + -nbyte ) / -8 ) )
+   51.             endif
+   56.             if ( $bitcnt_S7 > 0 ) then
+   57.                $t_S8 = mova2i(  _substr(in($index_S5),1,1) )
+   57.                $itmp_S4 = or( and( ones($bitcnt_S7), cvmg( lshift_ec( $t_S8, abs( -8 + $bitcnt_S7 ) ), rshift_ec( $t_S8, abs( -8 + $bitcnt_S7 ) ), -8 + $bitcnt_S7 > 0 ) ), cvmg( lshift_ec( $itmp_S4, abs( $bitcnt_S7 ) ), rshift_ec( $itmp_S4, abs( $bitcnt_S7 ) ), $bitcnt_S7 > 0 ) )
+   57.             endif
+   61.             iout(1 + $I_L35_12) = $itmp_S4
+   62.             $I_L35_12 = 1 + $I_L35_12
+   59.             if ( $I_L35_12 >= n ) exit
+   59.          enddo
+   59.       endif
+   65.       return
+   65.       end
+   65.       
+   67.       
+   67.       subroutine sbytesc( out, in, iskip, nbyte, nskip, n )
+   67.       t$5 = n
+   80.       t$6 = _zla( 0, n )
+   88.       if ( n > 0 ) then
+   88.          $I_L88_14 = 0
+   88.          do
+   89.             $itmp_S6 = in(1 + $I_L88_14)
+   90.             $bitcnt_S7 = nbyte
+   91.             $index_S3 = 1 + ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ) / 8
+   96.             if ( mod( ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ), 8 ) /= 7 ) then
+   98.                $imask_S4 = cvmg( lshift_ec( ones(min( nbyte, 1 + mod( ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ), 8 ) )), abs( 7 + -mod( ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ), 8 ) ) ), rshift_ec( ones(min( nbyte, 1 + mod( ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ), 8 ) )), abs( 7 + -mod( ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ), 8 ) ) ), 7 + -mod( ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ), 8 ) > 0 )
+  100.                $t_S5 = mova2i(  _substr(out(1 + ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ) / 8),1,1) )
+  101.                 _substr(out(1 + ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ) / 8),1,1) = character*1( or( and( $t_S5, 255 + -$imask_S4 ), and( $imask_S4, cvmg( lshift_ec( $itmp_S6, abs( 7 + -mod( ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ), 8 ) ) ), rshift_ec( $itmp_S6, abs( 7 + -mod( ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ), 8 ) ) ), 7 + -mod( ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ), 8 ) > 0 ) ) ) )
+  102.                $bitcnt_S7 = nbyte + -min( nbyte, 1 + mod( ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ), 8 ) )
+  103.                $itmp_S6 = cvmg( lshift_ec( $itmp_S6, abs( min( nbyte, 1 + mod( ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ), 8 ) ) ) ), rshift_ec( $itmp_S6, abs( min( nbyte, 1 + mod( ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ), 8 ) ) ) ), min( nbyte, 1 + mod( ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ), 8 ) ) < 0 )
+  104.                $index_S3 = ( iskip + nbyte + nbyte * $I_L88_14 + nskip * $I_L88_14 + -1 ) / 8
+  104.             endif
+  110.             if ( $bitcnt_S7 >= 8 ) then
+  110.                $Trips01_N1 = $bitcnt_S7 / 8
+  110.                $I_bitcnt_12 = 0
+  110.                do
+  111.                    _substr(out($index_S3 + -$I_bitcnt_12),1,1) = character*1( and( 255, _rsh( $itmp_S6, 8 * $I_bitcnt_12 ) ) )
+  115.                   $I_bitcnt_12 = 1 + $I_bitcnt_12
+  110.                   if ( $I_bitcnt_12 >= $bitcnt_S7 / 8 ) exit
+  110.                enddo
+  114.                $index_S3 = ( $index_S3 + $bitcnt_S7 / -8 )
+  113.                $bitcnt_S7 = ( $bitcnt_S7 + -8 * ( $bitcnt_S7 / 8 ) )
+  112.                $itmp_S6 = _rsh( $itmp_S6, 8 * $Trips01_N1 )
+  112.             endif
+  119.             if ( $bitcnt_S7 > 0 ) then
+  120.                $itmp2_S10 = and( $itmp_S6, ones($bitcnt_S7) )
+  121.                $t_S8 = mova2i(  _substr(out($index_S3),1,1) )
+  121.                $itmp3_S9 = and( $t_S8, 255 + -ones($bitcnt_S7) )
+  122.                 _substr(out($index_S3),1,1) = character*1( or( $itmp3_S9, $itmp2_S10 ) )
+  122.             endif
+  124.             $I_L88_14 = 1 + $I_L88_14
+  123.             if ( $I_L88_14 >= n ) exit
+  123.          enddo
+  123.       endif
+  127.       return
+  127.       end
+  127.       

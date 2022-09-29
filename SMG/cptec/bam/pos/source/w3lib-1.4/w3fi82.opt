@@ -1,0 +1,72 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi82.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi82.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi82( ifld, fval1, fdiff1, npts, pds, igds )
+   51.       call gbytec(  _substr(pds(1),1,1), iqq, 56, 1 )
+   52.       if ( iqq /= 0 ) then
+   53.          $nrow_S0 = igds(5)
+   54.          $ncol_S1 = igds(4)
+   60.          if ( -2 + $nrow_S0 >= 0 ) then
+   64.             if ( $ncol_S1 > 0 ) then
+   60.                $I_L60_28 = 0
+   60.                do
+   64.                   $I_L64_20 = 0
+   64. !dir$ ivdep
+   64.                   do
+   66.                      nboust(1 + $I_L64_20) = ifld(-$I_L64_20 + 2 * $ncol_S1 + $ncol_S1 * $I_L60_28 * 2)
+   67.                      $I_L64_20 = 1 + $I_L64_20
+   64.                      if ( $I_L64_20 >= $ncol_S1 ) exit
+   64.                   enddo
+   68.                   $I_L68_22 = 0
+   68. !dir$ ivdep
+   68.                   do
+   70.                      ifld($ncol_S1 + $I_L68_22 + $ncol_S1 * $I_L60_28 * 2 + 1) = nboust(1 + $I_L68_22)
+   71.                      $I_L68_22 = 1 + $I_L68_22
+   68.                      if ( $I_L68_22 >= $ncol_S1 ) exit
+   68.                   enddo
+   72.                   $I_L60_28 = 1 + $I_L60_28
+   71.                   if ( $I_L60_28 >= $nrow_S0 / 2 ) exit
+   71.                enddo
+   71.             endif
+   71.          endif
+   71.       endif
+   77.       if ( 2 + -npts <= 0 ) then
+   77.          $I_L77_24 = 0
+   77. !dir$ ivdep
+   77.          do
+   78.             ifld(npts + -$I_L77_24) = ifld(npts + -$I_L77_24) + -ifld(npts + -$I_L77_24 + -1)
+   79.             $I_L77_24 = 1 + $I_L77_24
+   77.             if ( $I_L77_24 >= -1 + npts ) exit
+   77.          enddo
+   77.       endif
+   80.       if ( 3 + -npts <= 0 ) then
+   80.          $I_L80_26 = 0
+   80. !dir$ ivdep
+   80.          do
+   81.             ifld(npts + -$I_L80_26) = ifld(npts + -$I_L80_26) + -ifld(npts + -$I_L80_26 + -1)
+   82.             $I_L80_26 = 1 + $I_L80_26
+   80.             if ( $I_L80_26 >= -2 + npts ) exit
+   80.          enddo
+   80.       endif
+   88.       fval1 = real( ifld(1) )
+   89.       fdiff1 = real( ifld(2) )
+   93.       ifld(1) = ifld(3)
+   94.       ifld(2) = ifld(3)
+   97.       return
+   97.       end
+   97.       

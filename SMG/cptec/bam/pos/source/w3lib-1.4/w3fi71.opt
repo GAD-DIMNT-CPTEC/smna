@@ -1,0 +1,1277 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi71.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi71.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi71( igrid, igds, ierr )
+  805.       ierr = 0
+  807.       $I_L807_620 = 0
+  807. !dir$ ivdep
+  807.       do
+  808.          igds(1 + $I_L807_620) = 0
+  809.          $I_L807_620 = 1 + $I_L807_620
+  807.          if ( $I_L807_620 >= 18 ) exit
+  807.       enddo
+  811.       if ( igrid >= 37 ) then
+  811.          if ( igrid <= 44 ) then
+  812.             $I_L812_622 = 0
+  812. !dir$ ivdep
+  812.             do
+  813.                igds(19 + $I_L812_622) = 0
+  814.                $I_L812_622 = 1 + $I_L812_622
+  812.                if ( $I_L812_622 >= 73 ) exit
+  812.             enddo
+  812.          endif
+  812.       endif
+  817.       if ( igrid >= 21 ) then
+  817.          if ( igrid <= 24 ) then
+  818.             $I_L818_624 = 0
+  818. !dir$ ivdep
+  818.             do
+  819.                igds(19 + $I_L818_624) = 0
+  820.                $I_L818_624 = 1 + $I_L818_624
+  818.                if ( $I_L818_624 >= 37 ) exit
+  818.             enddo
+  818.          endif
+  818.       endif
+  823.       if ( igrid >= 25 ) then
+  823.          if ( igrid <= 26 ) then
+  824.             $I_L824_626 = 0
+  824. !dir$ ivdep
+  824.             do
+  825.                igds(19 + $I_L824_626) = 0
+  826.                $I_L824_626 = 1 + $I_L824_626
+  824.                if ( $I_L824_626 >= 19 ) exit
+  824.             enddo
+  824.          endif
+  824.       endif
+  829.       if ( igrid >= 61 ) then
+  829.          if ( igrid <= 64 ) then
+  830.             $I_L830_628 = 0
+  830. !dir$ ivdep
+  830.             do
+  831.                igds(19 + $I_L830_628) = 0
+  832.                $I_L830_628 = 1 + $I_L830_628
+  830.                if ( $I_L830_628 >= 46 ) exit
+  830.             enddo
+  830.          endif
+  830.       endif
+  835.       if ( igrid == 1 ) then
+  836.          $I_L836_928 = 0
+  836. !dir$ ivdep
+  836.          do
+  837.             igds(1 + $I_L836_928) = grd1(1 + $I_L836_928)
+  838.             $I_L836_928 = 1 + $I_L836_928
+  836.             if ( $I_L836_928 >= 18 ) exit
+  836.          enddo
+  840.       else if ( igrid == 2 ) then
+  841.          $I_L841_926 = 0
+  841. !dir$ ivdep
+  841.          do
+  842.             igds(1 + $I_L841_926) = grd2(1 + $I_L841_926)
+  843.             $I_L841_926 = 1 + $I_L841_926
+  841.             if ( $I_L841_926 >= 18 ) exit
+  841.          enddo
+  841.       else if ( igrid == 3 ) then
+  846.          $I_L846_924 = 0
+  846. !dir$ ivdep
+  846.          do
+  847.             igds(1 + $I_L846_924) = grd3(1 + $I_L846_924)
+  848.             $I_L846_924 = 1 + $I_L846_924
+  846.             if ( $I_L846_924 >= 18 ) exit
+  846.          enddo
+  846.       else if ( igrid == 4 ) then
+  851.          $I_L851_922 = 0
+  851. !dir$ ivdep
+  851.          do
+  852.             igds(1 + $I_L851_922) = grd4(1 + $I_L851_922)
+  853.             $I_L851_922 = 1 + $I_L851_922
+  851.             if ( $I_L851_922 >= 18 ) exit
+  851.          enddo
+  851.       else if ( igrid == 5 ) then
+  856.          $I_L856_920 = 0
+  856. !dir$ ivdep
+  856.          do
+  857.             igds(1 + $I_L856_920) = grd5(1 + $I_L856_920)
+  858.             $I_L856_920 = 1 + $I_L856_920
+  856.             if ( $I_L856_920 >= 18 ) exit
+  856.          enddo
+  856.       else if ( igrid == 6 ) then
+  861.          $I_L861_918 = 0
+  861. !dir$ ivdep
+  861.          do
+  862.             igds(1 + $I_L861_918) = grd6(1 + $I_L861_918)
+  863.             $I_L861_918 = 1 + $I_L861_918
+  861.             if ( $I_L861_918 >= 18 ) exit
+  861.          enddo
+  861.       else if ( igrid == 8 ) then
+  866.          $I_L866_630 = 0
+  866. !dir$ ivdep
+  866.          do
+  867.             igds(1 + $I_L866_630) = grd8(1 + $I_L866_630)
+  868.             $I_L866_630 = 1 + $I_L866_630
+  866.             if ( $I_L866_630 >= 18 ) exit
+  866.          enddo
+  866.       else if ( igrid == 11 ) then
+  871.          $I_L871_632 = 0
+  871. !dir$ ivdep
+  871.          do
+  872.             igds(1 + $I_L871_632) = grd11(1 + $I_L871_632)
+  873.             $I_L871_632 = 1 + $I_L871_632
+  871.             if ( $I_L871_632 >= 18 ) exit
+  871.          enddo
+  871.       else if ( igrid == 12 ) then
+  876.          $I_L876_634 = 0
+  876. !dir$ ivdep
+  876.          do
+  877.             igds(1 + $I_L876_634) = grd12(1 + $I_L876_634)
+  878.             $I_L876_634 = 1 + $I_L876_634
+  876.             if ( $I_L876_634 >= 18 ) exit
+  876.          enddo
+  876.       else if ( igrid == 13 ) then
+  881.          $I_L881_636 = 0
+  881. !dir$ ivdep
+  881.          do
+  882.             igds(1 + $I_L881_636) = grd13(1 + $I_L881_636)
+  883.             $I_L881_636 = 1 + $I_L881_636
+  881.             if ( $I_L881_636 >= 18 ) exit
+  881.          enddo
+  881.       else if ( igrid == 14 ) then
+  886.          $I_L886_638 = 0
+  886. !dir$ ivdep
+  886.          do
+  887.             igds(1 + $I_L886_638) = grd14(1 + $I_L886_638)
+  888.             $I_L886_638 = 1 + $I_L886_638
+  886.             if ( $I_L886_638 >= 18 ) exit
+  886.          enddo
+  886.       else if ( igrid == 15 ) then
+  891.          $I_L891_640 = 0
+  891. !dir$ ivdep
+  891.          do
+  892.             igds(1 + $I_L891_640) = grd15(1 + $I_L891_640)
+  893.             $I_L891_640 = 1 + $I_L891_640
+  891.             if ( $I_L891_640 >= 18 ) exit
+  891.          enddo
+  891.       else if ( igrid == 16 ) then
+  896.          $I_L896_642 = 0
+  896. !dir$ ivdep
+  896.          do
+  897.             igds(1 + $I_L896_642) = grd16(1 + $I_L896_642)
+  898.             $I_L896_642 = 1 + $I_L896_642
+  896.             if ( $I_L896_642 >= 18 ) exit
+  896.          enddo
+  896.       else if ( igrid == 17 ) then
+  901.          $I_L901_644 = 0
+  901. !dir$ ivdep
+  901.          do
+  902.             igds(1 + $I_L901_644) = grd17(1 + $I_L901_644)
+  903.             $I_L901_644 = 1 + $I_L901_644
+  901.             if ( $I_L901_644 >= 18 ) exit
+  901.          enddo
+  901.       else if ( igrid == 18 ) then
+  906.          $I_L906_646 = 0
+  906. !dir$ ivdep
+  906.          do
+  907.             igds(1 + $I_L906_646) = grd18(1 + $I_L906_646)
+  908.             $I_L906_646 = 1 + $I_L906_646
+  906.             if ( $I_L906_646 >= 18 ) exit
+  906.          enddo
+  906.       else if ( igrid == 21 ) then
+  911.          $I_L911_916 = 0
+  911. !dir$ ivdep
+  911.          do
+  912.             igds(1 + $I_L911_916) = grd21(1 + $I_L911_916)
+  913.             $I_L911_916 = 1 + $I_L911_916
+  911.             if ( $I_L911_916 >= 55 ) exit
+  911.          enddo
+  911.       else if ( igrid == 22 ) then
+  916.          $I_L916_914 = 0
+  916. !dir$ ivdep
+  916.          do
+  917.             igds(1 + $I_L916_914) = grd22(1 + $I_L916_914)
+  918.             $I_L916_914 = 1 + $I_L916_914
+  916.             if ( $I_L916_914 >= 55 ) exit
+  916.          enddo
+  916.       else if ( igrid == 23 ) then
+  921.          $I_L921_912 = 0
+  921. !dir$ ivdep
+  921.          do
+  922.             igds(1 + $I_L921_912) = grd23(1 + $I_L921_912)
+  923.             $I_L921_912 = 1 + $I_L921_912
+  921.             if ( $I_L921_912 >= 55 ) exit
+  921.          enddo
+  921.       else if ( igrid == 24 ) then
+  926.          $I_L926_910 = 0
+  926. !dir$ ivdep
+  926.          do
+  927.             igds(1 + $I_L926_910) = grd24(1 + $I_L926_910)
+  928.             $I_L926_910 = 1 + $I_L926_910
+  926.             if ( $I_L926_910 >= 55 ) exit
+  926.          enddo
+  926.       else if ( igrid == 25 ) then
+  931.          $I_L931_908 = 0
+  931. !dir$ ivdep
+  931.          do
+  932.             igds(1 + $I_L931_908) = grd25(1 + $I_L931_908)
+  933.             $I_L931_908 = 1 + $I_L931_908
+  931.             if ( $I_L931_908 >= 37 ) exit
+  931.          enddo
+  931.       else if ( igrid == 26 ) then
+  936.          $I_L936_906 = 0
+  936. !dir$ ivdep
+  936.          do
+  937.             igds(1 + $I_L936_906) = grd26(1 + $I_L936_906)
+  938.             $I_L936_906 = 1 + $I_L936_906
+  936.             if ( $I_L936_906 >= 37 ) exit
+  936.          enddo
+  936.       else if ( igrid == 27 ) then
+  941.          $I_L941_904 = 0
+  941. !dir$ ivdep
+  941.          do
+  942.             igds(1 + $I_L941_904) = grd27(1 + $I_L941_904)
+  943.             $I_L941_904 = 1 + $I_L941_904
+  941.             if ( $I_L941_904 >= 18 ) exit
+  941.          enddo
+  941.       else if ( igrid == 28 ) then
+  946.          $I_L946_902 = 0
+  946. !dir$ ivdep
+  946.          do
+  947.             igds(1 + $I_L946_902) = grd28(1 + $I_L946_902)
+  948.             $I_L946_902 = 1 + $I_L946_902
+  946.             if ( $I_L946_902 >= 18 ) exit
+  946.          enddo
+  946.       else if ( igrid == 29 ) then
+  951.          $I_L951_900 = 0
+  951. !dir$ ivdep
+  951.          do
+  952.             igds(1 + $I_L951_900) = grd29(1 + $I_L951_900)
+  953.             $I_L951_900 = 1 + $I_L951_900
+  951.             if ( $I_L951_900 >= 18 ) exit
+  951.          enddo
+  951.       else if ( igrid == 30 ) then
+  956.          $I_L956_898 = 0
+  956. !dir$ ivdep
+  956.          do
+  957.             igds(1 + $I_L956_898) = grd30(1 + $I_L956_898)
+  958.             $I_L956_898 = 1 + $I_L956_898
+  956.             if ( $I_L956_898 >= 18 ) exit
+  956.          enddo
+  956.       else if ( igrid == 33 ) then
+  961.          $I_L961_896 = 0
+  961. !dir$ ivdep
+  961.          do
+  962.             igds(1 + $I_L961_896) = grd33(1 + $I_L961_896)
+  963.             $I_L961_896 = 1 + $I_L961_896
+  961.             if ( $I_L961_896 >= 18 ) exit
+  961.          enddo
+  961.       else if ( igrid == 34 ) then
+  966.          $I_L966_894 = 0
+  966. !dir$ ivdep
+  966.          do
+  967.             igds(1 + $I_L966_894) = grd34(1 + $I_L966_894)
+  968.             $I_L966_894 = 1 + $I_L966_894
+  966.             if ( $I_L966_894 >= 18 ) exit
+  966.          enddo
+  966.       else if ( igrid == 37 ) then
+  971.          $I_L971_892 = 0
+  971. !dir$ ivdep
+  971.          do
+  972.             igds(1 + $I_L971_892) = grd37(1 + $I_L971_892)
+  973.             $I_L971_892 = 1 + $I_L971_892
+  971.             if ( $I_L971_892 >= 91 ) exit
+  971.          enddo
+  971.       else if ( igrid == 38 ) then
+  976.          $I_L976_890 = 0
+  976. !dir$ ivdep
+  976.          do
+  977.             igds(1 + $I_L976_890) = grd38(1 + $I_L976_890)
+  978.             $I_L976_890 = 1 + $I_L976_890
+  976.             if ( $I_L976_890 >= 91 ) exit
+  976.          enddo
+  976.       else if ( igrid == 39 ) then
+  981.          $I_L981_888 = 0
+  981. !dir$ ivdep
+  981.          do
+  982.             igds(1 + $I_L981_888) = grd39(1 + $I_L981_888)
+  983.             $I_L981_888 = 1 + $I_L981_888
+  981.             if ( $I_L981_888 >= 91 ) exit
+  981.          enddo
+  981.       else if ( igrid == 40 ) then
+  986.          $I_L986_886 = 0
+  986. !dir$ ivdep
+  986.          do
+  987.             igds(1 + $I_L986_886) = grd40(1 + $I_L986_886)
+  988.             $I_L986_886 = 1 + $I_L986_886
+  986.             if ( $I_L986_886 >= 91 ) exit
+  986.          enddo
+  986.       else if ( igrid == 41 ) then
+  991.          $I_L991_884 = 0
+  991. !dir$ ivdep
+  991.          do
+  992.             igds(1 + $I_L991_884) = grd41(1 + $I_L991_884)
+  993.             $I_L991_884 = 1 + $I_L991_884
+  991.             if ( $I_L991_884 >= 91 ) exit
+  991.          enddo
+  991.       else if ( igrid == 42 ) then
+  996.          $I_L996_882 = 0
+  996. !dir$ ivdep
+  996.          do
+  997.             igds(1 + $I_L996_882) = grd42(1 + $I_L996_882)
+  998.             $I_L996_882 = 1 + $I_L996_882
+  996.             if ( $I_L996_882 >= 91 ) exit
+  996.          enddo
+  996.       else if ( igrid == 43 ) then
+ 1001.          $I_L1001_880 = 0
+ 1001. !dir$ ivdep
+ 1001.          do
+ 1002.             igds(1 + $I_L1001_880) = grd43(1 + $I_L1001_880)
+ 1003.             $I_L1001_880 = 1 + $I_L1001_880
+ 1001.             if ( $I_L1001_880 >= 91 ) exit
+ 1001.          enddo
+ 1001.       else if ( igrid == 44 ) then
+ 1006.          $I_L1006_878 = 0
+ 1006. !dir$ ivdep
+ 1006.          do
+ 1007.             igds(1 + $I_L1006_878) = grd44(1 + $I_L1006_878)
+ 1008.             $I_L1006_878 = 1 + $I_L1006_878
+ 1006.             if ( $I_L1006_878 >= 91 ) exit
+ 1006.          enddo
+ 1006.       else if ( igrid == 45 ) then
+ 1011.          $I_L1011_876 = 0
+ 1011. !dir$ ivdep
+ 1011.          do
+ 1012.             igds(1 + $I_L1011_876) = grd45(1 + $I_L1011_876)
+ 1013.             $I_L1011_876 = 1 + $I_L1011_876
+ 1011.             if ( $I_L1011_876 >= 18 ) exit
+ 1011.          enddo
+ 1011.       else if ( igrid == 53 ) then
+ 1016.          $I_L1016_648 = 0
+ 1016. !dir$ ivdep
+ 1016.          do
+ 1017.             igds(1 + $I_L1016_648) = grd53(1 + $I_L1016_648)
+ 1018.             $I_L1016_648 = 1 + $I_L1016_648
+ 1016.             if ( $I_L1016_648 >= 18 ) exit
+ 1016.          enddo
+ 1016.       else if ( igrid == 55 ) then
+ 1021.          $I_L1021_874 = 0
+ 1021. !dir$ ivdep
+ 1021.          do
+ 1022.             igds(1 + $I_L1021_874) = grd55(1 + $I_L1021_874)
+ 1023.             $I_L1021_874 = 1 + $I_L1021_874
+ 1021.             if ( $I_L1021_874 >= 18 ) exit
+ 1021.          enddo
+ 1021.       else if ( igrid == 56 ) then
+ 1026.          $I_L1026_872 = 0
+ 1026. !dir$ ivdep
+ 1026.          do
+ 1027.             igds(1 + $I_L1026_872) = grd56(1 + $I_L1026_872)
+ 1028.             $I_L1026_872 = 1 + $I_L1026_872
+ 1026.             if ( $I_L1026_872 >= 18 ) exit
+ 1026.          enddo
+ 1026.       else if ( igrid == 61 ) then
+ 1031.          $I_L1031_870 = 0
+ 1031. !dir$ ivdep
+ 1031.          do
+ 1032.             igds(1 + $I_L1031_870) = grd61(1 + $I_L1031_870)
+ 1033.             $I_L1031_870 = 1 + $I_L1031_870
+ 1031.             if ( $I_L1031_870 >= 64 ) exit
+ 1031.          enddo
+ 1031.       else if ( igrid == 62 ) then
+ 1036.          $I_L1036_868 = 0
+ 1036. !dir$ ivdep
+ 1036.          do
+ 1037.             igds(1 + $I_L1036_868) = grd62(1 + $I_L1036_868)
+ 1038.             $I_L1036_868 = 1 + $I_L1036_868
+ 1036.             if ( $I_L1036_868 >= 64 ) exit
+ 1036.          enddo
+ 1036.       else if ( igrid == 63 ) then
+ 1041.          $I_L1041_866 = 0
+ 1041. !dir$ ivdep
+ 1041.          do
+ 1042.             igds(1 + $I_L1041_866) = grd63(1 + $I_L1041_866)
+ 1043.             $I_L1041_866 = 1 + $I_L1041_866
+ 1041.             if ( $I_L1041_866 >= 64 ) exit
+ 1041.          enddo
+ 1041.       else if ( igrid == 64 ) then
+ 1046.          $I_L1046_864 = 0
+ 1046. !dir$ ivdep
+ 1046.          do
+ 1047.             igds(1 + $I_L1046_864) = grd64(1 + $I_L1046_864)
+ 1048.             $I_L1046_864 = 1 + $I_L1046_864
+ 1046.             if ( $I_L1046_864 >= 64 ) exit
+ 1046.          enddo
+ 1046.       else if ( igrid == 85 ) then
+ 1051.          $I_L1051_862 = 0
+ 1051. !dir$ ivdep
+ 1051.          do
+ 1052.             igds(1 + $I_L1051_862) = grd85(1 + $I_L1051_862)
+ 1053.             $I_L1051_862 = 1 + $I_L1051_862
+ 1051.             if ( $I_L1051_862 >= 18 ) exit
+ 1051.          enddo
+ 1051.       else if ( igrid == 86 ) then
+ 1056.          $I_L1056_860 = 0
+ 1056. !dir$ ivdep
+ 1056.          do
+ 1057.             igds(1 + $I_L1056_860) = grd86(1 + $I_L1056_860)
+ 1058.             $I_L1056_860 = 1 + $I_L1056_860
+ 1056.             if ( $I_L1056_860 >= 18 ) exit
+ 1056.          enddo
+ 1056.       else if ( igrid == 87 ) then
+ 1061.          $I_L1061_858 = 0
+ 1061. !dir$ ivdep
+ 1061.          do
+ 1062.             igds(1 + $I_L1061_858) = grd87(1 + $I_L1061_858)
+ 1063.             $I_L1061_858 = 1 + $I_L1061_858
+ 1061.             if ( $I_L1061_858 >= 18 ) exit
+ 1061.          enddo
+ 1061.       else if ( igrid == 88 ) then
+ 1066.          $I_L1066_856 = 0
+ 1066. !dir$ ivdep
+ 1066.          do
+ 1067.             igds(1 + $I_L1066_856) = grd88(1 + $I_L1066_856)
+ 1068.             $I_L1066_856 = 1 + $I_L1066_856
+ 1066.             if ( $I_L1066_856 >= 18 ) exit
+ 1066.          enddo
+ 1066.       else if ( igrid == 90 ) then
+ 1071.          $I_L1071_854 = 0
+ 1071. !dir$ ivdep
+ 1071.          do
+ 1072.             igds(1 + $I_L1071_854) = grd90(1 + $I_L1071_854)
+ 1073.             $I_L1071_854 = 1 + $I_L1071_854
+ 1071.             if ( $I_L1071_854 >= 18 ) exit
+ 1071.          enddo
+ 1071.       else if ( igrid == 91 ) then
+ 1076.          $I_L1076_852 = 0
+ 1076. !dir$ ivdep
+ 1076.          do
+ 1077.             igds(1 + $I_L1076_852) = grd91(1 + $I_L1076_852)
+ 1078.             $I_L1076_852 = 1 + $I_L1076_852
+ 1076.             if ( $I_L1076_852 >= 18 ) exit
+ 1076.          enddo
+ 1076.       else if ( igrid == 92 ) then
+ 1081.          $I_L1081_850 = 0
+ 1081. !dir$ ivdep
+ 1081.          do
+ 1082.             igds(1 + $I_L1081_850) = grd92(1 + $I_L1081_850)
+ 1083.             $I_L1081_850 = 1 + $I_L1081_850
+ 1081.             if ( $I_L1081_850 >= 18 ) exit
+ 1081.          enddo
+ 1081.       else if ( igrid == 93 ) then
+ 1086.          $I_L1086_848 = 0
+ 1086. !dir$ ivdep
+ 1086.          do
+ 1087.             igds(1 + $I_L1086_848) = grd93(1 + $I_L1086_848)
+ 1088.             $I_L1086_848 = 1 + $I_L1086_848
+ 1086.             if ( $I_L1086_848 >= 18 ) exit
+ 1086.          enddo
+ 1086.       else if ( igrid == 94 ) then
+ 1091.          $I_L1091_846 = 0
+ 1091. !dir$ ivdep
+ 1091.          do
+ 1092.             igds(1 + $I_L1091_846) = grd94(1 + $I_L1091_846)
+ 1093.             $I_L1091_846 = 1 + $I_L1091_846
+ 1091.             if ( $I_L1091_846 >= 18 ) exit
+ 1091.          enddo
+ 1091.       else if ( igrid == 95 ) then
+ 1096.          $I_L1096_844 = 0
+ 1096. !dir$ ivdep
+ 1096.          do
+ 1097.             igds(1 + $I_L1096_844) = grd95(1 + $I_L1096_844)
+ 1098.             $I_L1096_844 = 1 + $I_L1096_844
+ 1096.             if ( $I_L1096_844 >= 18 ) exit
+ 1096.          enddo
+ 1096.       else if ( igrid == 96 ) then
+ 1101.          $I_L1101_842 = 0
+ 1101. !dir$ ivdep
+ 1101.          do
+ 1102.             igds(1 + $I_L1101_842) = grd96(1 + $I_L1101_842)
+ 1103.             $I_L1101_842 = 1 + $I_L1101_842
+ 1101.             if ( $I_L1101_842 >= 18 ) exit
+ 1101.          enddo
+ 1101.       else if ( igrid == 97 ) then
+ 1106.          $I_L1106_840 = 0
+ 1106. !dir$ ivdep
+ 1106.          do
+ 1107.             igds(1 + $I_L1106_840) = grd97(1 + $I_L1106_840)
+ 1108.             $I_L1106_840 = 1 + $I_L1106_840
+ 1106.             if ( $I_L1106_840 >= 18 ) exit
+ 1106.          enddo
+ 1106.       else if ( igrid == 98 ) then
+ 1111.          $I_L1111_838 = 0
+ 1111. !dir$ ivdep
+ 1111.          do
+ 1112.             igds(1 + $I_L1111_838) = grd98(1 + $I_L1111_838)
+ 1113.             $I_L1111_838 = 1 + $I_L1111_838
+ 1111.             if ( $I_L1111_838 >= 18 ) exit
+ 1111.          enddo
+ 1111.       else if ( igrid == 100 ) then
+ 1116.          $I_L1116_836 = 0
+ 1116. !dir$ ivdep
+ 1116.          do
+ 1117.             igds(1 + $I_L1116_836) = grd100(1 + $I_L1116_836)
+ 1118.             $I_L1116_836 = 1 + $I_L1116_836
+ 1116.             if ( $I_L1116_836 >= 18 ) exit
+ 1116.          enddo
+ 1116.       else if ( igrid == 101 ) then
+ 1121.          $I_L1121_834 = 0
+ 1121. !dir$ ivdep
+ 1121.          do
+ 1122.             igds(1 + $I_L1121_834) = grd101(1 + $I_L1121_834)
+ 1123.             $I_L1121_834 = 1 + $I_L1121_834
+ 1121.             if ( $I_L1121_834 >= 18 ) exit
+ 1121.          enddo
+ 1121.       else if ( igrid == 103 ) then
+ 1126.          $I_L1126_832 = 0
+ 1126. !dir$ ivdep
+ 1126.          do
+ 1127.             igds(1 + $I_L1126_832) = grd103(1 + $I_L1126_832)
+ 1128.             $I_L1126_832 = 1 + $I_L1126_832
+ 1126.             if ( $I_L1126_832 >= 18 ) exit
+ 1126.          enddo
+ 1126.       else if ( igrid == 104 ) then
+ 1131.          $I_L1131_830 = 0
+ 1131. !dir$ ivdep
+ 1131.          do
+ 1132.             igds(1 + $I_L1131_830) = grd104(1 + $I_L1131_830)
+ 1133.             $I_L1131_830 = 1 + $I_L1131_830
+ 1131.             if ( $I_L1131_830 >= 18 ) exit
+ 1131.          enddo
+ 1131.       else if ( igrid == 105 ) then
+ 1136.          $I_L1136_828 = 0
+ 1136. !dir$ ivdep
+ 1136.          do
+ 1137.             igds(1 + $I_L1136_828) = grd105(1 + $I_L1136_828)
+ 1138.             $I_L1136_828 = 1 + $I_L1136_828
+ 1136.             if ( $I_L1136_828 >= 18 ) exit
+ 1136.          enddo
+ 1136.       else if ( igrid == 106 ) then
+ 1141.          $I_L1141_826 = 0
+ 1141. !dir$ ivdep
+ 1141.          do
+ 1142.             igds(1 + $I_L1141_826) = grd106(1 + $I_L1141_826)
+ 1143.             $I_L1141_826 = 1 + $I_L1141_826
+ 1141.             if ( $I_L1141_826 >= 18 ) exit
+ 1141.          enddo
+ 1141.       else if ( igrid == 107 ) then
+ 1146.          $I_L1146_824 = 0
+ 1146. !dir$ ivdep
+ 1146.          do
+ 1147.             igds(1 + $I_L1146_824) = grd107(1 + $I_L1146_824)
+ 1148.             $I_L1146_824 = 1 + $I_L1146_824
+ 1146.             if ( $I_L1146_824 >= 18 ) exit
+ 1146.          enddo
+ 1146.       else if ( igrid == 110 ) then
+ 1151.          $I_L1151_650 = 0
+ 1151. !dir$ ivdep
+ 1151.          do
+ 1152.             igds(1 + $I_L1151_650) = grd110(1 + $I_L1151_650)
+ 1153.             $I_L1151_650 = 1 + $I_L1151_650
+ 1151.             if ( $I_L1151_650 >= 18 ) exit
+ 1151.          enddo
+ 1151.       else if ( igrid == 120 ) then
+ 1156.          $I_L1156_652 = 0
+ 1156. !dir$ ivdep
+ 1156.          do
+ 1157.             igds(1 + $I_L1156_652) = grd120(1 + $I_L1156_652)
+ 1158.             $I_L1156_652 = 1 + $I_L1156_652
+ 1156.             if ( $I_L1156_652 >= 18 ) exit
+ 1156.          enddo
+ 1156.       else if ( igrid == 122 ) then
+ 1161.          $I_L1161_654 = 0
+ 1161. !dir$ ivdep
+ 1161.          do
+ 1162.             igds(1 + $I_L1161_654) = grd122(1 + $I_L1161_654)
+ 1163.             $I_L1161_654 = 1 + $I_L1161_654
+ 1161.             if ( $I_L1161_654 >= 18 ) exit
+ 1161.          enddo
+ 1161.       else if ( igrid == 123 ) then
+ 1166.          $I_L1166_656 = 0
+ 1166. !dir$ ivdep
+ 1166.          do
+ 1167.             igds(1 + $I_L1166_656) = grd123(1 + $I_L1166_656)
+ 1168.             $I_L1166_656 = 1 + $I_L1166_656
+ 1166.             if ( $I_L1166_656 >= 18 ) exit
+ 1166.          enddo
+ 1166.       else if ( igrid == 124 ) then
+ 1171.          $I_L1171_658 = 0
+ 1171. !dir$ ivdep
+ 1171.          do
+ 1172.             igds(1 + $I_L1171_658) = grd124(1 + $I_L1171_658)
+ 1173.             $I_L1171_658 = 1 + $I_L1171_658
+ 1171.             if ( $I_L1171_658 >= 18 ) exit
+ 1171.          enddo
+ 1171.       else if ( igrid == 125 ) then
+ 1176.          $I_L1176_660 = 0
+ 1176. !dir$ ivdep
+ 1176.          do
+ 1177.             igds(1 + $I_L1176_660) = grd125(1 + $I_L1176_660)
+ 1178.             $I_L1176_660 = 1 + $I_L1176_660
+ 1176.             if ( $I_L1176_660 >= 18 ) exit
+ 1176.          enddo
+ 1176.       else if ( igrid == 126 ) then
+ 1181.          $I_L1181_822 = 0
+ 1181. !dir$ ivdep
+ 1181.          do
+ 1182.             igds(1 + $I_L1181_822) = grd126(1 + $I_L1181_822)
+ 1183.             $I_L1181_822 = 1 + $I_L1181_822
+ 1181.             if ( $I_L1181_822 >= 18 ) exit
+ 1181.          enddo
+ 1181.       else if ( igrid == 127 ) then
+ 1186.          $I_L1186_662 = 0
+ 1186. !dir$ ivdep
+ 1186.          do
+ 1187.             igds(1 + $I_L1186_662) = grd127(1 + $I_L1186_662)
+ 1188.             $I_L1186_662 = 1 + $I_L1186_662
+ 1186.             if ( $I_L1186_662 >= 18 ) exit
+ 1186.          enddo
+ 1186.       else if ( igrid == 130 ) then
+ 1191.          $I_L1191_664 = 0
+ 1191. !dir$ ivdep
+ 1191.          do
+ 1192.             igds(1 + $I_L1191_664) = grd130(1 + $I_L1191_664)
+ 1193.             $I_L1191_664 = 1 + $I_L1191_664
+ 1191.             if ( $I_L1191_664 >= 18 ) exit
+ 1191.          enddo
+ 1191.       else if ( igrid == 138 ) then
+ 1196.          $I_L1196_666 = 0
+ 1196. !dir$ ivdep
+ 1196.          do
+ 1197.             igds(1 + $I_L1196_666) = grd138(1 + $I_L1196_666)
+ 1198.             $I_L1196_666 = 1 + $I_L1196_666
+ 1196.             if ( $I_L1196_666 >= 18 ) exit
+ 1196.          enddo
+ 1196.       else if ( igrid == 145 ) then
+ 1201.          $I_L1201_668 = 0
+ 1201. !dir$ ivdep
+ 1201.          do
+ 1202.             igds(1 + $I_L1201_668) = grd145(1 + $I_L1201_668)
+ 1203.             $I_L1201_668 = 1 + $I_L1201_668
+ 1201.             if ( $I_L1201_668 >= 18 ) exit
+ 1201.          enddo
+ 1201.       else if ( igrid == 146 ) then
+ 1206.          $I_L1206_670 = 0
+ 1206. !dir$ ivdep
+ 1206.          do
+ 1207.             igds(1 + $I_L1206_670) = grd146(1 + $I_L1206_670)
+ 1208.             $I_L1206_670 = 1 + $I_L1206_670
+ 1206.             if ( $I_L1206_670 >= 18 ) exit
+ 1206.          enddo
+ 1206.       else if ( igrid == 147 ) then
+ 1211.          $I_L1211_672 = 0
+ 1211. !dir$ ivdep
+ 1211.          do
+ 1212.             igds(1 + $I_L1211_672) = grd147(1 + $I_L1211_672)
+ 1213.             $I_L1211_672 = 1 + $I_L1211_672
+ 1211.             if ( $I_L1211_672 >= 18 ) exit
+ 1211.          enddo
+ 1211.       else if ( igrid == 148 ) then
+ 1216.          $I_L1216_674 = 0
+ 1216. !dir$ ivdep
+ 1216.          do
+ 1217.             igds(1 + $I_L1216_674) = grd148(1 + $I_L1216_674)
+ 1218.             $I_L1216_674 = 1 + $I_L1216_674
+ 1216.             if ( $I_L1216_674 >= 18 ) exit
+ 1216.          enddo
+ 1216.       else if ( igrid == 160 ) then
+ 1221.          $I_L1221_676 = 0
+ 1221. !dir$ ivdep
+ 1221.          do
+ 1222.             igds(1 + $I_L1221_676) = grd160(1 + $I_L1221_676)
+ 1223.             $I_L1221_676 = 1 + $I_L1221_676
+ 1221.             if ( $I_L1221_676 >= 18 ) exit
+ 1221.          enddo
+ 1221.       else if ( igrid == 161 ) then
+ 1226.          $I_L1226_678 = 0
+ 1226. !dir$ ivdep
+ 1226.          do
+ 1227.             igds(1 + $I_L1226_678) = grd161(1 + $I_L1226_678)
+ 1228.             $I_L1226_678 = 1 + $I_L1226_678
+ 1226.             if ( $I_L1226_678 >= 18 ) exit
+ 1226.          enddo
+ 1226.       else if ( igrid == 163 ) then
+ 1230.          $I_L1230_680 = 0
+ 1230. !dir$ ivdep
+ 1230.          do
+ 1231.             igds(1 + $I_L1230_680) = grd163(1 + $I_L1230_680)
+ 1232.             $I_L1230_680 = 1 + $I_L1230_680
+ 1230.             if ( $I_L1230_680 >= 18 ) exit
+ 1230.          enddo
+ 1230.       else if ( igrid == 170 ) then
+ 1235.          $I_L1235_682 = 0
+ 1235. !dir$ ivdep
+ 1235.          do
+ 1236.             igds(1 + $I_L1235_682) = grd170(1 + $I_L1235_682)
+ 1237.             $I_L1235_682 = 1 + $I_L1235_682
+ 1235.             if ( $I_L1235_682 >= 18 ) exit
+ 1235.          enddo
+ 1235.       else if ( igrid == 171 ) then
+ 1240.          $I_L1240_684 = 0
+ 1240. !dir$ ivdep
+ 1240.          do
+ 1241.             igds(1 + $I_L1240_684) = grd171(1 + $I_L1240_684)
+ 1242.             $I_L1240_684 = 1 + $I_L1240_684
+ 1240.             if ( $I_L1240_684 >= 18 ) exit
+ 1240.          enddo
+ 1240.       else if ( igrid == 172 ) then
+ 1245.          $I_L1245_686 = 0
+ 1245. !dir$ ivdep
+ 1245.          do
+ 1246.             igds(1 + $I_L1245_686) = grd172(1 + $I_L1245_686)
+ 1247.             $I_L1245_686 = 1 + $I_L1245_686
+ 1245.             if ( $I_L1245_686 >= 18 ) exit
+ 1245.          enddo
+ 1245.       else if ( igrid == 173 ) then
+ 1250.          $I_L1250_688 = 0
+ 1250. !dir$ ivdep
+ 1250.          do
+ 1251.             igds(1 + $I_L1250_688) = grd173(1 + $I_L1250_688)
+ 1252.             $I_L1250_688 = 1 + $I_L1250_688
+ 1250.             if ( $I_L1250_688 >= 18 ) exit
+ 1250.          enddo
+ 1250.       else if ( igrid == 174 ) then
+ 1255.          $I_L1255_690 = 0
+ 1255. !dir$ ivdep
+ 1255.          do
+ 1256.             igds(1 + $I_L1255_690) = grd174(1 + $I_L1255_690)
+ 1257.             $I_L1255_690 = 1 + $I_L1255_690
+ 1255.             if ( $I_L1255_690 >= 18 ) exit
+ 1255.          enddo
+ 1255.       else if ( igrid == 175 ) then
+ 1260.          $I_L1260_692 = 0
+ 1260. !dir$ ivdep
+ 1260.          do
+ 1261.             igds(1 + $I_L1260_692) = grd175(1 + $I_L1260_692)
+ 1262.             $I_L1260_692 = 1 + $I_L1260_692
+ 1260.             if ( $I_L1260_692 >= 18 ) exit
+ 1260.          enddo
+ 1260.       else if ( igrid == 176 ) then
+ 1265.          $I_L1265_694 = 0
+ 1265. !dir$ ivdep
+ 1265.          do
+ 1266.             igds(1 + $I_L1265_694) = grd176(1 + $I_L1265_694)
+ 1267.             $I_L1265_694 = 1 + $I_L1265_694
+ 1265.             if ( $I_L1265_694 >= 18 ) exit
+ 1265.          enddo
+ 1265.       else if ( igrid == 180 ) then
+ 1270.          $I_L1270_696 = 0
+ 1270. !dir$ ivdep
+ 1270.          do
+ 1271.             igds(1 + $I_L1270_696) = grd180(1 + $I_L1270_696)
+ 1272.             $I_L1270_696 = 1 + $I_L1270_696
+ 1270.             if ( $I_L1270_696 >= 18 ) exit
+ 1270.          enddo
+ 1270.       else if ( igrid == 181 ) then
+ 1275.          $I_L1275_698 = 0
+ 1275. !dir$ ivdep
+ 1275.          do
+ 1276.             igds(1 + $I_L1275_698) = grd181(1 + $I_L1275_698)
+ 1277.             $I_L1275_698 = 1 + $I_L1275_698
+ 1275.             if ( $I_L1275_698 >= 18 ) exit
+ 1275.          enddo
+ 1275.       else if ( igrid == 182 ) then
+ 1280.          $I_L1280_700 = 0
+ 1280. !dir$ ivdep
+ 1280.          do
+ 1281.             igds(1 + $I_L1280_700) = grd182(1 + $I_L1280_700)
+ 1282.             $I_L1280_700 = 1 + $I_L1280_700
+ 1280.             if ( $I_L1280_700 >= 18 ) exit
+ 1280.          enddo
+ 1280.       else if ( igrid == 183 ) then
+ 1285.          $I_L1285_702 = 0
+ 1285. !dir$ ivdep
+ 1285.          do
+ 1286.             igds(1 + $I_L1285_702) = grd183(1 + $I_L1285_702)
+ 1287.             $I_L1285_702 = 1 + $I_L1285_702
+ 1285.             if ( $I_L1285_702 >= 18 ) exit
+ 1285.          enddo
+ 1285.       else if ( igrid == 190 ) then
+ 1290.          $I_L1290_820 = 0
+ 1290. !dir$ ivdep
+ 1290.          do
+ 1291.             igds(1 + $I_L1290_820) = grd190(1 + $I_L1290_820)
+ 1292.             $I_L1290_820 = 1 + $I_L1290_820
+ 1290.             if ( $I_L1290_820 >= 18 ) exit
+ 1290.          enddo
+ 1290.       else if ( igrid == 192 ) then
+ 1295.          $I_L1295_818 = 0
+ 1295. !dir$ ivdep
+ 1295.          do
+ 1296.             igds(1 + $I_L1295_818) = grd192(1 + $I_L1295_818)
+ 1297.             $I_L1295_818 = 1 + $I_L1295_818
+ 1295.             if ( $I_L1295_818 >= 18 ) exit
+ 1295.          enddo
+ 1295.       else if ( igrid == 194 ) then
+ 1300.          $I_L1300_816 = 0
+ 1300. !dir$ ivdep
+ 1300.          do
+ 1301.             igds(1 + $I_L1300_816) = grd194(1 + $I_L1300_816)
+ 1302.             $I_L1300_816 = 1 + $I_L1300_816
+ 1300.             if ( $I_L1300_816 >= 18 ) exit
+ 1300.          enddo
+ 1300.       else if ( igrid == 196 ) then
+ 1305.          $I_L1305_814 = 0
+ 1305. !dir$ ivdep
+ 1305.          do
+ 1306.             igds(1 + $I_L1305_814) = grd196(1 + $I_L1305_814)
+ 1307.             $I_L1305_814 = 1 + $I_L1305_814
+ 1305.             if ( $I_L1305_814 >= 18 ) exit
+ 1305.          enddo
+ 1305.       else if ( igrid == 198 ) then
+ 1310.          $I_L1310_812 = 0
+ 1310. !dir$ ivdep
+ 1310.          do
+ 1311.             igds(1 + $I_L1310_812) = grd198(1 + $I_L1310_812)
+ 1312.             $I_L1310_812 = 1 + $I_L1310_812
+ 1310.             if ( $I_L1310_812 >= 18 ) exit
+ 1310.          enddo
+ 1310.       else if ( igrid == 201 ) then
+ 1315.          $I_L1315_810 = 0
+ 1315. !dir$ ivdep
+ 1315.          do
+ 1316.             igds(1 + $I_L1315_810) = grd201(1 + $I_L1315_810)
+ 1317.             $I_L1315_810 = 1 + $I_L1315_810
+ 1315.             if ( $I_L1315_810 >= 18 ) exit
+ 1315.          enddo
+ 1315.       else if ( igrid == 202 ) then
+ 1320.          $I_L1320_808 = 0
+ 1320. !dir$ ivdep
+ 1320.          do
+ 1321.             igds(1 + $I_L1320_808) = grd202(1 + $I_L1320_808)
+ 1322.             $I_L1320_808 = 1 + $I_L1320_808
+ 1320.             if ( $I_L1320_808 >= 18 ) exit
+ 1320.          enddo
+ 1320.       else if ( igrid == 203 ) then
+ 1325.          $I_L1325_806 = 0
+ 1325. !dir$ ivdep
+ 1325.          do
+ 1326.             igds(1 + $I_L1325_806) = grd203(1 + $I_L1325_806)
+ 1327.             $I_L1325_806 = 1 + $I_L1325_806
+ 1325.             if ( $I_L1325_806 >= 18 ) exit
+ 1325.          enddo
+ 1325.       else if ( igrid == 204 ) then
+ 1330.          $I_L1330_804 = 0
+ 1330. !dir$ ivdep
+ 1330.          do
+ 1331.             igds(1 + $I_L1330_804) = grd204(1 + $I_L1330_804)
+ 1332.             $I_L1330_804 = 1 + $I_L1330_804
+ 1330.             if ( $I_L1330_804 >= 18 ) exit
+ 1330.          enddo
+ 1330.       else if ( igrid == 205 ) then
+ 1335.          $I_L1335_802 = 0
+ 1335. !dir$ ivdep
+ 1335.          do
+ 1336.             igds(1 + $I_L1335_802) = grd205(1 + $I_L1335_802)
+ 1337.             $I_L1335_802 = 1 + $I_L1335_802
+ 1335.             if ( $I_L1335_802 >= 18 ) exit
+ 1335.          enddo
+ 1335.       else if ( igrid == 206 ) then
+ 1340.          $I_L1340_800 = 0
+ 1340. !dir$ ivdep
+ 1340.          do
+ 1341.             igds(1 + $I_L1340_800) = grd206(1 + $I_L1340_800)
+ 1342.             $I_L1340_800 = 1 + $I_L1340_800
+ 1340.             if ( $I_L1340_800 >= 18 ) exit
+ 1340.          enddo
+ 1340.       else if ( igrid == 207 ) then
+ 1345.          $I_L1345_798 = 0
+ 1345. !dir$ ivdep
+ 1345.          do
+ 1346.             igds(1 + $I_L1345_798) = grd207(1 + $I_L1345_798)
+ 1347.             $I_L1345_798 = 1 + $I_L1345_798
+ 1345.             if ( $I_L1345_798 >= 18 ) exit
+ 1345.          enddo
+ 1345.       else if ( igrid == 208 ) then
+ 1350.          $I_L1350_796 = 0
+ 1350. !dir$ ivdep
+ 1350.          do
+ 1351.             igds(1 + $I_L1350_796) = grd208(1 + $I_L1350_796)
+ 1352.             $I_L1350_796 = 1 + $I_L1350_796
+ 1350.             if ( $I_L1350_796 >= 18 ) exit
+ 1350.          enddo
+ 1350.       else if ( igrid == 209 ) then
+ 1355.          $I_L1355_794 = 0
+ 1355. !dir$ ivdep
+ 1355.          do
+ 1356.             igds(1 + $I_L1355_794) = grd209(1 + $I_L1355_794)
+ 1357.             $I_L1355_794 = 1 + $I_L1355_794
+ 1355.             if ( $I_L1355_794 >= 18 ) exit
+ 1355.          enddo
+ 1355.       else if ( igrid == 210 ) then
+ 1360.          $I_L1360_792 = 0
+ 1360. !dir$ ivdep
+ 1360.          do
+ 1361.             igds(1 + $I_L1360_792) = grd210(1 + $I_L1360_792)
+ 1362.             $I_L1360_792 = 1 + $I_L1360_792
+ 1360.             if ( $I_L1360_792 >= 18 ) exit
+ 1360.          enddo
+ 1360.       else if ( igrid == 211 ) then
+ 1365.          $I_L1365_790 = 0
+ 1365. !dir$ ivdep
+ 1365.          do
+ 1366.             igds(1 + $I_L1365_790) = grd211(1 + $I_L1365_790)
+ 1367.             $I_L1365_790 = 1 + $I_L1365_790
+ 1365.             if ( $I_L1365_790 >= 18 ) exit
+ 1365.          enddo
+ 1365.       else if ( igrid == 212 ) then
+ 1370.          $I_L1370_788 = 0
+ 1370. !dir$ ivdep
+ 1370.          do
+ 1371.             igds(1 + $I_L1370_788) = grd212(1 + $I_L1370_788)
+ 1372.             $I_L1370_788 = 1 + $I_L1370_788
+ 1370.             if ( $I_L1370_788 >= 18 ) exit
+ 1370.          enddo
+ 1370.       else if ( igrid == 213 ) then
+ 1375.          $I_L1375_786 = 0
+ 1375. !dir$ ivdep
+ 1375.          do
+ 1376.             igds(1 + $I_L1375_786) = grd213(1 + $I_L1375_786)
+ 1377.             $I_L1375_786 = 1 + $I_L1375_786
+ 1375.             if ( $I_L1375_786 >= 18 ) exit
+ 1375.          enddo
+ 1375.       else if ( igrid == 214 ) then
+ 1380.          $I_L1380_784 = 0
+ 1380. !dir$ ivdep
+ 1380.          do
+ 1381.             igds(1 + $I_L1380_784) = grd214(1 + $I_L1380_784)
+ 1382.             $I_L1380_784 = 1 + $I_L1380_784
+ 1380.             if ( $I_L1380_784 >= 18 ) exit
+ 1380.          enddo
+ 1380.       else if ( igrid == 215 ) then
+ 1385.          $I_L1385_782 = 0
+ 1385. !dir$ ivdep
+ 1385.          do
+ 1386.             igds(1 + $I_L1385_782) = grd215(1 + $I_L1385_782)
+ 1387.             $I_L1385_782 = 1 + $I_L1385_782
+ 1385.             if ( $I_L1385_782 >= 18 ) exit
+ 1385.          enddo
+ 1385.       else if ( igrid == 216 ) then
+ 1390.          $I_L1390_780 = 0
+ 1390. !dir$ ivdep
+ 1390.          do
+ 1391.             igds(1 + $I_L1390_780) = grd216(1 + $I_L1390_780)
+ 1392.             $I_L1390_780 = 1 + $I_L1390_780
+ 1390.             if ( $I_L1390_780 >= 18 ) exit
+ 1390.          enddo
+ 1390.       else if ( igrid == 217 ) then
+ 1395.          $I_L1395_778 = 0
+ 1395. !dir$ ivdep
+ 1395.          do
+ 1396.             igds(1 + $I_L1395_778) = grd217(1 + $I_L1395_778)
+ 1397.             $I_L1395_778 = 1 + $I_L1395_778
+ 1395.             if ( $I_L1395_778 >= 18 ) exit
+ 1395.          enddo
+ 1395.       else if ( igrid == 218 ) then
+ 1400.          $I_L1400_776 = 0
+ 1400. !dir$ ivdep
+ 1400.          do
+ 1401.             igds(1 + $I_L1400_776) = grd218(1 + $I_L1400_776)
+ 1402.             $I_L1400_776 = 1 + $I_L1400_776
+ 1400.             if ( $I_L1400_776 >= 18 ) exit
+ 1400.          enddo
+ 1400.       else if ( igrid == 219 ) then
+ 1405.          $I_L1405_774 = 0
+ 1405. !dir$ ivdep
+ 1405.          do
+ 1406.             igds(1 + $I_L1405_774) = grd219(1 + $I_L1405_774)
+ 1407.             $I_L1405_774 = 1 + $I_L1405_774
+ 1405.             if ( $I_L1405_774 >= 18 ) exit
+ 1405.          enddo
+ 1405.       else if ( igrid == 220 ) then
+ 1410.          $I_L1410_772 = 0
+ 1410. !dir$ ivdep
+ 1410.          do
+ 1411.             igds(1 + $I_L1410_772) = grd220(1 + $I_L1410_772)
+ 1412.             $I_L1410_772 = 1 + $I_L1410_772
+ 1410.             if ( $I_L1410_772 >= 18 ) exit
+ 1410.          enddo
+ 1410.       else if ( igrid == 221 ) then
+ 1415.          $I_L1415_770 = 0
+ 1415. !dir$ ivdep
+ 1415.          do
+ 1416.             igds(1 + $I_L1415_770) = grd221(1 + $I_L1415_770)
+ 1417.             $I_L1415_770 = 1 + $I_L1415_770
+ 1415.             if ( $I_L1415_770 >= 18 ) exit
+ 1415.          enddo
+ 1415.       else if ( igrid == 222 ) then
+ 1420.          $I_L1420_768 = 0
+ 1420. !dir$ ivdep
+ 1420.          do
+ 1421.             igds(1 + $I_L1420_768) = grd222(1 + $I_L1420_768)
+ 1422.             $I_L1420_768 = 1 + $I_L1420_768
+ 1420.             if ( $I_L1420_768 >= 18 ) exit
+ 1420.          enddo
+ 1420.       else if ( igrid == 223 ) then
+ 1425.          $I_L1425_766 = 0
+ 1425. !dir$ ivdep
+ 1425.          do
+ 1426.             igds(1 + $I_L1425_766) = grd223(1 + $I_L1425_766)
+ 1427.             $I_L1425_766 = 1 + $I_L1425_766
+ 1425.             if ( $I_L1425_766 >= 18 ) exit
+ 1425.          enddo
+ 1425.       else if ( igrid == 224 ) then
+ 1430.          $I_L1430_764 = 0
+ 1430. !dir$ ivdep
+ 1430.          do
+ 1431.             igds(1 + $I_L1430_764) = grd224(1 + $I_L1430_764)
+ 1432.             $I_L1430_764 = 1 + $I_L1430_764
+ 1430.             if ( $I_L1430_764 >= 18 ) exit
+ 1430.          enddo
+ 1430.       else if ( igrid == 225 ) then
+ 1435.          $I_L1435_762 = 0
+ 1435. !dir$ ivdep
+ 1435.          do
+ 1436.             igds(1 + $I_L1435_762) = grd225(1 + $I_L1435_762)
+ 1437.             $I_L1435_762 = 1 + $I_L1435_762
+ 1435.             if ( $I_L1435_762 >= 18 ) exit
+ 1435.          enddo
+ 1435.       else if ( igrid == 226 ) then
+ 1440.          $I_L1440_760 = 0
+ 1440. !dir$ ivdep
+ 1440.          do
+ 1441.             igds(1 + $I_L1440_760) = grd226(1 + $I_L1440_760)
+ 1442.             $I_L1440_760 = 1 + $I_L1440_760
+ 1440.             if ( $I_L1440_760 >= 18 ) exit
+ 1440.          enddo
+ 1440.       else if ( igrid == 227 ) then
+ 1445.          $I_L1445_758 = 0
+ 1445. !dir$ ivdep
+ 1445.          do
+ 1446.             igds(1 + $I_L1445_758) = grd227(1 + $I_L1445_758)
+ 1447.             $I_L1445_758 = 1 + $I_L1445_758
+ 1445.             if ( $I_L1445_758 >= 18 ) exit
+ 1445.          enddo
+ 1445.       else if ( igrid == 228 ) then
+ 1450.          $I_L1450_756 = 0
+ 1450. !dir$ ivdep
+ 1450.          do
+ 1451.             igds(1 + $I_L1450_756) = grd228(1 + $I_L1450_756)
+ 1452.             $I_L1450_756 = 1 + $I_L1450_756
+ 1450.             if ( $I_L1450_756 >= 18 ) exit
+ 1450.          enddo
+ 1450.       else if ( igrid == 229 ) then
+ 1455.          $I_L1455_754 = 0
+ 1455. !dir$ ivdep
+ 1455.          do
+ 1456.             igds(1 + $I_L1455_754) = grd229(1 + $I_L1455_754)
+ 1457.             $I_L1455_754 = 1 + $I_L1455_754
+ 1455.             if ( $I_L1455_754 >= 18 ) exit
+ 1455.          enddo
+ 1455.       else if ( igrid == 230 ) then
+ 1460.          $I_L1460_752 = 0
+ 1460. !dir$ ivdep
+ 1460.          do
+ 1461.             igds(1 + $I_L1460_752) = grd230(1 + $I_L1460_752)
+ 1462.             $I_L1460_752 = 1 + $I_L1460_752
+ 1460.             if ( $I_L1460_752 >= 18 ) exit
+ 1460.          enddo
+ 1460.       else if ( igrid == 231 ) then
+ 1465.          $I_L1465_750 = 0
+ 1465. !dir$ ivdep
+ 1465.          do
+ 1466.             igds(1 + $I_L1465_750) = grd231(1 + $I_L1465_750)
+ 1467.             $I_L1465_750 = 1 + $I_L1465_750
+ 1465.             if ( $I_L1465_750 >= 18 ) exit
+ 1465.          enddo
+ 1465.       else if ( igrid == 232 ) then
+ 1470.          $I_L1470_748 = 0
+ 1470. !dir$ ivdep
+ 1470.          do
+ 1471.             igds(1 + $I_L1470_748) = grd232(1 + $I_L1470_748)
+ 1472.             $I_L1470_748 = 1 + $I_L1470_748
+ 1470.             if ( $I_L1470_748 >= 18 ) exit
+ 1470.          enddo
+ 1470.       else if ( igrid == 233 ) then
+ 1475.          $I_L1475_746 = 0
+ 1475. !dir$ ivdep
+ 1475.          do
+ 1476.             igds(1 + $I_L1475_746) = grd233(1 + $I_L1475_746)
+ 1477.             $I_L1475_746 = 1 + $I_L1475_746
+ 1475.             if ( $I_L1475_746 >= 18 ) exit
+ 1475.          enddo
+ 1475.       else if ( igrid == 234 ) then
+ 1480.          $I_L1480_744 = 0
+ 1480. !dir$ ivdep
+ 1480.          do
+ 1481.             igds(1 + $I_L1480_744) = grd234(1 + $I_L1480_744)
+ 1482.             $I_L1480_744 = 1 + $I_L1480_744
+ 1480.             if ( $I_L1480_744 >= 18 ) exit
+ 1480.          enddo
+ 1480.       else if ( igrid == 235 ) then
+ 1485.          $I_L1485_742 = 0
+ 1485. !dir$ ivdep
+ 1485.          do
+ 1486.             igds(1 + $I_L1485_742) = grd235(1 + $I_L1485_742)
+ 1487.             $I_L1485_742 = 1 + $I_L1485_742
+ 1485.             if ( $I_L1485_742 >= 18 ) exit
+ 1485.          enddo
+ 1485.       else if ( igrid == 236 ) then
+ 1490.          $I_L1490_740 = 0
+ 1490. !dir$ ivdep
+ 1490.          do
+ 1491.             igds(1 + $I_L1490_740) = grd236(1 + $I_L1490_740)
+ 1492.             $I_L1490_740 = 1 + $I_L1490_740
+ 1490.             if ( $I_L1490_740 >= 18 ) exit
+ 1490.          enddo
+ 1490.       else if ( igrid == 237 ) then
+ 1495.          $I_L1495_738 = 0
+ 1495. !dir$ ivdep
+ 1495.          do
+ 1496.             igds(1 + $I_L1495_738) = grd237(1 + $I_L1495_738)
+ 1497.             $I_L1495_738 = 1 + $I_L1495_738
+ 1495.             if ( $I_L1495_738 >= 18 ) exit
+ 1495.          enddo
+ 1495.       else if ( igrid == 238 ) then
+ 1500.          $I_L1500_704 = 0
+ 1500. !dir$ ivdep
+ 1500.          do
+ 1501.             igds(1 + $I_L1500_704) = grd238(1 + $I_L1500_704)
+ 1502.             $I_L1500_704 = 1 + $I_L1500_704
+ 1500.             if ( $I_L1500_704 >= 18 ) exit
+ 1500.          enddo
+ 1500.       else if ( igrid == 239 ) then
+ 1505.          $I_L1505_706 = 0
+ 1505. !dir$ ivdep
+ 1505.          do
+ 1506.             igds(1 + $I_L1505_706) = grd239(1 + $I_L1505_706)
+ 1507.             $I_L1505_706 = 1 + $I_L1505_706
+ 1505.             if ( $I_L1505_706 >= 18 ) exit
+ 1505.          enddo
+ 1505.       else if ( igrid == 240 ) then
+ 1510.          $I_L1510_708 = 0
+ 1510. !dir$ ivdep
+ 1510.          do
+ 1511.             igds(1 + $I_L1510_708) = grd240(1 + $I_L1510_708)
+ 1512.             $I_L1510_708 = 1 + $I_L1510_708
+ 1510.             if ( $I_L1510_708 >= 18 ) exit
+ 1510.          enddo
+ 1510.       else if ( igrid == 241 ) then
+ 1515.          $I_L1515_736 = 0
+ 1515. !dir$ ivdep
+ 1515.          do
+ 1516.             igds(1 + $I_L1515_736) = grd241(1 + $I_L1515_736)
+ 1517.             $I_L1515_736 = 1 + $I_L1515_736
+ 1515.             if ( $I_L1515_736 >= 18 ) exit
+ 1515.          enddo
+ 1515.       else if ( igrid == 242 ) then
+ 1520.          $I_L1520_734 = 0
+ 1520. !dir$ ivdep
+ 1520.          do
+ 1521.             igds(1 + $I_L1520_734) = grd242(1 + $I_L1520_734)
+ 1522.             $I_L1520_734 = 1 + $I_L1520_734
+ 1520.             if ( $I_L1520_734 >= 18 ) exit
+ 1520.          enddo
+ 1520.       else if ( igrid == 243 ) then
+ 1525.          $I_L1525_732 = 0
+ 1525. !dir$ ivdep
+ 1525.          do
+ 1526.             igds(1 + $I_L1525_732) = grd243(1 + $I_L1525_732)
+ 1527.             $I_L1525_732 = 1 + $I_L1525_732
+ 1525.             if ( $I_L1525_732 >= 18 ) exit
+ 1525.          enddo
+ 1525.       else if ( igrid == 244 ) then
+ 1530.          $I_L1530_710 = 0
+ 1530. !dir$ ivdep
+ 1530.          do
+ 1531.             igds(1 + $I_L1530_710) = grd244(1 + $I_L1530_710)
+ 1532.             $I_L1530_710 = 1 + $I_L1530_710
+ 1530.             if ( $I_L1530_710 >= 18 ) exit
+ 1530.          enddo
+ 1530.       else if ( igrid == 245 ) then
+ 1535.          $I_L1535_730 = 0
+ 1535. !dir$ ivdep
+ 1535.          do
+ 1536.             igds(1 + $I_L1535_730) = grd245(1 + $I_L1535_730)
+ 1537.             $I_L1535_730 = 1 + $I_L1535_730
+ 1535.             if ( $I_L1535_730 >= 18 ) exit
+ 1535.          enddo
+ 1535.       else if ( igrid == 246 ) then
+ 1540.          $I_L1540_728 = 0
+ 1540. !dir$ ivdep
+ 1540.          do
+ 1541.             igds(1 + $I_L1540_728) = grd246(1 + $I_L1540_728)
+ 1542.             $I_L1540_728 = 1 + $I_L1540_728
+ 1540.             if ( $I_L1540_728 >= 18 ) exit
+ 1540.          enddo
+ 1540.       else if ( igrid == 247 ) then
+ 1545.          $I_L1545_726 = 0
+ 1545. !dir$ ivdep
+ 1545.          do
+ 1546.             igds(1 + $I_L1545_726) = grd247(1 + $I_L1545_726)
+ 1547.             $I_L1545_726 = 1 + $I_L1545_726
+ 1545.             if ( $I_L1545_726 >= 18 ) exit
+ 1545.          enddo
+ 1545.       else if ( igrid == 248 ) then
+ 1550.          $I_L1550_724 = 0
+ 1550. !dir$ ivdep
+ 1550.          do
+ 1551.             igds(1 + $I_L1550_724) = grd248(1 + $I_L1550_724)
+ 1552.             $I_L1550_724 = 1 + $I_L1550_724
+ 1550.             if ( $I_L1550_724 >= 18 ) exit
+ 1550.          enddo
+ 1550.       else if ( igrid == 249 ) then
+ 1555.          $I_L1555_722 = 0
+ 1555. !dir$ ivdep
+ 1555.          do
+ 1556.             igds(1 + $I_L1555_722) = grd249(1 + $I_L1555_722)
+ 1557.             $I_L1555_722 = 1 + $I_L1555_722
+ 1555.             if ( $I_L1555_722 >= 18 ) exit
+ 1555.          enddo
+ 1555.       else if ( igrid == 250 ) then
+ 1560.          $I_L1560_720 = 0
+ 1560. !dir$ ivdep
+ 1560.          do
+ 1561.             igds(1 + $I_L1560_720) = grd250(1 + $I_L1560_720)
+ 1562.             $I_L1560_720 = 1 + $I_L1560_720
+ 1560.             if ( $I_L1560_720 >= 18 ) exit
+ 1560.          enddo
+ 1560.       else if ( igrid == 251 ) then
+ 1565.          $I_L1565_718 = 0
+ 1565. !dir$ ivdep
+ 1565.          do
+ 1566.             igds(1 + $I_L1565_718) = grd251(1 + $I_L1565_718)
+ 1567.             $I_L1565_718 = 1 + $I_L1565_718
+ 1565.             if ( $I_L1565_718 >= 18 ) exit
+ 1565.          enddo
+ 1565.       else if ( igrid == 252 ) then
+ 1570.          $I_L1570_716 = 0
+ 1570. !dir$ ivdep
+ 1570.          do
+ 1571.             igds(1 + $I_L1570_716) = grd252(1 + $I_L1570_716)
+ 1572.             $I_L1570_716 = 1 + $I_L1570_716
+ 1570.             if ( $I_L1570_716 >= 18 ) exit
+ 1570.          enddo
+ 1570.       else if ( igrid == 253 ) then
+ 1574.          $I_L1574_714 = 0
+ 1574. !dir$ ivdep
+ 1574.          do
+ 1575.             igds(1 + $I_L1574_714) = grd253(1 + $I_L1574_714)
+ 1576.             $I_L1574_714 = 1 + $I_L1574_714
+ 1574.             if ( $I_L1574_714 >= 18 ) exit
+ 1574.          enddo
+ 1574.       else if ( igrid == 254 ) then
+ 1578.          $I_L1578_712 = 0
+ 1578. !dir$ ivdep
+ 1578.          do
+ 1579.             igds(1 + $I_L1578_712) = grd254(1 + $I_L1578_712)
+ 1580.             $I_L1578_712 = 1 + $I_L1578_712
+ 1578.             if ( $I_L1578_712 >= 18 ) exit
+ 1578.          enddo
+ 1578.       else
+ 1583.          ierr = 1
+ 1583.       endif
+ 1587.       return
+ 1587.       end
+ 1587.       

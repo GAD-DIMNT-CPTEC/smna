@@ -1,0 +1,240 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/sw_kgb26.f90
+Compiled : 12/12/20  00:15:14
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps sw_kgb26.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/sw_kgb26.f90
+Date     : 12/12/2020  00:15:14
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_30988/sw_kgb26_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     A - Pattern matched      a - atomic memory operation
+                              b - blocked
+     C - Collapsed            c - conditional and/or computed
+     D - Deleted               
+     E - Cloned               f - fused
+     G - Accelerated          g - partitioned
+     I - Inlined              i - interchanged
+     M - Multithreaded        m - partitioned
+                              n - non-blocking remote transfer
+                              p - partial
+                              r - unrolled
+                              s - shortloop
+     V - Vectorized           w - unwound
+
+
+    1.        !     path:      $Source: /storm/rc1/cvsroot/rc/rrtmg_sw/src/rrtmg_sw_k_g.f90,v $
+    2.        !     author:    $Author: mike $
+    3.        !     revision:  $Revision: 1.2 $
+    4.        !     created:   $Date: 2007/08/23 20:40:13 $
+    5.        
+    6.        !  --------------------------------------------------------------------------
+    7.        ! |                                                                          |
+    8.        ! |  Copyright 2002-2007, Atmospheric & Environmental Research, Inc. (AER).  |
+    9.        ! |  This software may be used, copied, or redistributed as long as it is    |
+   10.        ! |  not sold and this copyright notice is reproduced on each copy made.     |
+   11.        ! |  This model is provided as is without any express or implied warranties. |
+   12.        ! |                       (http://www.rtweb.aer.com/)                        |
+   13.        ! |                                                                          |
+   14.        !  --------------------------------------------------------------------------
+   15.        
+   16.        ! **************************************************************************
+   17.        !      subroutine sw_kgbnn
+   18.        ! **************************************************************************
+   19.        !  RRTM Shortwave Radiative Transfer Model
+   20.        !  Atmospheric and Environmental Research, Inc., Cambridge, MA
+   21.        !
+   22.        !  Original by J.Delamere, Atmospheric & Environmental Research.
+   23.        !  Reformatted for F90: JJMorcrette, ECMWF
+   24.        !  Further F90 and GCM revisions:  MJIacono, AER, July 2002
+   25.        !
+   26.        !  This file contains 14 subroutines that include the 
+   27.        !  absorption coefficients and other data for each of the 14 shortwave
+   28.        !  spectral bands used in RRTM_SW.  Here, the data are defined for 16
+   29.        !  g-points, or sub-intervals, per band.  These data are combined and
+   30.        !  weighted using a mapping procedure in routine RRTMG_SW_INIT to reduce
+   31.        !  the total number of g-points from 224 to 112 for use in the GCM.
+   32.        ! **************************************************************************
+   33.        ! **************************************************************************
+   34.              subroutine sw_kgb26
+   35.        ! **************************************************************************
+   36.        
+   37.              use shr_kind_mod, only: r8 => shr_kind_r8
+   38.        
+   39.        !      use parkind, only : jpim, jprb 
+   40.              use rrsw_kg26, only : sfluxrefo, raylo
+   41.        
+   42.              implicit none
+   43.              save
+   44.        
+   45.        ! Kurucz solar source function
+   46.  V--<>       sfluxrefo(:) = (/ &
+   47.        !         &     129.462_r8, 15*0._r8 /)
+   48.                &   29.0079_r8,  28.4088_r8,     20.3099_r8,  13.0283_r8 &
+   49.                &,  11.8619_r8,  9.95840_r8,     6.68696_r8,  5.38987_r8 &
+   50.                &,  3.49829_r8, 0.407693_r8,    0.299027_r8, 0.236827_r8 &
+   51.                &, 0.188502_r8, 0.163489_r8, 4.64335e-02_r8, 2.72662e-03_r8 /)
+   52.        
+   53.        ! Rayleigh extinction coefficient at all v 
+   54.  V--<>       raylo(:) = (/ &
+   55.                &  1.21263e-06_r8,1.43428e-06_r8,1.67677e-06_r8,1.93255e-06_r8 &
+   56.                &, 2.19177e-06_r8,2.44195e-06_r8,2.66926e-06_r8,2.85990e-06_r8 &
+   57.                &, 3.00380e-06_r8,3.06996e-06_r8,3.08184e-06_r8,3.09172e-06_r8 &
+   58.                &, 3.09938e-06_r8,3.10456e-06_r8,3.10727e-06_r8,3.10818e-06_r8 /)
+   59.        
+   60.              end subroutine sw_kgb26
+
+ftn-6204 ftn: VECTOR File = sw_kgb26.f90, Line = 46 
+  A loop starting at line 46 was vectorized.
+
+ftn-6204 ftn: VECTOR File = sw_kgb26.f90, Line = 54 
+  A loop starting at line 54 was vectorized.
+
+   61.        
+   62.        !**************************************************************************
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                 C r o s s   R e f e r e n c e   for   SW_KGB26
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD
+  Decl      37
+  Set 
+  Used
+
+RAYLO                           Use assoc                         REAL(KIND=8), From module RRSW_KG26, DIMENSION(16), SAVE
+  Decl
+  Set       54
+  Used
+
+RRSW_KG26                                                         Module
+  Decl
+  Set 
+  Used      40
+
+SFLUXREFO                       Use assoc                         REAL(KIND=8), From module RRSW_KG26, DIMENSION(16), SAVE
+  Decl
+  Set       46
+  Used
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used      37
+
+SW_KGB26                                                          Subroutine, EXTERNAL
+  Decl      34
+  Set 
+  Used
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+RRSW_KG26
+      Defined as:  No definitions.
+
+      Used By:     SW_KGB26
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     SW_KGB26
+
+Name  Messages
+----  --------
+SW_KGB26
+      Defined as:  Subroutine (line 34, file sw_kgb26.f90)
+
+      Interface:   None
+
+        Uses:      SHR_KIND_MOD
+                   RRSW_KG26
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

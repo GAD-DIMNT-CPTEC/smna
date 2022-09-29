@@ -1,0 +1,862 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/radconstants.f90
+Compiled : 12/11/20  23:53:57
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps radconstants.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/radconstants.f90
+Date     : 12/11/2020  23:53:57
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_26070/radconstants_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     A - Pattern matched      a - atomic memory operation
+                              b - blocked
+     C - Collapsed            c - conditional and/or computed
+     D - Deleted               
+     E - Cloned               f - fused
+     G - Accelerated          g - partitioned
+     I - Inlined              i - interchanged
+     M - Multithreaded        m - partitioned
+                              n - non-blocking remote transfer
+                              p - partial
+                              r - unrolled
+                              s - shortloop
+     V - Vectorized           w - unwound
+
+
+    1.        module radconstants
+    2.        
+    3.        ! This module contains constants that are specific to the radiative transfer
+    4.        ! code used in the RRTMG model.
+    5.        
+    6.        use shr_kind_mod,   only: r8 => shr_kind_r8
+    7.        use abortutils,     only: endrun
+    8.        
+    9.        implicit none
+   10.        private
+   11.        save
+   12.        
+   13.        ! SHORTWAVE DATA
+   14.        
+   15.        ! number of shorwave spectral intervals
+   16.        integer, parameter, public :: nswbands = 14
+   17.        integer, parameter, public :: nbndsw = 14
+   18.        
+   19.        ! Wavenumbers of band boundaries
+   20.        !
+   21.        ! Note: Currently rad_solar_var extends the lowest band down to
+   22.        ! 100 cm^-1 if it is too high to cover the far-IR. Any changes meant
+   23.        ! to affect IR solar variability should take note of this.
+   24.        
+   25.        real(r8),parameter :: wavenum_low(nbndsw) = & ! in cm^-1
+   26.          (/2600._r8, 3250._r8, 4000._r8, 4650._r8, 5150._r8, 6150._r8, 7700._r8, &
+   27.            8050._r8,12850._r8,16000._r8,22650._r8,29000._r8,38000._r8,  820._r8/)
+   28.        real(r8),parameter :: wavenum_high(nbndsw) = & ! in cm^-1
+   29.          (/3250._r8, 4000._r8, 4650._r8, 5150._r8, 6150._r8, 7700._r8, 8050._r8, &
+   30.           12850._r8,16000._r8,22650._r8,29000._r8,38000._r8,50000._r8, 2600._r8/)
+   31.        
+   32.        ! Solar irradiance at 1 A.U. in W/m^2 assumed by radiation code
+   33.        ! Rescaled so that sum is precisely 1368.22 and fractional amounts sum to 1.0
+   34.        real(r8), parameter :: solar_ref_band_irradiance(nbndsw) = & 
+   35.           (/ &
+   36.            12.11_r8,  20.3600000000001_r8, 23.73_r8, &
+   37.            22.43_r8,  55.63_r8, 102.93_r8, 24.29_r8, &
+   38.           345.74_r8, 218.19_r8, 347.20_r8, &
+   39.           129.49_r8,  50.15_r8,   3.08_r8, 12.89_r8 &
+   40.           /)
+   41.        
+   42.        ! None of the following comment appears to be the case any more? This
+   43.        ! should be reevalutated and/or removed.
+   44.        
+   45.        ! rrtmg (coarse) reference solar flux in rrtmg is initialized as the following
+   46.        ! reference data inside rrtmg seems to indicate 1366.44 instead
+   47.        !  This data references 1366.442114152342
+   48.        !real(r8), parameter :: solar_ref_band_irradiance(nbndsw) = & 
+   49.        !   (/ &
+   50.        !   12.10956827000000_r8, 20.36508467999999_r8, 23.72973826333333_r8, &
+   51.        !   22.42769644333333_r8, 55.62661262000000_r8, 102.9314315544444_r8, 24.29361887666667_r8, &
+   52.        !   345.7425138000000_r8, 218.1870300666667_r8, 347.1923147000001_r8, &
+   53.        !   129.4950181200000_r8, 48.37217043000000_r8, 3.079938997898001_r8, 12.88937733000000_r8 &
+   54.        !   /)
+   55.        !  Kurucz (fine) reference would seem to imply the following but the above values are from rrtmg_sw_init
+   56.        !  (/12.109559, 20.365097, 23.729752, 22.427697, 55.626622, 102.93142, 24.293593, &
+   57.        !    345.73655, 218.18416, 347.18406, 129.49407, 50.147238, 3.1197130, 12.793834 /)
+   58.        
+   59.        ! These are indices to the band for diagnostic output
+   60.        integer, parameter, public :: idx_sw_diag = 10 ! index to sw visible band
+   61.        integer, parameter, public :: idx_nir_diag = 8 ! index to sw near infrared (778-1240 nm) band
+   62.        integer, parameter, public :: idx_uv_diag = 11 ! index to sw uv (345-441 nm) band
+   63.        
+   64.        integer, parameter, public :: rrtmg_sw_cloudsim_band = 9  ! rrtmg band for .67 micron
+   65.        
+   66.        ! Number of evenly spaced intervals in rh
+   67.        ! The globality of this mesh may not be necessary
+   68.        ! Perhaps it could be specific to the aerosol
+   69.        ! But it is difficult to see how refined it must be
+   70.        ! for lookup.  This value was found to be sufficient
+   71.        ! for Sulfate and probably necessary to resolve the
+   72.        ! high variation near rh = 1.  Alternative methods
+   73.        ! were found to be too slow.
+   74.        ! Optimal approach would be for cam to specify size of aerosol
+   75.        ! based on each aerosol's characteristics.  Radiation 
+   76.        ! should know nothing about hygroscopic growth!
+   77.        integer, parameter, public :: nrh = 1000  
+   78.        
+   79.        ! LONGWAVE DATA
+   80.        
+   81.        ! These are indices to the band for diagnostic output
+   82.        integer, parameter, public :: idx_lw_diag = 7 ! index to (H20 window) LW band
+   83.        
+   84.        integer, parameter, public :: rrtmg_lw_cloudsim_band = 6  ! rrtmg band for 10.5 micron
+   85.        
+   86.        ! number of lw bands
+   87.        integer, parameter, public :: nlwbands = 16
+   88.        integer, parameter, public :: nbndlw = 16
+   89.        
+   90.        real(r8), parameter :: wavenumber1_longwave(nlwbands) = &! Longwave spectral band limits (cm-1)
+   91.            (/   10._r8,  350._r8, 500._r8,   630._r8,  700._r8,  820._r8,  980._r8, 1080._r8, &
+   92.               1180._r8, 1390._r8, 1480._r8, 1800._r8, 2080._r8, 2250._r8, 2390._r8, 2600._r8 /)
+   93.        
+   94.        real(r8), parameter :: wavenumber2_longwave(nlwbands) = &! Longwave spectral band limits (cm-1)
+   95.            (/  350._r8,  500._r8,  630._r8,  700._r8,  820._r8,  980._r8, 1080._r8, 1180._r8, &
+   96.               1390._r8, 1480._r8, 1800._r8, 2080._r8, 2250._r8, 2390._r8, 2600._r8, 3250._r8 /)
+   97.        
+   98.        !These can go away when old camrt disappears
+   99.        ! Index of volc. abs., H2O non-window
+  100.        integer, public, parameter :: idx_LW_H2O_NONWND=1
+  101.        ! Index of volc. abs., H2O window
+  102.        integer, public, parameter :: idx_LW_H2O_WINDOW=2
+  103.        ! Index of volc. cnt. abs. 0500--0650 cm-1
+  104.        integer, public, parameter :: idx_LW_0500_0650=3
+  105.        ! Index of volc. cnt. abs. 0650--0800 cm-1
+  106.        integer, public, parameter :: idx_LW_0650_0800=4
+  107.        ! Index of volc. cnt. abs. 0800--1000 cm-1
+  108.        integer, public, parameter :: idx_LW_0800_1000=5
+  109.        ! Index of volc. cnt. abs. 1000--1200 cm-1
+  110.        integer, public, parameter :: idx_LW_1000_1200=6
+  111.        ! Index of volc. cnt. abs. 1200--2000 cm-1
+  112.        integer, public, parameter :: idx_LW_1200_2000=7
+  113.        
+  114.        ! GASES TREATED BY RADIATION (line spectrae)
+  115.        
+  116.        ! gasses required by radiation
+  117.        integer, public, parameter :: gasnamelength = 5
+  118.        integer, public, parameter :: nradgas = 8
+  119.        character(len=gasnamelength), public, parameter :: gaslist(nradgas) &
+  120.           = (/'H2O  ','O3   ', 'O2   ', 'CO2  ', 'N2O  ', 'CH4  ', 'CFC11', 'CFC12'/)
+  121.        
+  122.        ! what is the minimum mass mixing ratio that can be supported by radiation implementation?
+  123.        real(r8), public, parameter :: minmmr(nradgas) &
+  124.           = epsilon(1._r8)
+  125.        
+  126.        ! Length of "optics type" string specified in optics files.
+  127.        integer, parameter, public :: ot_length = 32
+  128.        
+  129.        public :: rad_gas_index
+  130.        
+  131.        public :: get_number_sw_bands, &
+  132.                  get_sw_spectral_boundaries, &
+  133.                  get_lw_spectral_boundaries, &
+  134.                  get_ref_solar_band_irrad, &
+  135.                  get_ref_total_solar_irrad, &
+  136.                  get_solar_band_fraction_irrad
+  137.        
+  138.        contains
+  139.        !------------------------------------------------------------------------------
+  140.        subroutine get_solar_band_fraction_irrad(fractional_irradiance)
+  141.           ! provide Solar Irradiance for each band in RRTMG
+  142.        
+  143.           ! fraction of solar irradiance in each band
+  144.           real(r8), intent(out) :: fractional_irradiance(1:nswbands)
+  145.           real(r8) :: tsi ! total solar irradiance
+  146.        
+  147.           tsi = sum(solar_ref_band_irradiance)
+  148.  V--<>    fractional_irradiance = solar_ref_band_irradiance / tsi
+  149.        
+  150.        end subroutine get_solar_band_fraction_irrad
+  151.        !------------------------------------------------------------------------------
+  152.        subroutine get_ref_total_solar_irrad(tsi)
+  153.           ! provide Total Solar Irradiance assumed by RRTMG
+  154.        
+  155.           real(r8), intent(out) :: tsi
+  156.        
+  157.           tsi = sum(solar_ref_band_irradiance)
+  158.        
+  159.        end subroutine get_ref_total_solar_irrad
+  160.        !------------------------------------------------------------------------------
+  161.        subroutine get_ref_solar_band_irrad( band_irrad )
+  162.        
+  163.           ! solar irradiance in each band (W/m^2)
+  164.           real(r8), intent(out) :: band_irrad(nswbands)
+  165.         
+  166.  V--<>    band_irrad = solar_ref_band_irradiance
+  167.        
+  168.        end subroutine get_ref_solar_band_irrad
+  169.        !------------------------------------------------------------------------------
+  170.        subroutine get_number_sw_bands(number_of_bands)
+  171.        
+  172.           ! number of solar (shortwave) bands in the rrtmg code
+  173.           integer, intent(out) :: number_of_bands
+  174.        
+  175.           number_of_bands = nswbands
+  176.        
+  177.        end subroutine get_number_sw_bands
+  178.        
+  179.        !------------------------------------------------------------------------------
+  180.        subroutine get_lw_spectral_boundaries(low_boundaries, high_boundaries, units)
+  181.           ! provide spectral boundaries of each longwave band
+  182.        
+  183.           real(r8), intent(out) :: low_boundaries(nlwbands), high_boundaries(nlwbands)
+  184.           character(*), intent(in) :: units ! requested units
+  185.        
+  186.           select case (units)
+  187.           case ('inv_cm','cm^-1','cm-1')
+  188.  V--<>       low_boundaries  = wavenumber1_longwave
+  189.  V--<>       high_boundaries = wavenumber2_longwave
+  190.           case('m','meter','meters')
+  191.  V--<>       low_boundaries  = 1.e-2_r8/wavenumber2_longwave
+  192.  V--<>       high_boundaries = 1.e-2_r8/wavenumber1_longwave
+  193.           case('nm','nanometer','nanometers')
+  194.  V--<>       low_boundaries  = 1.e7_r8/wavenumber2_longwave
+  195.  V--<>       high_boundaries = 1.e7_r8/wavenumber1_longwave
+  196.           case('um','micrometer','micrometers','micron','microns')
+  197.  V--<>       low_boundaries  = 1.e4_r8/wavenumber2_longwave
+  198.  V--<>       high_boundaries = 1.e4_r8/wavenumber1_longwave
+  199.           case('cm','centimeter','centimeters')
+  200.  V--<>       low_boundaries  = 1._r8/wavenumber2_longwave
+  201.  V--<>       high_boundaries = 1._r8/wavenumber1_longwave
+  202.           case default
+  203.              call endrun('get_lw_spectral_boundaries: spectral units not acceptable'//units)
+  204.           end select
+  205.        
+  206.        end subroutine get_lw_spectral_boundaries
+  207.        
+  208.        !------------------------------------------------------------------------------
+  209.        subroutine get_sw_spectral_boundaries(low_boundaries, high_boundaries, units)
+  210.           ! provide spectral boundaries of each shortwave band
+  211.        
+  212.           real(r8), intent(out) :: low_boundaries(nswbands), high_boundaries(nswbands)
+  213.           character(*), intent(in) :: units ! requested units
+  214.        
+  215.           select case (units)
+  216.           case ('inv_cm','cm^-1','cm-1')
+  217.  V--<>       low_boundaries = wavenum_low
+  218.  V--<>       high_boundaries = wavenum_high
+  219.           case('m','meter','meters')
+  220.  V--<>       low_boundaries = 1.e-2_r8/wavenum_high
+  221.  V--<>       high_boundaries = 1.e-2_r8/wavenum_low
+  222.           case('nm','nanometer','nanometers')
+  223.  V--<>       low_boundaries = 1.e7_r8/wavenum_high
+  224.  V--<>       high_boundaries = 1.e7_r8/wavenum_low
+  225.           case('um','micrometer','micrometers','micron','microns')
+  226.  V--<>       low_boundaries = 1.e4_r8/wavenum_high
+  227.  V--<>       high_boundaries = 1.e4_r8/wavenum_low
+  228.           case('cm','centimeter','centimeters')
+  229.  V--<>       low_boundaries  = 1._r8/wavenum_high
+  230.  V--<>       high_boundaries = 1._r8/wavenum_low
+  231.           case default
+  232.              call endrun('rad_constants.F90: spectral units not acceptable'//units)
+  233.           end select
+  234.        
+  235.        end subroutine get_sw_spectral_boundaries
+  236.        
+  237.        !------------------------------------------------------------------------------
+  238.        integer function rad_gas_index(gasname)
+  239.        
+  240.           ! return the index in the gaslist array of the specified gasname
+  241.        
+  242.           character(len=*),intent(in) :: gasname
+  243.           integer :: igas
+  244.        
+  245.           rad_gas_index = -1
+  246.  1---<    do igas = 1, nradgas
+  247.  1           if (trim(gaslist(igas)).eq.trim(gasname)) then
+  248.  1              rad_gas_index = igas
+  249.  1              return
+  250.  1           endif
+  251.  1--->    enddo
+  252.           call endrun ("rad_gas_index: can not find gas with name "//gasname)
+  253.        end function rad_gas_index
+  254.        
+  255.        end module radconstants
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 148 
+  A loop starting at line 148 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 166 
+  A loop starting at line 166 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 188 
+  A loop starting at line 188 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 189 
+  A loop starting at line 189 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 191 
+  A loop starting at line 191 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 192 
+  A loop starting at line 192 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 194 
+  A loop starting at line 194 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 195 
+  A loop starting at line 195 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 197 
+  A loop starting at line 197 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 198 
+  A loop starting at line 198 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 200 
+  A loop starting at line 200 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 201 
+  A loop starting at line 201 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 217 
+  A loop starting at line 217 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 218 
+  A loop starting at line 218 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 220 
+  A loop starting at line 220 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 221 
+  A loop starting at line 221 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 223 
+  A loop starting at line 223 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 224 
+  A loop starting at line 224 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 226 
+  A loop starting at line 226 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 227 
+  A loop starting at line 227 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 229 
+  A loop starting at line 229 was vectorized.
+
+ftn-6204 ftn: VECTOR File = radconstants.f90, Line = 230 
+  A loop starting at line 230 was vectorized.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+               C r o s s   R e f e r e n c e   for   RADCONSTANTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+ABORTUTILS                                                        Module
+  Decl
+  Set 
+  Used       7
+
+BAND_IRRAD                      Dummy Arg                         REAL(KIND=8), DIMENSION(14), INTENT(OUT)
+  Decl     161     164
+  Set      166
+  Used
+
+ENDRUN                          Use assoc                         Subroutine, From module ABORTUTILS, Module procedure, PRIVATE
+  Decl
+  Set 
+  Used       0     232     252
+
+ENDRUN                          Use assoc                         Subroutine, From module ABORTUTILS, Module procedure, PRIVATE
+  Decl
+  Set 
+  Used       0     232     252
+
+EPSILON                                                           Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used     124
+
+FRACTIONAL_IRRADIANCE           Dummy Arg                         REAL(KIND=8), DIMENSION(14), INTENT(OUT)
+  Decl     140     144
+  Set      148
+  Used
+
+GASLIST                                                           CHARACTER(5), PARAMETER, DIMENSION(8)
+  Decl     119
+  Set 
+  Used
+
+GASNAME                         Dummy Arg                         CHARACTER(*), INTENT(IN)
+  Decl     238     242
+  Set 
+  Used     247
+
+GASNAMELENGTH                                                     INTEGER, PARAMETER
+  Decl     117
+  Set 
+  Used     119
+
+GET_LW_SPECTRAL_BOUNDARIES                                        Subroutine, Module procedure
+  Decl     133     180
+  Set 
+  Used
+
+GET_NUMBER_SW_BANDS                                               Subroutine, Module procedure
+  Decl     131     170
+  Set 
+  Used
+
+GET_REF_SOLAR_BAND_IRRAD                                          Subroutine, Module procedure
+  Decl     134     161
+  Set 
+  Used
+
+GET_REF_TOTAL_SOLAR_IRRAD                                         Subroutine, Module procedure
+  Decl     135     152
+  Set 
+  Used
+
+GET_SOLAR_BAND_FRACTION_IRRAD                                     Subroutine, Module procedure
+  Decl     136     140
+  Set 
+  Used
+
+GET_SW_SPECTRAL_BOUNDARIES                                        Subroutine, Module procedure
+  Decl     132     209
+  Set 
+  Used
+
+HIGH_BOUNDARIES                 Dummy Arg                         REAL(KIND=8), DIMENSION(16), INTENT(OUT)
+  Decl     180     183
+  Set      189     192     195     198     201
+  Used
+
+HIGH_BOUNDARIES                 Dummy Arg                         REAL(KIND=8), DIMENSION(14), INTENT(OUT)
+  Decl     209     212
+  Set      218     221     224     227     230
+  Used
+
+IDX_LW_0500_0650                                                  INTEGER, PARAMETER
+  Decl     104
+  Set 
+  Used
+
+IDX_LW_0650_0800                                                  INTEGER, PARAMETER
+  Decl     106
+  Set 
+  Used
+
+IDX_LW_0800_1000                                                  INTEGER, PARAMETER
+  Decl     108
+  Set 
+  Used
+
+IDX_LW_1000_1200                                                  INTEGER, PARAMETER
+  Decl     110
+  Set 
+  Used
+
+IDX_LW_1200_2000                                                  INTEGER, PARAMETER
+  Decl     112
+  Set 
+  Used
+
+IDX_LW_DIAG                                                       INTEGER, PARAMETER
+  Decl      82
+  Set 
+  Used
+
+IDX_LW_H2O_NONWND                                                 INTEGER, PARAMETER
+  Decl     100
+  Set 
+  Used
+
+IDX_LW_H2O_WINDOW                                                 INTEGER, PARAMETER
+  Decl     102
+  Set 
+  Used
+
+IDX_NIR_DIAG                                                      INTEGER, PARAMETER
+  Decl      61
+  Set 
+  Used
+
+IDX_SW_DIAG                                                       INTEGER, PARAMETER
+  Decl      60
+  Set 
+  Used
+
+IDX_UV_DIAG                                                       INTEGER, PARAMETER
+  Decl      62
+  Set 
+  Used
+
+IGAS                            Stack                             INTEGER
+  Decl     243
+  Set 
+  Used     247     248
+
+LOW_BOUNDARIES                  Dummy Arg                         REAL(KIND=8), DIMENSION(16), INTENT(OUT)
+  Decl     180     183
+  Set      188     191     194     197     200
+  Used
+
+LOW_BOUNDARIES                  Dummy Arg                         REAL(KIND=8), DIMENSION(14), INTENT(OUT)
+  Decl     209     212
+  Set      217     220     223     226     229
+  Used
+
+MINMMR                                                            REAL(KIND=8), PARAMETER, DIMENSION(8)
+  Decl     123
+  Set 
+  Used
+
+NBNDLW                                                            INTEGER, PARAMETER
+  Decl      88
+  Set 
+  Used
+
+NBNDSW                                                            INTEGER, PARAMETER
+  Decl      17
+  Set 
+  Used      25      28      34
+
+NLWBANDS                                                          INTEGER, PARAMETER
+  Decl      87
+  Set 
+  Used      90      94     183
+
+NRADGAS                                                           INTEGER, PARAMETER
+  Decl     118
+  Set 
+  Used     119     123     246
+
+NRH                                                               INTEGER, PARAMETER
+  Decl      77
+  Set 
+  Used
+
+NSWBANDS                                                          INTEGER, PARAMETER
+  Decl      16
+  Set 
+  Used     144     164     175     212
+
+NUMBER_OF_BANDS                 Dummy Arg                         INTEGER, INTENT(OUT)
+  Decl     170     173
+  Set      175
+  Used
+
+OT_LENGTH                                                         INTEGER, PARAMETER
+  Decl     127
+  Set 
+  Used
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD, PRIVATE
+  Decl       6
+  Set 
+  Used      25      28      34      90      94     123     144     145     155     164     183     212
+
+RADCONSTANTS                                                      Module
+  Decl       1
+  Set 
+  Used
+
+RAD_GAS_INDEX                                                     Function, INTEGER, RESULT(RAD_GAS_INDEX), Module procedure
+  Decl     129     238
+  Set 
+  Used
+
+RAD_GAS_INDEX                   Register                          INTEGER, Function result
+  Decl
+  Set      245     248
+  Used
+
+RRTMG_LW_CLOUDSIM_BAND                                            INTEGER, PARAMETER
+  Decl      84
+  Set 
+  Used
+
+RRTMG_SW_CLOUDSIM_BAND                                            INTEGER, PARAMETER
+  Decl      64
+  Set 
+  Used
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used       6
+
+SOLAR_REF_BAND_IRRADIANCE                                         REAL(KIND=8), PARAMETER, DIMENSION(14), PRIVATE
+  Decl      34
+  Set 
+  Used
+
+SUM                                                               Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     157
+
+TRIM                                                              Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used     247
+
+TSI                             Stack                             REAL(KIND=8)
+  Decl     145
+  Set      147
+  Used     148
+
+TSI                             Dummy Arg                         REAL(KIND=8), INTENT(OUT)
+  Decl     152     155
+  Set      157
+  Used
+
+UNITS                           Dummy Arg                         CHARACTER(*), INTENT(IN)
+  Decl     180     184
+  Set 
+  Used     186
+
+UNITS                           Dummy Arg                         CHARACTER(*), INTENT(IN)
+  Decl     209     213
+  Set 
+  Used     215
+
+WAVENUMBER1_LONGWAVE                                              REAL(KIND=8), PARAMETER, DIMENSION(16), PRIVATE
+  Decl      90
+  Set 
+  Used
+
+WAVENUMBER2_LONGWAVE                                              REAL(KIND=8), PARAMETER, DIMENSION(16), PRIVATE
+  Decl      94
+  Set 
+  Used
+
+WAVENUM_HIGH                                                      REAL(KIND=8), PARAMETER, DIMENSION(14), PRIVATE
+  Decl      28
+  Set 
+  Used
+
+WAVENUM_LOW                                                       REAL(KIND=8), PARAMETER, DIMENSION(14), PRIVATE
+  Decl      25
+  Set 
+  Used
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+ABORTUTILS
+      Defined as:  No definitions.
+
+      Used By:     RADCONSTANTS
+
+Name  Messages
+----  --------
+ENDRUN in ABORTUTILS
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   RADCONSTANTS (Line 203, file radconstants.f90)
+                   RADCONSTANTS (Line 232, file radconstants.f90)
+                   RADCONSTANTS (Line 252, file radconstants.f90)
+
+Name  Messages
+----  --------
+EPSILON(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   RADCONSTANTS (Line 124, file radconstants.f90)
+
+Name  Messages
+----  --------
+GET_LW_SPECTRAL_BOUNDARIES in RADCONSTANTS
+      Defined as:  Subroutine (line 133, file radconstants.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+GET_NUMBER_SW_BANDS in RADCONSTANTS
+      Defined as:  Subroutine (line 131, file radconstants.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+GET_REF_SOLAR_BAND_IRRAD in RADCONSTANTS
+      Defined as:  Subroutine (line 134, file radconstants.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+GET_REF_TOTAL_SOLAR_IRRAD in RADCONSTANTS
+      Defined as:  Subroutine (line 135, file radconstants.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+GET_SOLAR_BAND_FRACTION_IRRAD in RADCONSTANTS
+      Defined as:  Subroutine (line 136, file radconstants.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+GET_SW_SPECTRAL_BOUNDARIES in RADCONSTANTS
+      Defined as:  Subroutine (line 132, file radconstants.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+RADCONSTANTS
+      Defined as:  Module (line 1, file radconstants.f90)
+
+      Calls:       EPSILON(Intrinsic) (Line 124, file radconstants.f90)
+                   ENDRUN in ABORTUTILS (Line 203, file radconstants.f90)
+                   ENDRUN in ABORTUTILS (Line 232, file radconstants.f90)
+                   ENDRUN in ABORTUTILS (Line 252, file radconstants.f90)
+
+        Uses:      SHR_KIND_MOD
+                   ABORTUTILS
+
+Name  Messages
+----  --------
+RAD_GAS_INDEX in RADCONSTANTS
+      Defined as:  Function (line 129, file radconstants.f90)
+
+      Interface:   None
+
+      Calls:       SUM(Intrinsic) (Line 147, file radconstants.f90)
+                   SUM(Intrinsic) (Line 157, file radconstants.f90)
+                   TRIM(Intrinsic) (Line 247, file radconstants.f90)
+                   TRIM(Intrinsic) (Line 247, file radconstants.f90)
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     RADCONSTANTS
+
+Name  Messages
+----  --------
+SUM(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   RAD_GAS_INDEX in RADCONSTANTS (Line 147, file radconstants.f90)
+                   RAD_GAS_INDEX in RADCONSTANTS (Line 157, file radconstants.f90)
+
+Name  Messages
+----  --------
+TRIM(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   RAD_GAS_INDEX in RADCONSTANTS (Line 247, file radconstants.f90)
+                   RAD_GAS_INDEX in RADCONSTANTS (Line 247, file radconstants.f90)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

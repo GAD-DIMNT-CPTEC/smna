@@ -1,0 +1,30 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  iw3jdn.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/iw3jdn.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       integer
+    1.       function iw3jdn( iyear, month, iday )
+   57.       $LCS_month_1 = 0[loc( month ),0]
+   57.       $LCS_2 = ( -14 + $LCS_month_1 ) / 12
+   57.       $LCS_iyear_0 = 0[loc( iyear ),0] + $LCS_2
+   57.       $PRT_P3 = 7012800 + 1461 * $LCS_iyear_0
+   57.       $PRT_P4 = 3 * ( ( 4900 + $LCS_iyear_0 ) / 100 )
+   57.       $iw3jdn_S0 = -32075 + ( 0[loc( iday ),0] + _ash( $PRT_P3 + _rsh( _ash( $PRT_P3, 1 ), 30 ), 2 ) + ( 367 * $LCS_month_1 + -4404 * $LCS_2 + -734 ) / 12 - _ash( $PRT_P4 + _rsh( _ash( $PRT_P4, 1 ), 30 ), 2 ) )
+   62.       iw3jdn = $iw3jdn_S0
+   62.       return
+   62.       end
+   62.       

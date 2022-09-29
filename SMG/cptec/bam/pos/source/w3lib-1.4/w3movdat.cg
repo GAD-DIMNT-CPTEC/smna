@@ -1,0 +1,35 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3movdat.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3movdat.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine w3movdat( rinc, idat, jdat )
+   45.       $LCS_rinc_0 = loc( rinc )
+   45.       rinc1[0] = 0[$LCS_rinc_0,0]
+   46.       (1,rinc1)[0:4:1] = real( 4[loc( idat ):4:1] ) + 1[$LCS_rinc_0:4:1]
+   47.       $Con_P6 = -1
+   47.       call w3reddat( $Con_P6, rinc1[0], rinc2[0] )
+   48.       $LCS_idat_1 = loc( idat )
+   48.       $t_S0 = iw3jdn( 0[$LCS_idat_1,0], 1[$LCS_idat_1,0], 2[$LCS_idat_1,0] )
+   48.       jldayn = $t_S0 + _anint( rinc2[0] )
+   49.       $LCS_jdat_2 = loc( jdat )
+   49.       call w3fs26( jldayn, 0[$LCS_jdat_2,0], 1[$LCS_jdat_2,0], 2[$LCS_jdat_2,0], jdow, jdoy )
+   50.       $LCS_jdat_3 = loc( jdat )
+   50.       3[$LCS_jdat_3,0] = 3[loc( idat ),0]
+   51.       4[$LCS_jdat_3:4:1] = _anint( (1,rinc2)[0:4:1] )
+   53.       return
+   53.       end
+   53.       

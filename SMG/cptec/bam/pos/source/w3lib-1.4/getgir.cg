@@ -1,0 +1,82 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgir.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgir.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgir( lugb, msk1, msk2, mnum, mbuf, cbuf, nlen, nnum, iret )
+   61.       iseek = 0
+   62.       call skgb( 0[loc( lugb ),0], iseek, 0[loc( msk1 ),0], lskip, lgrib )
+   63.       $lgrib_S1 = lgrib
+   63.       if ( $lgrib_S1 > 0 ) then
+   63.          $MR_mbuf_S2 = 0[loc( mbuf ),0]
+   63.          if ( 320 <= $MR_mbuf_S2 ) then
+   64.             $Con_P7 = 320
+   64.             $Con_P8 = 1
+   64.             call ixgb( 0[loc( lugb ),0], lskip, lgrib, $Con_P7, $Con_P8, 0[loc( nlen ),0], substr[cbuf,0:1] )
+   64.          else
+   64.             goto 10
+   64.          endif
+   64.       else
+   64.    10    continue
+   66.          0[loc( nlen ),0] = 320
+   66.       endif
+   68.       $MR_mnum_2 = 0[loc( mnum ),0]
+   68.       if ( $MR_mnum_2 > 0 ) then
+   68.          $I_L68_S6 = 0
+   73.          $LIS_E0 = $MR_mnum_2
+   68.          do
+   69.             $lgrib_S3 = lgrib
+   69.             if ( $lgrib_S3 > 0 ) then
+   70.                $lskip_S4 = lskip
+   70.                $iseek_S5 = $lgrib_S3 + $lskip_S4
+   70.                iseek = $iseek_S5
+   71.                call skgb( 0[loc( lugb ),0], iseek, 0[loc( msk2 ),0], lskip, lgrib )
+   71.             endif
+   73.             $I_L68_S6 = 1 + $I_L68_S6
+   72.             if ( $I_L68_S6 >= $LIS_E0 ) exit
+   72.          enddo
+   72.       endif
+   76.       0[loc( nnum ),0] = 0
+   77.       0[loc( iret ),0] = 0
+   78.       $lgrib_S7 = lgrib
+   78.       if ( $lgrib_S7 > 0 ) then
+   87.          $iret_S15 = 0
+   79.          $MR_mbuf_S8 = 0[loc( mbuf ),0]
+   78.          do
+   79.             $LCS_nnum_1 = loc( nnum )
+   79.             $MR_nnum_S9 = 0[$LCS_nnum_1,0]
+   79.             $LCS_nlen_2 = loc( nlen )
+   79.             $LCS_nlen_0 = 0[$LCS_nlen_2,0]
+   79.             if ( $LCS_nlen_0 + $LCS_nlen_0 * $MR_nnum_S9 <= $MR_mbuf_S8 ) then
+   80.                $MR_nnum_S10 = 1 + $MR_nnum_S9
+   80.                0[$LCS_nnum_1,0] = $MR_nnum_S10
+   81.                call ixgb( 0[loc( lugb ),0], lskip, lgrib, 0[$LCS_nlen_2,0], 0[$LCS_nnum_1,0], mlen, substr[cbuf,0:1] )
+   82.                $lgrib_S12 = lgrib
+   82.                $lskip_S11 = lskip
+   82.                $iseek_S13 = $lskip_S11 + $lgrib_S12
+   82.                iseek = $iseek_S13
+   83.                call skgb( 0[loc( lugb ),0], iseek, 0[loc( msk2 ),0], lskip, lgrib )
+   83.             else
+   85.                $iret_S15 = 1
+   85.             endif
+   87.             $lgrib_S14 = lgrib
+   87.             if ( int( $iret_S15 == 0 .and. $lgrib_S14 > 0 ) == 0 ) exit
+   87.          enddo
+   85.          0[loc( iret ),0] = $iret_S15
+   85.       endif
+   90.       return
+   90.       end
+   90.       

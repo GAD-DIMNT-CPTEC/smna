@@ -1,0 +1,43 @@
+# Automatically generated dependencies. Sáb Set 13 21:25:58 BRT 2014
+# fgen v0.3 (C) 1997,98 Beroud Jean-Marc
+
+
+#$(srcdir)/sigio_BAMMod.o sigio_BAMMod.o: \
+#	$(srcdir)/sigio_BAMMod.F90 \
+#	$(srcdir)/Mod_FastFourierTransform.o \
+#	$(srcdir)/Mod_LegendreTransform.o \
+#	$(srcdir)/MiscMod.o
+	
+$(srcdir)/sigio_BAMMod.o sigio_BAMMod.o: \
+	$(srcdir)/sigio_BAMMod.F90 \
+	$(srcdir)/Fourier.o \
+	$(srcdir)/LegendreTransform.o \
+	$(srcdir)/TransformTools.o \
+	$(srcdir)/MiscMod.o
+
+#$(srcdir)/FastFourierTransform.o Mod_FastFourierTransform.o:\
+#	$(srcdir)/Mod_FastFourierTransform.f90
+
+$(srcdir)/Fourier.o Fourier.o:\
+	$(srcdir)/Fourier.f90 \
+   $(srcdir)/ModConstants.o 
+
+#$(srcdir)/Mod_LegendreTransform.o Mod_LegendreTransform.o: \
+#	$(srcdir)/Mod_LegendreTransform.f90 \
+#   $(srcdir)/ModConstants.o 
+
+$(srcdir)/LegendreTransform.o LegendreTransform.o: \
+	$(srcdir)/LegendreTransform.f90 \
+   $(srcdir)/ModConstants.o 
+
+$(srcdir)/MiscMod.o  MiscMod.o:\
+	$(srcdir)/MiscMod.f90
+
+$(srcdir)/ModConstants.o  ModConstants.o:\
+	$(srcdir)/ModConstants.f90
+
+$(srcdir)/TransformTools.o  TransformaTools.o:\
+	$(srcdir)/TransformTools.f90 \
+	$(srcdir)/LegendreTransform.o \
+	$(srcdir)/Fourier.o \
+   $(srcdir)/ModConstants.o 

@@ -1,0 +1,745 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_lw/rrtmg_lw_cldprop.f90
+Compiled : 12/12/20  00:23:04
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps rrtmg_lw_cldprop.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_lw/rrtmg_lw_cldprop.f90
+Date     : 12/12/2020  00:23:04
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_14031/rrtmg_lw_cldprop_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     A - Pattern matched      a - atomic memory operation
+                              b - blocked
+     C - Collapsed            c - conditional and/or computed
+     D - Deleted               
+     E - Cloned               f - fused
+     G - Accelerated          g - partitioned
+     I - Inlined              i - interchanged
+     M - Multithreaded        m - partitioned
+                              n - non-blocking remote transfer
+                              p - partial
+                              r - unrolled
+                              s - shortloop
+     V - Vectorized           w - unwound
+
+
+    1.         !     path:      $Source: /storm/rc1/cvsroot/rc/rrtmg_lw/src/rrtmg_lw_cldprop.f90,v $
+    2.         !     author:    $Author: mike $
+    3.         !     revision:  $Revision: 1.5 $
+    4.         !     created:   $Date: 2007/09/07 21:40:50 $
+    5.         !
+    6.               module rrtmg_lw_cldprop
+    7.         
+    8.         !  --------------------------------------------------------------------------
+    9.         ! |                                                                          |
+   10.         ! |  Copyright 2002-2007, Atmospheric & Environmental Research, Inc. (AER).  |
+   11.         ! |  This software may be used, copied, or redistributed as long as it is    |
+   12.         ! |  not sold and this copyright notice is reproduced on each copy made.     |
+   13.         ! |  This model is provided as is without any express or implied warranties. |
+   14.         ! |                       (http://www.rtweb.aer.com/)                        |
+   15.         ! |                                                                          |
+   16.         !  --------------------------------------------------------------------------
+   17.         
+   18.         ! --------- Modules ----------
+   19.         
+   20.               use shr_kind_mod, only: r8 => shr_kind_r8
+   21.         
+   22.         !      use parkind, only : jpim, jprb 
+   23.               use parrrtm, only : nbndlw
+   24.               use rrlw_cld, only: abscld1, absliq0, absliq1, &
+   25.                                   absice0, absice1, absice2, absice3
+   26.               use rrlw_vsn, only: hvrcld, hnamcld
+   27.         
+   28.               implicit none
+   29.         
+   30.               contains
+   31.         
+   32.         ! ------------------------------------------------------------------------------
+   33.               subroutine cldprop(           &! call cldprop( &
+   34.                                  nlayers  , &!              nlayers                              , &
+   35.                                  inflag   , &!              inflag                               , &
+   36.                                  iceflag  , &!              iceflag                              , &
+   37.                                  liqflag  , &!              liqflag                              , &
+   38.                                  cldfrac  , &!              cldfrac  (1:nlayers)                 , &
+   39.                                  tauc     , &!              tauc_lw  (1:nbndlw,iplon,1:nlayers)  , &
+   40.                                  ciwp     , &!              ciwp     (1:nlayers)                 , &
+   41.                                  clwp     , &!              clwp     (1:nlayers)                 , &
+   42.                                  rei      , &!              rei      (1:nlayers)                 , &
+   43.                                  dge      , &!              2*rei    (1:nlayers)                 , &
+   44.                                  rel      , &!              rel      (1:nlayers)                 , &
+   45.                                  ncbands  , &!              ncbands                              , &
+   46.                                  taucloud   )!              taucloud (1:nlayers,1:nbndlw)          )
+   47.         ! ------------------------------------------------------------------------------
+   48.         
+   49.         ! Purpose:  Compute the cloud optical depth(s) for each cloudy layer.
+   50.         
+   51.         ! ------- Input -------
+   52.         
+   53.               integer, intent(in) :: nlayers                    ! total number of layers
+   54.               integer, intent(in) :: inflag                     ! see definitions
+   55.               integer, intent(in) :: iceflag                    ! see definitions
+   56.               integer, intent(in) :: liqflag                    ! see definitions
+   57.         
+   58.               real(kind=r8), intent(in) :: cldfrac(1:nlayers)           ! cloud fraction
+   59.                                                                 !    Dimensions: (nlayers)
+   60.               real(kind=r8), intent(in) :: ciwp(1:nlayers)              ! cloud ice water path
+   61.                                                                 !    Dimensions: (nlayers)
+   62.               real(kind=r8), intent(in) :: clwp(1:nlayers)              ! cloud liquid water path
+   63.                                                                 !    Dimensions: (nlayers)
+   64.               real(kind=r8), intent(in) :: rei(1:nlayers)               ! cloud ice particle effective radius (microns)
+   65.                                                                 !    Dimensions: (nlayers)
+   66.               real(kind=r8), intent(in) :: dge(1:nlayers)              ! cloud ice particle generalized effective size (microns)
+   67.                                                                 !    Dimensions: (nlayers)
+   68.               real(kind=r8), intent(in) :: rel(1:nlayers)               ! cloud liquid particle effective radius (microns)
+   69.                                                                 !    Dimensions: (nlayers)
+   70.               real(kind=r8), intent(in) :: tauc(1:nbndlw,1:nlayers)            ! cloud optical depth
+   71.                                                                 !    Dimensions: (nbndlw,nlayers)
+   72.         
+   73.         ! ------- Output -------
+   74.         
+   75.               integer, intent(out) :: ncbands                   ! number of cloud spectral bands
+   76.               real(kind=r8), intent(out) :: taucloud(1:nlayers,1:nbndlw)       ! cloud optical depth
+   77.                                                                 !    Dimensions: (nlayers,nbndlw)
+   78.         
+   79.         ! ------- Local -------
+   80.         
+   81.               integer :: lay                                    ! Layer index
+   82.               integer :: ib                                     ! spectral band index
+   83.               integer :: index 
+   84.               integer :: icepat
+   85.               integer :: liqpat
+   86.               integer :: ipat(16,0:2)
+   87.         
+   88.               real(kind=r8) :: abscoice(nbndlw)                 ! ice absorption coefficients
+   89.               real(kind=r8) :: abscoliq(nbndlw)                 ! liquid absorption coefficients
+   90.               real(kind=r8) :: cwp                              ! cloud water path
+   91.               real(kind=r8) :: radliq                           ! cloud liquid droplet radius (microns)
+   92.               real(kind=r8) :: radice                           ! cloud ice effective radius (microns)
+   93.               real(kind=r8) :: dgeice                           ! cloud ice generalized effective size (microns)
+   94.               real(kind=r8) :: factor                           ! 
+   95.               real(kind=r8) :: fint                             ! 
+   96.               real(kind=r8) :: tauctot(nlayers)                 ! band integrated cloud optical depth
+   97.               real(kind=r8), parameter :: eps = 1.e-6_r8        ! epsilon
+   98.               real(kind=r8), parameter :: cldmin = 1.e-80_r8    ! minimum value for cloud quantities
+   99.         
+  100.         ! ------- Definitions -------
+  101.         
+  102.         !     Explanation of the method for each value of INFLAG.  Values of
+  103.         !     0 or 1 for INFLAG do not distingish being liquid and ice clouds.
+  104.         !     INFLAG = 2 does distinguish between liquid and ice clouds, and
+  105.         !     requires further user input to specify the method to be used to 
+  106.         !     compute the aborption due to each.
+  107.         !     INFLAG = 0:  For each cloudy layer, the cloud fraction and (gray)
+  108.         !                  optical depth are input.  
+  109.         !     INFLAG = 1:  For each cloudy layer, the cloud fraction and cloud
+  110.         !                  water path (g/m2) are input.  The (gray) cloud optical 
+  111.         !                  depth is computed as in CAM3.
+  112.         !     INFLAG = 2:  For each cloudy layer, the cloud fraction, cloud 
+  113.         !                  water path (g/m2), and cloud ice fraction are input.
+  114.         !       ICEFLAG = 0:  The ice effective radius (microns) is input and the
+  115.         !                     optical depths due to ice clouds are computed as in CAM3.
+  116.         !       ICEFLAG = 1:  The ice effective radius (microns) is input and the
+  117.         !                     optical depths due to ice clouds are computed as in 
+  118.         !                     Ebert and Curry, JGR, 97, 3831-3836 (1992).  The 
+  119.         !                     spectral regions in this work have been matched with
+  120.         !                     the spectral bands in RRTM to as great an extent 
+  121.         !                     as possible:  
+  122.         !                     E&C 1      IB = 5      RRTM bands 9-16
+  123.         !                     E&C 2      IB = 4      RRTM bands 6-8
+  124.         !                     E&C 3      IB = 3      RRTM bands 3-5
+  125.         !                     E&C 4      IB = 2      RRTM band 2
+  126.         !                     E&C 5      IB = 1      RRTM band 1
+  127.         !       ICEFLAG = 2:  The ice effective radius (microns) is input and the
+  128.         !                     optical properties due to ice clouds are computed from
+  129.         !                     the optical properties stored in the RT code,
+  130.         !                     STREAMER v3.0 (Reference: Key. J., Streamer 
+  131.         !                     User's Guide, Cooperative Institute for
+  132.         !                     Meteorological Satellite Studies, 2001, 96 pp.).
+  133.         !                     Valid range of values for re are between 5.0 and
+  134.         !                     131.0 micron.
+  135.         !       ICEFLAG = 3: The ice generalized effective size (dge) is input
+  136.         !                    and the optical properties, are calculated as in
+  137.         !                    Q. Fu, J. Climate, (1998). Q. Fu provided high resolution
+  138.         !                    tables which were appropriately averaged for the
+  139.         !                    bands in RRTM_LW.  Linear interpolation is used to
+  140.         !                    get the coefficients from the stored tables.
+  141.         !                    Valid range of values for dge are between 5.0 and
+  142.         !                    140.0 micron.
+  143.         !       LIQFLAG = 0:  The optical depths due to water clouds are computed as
+  144.         !                     in CAM3.
+  145.         !       LIQFLAG = 1:  The water droplet effective radius (microns) is input 
+  146.         !                     and the optical depths due to water clouds are computed 
+  147.         !                     as in Hu and Stamnes, J., Clim., 6, 728-742, (1993).
+  148.         !                     The values for absorption coefficients appropriate for
+  149.         !                     the spectral bands in RRTM have been obtained for a 
+  150.         !                     range of effective radii by an averaging procedure 
+  151.         !                     based on the work of J. Pinto (private communication).
+  152.         !                     Linear interpolation is used to get the absorption 
+  153.         !                     coefficients for the input effective radius.
+  154.         
+  155.               data ipat /1,1,1,1,1,1,1,1,1, 1, 1, 1, 1, 1, 1, 1, &
+  156.                          1,2,3,3,3,4,4,4,5, 5, 5, 5, 5, 5, 5, 5, &
+  157.                          1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16/
+  158.         
+  159.               hvrcld = '$Revision: 1.5 $'
+  160.         
+  161.               ncbands = 1
+  162.  V---<>       tauctot(:) = 0._r8
+  163.         
+  164.  1----<       do lay = 1, nlayers
+  165.  1 2--<          do ib = 1, nbndlw
+  166.  1 2                taucloud(lay,ib) = 0.0_r8
+  167.  1 2                tauctot(lay) = tauctot(lay) + tauc(ib,lay)
+  168.  1 2-->          enddo
+  169.  1---->       enddo
+  170.         
+  171.         ! Main layer loop
+  172.  1----<       do lay = 1, nlayers
+  173.  1               cwp = ciwp(lay) + clwp(lay)
+  174.  1               if (cldfrac(lay) .ge. cldmin .and. &
+  175.  1                  (cwp .ge. cldmin .or. tauctot(lay) .ge. cldmin)) then
+  176.  1      
+  177.  1      ! Ice clouds and water clouds combined.
+  178.  1                  if (inflag .eq. 0) then
+  179.  1                     ncbands = 16
+  180.  1 2--<                do ib = 1, ncbands
+  181.  1 2                      taucloud(lay,ib) = tauc(ib,lay)
+  182.  1 2-->                end do
+  183.  1      
+  184.  1                  elseif (inflag .eq. 1) then
+  185.  1                     ncbands = 16
+  186.  1 2--<                do ib = 1, ncbands
+  187.  1 2                      taucloud(lay,ib) = abscld1 * cwp
+  188.  1 2-->                end do
+  189.  1      
+  190.  1      ! Separate treatement of ice clouds and water clouds.
+  191.  1                  elseif (inflag .eq. 2) then
+  192.  1                     radice = rei(lay)
+  193.  1      
+  194.  1      ! Calculation of absorption coefficients due to ice clouds.
+  195.  1                     if (ciwp(lay) .eq. 0.0_r8) then
+  196.  1                        abscoice(1) = 0.0_r8
+  197.  1                        icepat = 0
+  198.  1      
+  199.  1                     elseif (iceflag .eq. 0) then
+  200.  1                        if (radice .lt. 10.0_r8) stop 'ICE RADIUS TOO SMALL'
+  201.  1                        abscoice(1) = absice0(1) + absice0(2)/radice
+  202.  1                        icepat = 0
+  203.  1      
+  204.  1                     elseif (iceflag .eq. 1) then
+  205.  1                        if (radice .lt. 13.0_r8 .or. radice .gt. 130._r8) stop &
+  206.  1                             'ICE RADIUS OUT OF BOUNDS'
+  207.  1                        ncbands = 5
+  208.  1 2--<                   do ib = 1, ncbands
+  209.  1 2                         abscoice(ib) = absice1(1,ib) + absice1(2,ib)/radice
+  210.  1 2-->                   enddo
+  211.  1                        icepat = 1
+  212.  1      
+  213.  1      ! For iceflag=2 option, combine with iceflag=0 option to handle out of bounds 
+  214.  1      ! particle sizes.
+  215.  1      ! Use iceflag=2 option for ice particle effective radii from 5.0 and 131.0 microns
+  216.  1      ! and use iceflag=0 option for ice particles greater than 131.0 microns.
+  217.  1      ! *** NOTE: Transition between two methods has not been smoothed. 
+  218.  1      
+  219.  1                     elseif (iceflag .eq. 2) then
+  220.  1                        if (radice .lt. 5.0_r8) stop 'ICE RADIUS OUT OF BOUNDS'
+  221.  1                        if (radice .ge. 5.0_r8 .and. radice .le. 131._r8) then
+  222.  1                           ncbands = 16
+  223.  1                           factor = (radice - 2._r8)/3._r8
+  224.  1                           index = int(factor)
+  225.  1                           if (index .eq. 43) index = 42
+  226.  1                           fint = factor - float(index)
+  227.  1 2--<                      do ib = 1, ncbands
+  228.  1 2                            abscoice(ib) = &
+  229.  1 2                                absice2(index,ib) + fint * &
+  230.  1 2                                (absice2(index+1,ib) - (absice2(index,ib)))
+  231.  1 2-->                      enddo
+  232.  1                           icepat = 2
+  233.  1                        elseif (radice .gt. 131._r8) then
+  234.  1 2--<                      do ib = 1, ncbands
+  235.  1 2                           abscoice(ib) = absice0(1) + absice0(2)/radice
+  236.  1 2                           icepat = 0
+  237.  1 2-->                      enddo
+  238.  1                        endif
+  239.  1      
+  240.  1      ! For iceflag=3 option, combine with iceflag=0 option to handle large particle sizes.
+  241.  1      ! Use iceflag=3 option for ice particle effective radii from 3.2 and 91.0 microns
+  242.  1      ! (generalized effective size, dge, from 5 to 140 microns), and use iceflag=0 option
+  243.  1      ! for ice particle effective radii greater than 91.0 microns (dge = 140 microns).
+  244.  1      ! *** NOTE: Fu parameterization requires particle size in generalized effective size.
+  245.  1      ! *** NOTE: Transition between two methods has not been smoothed. 
+  246.  1      
+  247.  1                     elseif (iceflag .eq. 3) then
+  248.  1                        dgeice = dge(lay)
+  249.  1                        if (dgeice .lt. 5.0_r8) stop 'ICE GENERALIZED EFFECTIVE SIZE OUT OF BOUNDS'
+  250.  1                        if (dgeice .ge. 5.0_r8 .and. dgeice .le. 140._r8) then
+  251.  1                           ncbands = 16
+  252.  1                           factor = (dgeice - 2._r8)/3._r8
+  253.  1                           index = int(factor)
+  254.  1                           if (index .eq. 46) index = 45
+  255.  1                           fint = factor - float(index)
+  256.  1 2--<                      do ib = 1, ncbands
+  257.  1 2                            abscoice(ib) = &
+  258.  1 2                              absice3(index,ib) + fint * &
+  259.  1 2                              (absice3(index+1,ib) - (absice3(index,ib)))
+  260.  1 2-->                      enddo
+  261.  1                           icepat = 2
+  262.  1                        elseif (dgeice .gt. 140._r8) then
+  263.  1 2--<                      do ib = 1, ncbands
+  264.  1 2                           abscoice(ib) = absice0(1) + absice0(2)/radice
+  265.  1 2                           icepat = 0
+  266.  1 2-->                      enddo
+  267.  1                        endif
+  268.  1         
+  269.  1                     endif
+  270.  1                        
+  271.  1      ! Calculation of absorption coefficients due to water clouds.
+  272.  1                     if (clwp(lay) .eq. 0.0_r8) then
+  273.  1                        abscoliq(1) = 0.0_r8
+  274.  1                        liqpat = 0
+  275.  1                        if (icepat .eq. 1) icepat = 2
+  276.  1      
+  277.  1                     elseif (liqflag .eq. 0) then
+  278.  1                        abscoliq(1) = absliq0
+  279.  1                        liqpat = 0
+  280.  1                        if (icepat .eq. 1) icepat = 2
+  281.  1      
+  282.  1                     elseif (liqflag .eq. 1) then
+  283.  1                        radliq = rel(lay)
+  284.  1                        if (radliq .lt. 1.5_r8 .or. radliq .gt. 60._r8) stop &
+  285.  1                             'LIQUID EFFECTIVE RADIUS OUT OF BOUNDS'
+  286.  1                        index = radliq - 1.5_r8
+  287.  1                        if (index .eq. 58) index = 57
+  288.  1                        if (index .eq. 0) index = 1
+  289.  1                        fint = radliq - 1.5_r8 - index
+  290.  1                        ncbands = 16
+  291.  1 2--<                   do ib = 1, ncbands
+  292.  1 2                         abscoliq(ib) = &
+  293.  1 2                             absliq1(index,ib) + fint * &
+  294.  1 2                             (absliq1(index+1,ib) - (absliq1(index,ib)))
+  295.  1 2-->                   enddo
+  296.  1                        liqpat = 2
+  297.  1                     endif
+  298.  1      
+  299.  1 2--<                do ib = 1, ncbands
+  300.  1 2                      taucloud(lay,ib) = ciwp(lay) * abscoice(ipat(ib,icepat)) + &
+  301.  1 2                                         clwp(lay) * abscoliq(ipat(ib,liqpat))
+  302.  1 2-->                enddo
+  303.  1                  endif
+  304.  1               endif
+  305.  1---->       enddo
+  306.         
+  307.               end subroutine cldprop
+ftn-5008 ftn: NOTE File = rrtmg_lw_cldprop.f90, Line = 307 
+  Named Constant "EPS" is not used.
+
+  308.         
+  309.               end module rrtmg_lw_cldprop
+
+ftn-6204 ftn: VECTOR File = rrtmg_lw_cldprop.f90, Line = 162 
+  A loop starting at line 162 was vectorized.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+             C r o s s   R e f e r e n c e   for   RRTMG_LW_CLDPROP
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+ABSCLD1                         Use assoc                         REAL(KIND=8), From module RRLW_CLD, SAVE
+  Decl
+  Set 
+  Used     187
+
+ABSCOICE                        Stack                             REAL(KIND=8), DIMENSION(16)
+  Decl      88
+  Set      196     201     209     228     235     257     264
+  Used     300
+
+ABSCOLIQ                        Stack                             REAL(KIND=8), DIMENSION(16)
+  Decl      89
+  Set      273     278     292
+  Used     301
+
+ABSICE0                         Use assoc                         REAL(KIND=8), From module RRLW_CLD, DIMENSION(2), SAVE
+  Decl
+  Set 
+  Used     201     235     264
+
+ABSICE1                         Use assoc                         REAL(KIND=8), From module RRLW_CLD, DIMENSION(2, 5), SAVE
+  Decl
+  Set 
+  Used     209
+
+ABSICE2                         Use assoc                         REAL(KIND=8), From module RRLW_CLD, DIMENSION(43, 16), SAVE
+  Decl
+  Set 
+  Used     229     230
+
+ABSICE3                         Use assoc                         REAL(KIND=8), From module RRLW_CLD, DIMENSION(46, 16), SAVE
+  Decl
+  Set 
+  Used     258     259
+
+ABSLIQ0                         Use assoc                         REAL(KIND=8), From module RRLW_CLD, SAVE
+  Decl
+  Set 
+  Used     278
+
+ABSLIQ1                         Use assoc                         REAL(KIND=8), From module RRLW_CLD, DIMENSION(58, 16), SAVE
+  Decl
+  Set 
+  Used     293     294
+
+CIWP                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      40      60
+  Set 
+  Used     173     195     300
+
+CLDFRAC                         Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      38      58
+  Set 
+  Used
+
+CLDMIN                                                            REAL(KIND=8), PARAMETER
+  Decl      98
+  Set 
+  Used     174     175
+
+CLDPROP                                                           Subroutine, Module procedure
+  Decl      33
+  Set 
+  Used
+
+CLWP                            Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      41      62
+  Set 
+  Used     173     272     301
+
+CWP                             Stack                             REAL(KIND=8)
+  Decl      90
+  Set      173
+  Used     187
+
+DGE                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      43      66
+  Set 
+  Used     248
+
+DGEICE                          Stack                             REAL(KIND=8)
+  Decl      93
+  Set      248
+  Used     249     250     252     262
+
+EPS                                                               REAL(KIND=8), PARAMETER
+  Decl      97
+  Set 
+  Used
+
+FACTOR                          Stack                             REAL(KIND=8)
+  Decl      94
+  Set      223     252
+  Used     224     226     253     255
+
+FINT                            Stack                             REAL(KIND=8)
+  Decl      95
+  Set      226     255     289
+  Used     229     258     293
+
+FLOAT                                                             Function, REAL, INTRINSIC
+  Decl
+  Set 
+  Used       0     255
+
+HVRCLD                          Use assoc                         CHARACTER(18), From module RRLW_VSN, SAVE
+  Decl
+  Set      159
+  Used
+
+IB                              Stack                             INTEGER
+  Decl      82
+  Set 
+  Used     166     167     181     187     209     228     229     230     235     257     258     259     264     292     293
+           294     300     301
+
+ICEFLAG                         Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      36      55
+  Set 
+  Used     199     204     219     247
+
+ICEPAT                          Stack                             INTEGER
+  Decl      84
+  Set      197     202     211     232     236     261     265     275     280
+  Used     275     280     300
+
+INDEX                           Stack                             INTEGER
+  Decl      83
+  Set      224     225     253     254     286     287     288
+  Used     225     226     229     230     254     255     258     259     287     288     289     293     294
+
+INFLAG                          Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      35      54
+  Set 
+  Used     178     184     191
+
+INT                                                               Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     253
+
+IPAT                            Static offset=0                   INTEGER, DIMENSION(16, 0:2), INITIALIZED, SAVE
+  Decl      86
+  Set 
+  Used     300     301
+
+LAY                             Stack                             INTEGER
+  Decl      81
+  Set 
+  Used     166     167     173     175     181     187     192     195     248     272     283     300     301
+
+LIQFLAG                         Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      37      56
+  Set 
+  Used     277     282
+
+LIQPAT                          Stack                             INTEGER
+  Decl      85
+  Set      274     279     296
+  Used     301
+
+NBNDLW                          Use assoc                         INTEGER, PARAMETER, From module PARRRTM
+  Decl
+  Set 
+  Used      70      76      88      89     165
+
+NCBANDS                         Dummy Arg                         INTEGER, INTENT(OUT)
+  Decl      45      75
+  Set      161     179     185     207     222     251     290
+  Used     180     186     208     227     234     256     263     291     299
+
+NLAYERS                         Dummy Arg                         INTEGER, INTENT(IN)
+  Decl      34      53
+  Set 
+  Used      58      60      62      64      66      68      70      76      96     164     172
+
+PARRRTM                                                           Module
+  Decl
+  Set 
+  Used      23
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD
+  Decl      20
+  Set 
+  Used      58      60      62      64      66      68      70      76      88      89      90      91      92      93      94
+            95      96      97      98
+
+RADICE                          Stack                             REAL(KIND=8)
+  Decl      92
+  Set      192
+  Used     200     201     205     209     220     221     223     233     235     264
+
+RADLIQ                          Stack                             REAL(KIND=8)
+  Decl      91
+  Set      283
+  Used     284     286     289
+
+REI                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      42      64
+  Set 
+  Used     192
+
+REL                             Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>), INTENT(IN)
+  Decl      44      68
+  Set 
+  Used     283
+
+RRLW_CLD                                                          Module
+  Decl
+  Set 
+  Used      24
+
+RRLW_VSN                                                          Module
+  Decl
+  Set 
+  Used      26
+
+RRTMG_LW_CLDPROP                                                  Module
+  Decl       6
+  Set 
+  Used
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used      20
+
+TAUC                            Dummy Arg                         REAL(KIND=8), DIMENSION(16, <exp>), INTENT(IN)
+  Decl      39      70
+  Set 
+  Used     167     181
+
+TAUCLOUD                        Dummy Arg                         REAL(KIND=8), DIMENSION(<exp>, 16), INTENT(OUT)
+  Decl      46      76
+  Set      166     181     187     300
+  Used
+
+TAUCTOT                         Stack                             REAL(KIND=8), DIMENSION(<exp>)
+  Decl      96
+  Set      162     167
+  Used     175
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+CLDPROP in RRTMG_LW_CLDPROP
+      Defined as:  Subroutine (line 33, file rrtmg_lw_cldprop.f90)
+
+      Interface:   None
+
+      Calls:       INT(Intrinsic) (Line 224, file rrtmg_lw_cldprop.f90)
+                   INT(Intrinsic) (Line 253, file rrtmg_lw_cldprop.f90)
+                   FLOAT(Intrinsic) (Line 226, file rrtmg_lw_cldprop.f90)
+                   FLOAT(Intrinsic) (Line 255, file rrtmg_lw_cldprop.f90)
+
+Name  Messages
+----  --------
+FLOAT(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   CLDPROP in RRTMG_LW_CLDPROP (Line 226, file rrtmg_lw_cldprop.f90)
+                   CLDPROP in RRTMG_LW_CLDPROP (Line 255, file rrtmg_lw_cldprop.f90)
+
+Name  Messages
+----  --------
+INT(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   CLDPROP in RRTMG_LW_CLDPROP (Line 224, file rrtmg_lw_cldprop.f90)
+                   CLDPROP in RRTMG_LW_CLDPROP (Line 253, file rrtmg_lw_cldprop.f90)
+
+Name  Messages
+----  --------
+PARRRTM
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_LW_CLDPROP
+
+Name  Messages
+----  --------
+RRLW_CLD
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_LW_CLDPROP
+
+Name  Messages
+----  --------
+RRLW_VSN
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_LW_CLDPROP
+
+Name  Messages
+----  --------
+RRTMG_LW_CLDPROP
+      Defined as:  Module (line 6, file rrtmg_lw_cldprop.f90)
+
+        Uses:      SHR_KIND_MOD
+                   PARRRTM
+                   RRLW_CLD
+                   RRLW_VSN
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     RRTMG_LW_CLDPROP
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,24 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgbens.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgbens.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgbens( lugb, lugi, jf, j, jpds, jgds, jens, kf, k, kpds, kgds, kens, lb, f, iret )
+  202.       _fwf( pointer to integer (kind=8)( loc( $_StaticCntrl_O0 ) ), pointer to integer (kind=8)( loc( $_StaticIolist_O1[0].L ) ), pointer to integer (kind=8)( loc( $_IO_Lib_Stack_O3 ) ) )
+  203.       call getgbe( 0[loc( lugb ),0], 0[loc( lugi ),0], 0[loc( jf ),0], 0[loc( j ),0], 0[loc( jpds ),0], 0[loc( jgds ),0], 0[loc( jens ),0], 0[loc( kf ),0], 0[loc( k ),0], 0[loc( kpds ),0], 0[loc( kgds ),0], 0[loc( kens ),0], 0[loc( lb )].B, 0[loc( f ),0], 0[loc( iret ),0] )
+  207.       return
+  207.       end
+  207.       

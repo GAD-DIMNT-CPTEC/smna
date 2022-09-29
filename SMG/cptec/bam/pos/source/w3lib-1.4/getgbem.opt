@@ -1,0 +1,98 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  getgbem.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/getgbem.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine getgbem( lugb, lugi, jf, j, jpds, jgds, jens, mbuf, cbuf, nlen, nnum, mnum, kf, k, kpds, kgds, kens, lb, f, iret )
+    2.       t$1 = mbuf
+  214.       t$3 = _zla( 0, mbuf )
+    2.       t$2 = jf
+  215.       t$4 = _zla( 0, jf )
+  220.       if ( j >= 0 ) then
+  221.          if ( mnum >= 0 ) then
+  222.             irgi = 0
+  222.          else
+  224.             mnum = -1 + -mnum
+  225.             irgi = 1
+  225.          endif
+  227.          jr = j + -mnum
+  228.          if ( j + -mnum < 0 ) then
+  226.             goto 10
+  228.          else if ( j + -mnum < nnum ) then
+  228.             goto 20
+  228.          else if ( irgi == 0 ) then
+  228.    20       continue
+  229.             call getgb1s(  _substr(cbuf(1),1,1), nlen, nnum, jr, jpds(1), jgds(1), jens(1), kr, kpds(1), kgds(1), kens(1), lskip, lgrib, irgs )
+  231.             k = cvmg( k, mnum + kr, irgs /= 0 )
+  232.             if ( irgi == 1 ) then
+  232.                if ( irgs == 0 ) then
+  232.                   mnum = -1 + -mnum
+  232.                endif
+  233.                if ( irgs > 0 ) then
+  233.                   mnum = mnum + nnum
+  233.                endif
+  233.             endif
+  233.          else
+  233.    10       continue
+  235.             mnum = j
+  236.             irgi = 1
+  237.             irgs = 1
+  237.          endif
+  237.       else
+  240.          mnum = -1 + -j
+  241.          irgi = 1
+  242.          irgs = 1
+  242.       endif
+  246.       jr = 0
+  247.       if ( irgi == 1 .and. irgs == 1 ) then
+  247.          do
+  248.             if ( lugi > 0 ) then
+  249.                call getgi( lugi, mnum, mbuf,  _substr(cbuf(1),1,1), nlen, nnum, irgi )
+  249.             else
+  251.                call getgir( lugb, 32000, 4000, mnum, mbuf,  _substr(cbuf(1),1,1), nlen, nnum, irgi )
+  251.             endif
+  253.             if ( irgi <= 1 ) then
+  254.                call getgb1s(  _substr(cbuf(1),1,1), nlen, nnum, jr, jpds(1), jgds(1), jens(1), kr, kpds(1), kgds(1), kens(1), lskip, lgrib, irgs )
+  256.                if ( irgs == 0 ) then
+  256.                   k = mnum + kr
+  256.                endif
+  257.                if ( irgi == 1 ) then
+  257.                   if ( irgs == 0 ) then
+  257.                      mnum = -1 + -mnum
+  257.                   endif
+  258.                   if ( irgs > 0 ) then
+  258.                      mnum = mnum + nnum
+  258.                   endif
+  258.                endif
+  258.             endif
+  259.             if ( ( irgi == 1 .and. irgs == 1 ) == 0 ) exit
+  259.          enddo
+  259.       endif
+  263.       if ( irgi > 1 ) then
+  264.          iret = 96
+  265.       else if ( irgs /= 0 ) then
+  266.          iret = 99
+  266.       else
+  267.          $t_S0 = lengds( kgds(1) )
+  267.          if ( $t_S0 > jf ) then
+  268.             iret = 98
+  268.          else
+  270.             call getgb1r( lugb, lskip, lgrib, kf, kpds(1), kgds(1), kens(1), lb(1), f(1), iret )
+  270.          endif
+  270.       endif
+  274.       return
+  274.       end
+  274.       

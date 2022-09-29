@@ -1,0 +1,385 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_lw/rrlw_kg08.f90
+Compiled : 12/12/20  00:22:57
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps rrlw_kg08.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_lw/rrlw_kg08.f90
+Date     : 12/12/2020  00:22:57
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_12167/rrlw_kg08_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     There are no optimizations or loops to mark
+
+
+    1.          module rrlw_kg08
+    2.    
+    3.          use shr_kind_mod, only: r8 => shr_kind_r8
+    4.    
+    5.    !      use parkind ,only : jpim, jprb
+    6.    
+    7.          implicit none
+    8.          save
+    9.    
+   10.    !-----------------------------------------------------------------
+   11.    ! rrtmg_lw ORIGINAL abs. coefficients for interval 8
+   12.    ! band 8:  1080-1180 cm-1 (low (i.e.>~300mb) - h2o; high - o3)
+   13.    !
+   14.    ! Initial version:  JJMorcrette, ECMWF, jul1998
+   15.    ! Revised: MJIacono, AER, jun2006
+   16.    !-----------------------------------------------------------------
+   17.    !
+   18.    !  name     type     purpose
+   19.    !  ----   : ----   : ---------------------------------------------
+   20.    !fracrefao: real    
+   21.    !fracrefbo: real    
+   22.    ! kao     : real     
+   23.    ! kbo     : real     
+   24.    ! kao_mco2: real     
+   25.    ! kbo_mco2: real     
+   26.    ! kao_mn2o: real     
+   27.    ! kbo_mn2o: real     
+   28.    ! kao_mo3 : real     
+   29.    ! selfrefo: real     
+   30.    ! forrefo : real     
+   31.    ! cfc12o  : real     
+   32.    !cfc22adjo: real     
+   33.    !-----------------------------------------------------------------
+   34.    
+   35.          integer, parameter :: no8  = 16
+   36.    
+   37.          real(kind=r8) , dimension(no8) :: fracrefao
+   38.          real(kind=r8) , dimension(no8) :: fracrefbo
+   39.          real(kind=r8) , dimension(no8) :: cfc12o
+   40.          real(kind=r8) , dimension(no8) :: cfc22adjo
+   41.    
+   42.          real(kind=r8) :: kao(5,13,no8)
+   43.          real(kind=r8) :: kao_mco2(19,no8)
+   44.          real(kind=r8) :: kao_mn2o(19,no8)
+   45.          real(kind=r8) :: kao_mo3(19,no8)
+   46.          real(kind=r8) :: kbo(5,13:59,no8)
+   47.          real(kind=r8) :: kbo_mco2(19,no8)
+   48.          real(kind=r8) :: kbo_mn2o(19,no8)
+   49.          real(kind=r8) :: selfrefo(10,no8)
+   50.          real(kind=r8) :: forrefo(4,no8)
+   51.    
+   52.    !-----------------------------------------------------------------
+   53.    ! rrtmg_lw COMBINED abs. coefficients for interval 8
+   54.    ! band 8:  1080-1180 cm-1 (low (i.e.>~300mb) - h2o; high - o3)
+   55.    !
+   56.    ! Initial version:  JJMorcrette, ECMWF, jul1998
+   57.    ! Revised: MJIacono, AER, jun2006
+   58.    !-----------------------------------------------------------------
+   59.    !
+   60.    !  name     type     purpose
+   61.    !  ----   : ----   : ---------------------------------------------
+   62.    !fracrefa : real    
+   63.    !fracrefb : real    
+   64.    ! ka      : real     
+   65.    ! kb      : real     
+   66.    ! ka_mco2 : real     
+   67.    ! kb_mco2 : real     
+   68.    ! ka_mn2o : real     
+   69.    ! kb_mn2o : real     
+   70.    ! ka_mo3  : real     
+   71.    ! selfref : real     
+   72.    ! forref  : real     
+   73.    ! cfc12   : real     
+   74.    ! cfc22adj: real     
+   75.    !
+   76.    ! absa    : real
+   77.    ! absb    : real
+   78.    !-----------------------------------------------------------------
+   79.    
+   80.          integer, parameter :: ng8  = 8
+   81.    
+   82.          real(kind=r8) , dimension(ng8) :: fracrefa
+   83.          real(kind=r8) , dimension(ng8) :: fracrefb
+   84.          real(kind=r8) , dimension(ng8) :: cfc12
+   85.          real(kind=r8) , dimension(ng8) :: cfc22adj
+   86.    
+   87.          real(kind=r8) :: ka(5,13,ng8)    ,absa(65,ng8)
+   88.          real(kind=r8) :: kb(5,13:59,ng8) ,absb(235,ng8)
+   89.          real(kind=r8) :: ka_mco2(19,ng8)
+   90.          real(kind=r8) :: ka_mn2o(19,ng8)
+   91.          real(kind=r8) :: ka_mo3(19,ng8)
+   92.          real(kind=r8) :: kb_mco2(19,ng8)
+   93.          real(kind=r8) :: kb_mn2o(19,ng8)
+   94.          real(kind=r8) :: selfref(10,ng8)
+   95.          real(kind=r8) :: forref(4,ng8)
+   96.    
+   97.          equivalence (ka(1,1,1),absa(1,1)),(kb(1,13,1),absb(1,1))
+   98.    
+   99.          end module rrlw_kg08
+  100.    
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                C r o s s   R e f e r e n c e   for   RRLW_KG08
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+ABSA                            Static offset=120320              REAL(KIND=8), DIMENSION(65, 8), EQUIVALENCE, SAVE
+  Decl      87      97
+  Set 
+  Used
+
+ABSB                            Static offset=0                   REAL(KIND=8), DIMENSION(235, 8), EQUIVALENCE, SAVE
+  Decl      88      97
+  Set 
+  Used
+
+CFC12                           Static offset=153600              REAL(KIND=8), DIMENSION(8), SAVE
+  Decl      84
+  Set 
+  Used
+
+CFC12O                          Static offset=156672              REAL(KIND=8), DIMENSION(16), SAVE
+  Decl      39
+  Set 
+  Used
+
+CFC22ADJ                        Static offset=160256              REAL(KIND=8), DIMENSION(8), SAVE
+  Decl      85
+  Set 
+  Used
+
+CFC22ADJO                       Static offset=163328              REAL(KIND=8), DIMENSION(16), SAVE
+  Decl      40
+  Set 
+  Used
+
+FORREF                          Static offset=166912              REAL(KIND=8), DIMENSION(4, 8), SAVE
+  Decl      95
+  Set 
+  Used
+
+FORREFO                         Static offset=170496              REAL(KIND=8), DIMENSION(4, 16), SAVE
+  Decl      50
+  Set 
+  Used
+
+FRACREFA                        Static offset=175104              REAL(KIND=8), DIMENSION(8), SAVE
+  Decl      82
+  Set 
+  Used
+
+FRACREFAO                       Static offset=178176              REAL(KIND=8), DIMENSION(16), SAVE
+  Decl      37
+  Set 
+  Used
+
+FRACREFB                        Static offset=181760              REAL(KIND=8), DIMENSION(8), SAVE
+  Decl      83
+  Set 
+  Used
+
+FRACREFBO                       Static offset=184832              REAL(KIND=8), DIMENSION(16), SAVE
+  Decl      38
+  Set 
+  Used
+
+KA                              Static offset=120320              REAL(KIND=8), DIMENSION(5, 13, 8), EQUIVALENCE, SAVE
+  Decl      87      97
+  Set 
+  Used
+
+KAO                             Static offset=188416              REAL(KIND=8), DIMENSION(5, 13, 16), SAVE
+  Decl      42
+  Set 
+  Used
+
+KAO_MCO2                        Static offset=256512              REAL(KIND=8), DIMENSION(19, 16), SAVE
+  Decl      43
+  Set 
+  Used
+
+KAO_MN2O                        Static offset=278528              REAL(KIND=8), DIMENSION(19, 16), SAVE
+  Decl      44
+  Set 
+  Used
+
+KAO_MO3                         Static offset=300544              REAL(KIND=8), DIMENSION(19, 16), SAVE
+  Decl      45
+  Set 
+  Used
+
+KA_MCO2                         Static offset=322560              REAL(KIND=8), DIMENSION(19, 8), SAVE
+  Decl      89
+  Set 
+  Used
+
+KA_MN2O                         Static offset=332800              REAL(KIND=8), DIMENSION(19, 8), SAVE
+  Decl      90
+  Set 
+  Used
+
+KA_MO3                          Static offset=343040              REAL(KIND=8), DIMENSION(19, 8), SAVE
+  Decl      91
+  Set 
+  Used
+
+KB                              Static offset=0                   REAL(KIND=8), DIMENSION(5, 13:59, 8), EQUIVALENCE, SAVE
+  Decl      88      97
+  Set 
+  Used
+
+KBO                             Static offset=353280              REAL(KIND=8), DIMENSION(5, 13:59, 16), SAVE
+  Decl      46
+  Set 
+  Used
+
+KBO_MCO2                        Static offset=597504              REAL(KIND=8), DIMENSION(19, 16), SAVE
+  Decl      47
+  Set 
+  Used
+
+KBO_MN2O                        Static offset=619520              REAL(KIND=8), DIMENSION(19, 16), SAVE
+  Decl      48
+  Set 
+  Used
+
+KB_MCO2                         Static offset=641536              REAL(KIND=8), DIMENSION(19, 8), SAVE
+  Decl      92
+  Set 
+  Used
+
+KB_MN2O                         Static offset=651776              REAL(KIND=8), DIMENSION(19, 8), SAVE
+  Decl      93
+  Set 
+  Used
+
+NG8                                                               INTEGER, PARAMETER
+  Decl      80
+  Set 
+  Used      82      83      84      85      87      88      89      90      91      92      93      94      95
+
+NO8                                                               INTEGER, PARAMETER
+  Decl      35
+  Set 
+  Used      37      38      39      40      42      43      44      45      46      47      48      49      50
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD
+  Decl       3
+  Set 
+  Used      37      38      39      40      42      43      44      45      46      47      48      49      50      82      83
+            84      85      87      88      89      90      91      92      93      94      95
+
+RRLW_KG08                                                         Module
+  Decl       1
+  Set 
+  Used
+
+SELFREF                         Static offset=662016              REAL(KIND=8), DIMENSION(10, 8), SAVE
+  Decl      94
+  Set 
+  Used
+
+SELFREFO                        Static offset=667648              REAL(KIND=8), DIMENSION(10, 16), SAVE
+  Decl      49
+  Set 
+  Used
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used       3
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+RRLW_KG08
+      Defined as:  Module (line 1, file rrlw_kg08.f90)
+
+        Uses:      SHR_KIND_MOD
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     RRLW_KG08
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

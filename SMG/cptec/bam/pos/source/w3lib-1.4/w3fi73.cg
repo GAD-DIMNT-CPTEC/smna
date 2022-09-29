@@ -1,0 +1,110 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi73.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi73.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi73( ibflag, ibmap, iblen, bms, lenbms, ier )
+   43.       0[loc( ier ),0] = 0
+   45.       $iz_S24 = 0
+   46.       $MR_iblen_S21 = 0[loc( iblen ),0]
+   46.       if ( $MR_iblen_S21 > 0 ) then
+   46.          $I_L46_S25 = 0
+   46.          $LCS_0 = $MR_iblen_S21
+   46.          if ( $LCS_0 >= 4 ) then !  99.50%
+   46.             $TC_3 = and( -4, $LCS_0 )
+   46.             $LC_S22 = -$TC_3
+   46.             $SI_S23 = 0
+   47.             $LIS_0[0:4:1] = _bcst( 0, 4 )
+   46.             if ( $LC_S22 < -15 ) then
+   46.                do
+   47.                   $LCS_1 = $SI_S23 + loc( ibmap )
+   47.                   $BM_VMT_S5[0:4:1] = 0[$LCS_1:4:1] ==.BM $LIS_0[0:4:1]
+   47.                   $cii_iz_S6 = popcnt( _vsb2mask( $BM_VMT_S5[0:4:1] ) )
+   47.                   $iz_S9 = ( $cii_iz_S6 + $iz_S24 )
+   47.                   $BM_VMT_S7[0:4:1] = 4[$LCS_1:4:1] ==.BM $LIS_0[0:4:1]
+   47.                   $cii_iz_S8 = popcnt( _vsb2mask( $BM_VMT_S7[0:4:1] ) )
+   47.                   $iz_S12 = ( $cii_iz_S8 + $iz_S9 )
+   47.                   $BM_VMT_S10[0:4:1] = 8[$LCS_1:4:1] ==.BM $LIS_0[0:4:1]
+   47.                   $cii_iz_S11 = popcnt( _vsb2mask( $BM_VMT_S10[0:4:1] ) )
+   47.                   $iz_S15 = ( $cii_iz_S11 + $iz_S12 )
+   47.                   $BM_VMT_S13[0:4:1] = 12[$LCS_1:4:1] ==.BM $LIS_0[0:4:1]
+   47.                   $cii_iz_S14 = popcnt( _vsb2mask( $BM_VMT_S13[0:4:1] ) )
+   47.                   $iz_S24 = ( $cii_iz_S14 + $iz_S15 )
+   46.                   $SI_S23 = 64 + $SI_S23
+   46.                   $LC_S22 = 16 + $LC_S22
+   46.                   if ( $LC_S22 >= -15 ) exit
+   46.                enddo
+   46.             endif
+   46.             if ( $LC_S22 < 0 ) then
+   46.                do
+   47.                   $BM_VMT_S17[0:4:1] = 0[$SI_S23 + loc( ibmap ):4:1] ==.BM $LIS_0[0:4:1]
+   47.                   $cii_iz_S18 = popcnt( _vsb2mask( $BM_VMT_S17[0:4:1] ) )
+   47.                   $iz_S24 = ( $cii_iz_S18 + $iz_S24 )
+   46.                   $SI_S23 = 16 + $SI_S23
+   46.                   $LC_S22 = 4 + $LC_S22
+   46.                   if ( $LC_S22 >= 0 ) exit
+   46.                enddo
+   46.             endif
+   46.             $I_L46_S25 = $TC_3
+   46.          endif
+   46.          $LCS_MR_iblen_2 = $MR_iblen_S21
+   46.          if ( $LCS_MR_iblen_2 > $I_L46_S25 ) then !  99.50%
+   46.             do
+   47.                if ( 0[loc( ibmap ),$I_L46_S25] == 0 ) then
+   47.                   $iz_S24 = 1 + $iz_S24
+   47.                endif
+   48.                $I_L46_S25 = 1 + $I_L46_S25
+   47.                if ( $I_L46_S25 >= $LCS_MR_iblen_2 ) exit
+   47.             enddo
+   47.          endif
+   47.       endif
+   49.       if ( $MR_iblen_S21 - $iz_S24 == 0 ) then
+   53.          0[loc( ier ),0] = 8
+   53.       else
+   62.          $Con_P6 = 48
+   62.          $Con_P7 = 1
+   62.          $Con_P8 = 0
+   62.          call sbytesc( substr[bms,0:1], 0[loc( ibmap ),0], $Con_P6, $Con_P7, $Con_P8, 0[loc( iblen ),0] )
+   64.          $MR_iblen_S26 = 0[loc( iblen ),0]
+   64.          $LCS_MR_iblen_3 = $MR_iblen_S26 - and( -16, $MR_iblen_S26 + _rsh( _ash( $MR_iblen_S26, 3 ), 28 ) )
+   64.          $LCS_4 = cvmg( 0, 16 - $LCS_MR_iblen_3, $LCS_MR_iblen_3 == 0 )
+   64.          nleft = $LCS_4
+   70.          $PRT_P5 = $LCS_4 + $MR_iblen_S26
+   70.          $num_S27 = 6 + _ash( $PRT_P5 + _rsh( _ash( $PRT_P5, 2 ), 29 ), 3 )
+   70.          num = $num_S27
+   76.          $Con_P6 = 0
+   76.          $Con_P7 = 24
+   76.          call sbytec( substr[bms,0:1], num, $Con_P6, $Con_P7 )
+   78.          $Con_P6 = 24
+   78.          $Con_P7 = 8
+   78.          call sbytec( substr[bms,0:1], nleft, $Con_P6, $Con_P7 )
+   80.          $Con_P6 = 32
+   80.          $Con_P7 = 16
+   80.          call sbytec( substr[bms,0:1], 0[loc( ibflag ),0], $Con_P6, $Con_P7 )
+   88.          $nleft_S28 = nleft
+   88.          if ( $nleft_S28 /= 0 ) then
+   89.             $nleft_S29 = 16 - $nleft_S28
+   89.             nleft = $nleft_S29
+   91.             t$4 = 48 + $MR_iblen_S26
+   91.             $Con_P6 = 0
+   91.             call sbytec( substr[bms,0:1], $Con_P6, t$4, nleft )
+   91.          endif
+   96.          $num_S30 = num
+   96.          0[loc( lenbms ),0] = $num_S30
+   96.       endif
+  100.       return
+  100.       end
+  100.       

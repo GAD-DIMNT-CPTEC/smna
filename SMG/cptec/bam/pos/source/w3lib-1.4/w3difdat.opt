@@ -1,0 +1,33 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3difdat.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3difdat.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine w3difdat( jdat, idat, it, rinc )
+   50.       $t_S1 = iw3jdn( jdat(1), jdat(2), jdat(3) )
+   51.       $t_S0 = iw3jdn( idat(1), idat(2), idat(3) )
+   50.       rinc1(1) = real( $t_S1 + -$t_S0 )
+   52.       $I_A1 = 0
+   52. !dir$ ivdep
+   52.       do
+   52.          rinc1(2 + $I_A1) = real( jdat(5 + $I_A1) + -idat(5 + $I_A1) )
+   52.          $I_A1 = 1 + $I_A1
+   52.          if ( $I_A1 >= 4 ) exit
+   52.       enddo
+   53.       call w3reddat( it, rinc1(1), rinc(1) )
+   55.       return
+   55.       end
+   55.       

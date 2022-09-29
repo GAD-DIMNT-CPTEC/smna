@@ -1,0 +1,705 @@
+#!/bin/bash
+#-----------------------------------------------------------------------------#
+#           Group on Data Assimilation Development - GDAD/CPTEC/INPE          #
+#-----------------------------------------------------------------------------#
+#BOP
+#
+# !DESCRIPTION: script auxiliar utilizado pelo runGSI. Este script possui todas
+#               as funções utilizadas pelo script runGSI.
+#
+#
+# !REVISION HISTORY: 
+# 20 Ago 2018 - J. G. de Mattos - Initial Version
+#
+# !REMARKS:
+#    
+#    * para o correto funcionamento deve-se primeiro carregar este script
+#      com o comando source
+#      - source runGSI_functions.sh
+#    * O passo seguinte deve ser executar a função constants!
+#
+# !BUGS:
+#
+#    Not yet!
+#
+#EOP
+#-----------------------------------------------------------------------------#
+#BOC
+#-----------------------------------------------------------------------------#
+# assign value $2 to variable $1
+#-----------------------------------------------------------------------------#
+assign(){
+eval export $1=$2
+}
+
+#-----------------------------------------------------------------------------#
+# return a subword of a string
+#-----------------------------------------------------------------------------#
+
+subwrd ( ) {
+   str=$(echo "${@}" | awk '{ for (i=1; i<=NF-1; i++) printf("%s ",$i)}')
+   n=$(echo "${@}" | awk '{ print $NF }')
+   echo "${str}" | awk -v var=${n} '{print $var}'
+}
+
+#-----------------------------------------------------------------------------#
+# return usage from main program
+#-----------------------------------------------------------------------------#
+usage ( ){
+   echo
+   echo "Usage:"
+   sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' ${runGSI} 
+}
+
+#-----------------------------------------------------------------------------#
+# Define some constants to GSI use
+#-----------------------------------------------------------------------------#
+constants ( ) {
+   
+   # Get local run of the runGSI
+    for i in $(seq 0 $((${#FUNCNAME[@]}-1)) );do
+       if [ ${FUNCNAME[$i]} == 'main' ];then
+          export runGSIDir=$(dirname $(readlink -e ${BASH_SOURCE[$i]}))
+          export runGSI=$(readlink -e ${BASH_SOURCE[$i]})
+          break
+       fi
+    done
+
+   # Define endianness
+   export BYTE_ORDER=Big_Endian
+   
+   # PBS default variables
+   #
+   #   * Some of these variables
+   #     can be modified by command
+   #     line
+
+   export MaxCoresPerNode=40
+   export MPITasks=120                    # Number of Processors
+   export ThreadsPerMPITask=1             # Number of cores hosting OpenMP threads
+   export TasksPerNode=$((${MaxCoresPerNode}/${ThreadsPerMPITask})) # Number of Processors used by each MPI tasks
+   export PEs=$((${MPITasks}/${ThreadsPerMPITask}))
+   export Nodes=$(((${MPITasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
+   export Queue=pesq 
+   export WallTime=00:45:00
+   export BcCycles=0
+
+   # MPI environmental variables
+   export MPICH_UNEX_BUFFER_SIZE=100000000
+   export MPICH_MAX_SHORT_MSG_SIZE=4096      
+   export MPICH_PTL_UNEX_EVENTS=50000
+   export MPICH_PTL_OTHER_EVENTS=2496
+
+   # files used by this script
+   export execGSI=${home_cptec}/bin/gsi.exe
+   export parmGSI=${home_gsi_fix}/gsiparm.anl
+   export obsGSI=${home_gsi_fix}/obsfiles.rc
+#   export SatBiasSample=${public_fix}/comgsi_satbias_in
+#   export SatBiasPCSample=${public_fix}/comgsi_satbias_pc_in
+   export SatBiasSample=${public_fix}/gdas1.t00z.abias
+   export SatBiasPCSample=${public_fix}/gdas1.t00z.abias_pc
+   export ScanInfo=${public_fix}/global_scaninfo.txt
+   export SatBiasAngSample=${public_fix}/global_satangbias.txt
+   export execBCAng=${home_cptec}/bin/gsi_angupdate.exe
+   export parmBCAng=${home_gsi_fix}/global_angupdate.nml
+
+   # Satbias files
+   export satbiasIn=satbias.in
+   export satbiasOu=satbias.out
+   export satbiasPCIn=satbias_pc
+   export satbiasPCOu=satbias_pc.out
+   export satbiasAngIn=satbias_angle.in
+   export satbiasAngOu=satbias_angle.out
+
+   
+}
+#-----------------------------------------------------------------------------#
+# Get BAM trunc
+#-----------------------------------------------------------------------------#
+BAM_CoordSize ( ){
+
+   trunc=${1}
+
+   case ${trunc} in
+      21)TimeStep=3600; IMax=64; JMax=32;;
+      31)TimeStep=1800; IMax=96; JMax=48;;
+      42)TimeStep=1800; IMax=128; JMax=64;;
+      62)TimeStep=900; IMax=192; JMax=96;;
+      106)TimeStep=900; IMax=320; JMax=160;;
+      126)TimeStep=600; IMax=384; JMax=192;;
+      133)TimeStep=600; IMax=400; JMax=200;;
+      159)TimeStep=600; IMax=480; JMax=240;;
+      170)TimeStep=450; IMax=512; JMax=256;;
+      213)TimeStep=300; IMax=640; JMax=320;;
+      254)TimeStep=255; IMax=768; JMax=384;;
+      299)TimeStep=200; IMax=900; JMax=450;;
+      319)TimeStep=225; IMax=960; JMax=480;;
+      341)TimeStep=200; IMax=1024; JMax=512;;
+      382)TimeStep=180; IMax=1152; JMax=576;;
+      511)TimeStep=150; IMax=1536; JMax=768;;
+      533)TimeStep=150; IMax=1600; JMax=800;;
+      666)TimeStep=240; IMax=2000; JMax=1000;;
+      863)TimeStep=150; IMax=2592; JMax=1296;;
+      1279)TimeStep=20; IMax=3840; JMax=1920;;
+      1332)TimeStep=20; IMax=4000; JMax=2000;;
+      *)echo "Truncamento desconhecido ${trunc}"
+   esac
+}
+
+#-----------------------------------------------------------------------------#
+# Get options from runGSI line command
+#-----------------------------------------------------------------------------#
+ParseOpts( ) {
+
+   i=1
+   flag=0
+   while true; do
+
+      arg=$(echo "${@}" | awk -v var=${i} '{print $var}')
+      i=$((i+1))
+
+      if [ -z ${arg} ];then
+         break;
+      fi
+
+      while true ;do
+
+         if [ ${arg} = '-t' ]; then BkgTrunc=$(subwrd ${@} ${i}); i=$((i+1)); break; fi
+         if [ ${arg} = '-l' ]; then BkgNLevs=$(subwrd ${@} ${i}); i=$((i+1)); break; fi
+         if [ ${arg} = '-p' ]; then BkgPrefix=$(subwrd ${@} ${i}); i=$((i+1)); break; fi
+
+         if [ ${arg} = '-I' ]; then AnlDate=$(subwrd ${@} ${i}); i=$((i+1)); break; fi
+         if [ ${arg} = '-T' ]; then AnlTrunc=$(subwrd ${@} ${i}); i=$((i+1)); break; fi
+         if [ ${arg} = '-bc' ]; then BcCycles=$(subwrd ${@} ${i}); i=$((i+1)); break; fi
+
+         if [ ${arg} = '-np' ]; then MPITasks=$(subwrd ${@} ${i}); i=$((i+1)); break; fi
+         if [ ${arg} = '-N' ]; then TasksPerNode=$(subwrd ${@} ${i}); i=$((i+1)); break; fi
+         if [ ${arg} = '-d' ]; then ThreadsPerMPITask=$(subwrd ${@} ${i}); i=$((i+1)); break; fi
+
+         if [ ${arg} = '-om' ]; then ObsMod=$(subwrd ${@} ${i}); i=$((i+1)); break; fi
+
+         if [ ${arg} = '-h' ]; then cat < ${0} | sed -n '/^#BOP/,/^#EOP/p' ; i=$((i+0)); exit 0; fi
+
+         flag=1
+         i=$((i-1))
+
+         break;
+      done
+      if [ ${flag} -eq 1 ]; then break; fi
+   done
+
+   # Truncamento do background
+   if [ -z ${BkgTrunc} ];then
+      echo -e "\e[31;1m >> Erro: \e[m\e[33;1m Truncamento do background não foi passado\e[m"
+      usage
+      exit -1
+   fi
+
+   # Numero de niveis do background
+   if [ -z ${BkgNLevs} ];then
+      echo -e "\e[31;1m >> Erro: \e[m\e[33;1m Número de níveis do background não foi passado\e[m"
+      usage
+      exit -1
+   fi
+
+   # Prefixo do arquivo de background
+   if [ -z ${BkgPrefix} ];then
+      echo -e "\e[31;1m >> Erro: \e[m\e[33;1m Prefixo do arquivo de background não foi passado\e[m"
+      usage
+      exit -1
+   fi
+
+   # Data para a produção da Análise
+   if [ -z ${AnlDate} ];then
+      echo -e "\e[31;1m >> Erro: \e[m\e[33;1m A data da análise não foi passada\e[m"
+      usage
+      exit -1
+   fi
+
+   # Execução com 1 (oneobtest) ou mais (fullobs) observações
+   if [ -z ${ObsMod} ]; then
+     ObsMod="false"
+   fi
+
+   # Truncamento em que a análise será calculada
+   # Obs: Este é o mesmo truncamento utilizado no
+   #      cálculo prévio da matriz de covariância 
+   #      do erro. Então esta será a resolução em
+   #      que o GSI irá processar internamente a
+   #      análise. Pode ser diferente do Truncamento
+   #      do modelo.
+   if [ -z ${AnlTrunc} ];then
+      AnlTrunc=${BkgTrunc}
+   fi
+
+   # Não haverá modificações na coordenada vertical
+   export AnlNLevs=${BkgNLevs}
+      
+   # Configurando datas
+   export BkgDate=$(${inctime} ${AnlDate} -6h %y4%m2%d2%h2)
+   export FctDate=$(${inctime} ${AnlDate} +6h %y4%m2%d2%h2)
+   
+   # Configurando Sulfixo dos arquivos do Modelo
+   export AnlMRES=$(printf 'TQ%4.4dL%3.3d' ${AnlTrunc} ${AnlNLevs})
+   export BkgMRES=$(printf 'TQ%4.4dL%3.3d' ${BkgTrunc} ${BkgNLevs})
+}
+
+#-----------------------------------------------------------------------------#
+# Choose and link/copy observations from ObsDir to GSI dir run
+#-----------------------------------------------------------------------------#
+linkObs ( ){
+   local runDate=${1}
+   local runDir=${2}
+   
+   local verbose=true
+
+   local obsDir=${ncep_ext}/${runDate:0:8}00/dataout/NCEP
+   local obsDir=${obsDir}:/lustre_xc50/ioper/data/external/ASSIMDADOS
+   local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/${runDate}
+   local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/obs/${runDate:0:6}/${runDate:6:4}
+
+   local IFS=":"; read -a obsPath < <(echo "${obsDir}")
+   local nPaths=${#obsPath[@]}
+   local IFS=" "
+   local names=$(sed -n '/OBS_INPUT::/,/::/{/OBS_INPUT/d;/::/d;/^!/d;p}' ${parmGSI} | awk '{print $1}' | sort -u | xargs)
+   count=0
+   for name in ${names};do
+      i=0
+      while [ $i -le $((nPaths-1)) ];do
+         filemask=${obsPath[$i]}/$(grep -iw ${name} ${obsGSI} | awk '{print $1}'; exit ${PIPESTATUS[0]} )
+         if [ $? -eq 0 ];then
+            file=$(${inctime} ${runDate} +0h ${filemask})
+            if [ -e ${file} ];then
+               cp -pfr  ${file} ${runDir}/${name} 2> /dev/null
+
+               if [ $? -eq 0 ];then
+                  echo -en "\033[34;1m[\033[m\033[32;1m OK\033[m"
+                  count=$((count + 1))
+               else
+                  echo -en "\033[34;1m[\033[m\033[31;1m FAIL\033[m"
+               fi
+
+               if [ ${verbose} == 'true' ];then
+                  echo -e "\033[34;1m ]\033[m\033[34;1m link\033[m\033[37;1m ${name}\033[m @ [ ${obsPath[$i]} ]"
+               else
+                  echo -e "\033[34;1m ]\033[m\033[34;1m link\033[m\033[37;1m ${name}\033[m"
+               fi
+
+               break
+
+            elif [ $i -eq $((nPaths-1)) ];then
+               echo -e " "
+               echo -e "\033[31;1m File not found \033[m\033[34;1m $(basename ${file})\033[m\033[31;1m\033[m"
+               echo -e " "
+            fi
+         else
+            echo -e " "
+            echo -e "\033[31;1m Error trying link\033[m\033[34;1m ${name}\033[m\033[31;1m observation file \033[m"
+            echo -e "\033[31;1m Observation not found in\033[m\033[34;1m ${obsGSI}\033[m\033[31;1m file ! \033[m"
+            echo -e " "
+         fi 
+         i=$((i+1))
+      done
+
+   done
+   echo -e "\033[34;1m Found\033[m\033[32;1m ${count}\033[m\033[34;1m observation files to use\033[m"
+}
+
+#-----------------------------------------------------------------------------#
+# Copy fixed files to use in GSI run
+#-----------------------------------------------------------------------------#
+FixedFiles ( ) {
+
+   local Trunc=${1}
+   local NLevs=${2}
+   local runDir=${3}
+
+   local mres=$(printf 'TQ%4.4dL%3.3d' ${Trunc} ${NLevs})
+
+   # Public fixed files 
+   # (GSI)
+   cp -pfr ${public_fix}/gsir4.berror_stats.gcv.BAM.${mres} ${runDir}/berror_stats
+   cp -pfr ${public_fix}/atms_beamwidth.txt                 ${runDir}/atms_beamwidth.txt
+   cp -pfr ${public_fix}/global_ozinfo.txt                  ${runDir}/ozinfo
+   cp -pfr ${public_fix}/global_pcpinfo.txt                 ${runDir}/pcpinfo
+   cp -pfr ${public_fix}/prepobs_errtable.global            ${runDir}/errtable
+   if [ ${ObsMod} == "true" ]; then
+     cp -pfr ${public_fix}/prepobs_prep.bufrtable             ${runDir}/prepobs_prep.bufrtable
+   fi
+   cp -pfr ${public_fix}/bufrtab.012                        ${runDir}/bftab_sstphr
+
+   # (CRTM)
+   ln -sf ${public_crtm}/${BYTE_ORDER}/Nalli.IRwater.EmisCoeff.bin    ${runDir}/Nalli.IRwater.EmisCoeff.bin
+   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRice.EmisCoeff.bin     ${runDir}/NPOESS.IRice.EmisCoeff.bin
+   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRland.EmisCoeff.bin    ${runDir}/NPOESS.IRland.EmisCoeff.bin
+   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRsnow.EmisCoeff.bin    ${runDir}/NPOESS.IRsnow.EmisCoeff.bin
+   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISice.EmisCoeff.bin    ${runDir}/NPOESS.VISice.EmisCoeff.bin
+   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISland.EmisCoeff.bin   ${runDir}/NPOESS.VISland.EmisCoeff.bin
+   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISsnow.EmisCoeff.bin   ${runDir}/NPOESS.VISsnow.EmisCoeff.bin
+   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISwater.EmisCoeff.bin  ${runDir}/NPOESS.VISwater.EmisCoeff.bin
+   ln -sf ${public_crtm}/${BYTE_ORDER}/FASTEM5.MWwater.EmisCoeff.bin  ${runDir}/FASTEM5.MWwater.EmisCoeff.bin
+   ln -sf ${public_crtm}/${BYTE_ORDER}/AerosolCoeff.bin               ${runDir}/AerosolCoeff.bin
+   ln -sf ${public_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 ${runDir}/CloudCoeff.bin
+
+   # User fixed files
+   cp -pfr ${home_gsi_fix}/global_anavinfo.l${NLevs}.txt   ${runDir}/anavinfo
+   cp -pfr ${home_gsi_fix}/global_satinfo.txt              ${runDir}/satinfo
+   cp -pfr ${home_gsi_fix}/global_convinfo.txt             ${runDir}/convinfo
+   cp -pfr ${home_gsi_fix}/global_scaninfo.txt             ${runDir}/scaninfo
+
+   #
+   #-------------------------------------------------------------------------------#
+   # Copy CRTM coefficient files based on entries in satinfo file
+   #
+   
+   for file in $(awk '{if($1!~"!"){print $1}}' ${runDir}/satinfo | sort | uniq) ;do
+      ln -s ${public_crtm}/${BYTE_ORDER}/${file}.SpcCoeff.bin ${runDir}
+      ln -s ${public_crtm}/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
+   done
+}
+#-----------------------------------------------------------------------------#
+# Link/Copy info Files (satinfo, convinfo, ozinfo). These files are dependent
+# of the anl time.
+#-----------------------------------------------------------------------------#
+getInfoFiles (){
+   anlDate=${1}
+   infoFiles=${home_gsi_fix}/infoFiles
+   for infoFile in satinfo convinfo ozinfo;do
+      while read file;do
+         infoDate=${file##*.}
+         #echo -e $infoFile "${file##*.} -- $anlDate"
+         if [ $anlDate -ge ${infoDate} ];then
+            assign ${infoFile} ${file}   
+         fi
+      done < <(ls -1 ${infoFiles}/global_*${infoFile}* )
+   done
+
+   cp -pvfr ${satinfo}  ${runDir}/satinfo
+   cp -pvfr ${convinfo} ${runDir}/convinfo
+   cp -pvfr ${ozinfo}   ${runDir}/ozinfo
+
+}
+#-----------------------------------------------------------------------------#
+# Link/Copy coefficient files for both air bias correction and angle dependent 
+# bias into the GSI run directory before running the GSI executable. 
+#-----------------------------------------------------------------------------#
+getSatBias ( ){
+
+   local AnlDate=${1}
+   local bkgDate=${2}
+   local runDir=${3}
+   local DataOut=${4}
+
+   local cold=0
+
+   # Find for a bias corrected file
+
+   # if are running a bias correcion cycle
+   # find in current GSI running dir by 
+   # satbias file
+   FindDir01=${runDir}
+
+   # but nomaly find from a previous cycle
+   FindDir02=${DataOut}/${BkgDate}
+
+   local FileSatbiasOu=$(find ${FindDir01} ${FindDir02} -iname "${satbiasOu}*" -print 2> /dev/null | sort -nr | head -n 1)
+
+   if [ ${#FileSatbiasOu} -eq 0 ];then
+
+     echo -e "\033[31;1m #--------------------------------------#\033[m"
+     echo -e "\033[31;1m #    1° ciclo de assimilação           #\033[m"
+     echo -e "\033[31;1m #  Caso não seja o 1° ciclo verificar  #\033[m"
+     echo -e "\033[31;1m #    porque não copiou o arquivo       #\033[m"
+     echo -e "\033[31;1m #            ${satbiasOu}         #\033[m"
+     echo -e "\033[31;1m #--------------------------------------#\033[m"
+
+     if [ -e ${runDir}/${satbiasIn} ];then
+        #
+        # if file exist, may be corrupted!
+        #
+        rm -fr ${runDir}/${satbiasIn}
+     fi
+
+     cp -pfr ${SatBiasSample} ${runDir}/${satbiasIn}
+
+     cold=1
+
+   else
+     
+     cp -pfr ${FileSatbiasOu} ${runDir}/${satbiasIn}
+
+   fi
+
+   local FileSatbiasAngOu=$(find ${FindDir01} ${FindDir02} -iname "${satbiasAngOu}*" -print 2> /dev/null | sort -nr | head -n 1)
+
+   if [ ${#FileSatbiasAngOu} -eq 0 ];then
+
+     echo -e "\033[31;1m #--------------------------------------#\033[m"
+     echo -e "\033[31;1m #    1° ciclo de assimilação           #\033[m"
+     echo -e "\033[31;1m #  Caso não seja o 1° ciclo verificar  #\033[m"
+     echo -e "\033[31;1m #    porque não copiou o arquivo       #\033[m"
+     echo -e "\033[31;1m #          ${satbiasAngOu}         #\033[m"
+     echo -e "\033[31;1m #--------------------------------------#\033[m"
+     
+     if [ -e ${runDir}/${satbiasAngIn} ];then
+        #
+        # if file exist, may be corrupted!
+        #
+        rm -fr ${runDir}/${satbiasAngIn}
+     fi
+
+     cp -pfr ${SatBiasAngSample} ${runDir}/${satbiasAngIn}
+
+   else
+     
+     cp -pfr ${FileSatbiasAngOu} ${runDir}/${satbiasAngIn}
+
+   fi
+
+   local FileSatbiasPCOu=$(find ${FindDir01} ${FindDir02} -iname "${satbiasPCOu}*" -print 2> /dev/null | sort -nr | head -n 1)
+
+   if [ ${#FileSatbiasPCOu} -eq 0 ];then
+
+     echo -e "\033[31;1m #--------------------------------------#\033[m"
+     echo -e "\033[31;1m #    1° ciclo de assimilação           #\033[m"
+     echo -e "\033[31;1m #  Caso não seja o 1° ciclo verificar  #\033[m"
+     echo -e "\033[31;1m #    porque não copiou o arquivo       #\033[m"
+     echo -e "\033[31;1m #          ${satbiasPCOu}         #\033[m"
+     echo -e "\033[31;1m #--------------------------------------#\033[m"
+     
+     if [ -e ${runDir}/${satbiasPCIn} ];then
+        #
+        # if file exist, may be corrupted!
+        #
+        rm -fr ${runDir}/${satbiasPCIn}
+     fi
+
+     cp -pfr ${SatBiasPCSample} ${runDir}/${satbiasPCIn}
+
+   else
+     
+     cp -pfr ${FileSatbiasPCOu} ${runDir}/${satbiasPCIn}
+
+   fi
+
+   return ${cold}
+
+}
+
+
+#-----------------------------------------------------------------------------#
+# Function to submit GSI job at tupa supercomputer 
+#-----------------------------------------------------------------------------#
+subGSI() {
+   runDir=${1}
+   imax=${2}
+   jmax=${3}
+   kmax=${4}
+   atrc=${5}
+   btrc=${6}
+   andt=${7}
+   onet=${8}
+   cold=${9}
+   
+   if [ $cold == '.true.' ];then
+      sed "s/#CENTER#/cptec/g" ${parmGSI}.cold > ${runDir}/$(basename ${parmGSI})
+   else
+      sed "s/#CENTER#/cptec/g" ${parmGSI} > ${runDir}/$(basename ${parmGSI})
+   fi
+
+   sed -i -e "s/#IMAX#/${imax}/g" \
+          -e "s/#JMAX#/${jmax}/g" \
+          -e "s/#KMAX#/${kmax}/g" \
+          -e "s/#TRUNC#/${atrc}/g" \
+          -e "s/#TRUNCB#/${btrc}/g" \
+          -e "s/#NLVL#/$((${kmax}-1))/g" \
+          -e "s/#NLV#/${kmax}/g" \
+          -e "s/#LABELANL#/${andt}/g" \
+          -e "s/#ONEOBTEST#/${onet}/" ${runDir}/$(basename ${parmGSI})
+
+  runTime=$(date '+runTime-%H:%M:%S')
+
+  #
+  # Sanity Check
+  #
+  sanity=$((${TasksPerNode}*${ThreadsPerMPITask}))
+  if [ ${sanity} -ne ${MaxCoresPerNode} ];then
+     echo -e "\e[31;1m >> Erro: \e[m\e[33;1m Redefina Numero de Processos MPI e openMP\e[m"
+     exit -1
+  fi
+
+cat << EOF > ${runDir}/gsi.qsb
+#!/bin/bash
+#PBS -o \${PBS_O_WORKDIR}/gsiAnl.${andt}.${runTime}.out
+#PBS -S /bin/bash
+#PBS -q ${Queue}
+#PBS -l nodes=${Nodes}:ppn=${MaxCoresPerNode}
+#PBS -N gsiAnl
+#PBS -A CPTEC
+
+ulimit -c unlimited
+ulimit -s unlimited
+
+# Enable ro debug after run gsi
+# must use Stack Trace Analysis Tool (STAT) 
+export ATP_ENABLED=1
+
+cd \${PBS_O_WORKDIR}
+
+aprun -n ${PEs} -N ${TasksPerNode} -d ${ThreadsPerMPITask} $(basename ${execGSI}) > gsiStdout_${andt}.${runTime}.log
+
+EOF
+
+cd ${runDir}
+
+PID=$(qsub -W block=true gsi.qsb; exit ${PIPESTATUS[0]})
+return $?
+exit 1
+}
+
+#-----------------------------------------------------------------------------#
+# Function to submet radiance Bias Correction from satellite angle 
+#-----------------------------------------------------------------------------#
+subBCAng ( ) { 
+
+   runDir=${1}
+   andt=${2}
+
+   cp ${parmBCAng} ${runDir}/$(basename ${parmBCAng})
+
+   sed -i -e "s/#YEAR#/${andt:0:4}/g" \
+          -e "s/#MONTH#/${andt:4:2}/g" \
+          -e "s/#DAY#/${andt:6:2}/g" \
+          -e "s/#HOUR#/${andt:8:2}/g" ${runDir}/$(basename ${parmBCAng})
+
+  runTime=$(date '+runTime-%H:%M:%S')
+
+cat << EOF > ${runDir}/angupdate.qsb
+#!/bin/bash
+#PBS -o \${PBS_O_WORKDIR}/gsiAngUpdate.${andt}.${runTime}.out
+#PBS -S /bin/bash
+#PBS -q ${Queue}
+#PBS -l nodes=1:ppn=40
+#PBS -l walltime=00:05:00
+#PBS -N gsiAngUpdate
+#PBS -A CPTEC
+
+# Enable to debug after run gsi angupdate
+# must use Stack Trace Analysis Tool (STAT) 
+export ATP_ENABLED=1
+
+cd \${PBS_O_WORKDIR}
+
+aprun -n 40 $(basename ${execBCAng}) > gsiAngUpdateStdout_${andt}.${runTime}.log
+
+EOF
+
+cd ${runDir}
+
+PID=$(qsub -W block=true angupdate.qsb; exit ${PIPESTATUS[0]})
+return $?
+
+}
+teste(){
+echo 'hello'
+}
+#-----------------------------------------------------------------------------#
+# Function to Merge diagnostic files from GSI run 
+#-----------------------------------------------------------------------------#
+mergeDiagFiles ( ) { 
+
+   local runDir=${1}
+   local AnDate=${2}
+
+   local miter=$(printf "%2.2d" $(($(grep -i miter ${parmGSI} | awk -F"," '{print $1}' | awk -F"=" '{print $2}')+1)))
+   local files=$(find -P -O3 ${runDir} -maxdepth 1 -iname "pe*.*" -printf '%f\n'| awk -F"." '{print $2}' | sort -u)
+
+   for file in $(echo ${files});do
+   
+      #tmpv=${file##pe0000.}
+      #loop=$(echo ${tmpv}|awk -F"_" '{print $NF}')
+      #type=${tmpv%%_${loop}}
+      loop=$(echo ${file}|awk -F"_" '{print $NF}')
+      type=${file%%_${loop}}
+      echo -en "\033[34;1mMerging diag files \033[m\033[32;1m${type}\033[m\033[34;1m, outer loop \033[m\033[32;1m${loop}\033[m \033[34;1m[\033[m" 
+
+      cat $(find -P -O3 ${runDir} -maxdepth 1 -iname "pe*${type}*${loop}" | sort -n) > ${runDir}/diag_${type}_${loop}.${AnDate} 2> /dev/null
+
+      if [ $? -eq 0 ];then
+         echo -e "\033[32;1m OK \033[m\033[34;1m]\033[m"
+
+#         # remove pe's files
+#         find ${runDir} -iname "pe*${type}*${loop}" -exec rm -f {} \;
+
+         # copy pe's files to diag dir #
+         #
+         # This procedure will be removed later
+         #
+         if [ ! -e ${runDir}/diag ];then
+            mkdir -p ${runDir}/diag
+         fi
+
+         find -P -O3 ${runDir} -maxdepth 1 -iname "pe*${type}*${loop}" -exec mv -f {} ${runDir}/diag \;
+
+         # link to be used by gsi_angleupdate.exe
+         if [ ${loop} = ${miter} ];then
+            ln -sf ${runDir}/diag_${type}_${loop}.${AnDate} ${runDir}/diag_${type}.${AnDate}
+         fi
+      else
+         echo -e "\033[31;1m FAIL \033[m\033[34;1m]\033[m"
+      fi
+
+   done
+
+
+}
+#-----------------------------------------------------------------------------#
+# Function to copy files generated by gsi and gsiAngUpdate
+#-----------------------------------------------------------------------------#
+copyFiles (){
+   
+   local fromDir=${1}
+   local toDir=${2}
+
+   local CP='cp -pf'
+#   local MV='mv -f'
+   local MV='cp -pf'
+
+   # arquivos gerados pelo gsi
+   find -P -O3 ${fromDir} -maxdepth 1 -type f -iname "diag_*" -exec mv -f {} ${toDir} \;
+   find -P -O3 ${fromDir} -maxdepth 1 -type f -iname "fort.*" -exec mv -f {} ${toDir} \;
+   
+   mv -f ${fromDir}/diag ${toDir}
+
+   ${MV} ${fromDir}/BAM.anl ${toDir}/GANL${BkgPrefix}${AnlDate}S.unf.${BkgMRES}
+   ${MV} ${fromDir}/${satbiasIn} ${toDir}
+   ${MV} ${fromDir}/${satbiasOu} ${toDir}
+   ${MV} ${fromDir}/${satbiasPCIn} ${toDir}
+   ${MV} ${fromDir}/${satbiasPCOu} ${toDir}
+   ${MV} ${fromDir}/${satbiasAngIn} ${toDir}
+   ${MV} ${fromDir}/${satbiasAngOu} ${toDir}
+
+   # arquivos de configuracao
+   ${MV} ${fromDir}/gsiparm.anl ${toDir}
+   ${CP} ${fromDir}/anavinfo ${toDir}
+   ${CP} ${fromDir}/satinfo  ${toDir}
+   ${CP} ${fromDir}/convinfo ${toDir}
+
+   # arquivos de log
+   ${MV} ${fromDir}/gsiAnl.* ${toDir}
+   ${MV} ${fromDir}/gsiStdout* ${toDir}
+#   mv -f ${fromDir}/gsiAngUpdate* ${toDir}
+   
+}
+#EOC
+#-----------------------------------------------------------------------------#
+function .log () {
+  local LOG_LEVELS=([0]="emerg"  [1]="alert"   [2]="crit"   [3]="err"    [4]="warning" [5]="notice" [6]="info"   [7]="debug")
+  local LOG_COLORS=([0]="[31;1m" [1]="[33;1m" [2]="[31;1m" [3]="[31;1m" [4]="[33;1m"  [5]="[32;1m" [6]="[34;1m" [7]="[32;1m")
+  local LEVEL=${1}
+  local __VERBOSE=${#LOG_LEVELS[@]}
+  shift
+  if [ ${__VERBOSE} -ge ${LEVEL} ]; then
+    echo -e "\033${LOG_COLORS[$LEVEL]}[${LOG_LEVELS[$LEVEL]}]\033[m" "$@ ${LOG_COLORS}"
+  fi
+}

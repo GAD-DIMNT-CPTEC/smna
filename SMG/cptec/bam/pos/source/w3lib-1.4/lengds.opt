@@ -1,0 +1,36 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  lengds.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/lengds.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       integer
+    2.       function lengds( kgds )
+   27.       if ( kgds(1) == 201 ) then
+   28.          $lengds_S0 = kgds(8) / -2 + kgds(7) * kgds(8)
+   30.       else if ( kgds(1) == 202 ) then
+   31.          $lengds_S0 = kgds(7) * kgds(8)
+   31.       else if ( kgds(19) /= 0 ) then
+   31.          goto 10
+   31.       else if ( kgds(20) /= 255 ) then
+   34.          $lengds_S0 = kgds(21)
+   34.       else
+   34.    10    continue
+   37.          $lengds_S0 = kgds(2) * kgds(3)
+   37.       endif
+   40.       lengds = $lengds_S0
+   40.       return
+   40.       end
+   40.       

@@ -1,0 +1,1384 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S u m m a r y   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Compilation
+-----------
+File     : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/../../ext/rrtmg_mcica/mcica_random_numbers.f90
+Compiled : 12/12/20  00:22:29
+Compiler : Version 8.0.6
+Target   : x86-64
+Command  : /opt/cray/cce/8.0.6/cftn/x86-64/bin/ftn_driver.exe -hcpu=mc12
+           -hnetwork=gemini -hstatic -ra -hbyteswapio
+           -Onomodinline,vector0,ipa0,fusion0,unroll0,fp0 -homp -sdefault32
+           -hdisplay_opt -c -I/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/include
+           -I/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/include
+           -I/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/include
+           -I/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/include
+           -I/opt/cray/gni-headers/2.1-1.0400.4351.3.1.gem/include
+           -I/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/include
+           -I/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/include
+           -I/opt/cray-hss-devel/6.0.0/include
+           -I/opt/cray/krca/1.0.0-2.0400.31554.3.55.gem/include
+           -I/opt/cray/cce/8.0.6/craylibs/x86-64/include
+           -I/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/include
+           -L/opt/cray/udreg/2.3.1-1.0400.4264.3.1.gem/lib64
+           -L/opt/cray/ugni/2.3-1.0400.4374.4.88.gem/lib64
+           -L/opt/cray/pmi/3.0.1-1.0000.9101.2.26.gem/lib64
+           -L/opt/cray/dmapp/3.2.1-1.0400.4255.2.159.gem/lib64
+           -L/opt/cray/xpmem/0.1-2.0400.31280.3.1.gem/lib64
+           -L/opt/cray/rca/1.0.0-2.0400.31553.3.58.gem/lib64 -lrca
+           -L/opt/cray/cce/8.0.6/craylibs/x86-64 -L/opt/gcc/4.4.4/snos/lib64
+           -D__CRAYXE -D__CRAYXT_COMPUTE_LINUX_TARGET -D__TARGET_LINUX__
+           -I/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/include
+           -I/opt/xt-libsci/11.1.01/cray/74/mc12/include
+           -I/opt/cray/hdf5/1.8.8/cray/74/include
+           -I/opt/cray/netcdf/4.2.0/cray/74/include
+           -L/opt/cray/mpt/5.5.4/gni/mpich2-cray/74/lib
+           -L/opt/xt-libsci/11.1.01/cray/74/mc12/lib
+           -L/opt/cray/hdf5/1.8.8/cray/74/lib
+           -L/opt/cray/netcdf/4.2.0/cray/74/lib -lnetcdff_cray -lnetcdf_cray
+           -lhdf5hl_fortran_cray -lhdf5_hl_cray -lhdf5_fortran_cray -lhdf5_cray
+           -lz -lscicpp_cray -lsci_cray_mp -lmpichf90_cray -lmpich_cray -lmpl
+           -lxpmem -ldmapp -lpmi -lugni -lalpslli -lalpsutil -ludreg
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/lib64
+           -L/opt/cray/xe-sysroot/4.0.46.securitypatch.20120828/usr/lib/alps
+           -L/usr/lib/alps ../../ext/rrtmg_mcica/mcica_random_numbers.f90
+
+ftnlx report
+------------
+Source   : /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0/model/source_cray_dbx_diffusion_save_rad_sfc_ibis_restart/Physics/Radiation/RRTMG/ext/rrtmg_sw/../../ext/rrtmg_mcica/mcica_random_numbers.f90
+Date     : 12/12/2020  00:22:29
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          O p t i o n s   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Options :  -O cache2,fp0,scalar2,thread2,vector0,mpi0,nomodinline,ipa0,noaggress
+           -O autoprefetch,noautothread,fusion0,nomsgs,negmsgs,nooverindex
+           -O nopattern,shortcircuit2,unroll0,nozeroinc
+           -h noadd_paren,align_arrays,nocaf,dwarf,fp_trap,nofunc_trace,nomessag
+           e
+           -h noomp_analyze,noomp_trace,nopat_trace
+           -h omp,noomp_acc,noacc
+           -h flex_mp=default
+           -h cpu=x86-64,mc12,gemini
+           -s default32
+           -eh
+           -d acdgjmnopvwBDEFILPQRSTZ0
+           -e qsAC 
+           -f free
+           -m3
+           -S /tmp/pe_9370/mcica_random_numbers_1.s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+     %%%    L o o p m a r k   L e g e n d    %%%
+
+     Primary Loop Type        Modifiers
+     ------- ---- ----        ---------
+     A - Pattern matched      a - atomic memory operation
+                              b - blocked
+     C - Collapsed            c - conditional and/or computed
+     D - Deleted               
+     E - Cloned               f - fused
+     G - Accelerated          g - partitioned
+     I - Inlined              i - interchanged
+     M - Multithreaded        m - partitioned
+                              n - non-blocking remote transfer
+                              p - partial
+                              r - unrolled
+                              s - shortloop
+     V - Vectorized           w - unwound
+
+
+    1.        !     path:      $Source: /storm/rc1/cvsroot/rc/rrtmg_lw/src/mcica_random_numbers.f90,v $
+    2.        !     author:    $Author: mike $
+    3.        !     revision:  $Revision: 1.2 $
+    4.        !     created:   $Date: 2007/08/22 19:20:02 $
+    5.        !
+    6.        
+    7.        ! Fortran-95 implementation of the Mersenne Twister 19937, following 
+    8.        !   the C implementation described below (code mt19937ar-cok.c, dated 2002/2/10), 
+    9.        !   adapted cosmetically by making the names more general.  
+   10.        ! Users must declare one or more variables of type randomNumberSequence in the calling 
+   11.        !   procedure which are then initialized using a required seed. If the 
+   12.        !   variable is not initialized the random numbers will all be 0. 
+   13.        ! For example: 
+   14.        ! program testRandoms 
+   15.        !   use RandomNumbers
+   16.        !   type(randomNumberSequence) :: randomNumbers
+   17.        !   integer                    :: i
+   18.        !   
+   19.        !   randomNumbers = new_RandomNumberSequence(seed = 100)
+   20.        !   do i = 1, 10
+   21.        !     print ('(f12.10, 2x)'), getRandomReal(randomNumbers)
+   22.        !   end do
+   23.        ! end program testRandoms
+   24.        ! 
+   25.        ! Fortran-95 implementation by 
+   26.        !   Robert Pincus
+   27.        !   NOAA-CIRES Climate Diagnostics Center
+   28.        !   Boulder, CO 80305 
+   29.        !   email: Robert.Pincus@colorado.edu
+   30.        !
+   31.        ! This documentation in the original C program reads:
+   32.        ! -------------------------------------------------------------
+   33.        !    A C-program for MT19937, with initialization improved 2002/2/10.
+   34.        !    Coded by Takuji Nishimura and Makoto Matsumoto.
+   35.        !    This is a faster version by taking Shawn Cokus's optimization,
+   36.        !    Matthe Bellew's simplification, Isaku Wada's real version.
+   37.        ! 
+   38.        !    Before using, initialize the state by using init_genrand(seed) 
+   39.        !    or init_by_array(init_key, key_length).
+   40.        ! 
+   41.        !    Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
+   42.        !    All rights reserved.                          
+   43.        ! 
+   44.        !    Redistribution and use in source and binary forms, with or without
+   45.        !    modification, are permitted provided that the following conditions
+   46.        !    are met:
+   47.        ! 
+   48.        !      1. Redistributions of source code must retain the above copyright
+   49.        !         notice, this list of conditions and the following disclaimer.
+   50.        ! 
+   51.        !      2. Redistributions in binary form must reproduce the above copyright
+   52.        !         notice, this list of conditions and the following disclaimer in the
+   53.        !         documentation and/or other materials provided with the distribution.
+   54.        ! 
+   55.        !      3. The names of its contributors may not be used to endorse or promote 
+   56.        !         products derived from this software without specific prior written 
+   57.        !         permission.
+   58.        ! 
+   59.        !    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   60.        !    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   61.        !    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   62.        !    A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+   63.        !    CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   64.        !    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   65.        !    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   66.        !    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   67.        !    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   68.        !    NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   69.        !    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+   70.        ! 
+   71.        ! 
+   72.        !    Any feedback is very welcome.
+   73.        !    http://www.math.keio.ac.jp/matumoto/emt.html
+   74.        !    email: matumoto@math.keio.ac.jp
+   75.        ! -------------------------------------------------------------
+   76.        
+   77.          module MersenneTwister
+   78.        ! -------------------------------------------------------------
+   79.        
+   80.          use shr_kind_mod, only: r8 => shr_kind_r8
+   81.        
+   82.        !  use parkind, only : jpim, jprb
+   83.        
+   84.          implicit none
+   85.          private
+   86.          
+   87.          ! Algorithm parameters
+   88.          ! -------
+   89.          ! Period parameters
+   90.          integer, parameter :: blockSize = 624,         &
+   91.                                M         = 397,         &
+   92.                                MATRIX_A  = -1727483681, & ! constant vector a         (0x9908b0dfUL)
+   93.                                LMASK     =  2147483647, & ! least significant r bits (0x7fffffffUL)
+   94.                                UMASK     = (-LMASK) - 1   ! most significant w-r bits (0x80000000UL)
+   95.          ! Tempering parameters
+   96.          integer, parameter :: TMASKB= -1658038656, & ! (0x9d2c5680UL)
+   97.                                TMASKC= -272236544     ! (0xefc60000UL)
+   98.          ! -------
+   99.        
+  100.          ! The type containing the state variable  
+  101.          type randomNumberSequence
+  102.            integer                            :: currentElement ! = blockSize
+  103.            integer, dimension(0:blockSize -1) :: state ! = 0
+  104.          end type randomNumberSequence
+  105.        
+  106.          interface new_RandomNumberSequence
+  107.            module procedure initialize_scalar, initialize_vector
+  108.          end interface new_RandomNumberSequence 
+  109.        
+  110.          public :: randomNumberSequence
+  111.          public :: new_RandomNumberSequence, finalize_RandomNumberSequence, &
+  112.                    getRandomInt, getRandomPositiveInt, getRandomReal
+  113.        ! -------------------------------------------------------------
+  114.        contains
+  115.          ! -------------------------------------------------------------
+  116.          ! Private functions
+  117.          ! ---------------------------
+  118.          function mixbits(u, v)
+  119.            integer, intent( in) :: u, v
+  120.            integer              :: mixbits
+  121.            
+  122.            mixbits = ior(iand(u, UMASK), iand(v, LMASK))
+  123.          end function mixbits
+  124.          ! ---------------------------
+  125.          function twist(u, v)
+  126.            integer, intent( in) :: u, v
+  127.            integer              :: twist
+  128.        
+  129.            ! Local variable
+  130.            integer, parameter, dimension(0:1) :: t_matrix = (/ 0, MATRIX_A /)
+  131.            
+  132.            twist = ieor(ishft(mixbits(u, v), -1), t_matrix(iand(v, 1)))
+  133.            twist = ieor(ishft(mixbits(u, v), -1), t_matrix(iand(v, 1)))
+  134.          end function twist
+  135.          ! ---------------------------
+  136.          subroutine nextState(twister)
+  137.            type(randomNumberSequence), intent(inout) :: twister
+  138.            
+  139.            ! Local variables
+  140.            integer :: k
+  141.            
+  142.  1---<     do k = 0, blockSize - M - 1
+  143.  1           twister%state(k) = ieor(twister%state(k + M), &
+  144.  1                                   twist(twister%state(k), twister%state(k + 1)))
+  145.  1--->     end do 
+  146.  1---<     do k = blockSize - M, blockSize - 2
+  147.  1           twister%state(k) = ieor(twister%state(k + M - blockSize), &
+  148.  1                                   twist(twister%state(k), twister%state(k + 1)))
+  149.  1--->     end do 
+  150.            twister%state(blockSize - 1) = ieor(twister%state(M - 1), &
+  151.                                                twist(twister%state(blockSize - 1), twister%state(0)))
+  152.            twister%currentElement = 0
+  153.        
+  154.          end subroutine nextState
+  155.          ! ---------------------------
+  156.          elemental function temper(y)
+  157.            integer, intent(in) :: y
+  158.            integer             :: temper
+  159.            
+  160.            integer :: x
+  161.            
+  162.            ! Tempering
+  163.            x      = ieor(y, ishft(y, -11))
+  164.            x      = ieor(x, iand(ishft(x,  7), TMASKB))
+  165.            x      = ieor(x, iand(ishft(x, 15), TMASKC))
+  166.            temper = ieor(x, ishft(x, -18))
+  167.          end function temper
+  168.          ! -------------------------------------------------------------
+  169.          ! Public (but hidden) functions
+  170.          ! --------------------
+  171.          function initialize_scalar(seed) result(twister)
+  172.            integer,       intent(in   ) :: seed
+  173.            type(randomNumberSequence)                :: twister 
+  174.            
+  175.            integer :: i
+  176.            ! See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. In the previous versions, 
+  177.            !   MSBs of the seed affect only MSBs of the array state[].                       
+  178.            !   2002/01/09 modified by Makoto Matsumoto            
+  179.            
+  180.            twister%state(0) = iand(seed, -1)
+  181.  1---<     do i = 1,  blockSize - 1 ! ubound(twister%state)
+  182.  1            twister%state(i) = 1812433253 * ieor(twister%state(i-1), &
+  183.  1                                                 ishft(twister%state(i-1), -30)) + i
+  184.  1            twister%state(i) = iand(twister%state(i), -1) ! for >32 bit machines
+  185.  1--->     end do
+  186.            twister%currentElement = blockSize
+  187.          end function initialize_scalar
+  188.          ! -------------------------------------------------------------
+  189.          function initialize_vector(seed) result(twister)
+  190.            integer, dimension(0:), intent(in) :: seed
+  191.            type(randomNumberSequence)                      :: twister 
+  192.            
+  193.            integer :: i, j, k, nFirstLoop, nWraps
+  194.            
+  195.            nWraps  = 0
+  196.            twister = initialize_scalar(19650218)
+  197.            
+  198.            nFirstLoop = max(blockSize, size(seed))
+  199.  1---<     do k = 1, nFirstLoop
+  200.  1            i = mod(k + nWraps, blockSize)
+  201.  1            j = mod(k - 1,      size(seed))
+  202.  1            if(i == 0) then
+  203.  1              twister%state(i) = twister%state(blockSize - 1)
+  204.  1              twister%state(1) = ieor(twister%state(1),                                 &
+  205.  1                                      ieor(twister%state(1-1),                          & 
+  206.  1                                           ishft(twister%state(1-1), -30)) * 1664525) + & 
+  207.  1                                 seed(j) + j ! Non-linear
+  208.  1              twister%state(i) = iand(twister%state(i), -1) ! for >32 bit machines
+  209.  1              nWraps = nWraps + 1
+  210.  1            else
+  211.  1              twister%state(i) = ieor(twister%state(i),                                 &
+  212.  1                                      ieor(twister%state(i-1),                          & 
+  213.  1                                           ishft(twister%state(i-1), -30)) * 1664525) + & 
+  214.  1                                 seed(j) + j ! Non-linear
+  215.  1              twister%state(i) = iand(twister%state(i), -1) ! for >32 bit machines
+  216.  1           end if
+  217.  1--->     end do
+  218.            
+  219.            !
+  220.            ! Walk through the state array, beginning where we left off in the block above
+  221.            ! 
+  222.  1---<     do i = mod(nFirstLoop, blockSize) + nWraps + 1, blockSize - 1
+  223.  1           twister%state(i) = ieor(twister%state(i),                                 &
+  224.  1                                   ieor(twister%state(i-1),                          & 
+  225.  1                                        ishft(twister%state(i-1), -30)) * 1566083941) - i ! Non-linear
+  226.  1           twister%state(i) = iand(twister%state(i), -1) ! for >32 bit machines
+  227.  1--->     end do
+  228.            
+  229.            twister%state(0) = twister%state(blockSize - 1) 
+  230.            
+  231.  1---<     do i = 1, mod(nFirstLoop, blockSize) + nWraps
+  232.  1           twister%state(i) = ieor(twister%state(i),                                 &
+  233.  1                                   ieor(twister%state(i-1),                          & 
+  234.  1                                        ishft(twister%state(i-1), -30)) * 1566083941) - i ! Non-linear
+  235.  1           twister%state(i) = iand(twister%state(i), -1) ! for >32 bit machines
+  236.  1--->     end do
+  237.            
+  238.            twister%state(0) = UMASK 
+  239.            twister%currentElement = blockSize
+  240.            
+  241.          end function initialize_vector
+  242.          ! -------------------------------------------------------------
+  243.          ! Public functions
+  244.          ! --------------------
+  245.          function getRandomInt(twister)
+  246.            type(randomNumberSequence), intent(inout) :: twister
+  247.            integer                        :: getRandomInt
+  248.            ! Generate a random integer on the interval [0,0xffffffff]
+  249.            !   Equivalent to genrand_int32 in the C code. 
+  250.            !   Fortran doesn't have a type that's unsigned like C does, 
+  251.            !   so this is integers in the range -2**31 - 2**31
+  252.            ! All functions for getting random numbers call this one, 
+  253.            !   then manipulate the result
+  254.            
+  255.            if(twister%currentElement >= blockSize) call nextState(twister)
+  256.              
+  257.            getRandomInt = temper(twister%state(twister%currentElement))
+  258.            twister%currentElement = twister%currentElement + 1
+  259.          
+  260.          end function getRandomInt
+  261.          ! --------------------
+  262.          function getRandomPositiveInt(twister)
+  263.            type(randomNumberSequence), intent(inout) :: twister
+  264.            integer                        :: getRandomPositiveInt
+  265.            ! Generate a random integer on the interval [0,0x7fffffff]
+  266.            !   or [0,2**31]
+  267.            !   Equivalent to genrand_int31 in the C code. 
+  268.            
+  269.            ! Local integers
+  270.            integer :: localInt
+  271.        
+  272.            localInt = getRandomInt(twister)
+  273.            getRandomPositiveInt = ishft(localInt, -1)
+  274.          
+  275.          end function getRandomPositiveInt
+  276.          ! --------------------
+  277.        !! mji - modified Jan 2007, double converted to rrtmg real kind type
+  278.          function getRandomReal(twister)
+  279.            type(randomNumberSequence), intent(inout) :: twister
+  280.        !    double precision             :: getRandomReal
+  281.            real(kind=r8)             :: getRandomReal
+  282.            ! Generate a random number on [0,1]
+  283.            !   Equivalent to genrand_real1 in the C code
+  284.            !   The result is stored as double precision but has 32 bit resolution
+  285.            
+  286.            integer :: localInt
+  287.            
+  288.            localInt = getRandomInt(twister)
+  289.            if(localInt < 0) then
+  290.        !      getRandomReal = dble(localInt + 2.0d0**32)/(2.0d0**32 - 1.0d0)
+  291.              getRandomReal = (localInt + 2.0**32_r8)/(2.0**32_r8 - 1.0_r8)
+  292.            else
+  293.        !      getRandomReal = dble(localInt            )/(2.0d0**32 - 1.0d0)
+  294.              getRandomReal = (localInt            )/(2.0**32_r8 - 1.0_r8)
+  295.            end if
+  296.        
+  297.          end function getRandomReal
+  298.          ! --------------------
+  299.          subroutine finalize_RandomNumberSequence(twister)
+  300.            type(randomNumberSequence), intent(inout) :: twister
+  301.            
+  302.              twister%currentElement = blockSize
+  303.  V--<>       twister%state(:) = 0
+  304.          end subroutine finalize_RandomNumberSequence
+  305.        
+  306.          ! --------------------  
+  307.          
+  308.          end module MersenneTwister
+
+ftn-6204 ftn: VECTOR File = mcica_random_numbers.f90, Line = 303 
+  A loop starting at line 303 was vectorized.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                          S o u r c e   L i s t i n g
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  309.        
+  310.        
+  311.          module mcica_random_numbers
+  312.        
+  313.          ! Generic module to wrap random number generators. 
+  314.          !   The module defines a type that identifies the particular stream of random 
+  315.          !   numbers, and has procedures for initializing it and getting real numbers 
+  316.          !   in the range 0 to 1. 
+  317.          ! This version uses the Mersenne Twister to generate random numbers on [0, 1]. 
+  318.          !
+  319.          use MersenneTwister, only: randomNumberSequence, & ! The random number engine.
+  320.                                     new_RandomNumberSequence, getRandomReal
+  321.        !! mji
+  322.        !!  use time_manager_mod, only: time_type, get_date
+  323.        
+  324.          use shr_kind_mod, only: r8 => shr_kind_r8
+  325.        
+  326.        !  use parkind, only : jpim, jprb
+  327.        
+  328.          implicit none
+  329.          private
+  330.          
+  331.          type randomNumberStream
+  332.            type(randomNumberSequence) :: theNumbers
+  333.          end type randomNumberStream
+  334.          
+  335.          interface getRandomNumbers
+  336.            module procedure getRandomNumber_Scalar, getRandomNumber_1D, getRandomNumber_2D
+  337.          end interface getRandomNumbers
+  338.          
+  339.          interface initializeRandomNumberStream
+  340.            module procedure initializeRandomNumberStream_S, initializeRandomNumberStream_V
+  341.          end interface initializeRandomNumberStream
+  342.        
+  343.          public :: randomNumberStream,                             &
+  344.                    initializeRandomNumberStream, getRandomNumbers
+  345.        !! mji
+  346.        !!            initializeRandomNumberStream, getRandomNumbers, &
+  347.        !!            constructSeed
+  348.        contains
+  349.          ! ---------------------------------------------------------
+  350.          ! Initialization
+  351.          ! ---------------------------------------------------------
+  352.          function initializeRandomNumberStream_S(seed) result(new) 
+  353.            integer, intent( in)     :: seed
+  354.            type(randomNumberStream) :: new
+  355.            
+  356.            new%theNumbers = new_RandomNumberSequence(seed)
+  357.            
+  358.          end function initializeRandomNumberStream_S
+  359.          ! ---------------------------------------------------------
+  360.          function initializeRandomNumberStream_V(seed) result(new) 
+  361.            integer, dimension(:), intent( in) :: seed
+  362.            type(randomNumberStream)           :: new
+  363.            
+  364.            new%theNumbers = new_RandomNumberSequence(seed)
+  365.            
+  366.          end function initializeRandomNumberStream_V
+  367.          ! ---------------------------------------------------------
+  368.          ! Procedures for drawing random numbers
+  369.          ! ---------------------------------------------------------
+  370.          subroutine getRandomNumber_Scalar(stream, number)
+  371.            type(randomNumberStream), intent(inout) :: stream
+  372.            real(kind=r8),                     intent(  out) :: number
+  373.            
+  374.            number = getRandomReal(stream%theNumbers)
+  375.          end subroutine getRandomNumber_Scalar
+  376.          ! ---------------------------------------------------------
+  377.          subroutine getRandomNumber_1D(stream, numbers)
+  378.            type(randomNumberStream), intent(inout) :: stream
+  379.            real(kind=r8), dimension(:),       intent(  out) :: numbers
+  380.            
+  381.            ! Local variables
+  382.            integer :: i
+  383.            
+  384.  1---<     do i = 1, size(numbers)
+  385.  1           numbers(i) = getRandomReal(stream%theNumbers)
+  386.  1--->     end do
+  387.          end subroutine getRandomNumber_1D
+  388.          ! ---------------------------------------------------------
+  389.          subroutine getRandomNumber_2D(stream, numbers)
+  390.            type(randomNumberStream), intent(inout) :: stream
+  391.            real(kind=r8), dimension(:, :),    intent(  out) :: numbers
+  392.            
+  393.            ! Local variables
+  394.            integer :: i
+  395.            
+  396.  1---<     do i = 1, size(numbers, 2)
+  397.  1           call getRandomNumber_1D(stream, numbers(:, i))
+  398.  1--->     end do
+  399.          end subroutine getRandomNumber_2D
+  400.        ! mji
+  401.        !  ! ---------------------------------------------------------
+  402.        !  ! Constructing a unique seed from grid cell index and model date/time
+  403.        !  !   Once we have the GFDL stuff we'll add the year, month, day, hour, minute
+  404.        !  ! ---------------------------------------------------------
+  405.        !  function constructSeed(i, j, time) result(seed)
+  406.        !    integer,         intent( in)  :: i, j
+  407.        !    type(time_type), intent( in) :: time
+  408.        !    integer, dimension(8) :: seed
+  409.        !    
+  410.        !    ! Local variables
+  411.        !    integer :: year, month, day, hour, minute, second
+  412.        !    
+  413.        !    
+  414.        !    call get_date(time, year, month, day, hour, minute, second)
+  415.        !    seed = (/ i, j, year, month, day, hour, minute, second /)
+  416.        !  end function constructSeed
+  417.        
+  418.          end module mcica_random_numbers
+  419.        
+  420.        
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+             C r o s s   R e f e r e n c e   for   MERSENNETWISTER
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+BLOCKSIZE                                                         INTEGER, PARAMETER, PRIVATE
+  Decl      90
+  Set 
+  Used     103     142     146     147     150     151     181     186     198     200     203     222     229     231     239
+           255     302
+
+CURRENTELEMENT                  Structure offset=0                INTEGER, Component of RANDOMNUMBERSEQUENCE
+  Decl     102
+  Set 
+  Used
+
+CURRENTELEMENT                  Structure offset=0                INTEGER, Component of RANDOMNUMBERSEQUENCE
+  Decl
+  Set 
+  Used       0       0     186     255     258     302
+
+FINALIZE_RANDOMNUMBERSEQUENCE                                     Subroutine, Module procedure
+  Decl     111     299
+  Set 
+  Used
+
+GETRANDOMINT                                                      Function, INTEGER, RESULT(GETRANDOMINT), Module procedure
+  Decl     112     245     247
+  Set 
+  Used
+
+GETRANDOMINT                    Register                          INTEGER, Function result
+  Decl
+  Set      257
+  Used
+
+GETRANDOMPOSITIVEINT                                              Function, INTEGER, RESULT(GETRANDOMPOSITIVEINT), Module procedure
+  Decl     112     262     264
+  Set 
+  Used
+
+GETRANDOMPOSITIVEINT            Register                          INTEGER, Function result
+  Decl
+  Set      273
+  Used
+
+GETRANDOMREAL                                                     Function, REAL(KIND=8), RESULT(GETRANDOMREAL), Module procedure
+  Decl     112     278     281
+  Set 
+  Used
+
+GETRANDOMREAL                   Register                          REAL(KIND=8), Function result
+  Decl
+  Set      291     294
+  Used
+
+I                               Stack                             INTEGER
+  Decl     175
+  Set 
+  Used     182     183     184
+
+I                               Stack                             INTEGER
+  Decl     193
+  Set      200
+  Used     202     203     208     211     212     213     215     223     224     225     226     232     233     234     235
+
+IAND                                                              Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0       0       0     132     164     180     184     208     215     226     235
+
+IEOR                                                              Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0       0       0       0       0     133     147     163     165     182     204     205     211     212     223
+           224     232     233
+
+INITIALIZE_SCALAR                                                 Function, TYPE(RANDOMNUMBERSEQUENCE), RESULT(TWISTER), Module procedure,
+                                                        PRIVATE
+  Decl     171
+  Set 
+  Used
+
+INITIALIZE_VECTOR                                                 Function, TYPE(RANDOMNUMBERSEQUENCE), RESULT(TWISTER), Module procedure,
+                                                        PRIVATE
+  Decl     189
+  Set 
+  Used
+
+IOR                                                               Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used     122
+
+ISHFT                                                             Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0       0       0     132     163     165     183     206     213     225     234     273
+
+J                               Stack                             INTEGER
+  Decl     193
+  Set      201
+  Used     207     214
+
+K                               Stack                             INTEGER
+  Decl     140
+  Set 
+  Used     143     147
+
+K                               Stack                             INTEGER
+  Decl     193
+  Set 
+  Used     200     201
+
+LMASK                                                             INTEGER, PARAMETER, PRIVATE
+  Decl      93
+  Set 
+  Used      94     122
+
+LOCALINT                        Stack                             INTEGER
+  Decl     270
+  Set      272
+  Used     273
+
+LOCALINT                        Stack                             INTEGER
+  Decl     286
+  Set      288
+  Used     289     291     294
+
+M                                                                 INTEGER, PARAMETER, PRIVATE
+  Decl      91
+  Set 
+  Used     142     143     146     147     150
+
+MATRIX_A                                                          INTEGER, PARAMETER, PRIVATE
+  Decl      92
+  Set 
+  Used     130
+
+MAX                                                               Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used     198
+
+MERSENNETWISTER                                                   Module
+  Decl      77
+  Set 
+  Used
+
+MIXBITS                                                           Function, INTEGER, RESULT(MIXBITS), Module procedure, PRIVATE
+  Decl     118     120
+  Set 
+  Used
+
+MIXBITS                         Register                          INTEGER, Function result
+  Decl
+  Set      122
+  Used
+
+MOD                                                               Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     200     222     231
+
+NEW_RANDOMNUMBERSEQUENCE                                          Generic interface
+  Decl     106     111
+  Set 
+  Used
+
+NEXTSTATE                                                         Subroutine, Module procedure, PRIVATE
+  Decl     136
+  Set 
+  Used     255
+
+NFIRSTLOOP                      Stack                             INTEGER
+  Decl     193
+  Set      198
+  Used     199     231
+
+NWRAPS                          Stack                             INTEGER
+  Decl     193
+  Set      195     209
+  Used     200     231
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD, PRIVATE
+  Decl      80
+  Set 
+  Used     281
+
+RANDOMNUMBERSEQUENCE                                              Derived type
+  Decl     101     110
+  Set 
+  Used
+
+SEED                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     171     172
+  Set 
+  Used     180
+
+SEED                            Dummy Arg                         INTEGER, DIMENSION(0:), INTENT(IN)
+  Decl     189     190
+  Set 
+  Used     198     201     207     214
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used      80
+
+SIZE                                                              Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     201
+
+STATE                           Structure offset=32               INTEGER, Component of RANDOMNUMBERSEQUENCE, DIMENSION(0:623)
+  Decl     103
+  Set 
+  Used
+
+STATE                           Structure offset=32               INTEGER, Component of RANDOMNUMBERSEQUENCE, DIMENSION(0:623)
+  Decl
+  Set 
+  Used       0       0       0       0       0       0       0     147     180     183     203     205     208     212     213
+           215     223     224     225     226     229     232     233     234     235     238     303
+
+TEMPER                                                            Function, INTEGER, RESULT(TEMPER), Module procedure, PRIVATE
+  Decl     156     158
+  Set 
+  Used
+
+TEMPER                          Register                          INTEGER, Function result
+  Decl
+  Set      166
+  Used
+
+TMASKB                                                            INTEGER, PARAMETER, PRIVATE
+  Decl      96
+  Set 
+  Used     164
+
+TMASKC                                                            INTEGER, PARAMETER, PRIVATE
+  Decl      97
+  Set 
+  Used     165
+
+TWIST                                                             Function, INTEGER, RESULT(TWIST), Module procedure, PRIVATE
+  Decl     125     127
+  Set 
+  Used
+
+TWIST                           Register                          INTEGER, Function result
+  Decl
+  Set      132     133
+  Used
+
+TWISTER                         Dummy Arg                         TYPE(RANDOMNUMBERSEQUENCE), INTENT(INOUT)
+  Decl     136     137
+  Set        0     143     150     152
+  Used
+
+TWISTER                         Stack                             TYPE(RANDOMNUMBERSEQUENCE), Function result
+  Decl     171     173
+  Set        0     180     184     186
+  Used
+
+TWISTER                         Stack                             TYPE(RANDOMNUMBERSEQUENCE), Function result
+  Decl     189     191
+  Set        0       0       0     203     208     215     226     229     232     235     238     239
+  Used
+
+TWISTER                         Dummy Arg                         TYPE(RANDOMNUMBERSEQUENCE), INTENT(INOUT)
+  Decl     245     246
+  Set      258
+  Used     255
+
+TWISTER                         Dummy Arg                         TYPE(RANDOMNUMBERSEQUENCE), INTENT(INOUT)
+  Decl     262     263
+  Set 
+  Used
+
+TWISTER                         Dummy Arg                         TYPE(RANDOMNUMBERSEQUENCE), INTENT(INOUT)
+  Decl     278     279
+  Set 
+  Used
+
+TWISTER                         Dummy Arg                         TYPE(RANDOMNUMBERSEQUENCE), INTENT(INOUT)
+  Decl     299     300
+  Set        0     303
+  Used
+
+T_MATRIX                                                          INTEGER, PARAMETER, DIMENSION(0:1)
+  Decl     130
+  Set 
+  Used
+
+U                               Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     118     119
+  Set 
+  Used     122
+
+U                               Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     125     126
+  Set 
+  Used
+
+UMASK                                                             INTEGER, PARAMETER, PRIVATE
+  Decl      94
+  Set 
+  Used     122     238
+
+V                               Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     118     119
+  Set 
+  Used     122
+
+V                               Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     125     126
+  Set 
+  Used     132     133
+
+X                               Stack                             INTEGER
+  Decl     160
+  Set      163     164     165
+  Used     166
+
+Y                               Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     156     157
+  Set 
+  Used     163
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+           C r o s s   R e f e r e n c e   for   MCICA_RANDOM_NUMBERS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name                            Storage                           Attributes
+----                            -------                           ----------
+
+GETRANDOMNUMBERS                                                  Generic interface
+  Decl     335     344
+  Set 
+  Used
+
+GETRANDOMNUMBER_1D                                                Subroutine, Module procedure, PRIVATE
+  Decl     377
+  Set 
+  Used     397
+
+GETRANDOMNUMBER_2D                                                Subroutine, Module procedure, PRIVATE
+  Decl     389
+  Set 
+  Used
+
+GETRANDOMNUMBER_SCALAR                                            Subroutine, Module procedure, PRIVATE
+  Decl     370
+  Set 
+  Used
+
+I                               Stack                             INTEGER
+  Decl     382
+  Set 
+  Used     385
+
+I                               Stack                             INTEGER
+  Decl     394
+  Set 
+  Used
+
+INITIALIZERANDOMNUMBERSTREAM                                      Generic interface
+  Decl     339     344
+  Set 
+  Used
+
+INITIALIZERANDOMNUMBERSTREAM_S                                    Function, TYPE(RANDOMNUMBERSTREAM), RESULT(NEW), Module procedure, PRIVATE
+  Decl     352
+  Set 
+  Used
+
+INITIALIZERANDOMNUMBERSTREAM_V                                    Function, TYPE(RANDOMNUMBERSTREAM), RESULT(NEW), Module procedure, PRIVATE
+  Decl     360
+  Set 
+  Used
+
+INITIALIZE_SCALAR               Use assoc                         Function, TYPE(RANDOMNUMBERSEQUENCE), RESULT(TWISTER), From module
+                                                        MERSENNETWISTER, Module procedure, PRIVATE
+  Decl
+  Set 
+  Used     356
+
+INITIALIZE_VECTOR               Use assoc                         Function, TYPE(RANDOMNUMBERSEQUENCE), RESULT(TWISTER), From module
+                                                        MERSENNETWISTER, Module procedure, PRIVATE
+  Decl
+  Set 
+  Used     364
+
+MCICA_RANDOM_NUMBERS                                              Module
+  Decl     311
+  Set 
+  Used
+
+MERSENNETWISTER                                                   Module
+  Decl
+  Set 
+  Used     319
+
+NEW                             Stack                             TYPE(RANDOMNUMBERSTREAM), Function result
+  Decl     352     354
+  Set 
+  Used
+
+NEW                             Stack                             TYPE(RANDOMNUMBERSTREAM), Function result
+  Decl     360     362
+  Set 
+  Used
+
+NUMBER                          Dummy Arg                         REAL(KIND=8), INTENT(OUT)
+  Decl     370     372
+  Set      374
+  Used
+
+NUMBERS                         Dummy Arg                         REAL(KIND=8), DIMENSION(:), INTENT(OUT)
+  Decl     377     379
+  Set      385
+  Used     384
+
+NUMBERS                         Dummy Arg                         REAL(KIND=8), DIMENSION(:, :), INTENT(OUT)
+  Decl     389     391
+  Set 
+  Used     396
+
+R8                                                                INTEGER, PARAMETER, Renames SHR_KIND_R8 in SHR_KIND_MOD, PRIVATE
+  Decl     324
+  Set 
+  Used     372     379     391
+
+RANDOMNUMBERSEQUENCE                                              Derived type, PRIVATE
+  Decl
+  Set 
+  Used     332
+
+RANDOMNUMBERSTREAM                                                Derived type
+  Decl     331     343
+  Set 
+  Used
+
+SEED                            Dummy Arg                         INTEGER, INTENT(IN)
+  Decl     352     353
+  Set 
+  Used
+
+SEED                            Dummy Arg                         INTEGER, DIMENSION(:), INTENT(IN)
+  Decl     360     361
+  Set 
+  Used
+
+SHR_KIND_MOD                                                      Module
+  Decl
+  Set 
+  Used     324
+
+SIZE                                                              Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used     384
+
+SIZE                                                              Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used       0     384
+
+SIZE                                                              Function, INTEGER, INTRINSIC
+  Decl
+  Set 
+  Used     384
+
+STREAM                          Dummy Arg                         TYPE(RANDOMNUMBERSTREAM), INTENT(INOUT)
+  Decl     370     371
+  Set 
+  Used
+
+STREAM                          Dummy Arg                         TYPE(RANDOMNUMBERSTREAM), INTENT(INOUT)
+  Decl     377     378
+  Set 
+  Used
+
+STREAM                          Dummy Arg                         TYPE(RANDOMNUMBERSTREAM), INTENT(INOUT)
+  Decl     389     390
+  Set 
+  Used     397
+
+THENUMBERS                      Structure offset=0                TYPE(RANDOMNUMBERSEQUENCE), Component of RANDOMNUMBERSTREAM
+  Decl     332
+  Set 
+  Used
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                         E x t e r n a l   R e p o r t
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Name  Messages
+----  --------
+FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER
+      Defined as:  Subroutine (line 111, file mcica_random_numbers.f90)
+
+      Interface:   None
+
+      Calls:       IAND(Intrinsic) (Line 122, file mcica_random_numbers.f90)
+                   IAND(Intrinsic) (Line 122, file mcica_random_numbers.f90)
+                   IOR(Intrinsic) (Line 122, file mcica_random_numbers.f90)
+                   ISHFT(Intrinsic) (Line 132, file mcica_random_numbers.f90)
+                   ISHFT(Intrinsic) (Line 133, file mcica_random_numbers.f90)
+                   IAND(Intrinsic) (Line 132, file mcica_random_numbers.f90)
+                   IAND(Intrinsic) (Line 133, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 132, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 133, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 143, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 147, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 150, file mcica_random_numbers.f90)
+                   ISHFT(Intrinsic) (Line 163, file mcica_random_numbers.f90)
+                   ISHFT(Intrinsic) (Line 164, file mcica_random_numbers.f90)
+                   ISHFT(Intrinsic) (Line 165, file mcica_random_numbers.f90)
+                   ISHFT(Intrinsic) (Line 166, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 163, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 164, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 165, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 166, file mcica_random_numbers.f90)
+                   IAND(Intrinsic) (Line 164, file mcica_random_numbers.f90)
+                   IAND(Intrinsic) (Line 165, file mcica_random_numbers.f90)
+                   IAND(Intrinsic) (Line 180, file mcica_random_numbers.f90)
+                   IAND(Intrinsic) (Line 184, file mcica_random_numbers.f90)
+                   ISHFT(Intrinsic) (Line 183, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 182, file mcica_random_numbers.f90)
+                   SIZE(Intrinsic) (Line 198, file mcica_random_numbers.f90)
+                   SIZE(Intrinsic) (Line 201, file mcica_random_numbers.f90)
+                   MAX(Intrinsic) (Line 198, file mcica_random_numbers.f90)
+                   MOD(Intrinsic) (Line 200, file mcica_random_numbers.f90)
+                   MOD(Intrinsic) (Line 201, file mcica_random_numbers.f90)
+                   MOD(Intrinsic) (Line 222, file mcica_random_numbers.f90)
+                   MOD(Intrinsic) (Line 231, file mcica_random_numbers.f90)
+                   ISHFT(Intrinsic) (Line 206, file mcica_random_numbers.f90)
+                   ISHFT(Intrinsic) (Line 213, file mcica_random_numbers.f90)
+                   ISHFT(Intrinsic) (Line 225, file mcica_random_numbers.f90)
+                   ISHFT(Intrinsic) (Line 234, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 204, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 205, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 211, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 212, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 223, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 224, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 232, file mcica_random_numbers.f90)
+                   IEOR(Intrinsic) (Line 233, file mcica_random_numbers.f90)
+                   IAND(Intrinsic) (Line 208, file mcica_random_numbers.f90)
+                   IAND(Intrinsic) (Line 215, file mcica_random_numbers.f90)
+                   IAND(Intrinsic) (Line 226, file mcica_random_numbers.f90)
+                   IAND(Intrinsic) (Line 235, file mcica_random_numbers.f90)
+                   ISHFT(Intrinsic) (Line 273, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+GETRANDOMINT in MERSENNETWISTER
+      Defined as:  Function (line 112, file mcica_random_numbers.f90)
+
+      Interface:   None
+
+      Called By:   GETRANDOMINT in MERSENNETWISTER (Line 272, file mcica_random_numbers.f90)
+                   GETRANDOMINT in MERSENNETWISTER (Line 288, file mcica_random_numbers.f90)
+
+      Calls:       GETRANDOMINT in MERSENNETWISTER (Line 272, file mcica_random_numbers.f90)
+                   GETRANDOMINT in MERSENNETWISTER (Line 288, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+GETRANDOMPOSITIVEINT in MERSENNETWISTER
+      Defined as:  Function (line 112, file mcica_random_numbers.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+GETRANDOMREAL in MERSENNETWISTER
+      Defined as:  Function (line 112, file mcica_random_numbers.f90)
+
+      Interface:   None
+
+      Called By:   MCICA_RANDOM_NUMBERS (Line 374, file mcica_random_numbers.f90)
+                   MCICA_RANDOM_NUMBERS (Line 385, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+IAND(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 122, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 122, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 132, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 133, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 164, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 165, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 180, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 184, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 208, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 215, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 226, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 235, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+IEOR(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 132, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 133, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 143, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 147, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 150, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 163, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 164, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 165, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 166, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 182, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 204, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 205, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 211, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 212, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 223, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 224, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 232, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 233, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+INITIALIZE_SCALAR in MERSENNETWISTER
+      Defined as:  Function (line 171, file mcica_random_numbers.f90)
+
+      Interface:   None
+
+      Called By:   INITIALIZE_SCALAR in MERSENNETWISTER (Line 196, file mcica_random_numbers.f90)
+                   MCICA_RANDOM_NUMBERS (Line 356, file mcica_random_numbers.f90)
+
+      Calls:       INITIALIZE_SCALAR in MERSENNETWISTER (Line 196, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+INITIALIZE_VECTOR in MERSENNETWISTER
+      Defined as:  Function (line 189, file mcica_random_numbers.f90)
+
+      Interface:   None
+
+      Called By:   MCICA_RANDOM_NUMBERS (Line 364, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+IOR(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 122, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+ISHFT(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 132, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 133, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 163, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 164, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 165, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 166, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 183, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 206, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 213, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 225, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 234, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 273, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+MAX(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 198, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+MERSENNETWISTER
+      Defined as:  Module (line 77, file mcica_random_numbers.f90)
+
+        Uses:      SHR_KIND_MOD
+
+      Used By:     MCICA_RANDOM_NUMBERS
+
+Name  Messages
+----  --------
+MIXBITS in MERSENNETWISTER
+      Defined as:  Function (line 118, file mcica_random_numbers.f90)
+
+      Interface:   None
+
+      Called By:   MIXBITS in MERSENNETWISTER (Line 132, file mcica_random_numbers.f90)
+                   MIXBITS in MERSENNETWISTER (Line 133, file mcica_random_numbers.f90)
+
+      Calls:       MIXBITS in MERSENNETWISTER (Line 132, file mcica_random_numbers.f90)
+                   MIXBITS in MERSENNETWISTER (Line 133, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+MOD(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 200, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 201, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 222, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 231, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+NEXTSTATE in MERSENNETWISTER
+      Defined as:  Subroutine (line 136, file mcica_random_numbers.f90)
+
+      Interface:   None
+
+      Called By:   NEXTSTATE in MERSENNETWISTER (Line 255, file mcica_random_numbers.f90)
+
+      Calls:       NEXTSTATE in MERSENNETWISTER (Line 255, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+SHR_KIND_MOD
+      Defined as:  No definitions.
+
+      Used By:     MERSENNETWISTER
+                   MCICA_RANDOM_NUMBERS
+
+Name  Messages
+----  --------
+SIZE(Intrinsic)
+      Defined as:  No definitions.
+
+      Interface:   None
+
+      Called By:   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 198, file mcica_random_numbers.f90)
+                   FINALIZE_RANDOMNUMBERSEQUENCE in MERSENNETWISTER (Line 201, file mcica_random_numbers.f90)
+                   GETRANDOMNUMBER_2D in MCICA_RANDOM_NUMBERS (Line 384, file mcica_random_numbers.f90)
+                   GETRANDOMNUMBER_2D in MCICA_RANDOM_NUMBERS (Line 396, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+TEMPER in MERSENNETWISTER
+      Defined as:  Function (line 156, file mcica_random_numbers.f90)
+
+      Interface:   None
+
+      Called By:   TEMPER in MERSENNETWISTER (Line 257, file mcica_random_numbers.f90)
+
+      Calls:       TEMPER in MERSENNETWISTER (Line 257, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+TWIST in MERSENNETWISTER
+      Defined as:  Function (line 125, file mcica_random_numbers.f90)
+
+      Interface:   None
+
+      Called By:   TWIST in MERSENNETWISTER (Line 144, file mcica_random_numbers.f90)
+                   TWIST in MERSENNETWISTER (Line 148, file mcica_random_numbers.f90)
+                   TWIST in MERSENNETWISTER (Line 151, file mcica_random_numbers.f90)
+
+      Calls:       TWIST in MERSENNETWISTER (Line 144, file mcica_random_numbers.f90)
+                   TWIST in MERSENNETWISTER (Line 148, file mcica_random_numbers.f90)
+                   TWIST in MERSENNETWISTER (Line 151, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+GETRANDOMNUMBER_1D in MCICA_RANDOM_NUMBERS
+      Defined as:  Subroutine (line 377, file mcica_random_numbers.f90)
+
+      Interface:   None
+
+      Called By:   GETRANDOMNUMBER_1D in MCICA_RANDOM_NUMBERS (Line 397, file mcica_random_numbers.f90)
+
+      Calls:       GETRANDOMNUMBER_1D in MCICA_RANDOM_NUMBERS (Line 397, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+GETRANDOMNUMBER_2D in MCICA_RANDOM_NUMBERS
+      Defined as:  Subroutine (line 389, file mcica_random_numbers.f90)
+
+      Interface:   None
+
+      Calls:       SIZE(Intrinsic) (Line 384, file mcica_random_numbers.f90)
+                   SIZE(Intrinsic) (Line 396, file mcica_random_numbers.f90)
+
+Name  Messages
+----  --------
+GETRANDOMNUMBER_SCALAR in MCICA_RANDOM_NUMBERS
+      Defined as:  Subroutine (line 370, file mcica_random_numbers.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+INITIALIZERANDOMNUMBERSTREAM_S in MCICA_RANDOM_NUMBERS
+      Defined as:  Function (line 352, file mcica_random_numbers.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+INITIALIZERANDOMNUMBERSTREAM_V in MCICA_RANDOM_NUMBERS
+      Defined as:  Function (line 360, file mcica_random_numbers.f90)
+
+                   No calls.  It is not called and does not use any procedure.
+
+      Interface:   None
+
+Name  Messages
+----  --------
+MCICA_RANDOM_NUMBERS
+      Defined as:  Module (line 311, file mcica_random_numbers.f90)
+
+      Calls:       GETRANDOMREAL in MERSENNETWISTER (Line 374, file mcica_random_numbers.f90)
+                   GETRANDOMREAL in MERSENNETWISTER (Line 385, file mcica_random_numbers.f90)
+                   INITIALIZE_SCALAR in MERSENNETWISTER (Line 356, file mcica_random_numbers.f90)
+                   INITIALIZE_VECTOR in MERSENNETWISTER (Line 364, file mcica_random_numbers.f90)
+
+        Uses:      MERSENNETWISTER
+                   SHR_KIND_MOD
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

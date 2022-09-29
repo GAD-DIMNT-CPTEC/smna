@@ -1,0 +1,83 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3utcdat.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3utcdat.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine w3utcdat( idat )
+   42. !dir$ suppress 0[loc( idat ),0]
+   42.       t$3[0].L = pointer to array[1] of integer( cri_pointer( idat ) )
+   42.       (1,t$3)[0].L = 32
+   42.       (2,t$3)[0].L = 0x100000000010051UL
+   42.       (6,t$3)[0] = 10
+   42.       (7,t$3)[0] = 131074
+   42.       (4,t$3)[0].L = 0
+   42.       (5,t$3)[0].L = 0
+   42.       (6,t$3)[0].L = 1
+   42.       (7,t$3)[0].L = 8
+   42.       (8,t$3)[0].L = 1
+   42.       call _f90_date_and_time( substr[cdate,0:8], substr[ctime,0:10], substr[czone,0:5], t$3 )
+   43.       $_StackCntrl_O2 = $_StaticCntrl_O1
+   43.       (1,$_StackCntrl_O2)[0].L = loc( substr[czone,0:5] )
+   43.       $_StackIolist_O4 = $_StaticIolist_O3
+   43.       0[int( pointer to c_union Pointer_union( loc( (3,$_StackIolist_O4)[0].L ) ), 8 ),0].L = loc( $IOitem_O0 )
+   43.       _frf( pointer to integer (kind=8)( loc( $_StackCntrl_O2 ) ), pointer to integer (kind=8)( loc( $_StackIolist_O4[0].L ) ), pointer to integer (kind=8)( loc( $_IO_Lib_Stack_O5 ) ) )
+   43.       $LCS_idat_0 = loc( idat )
+   43.       3[$LCS_idat_0,0] = $IOitem_O0
+   47.       $MR_idat_S2 = 5[$LCS_idat_0,0]
+   47.       $MR_idat_S3 = $MR_idat_S2 - $IOitem_O0 + 100 * ( $IOitem_O0 / 100 )
+   47.       5[$LCS_idat_0,0] = $MR_idat_S3
+   48.       $MR_idat_4 = 3[$LCS_idat_0,0]
+   48.       $MR_idat_S4 = 4[$LCS_idat_0,0]
+   48.       $MR_idat_S5 = $MR_idat_S4 + $MR_idat_4 / -100
+   48.       4[$LCS_idat_0,0] = $MR_idat_S5
+   49.       3[$LCS_idat_0,0] = 0
+   50.       if ( $MR_idat_S3 < 0 ) then
+   51.          $MR_idat_S6 = 60 + $MR_idat_S3
+   51.          5[$LCS_idat_0,0] = $MR_idat_S6
+   52.          $MR_idat_S7 = 4[$LCS_idat_0,0]
+   52.          $MR_idat_S8 = -1 + $MR_idat_S7
+   52.          4[$LCS_idat_0,0] = $MR_idat_S8
+   53.       else if ( $MR_idat_S3 >= 60 ) then
+   54.          $MR_idat_S9 = -60 + $MR_idat_S3
+   54.          $LCS_idat_1 = loc( idat )
+   54.          5[$LCS_idat_1,0] = $MR_idat_S9
+   55.          $MR_idat_S10 = 4[$LCS_idat_1,0]
+   55.          $MR_idat_S11 = 1 + $MR_idat_S10
+   55.          4[$LCS_idat_1,0] = $MR_idat_S11
+   55.       endif
+   57.       $LCS_idat_2 = loc( idat )
+   57.       $MR_idat_S12 = 4[$LCS_idat_2,0]
+   57.       if ( $MR_idat_S12 < 0 ) then
+   58.          $MR_idat_S13 = 24 + $MR_idat_S12
+   58.          4[$LCS_idat_2,0] = $MR_idat_S13
+   59.          $t_S0 = iw3jdn( 0[$LCS_idat_2,0], 1[$LCS_idat_2,0], 2[$LCS_idat_2,0] )
+   59.          $jldayn_S14 = -1 + $t_S0
+   59.          jldayn = $jldayn_S14
+   60.          $LCS_idat_3 = loc( idat )
+   60.          call w3fs26( jldayn, 0[$LCS_idat_3,0], 1[$LCS_idat_3,0], 2[$LCS_idat_3,0], idaywk, idayyr )
+   61.       else if ( $MR_idat_S12 >= 24 ) then
+   62.          $MR_idat_S15 = -24 + $MR_idat_S12
+   62.          $LCS_idat_4 = loc( idat )
+   62.          4[$LCS_idat_4,0] = $MR_idat_S15
+   63.          $t_S1 = iw3jdn( 0[$LCS_idat_4,0], 1[$LCS_idat_4,0], 2[$LCS_idat_4,0] )
+   63.          $jldayn_S16 = 1 + $t_S1
+   63.          jldayn = $jldayn_S16
+   64.          $LCS_idat_5 = loc( idat )
+   64.          call w3fs26( jldayn, 0[$LCS_idat_5,0], 1[$LCS_idat_5,0], 2[$LCS_idat_5,0], idaywk, idayyr )
+   64.       endif
+   67.       return
+   67.       end
+   67.       

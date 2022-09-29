@@ -1,0 +1,26 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  fparsei.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/fparsei.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    2.       
+    2.       subroutine fparsei( carg, marg, karg )
+    2.       t$2 = _len( carg )
+    2.       t$1 = marg
+   35.       t$3 = _zla( 0, marg )
+   37.       t$4 = _fread( _clist( 0, 1, 3,  _substr(carg,1,_len( carg )), ios, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, 0x2000200000000L, 0, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg, Null_Arg ), _iolist( _iotype( karg(+:( 1, marg, 1 )), 0x2000200000000L ) ) )
+   39.       return
+   39.       end
+   39.       

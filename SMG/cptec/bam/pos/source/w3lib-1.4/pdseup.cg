@@ -1,0 +1,82 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  pdseup.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/pdseup.cg
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+   37.       
+   37.       subroutine pdseup( kens, kprob, xprob, kclust, kmembr, ilast, msga )
+   42.       $Con_P7 = 0
+   42.       $Con_P8 = 24
+   42.       call gbytec( substr[msga,0:1], ibytes, $Con_P7, $Con_P8 )
+   43.       $MR_ilast_1 = 0[loc( ilast ),0]
+   43.       if ( $MR_ilast_1 <= ibytes ) then
+   47.          if ( $MR_ilast_1 >= 41 ) then
+   51.             $Con_P7 = 320
+   51.             $Con_P8 = 8
+   51.             $Con_P9 = 0
+   51.             $Con_P10 = 5
+   51.             call gbytesc( substr[msga,0:1], 0[loc( kens ),0], $Con_P7, $Con_P8, $Con_P9, $Con_P10 )
+   53.             if ( $MR_ilast_1 >= 46 ) then
+   54.                $Con_P7 = 360
+   54.                $Con_P8 = 8
+   54.                $Con_P9 = 0
+   54.                $Con_P10 = 2
+   54.                call gbytesc( substr[msga,0:1], 0[loc( kprob ),0], $Con_P7, $Con_P8, $Con_P9, $Con_P10 )
+   56.                $Con_P7 = 376
+   56.                $Con_P8 = 1
+   56.                call gbytec( substr[msga,0:1], jsgn, $Con_P7, $Con_P8 )
+   57.                $Con_P7 = 377
+   57.                $Con_P8 = 7
+   57.                call gbytec( substr[msga,0:1], jexp, $Con_P7, $Con_P8 )
+   58.                $Con_P7 = 384
+   58.                $Con_P8 = 24
+   58.                call gbytec( substr[msga,0:1], ifr, $Con_P7, $Con_P8 )
+   59.                $jsgn_S0 = jsgn
+   59.                $ifr_S1 = ifr
+   59.                $jexp_S2 = jexp
+   59.                0[loc( xprob ),0] = 16.0 ** ( -70 + $jexp_S2 ) * real( $ifr_S1 * cvmg( -1, 1, and( 1, $jsgn_S0 ) /= 0 ) )
+   61.                $Con_P7 = 408
+   61.                $Con_P8 = 1
+   61.                call gbytec( substr[msga,0:1], jsgn, $Con_P7, $Con_P8 )
+   62.                $Con_P7 = 409
+   62.                $Con_P8 = 7
+   62.                call gbytec( substr[msga,0:1], jexp, $Con_P7, $Con_P8 )
+   63.                $Con_P7 = 416
+   63.                $Con_P8 = 24
+   63.                call gbytec( substr[msga,0:1], ifr, $Con_P7, $Con_P8 )
+   64.                $jsgn_S3 = jsgn
+   64.                $ifr_S4 = ifr
+   64.                $jexp_S5 = jexp
+   64.                1[loc( xprob ),0] = 16.0 ** ( -70 + $jexp_S5 ) * real( $ifr_S4 * cvmg( -1, 1, and( 1, $jsgn_S3 ) /= 0 ) )
+   64.             endif
+   68.             if ( $MR_ilast_1 >= 61 ) then
+   68.                $Con_P7 = 480
+   68.                $Con_P8 = 8
+   68.                $Con_P9 = 0
+   68.                $Con_P10 = 16
+   68.                call gbytesc( substr[msga,0:1], 0[loc( kclust ),0], $Con_P7, $Con_P8, $Con_P9, $Con_P10 )
+   68.             endif
+   70.             if ( $MR_ilast_1 >= 77 ) then
+   70.                $Con_P7 = 608
+   70.                $Con_P8 = 1
+   70.                $Con_P9 = 0
+   70.                $Con_P10 = 80
+   70.                call gbytesc( substr[msga,0:1], 0[loc( kmembr ),0], $Con_P7, $Con_P8, $Con_P9, $Con_P10 )
+   70.             endif
+   70.          endif
+   70.       endif
+   74.       return
+   74.       end
+   74.       

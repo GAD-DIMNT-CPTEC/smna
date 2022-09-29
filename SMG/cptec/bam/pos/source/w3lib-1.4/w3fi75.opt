@@ -1,0 +1,900 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi75.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi75.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi75( ibitl, itype, itoss, fld, ifld, ibmap, ibdsfl, npts, bds11, ipfld, pfld, len, lenbds, iberr, pds, igds )
+    1.       t$1 = npts
+   97.       t$2 = _zla( 0, npts )
+   97.       t$5 = 4 * _zla( 0, npts )
+  108.       t$7 = 8 * _zla( 0, npts )
+    1.       t$3 = int( _alloc( 8 * _zla( 0, npts ) ), 8 )
+   97.       t$4 = t$3
+  108.       t$6 = t$3 + 4 * _zla( 0, npts )
+  121.       iberr = 0
+  122.       $iw_S1 = 0
+  124.       if ( itoss == 1 ) then
+  125.          if ( itype == 0 ) then
+  126.             if ( npts > 0 ) then
+  126.                $I_L126_70 = 0
+  126. !dir$ ivdep
+  126.                do
+  127.                   if ( ibmap(1 + $I_L126_70) == 1 ) then
+  128.                      $iw_S1 = 1 + $iw_S1
+  129.                      fwork($iw_S1) = fld(1 + $I_L126_70)
+  129.                   endif
+  131.                   $I_L126_70 = 1 + $I_L126_70
+  130.                   if ( $I_L126_70 >= npts ) exit
+  130.                enddo
+  130.             endif
+  132.             npts = $iw_S1
+  133.          else if ( itype == 1 ) then
+  134.             if ( npts > 0 ) then
+  134.                $I_L134_68 = 0
+  134. !dir$ ivdep
+  134.                do
+  135.                   if ( ibmap(1 + $I_L134_68) == 1 ) then
+  136.                      $iw_S1 = 1 + $iw_S1
+  137.                      iwork($iw_S1) = ifld(1 + $I_L134_68)
+  137.                   endif
+  139.                   $I_L134_68 = 1 + $I_L134_68
+  138.                   if ( $I_L134_68 >= npts ) exit
+  138.                enddo
+  138.             endif
+  140.             npts = $iw_S1
+  140.          endif
+  145.       else if ( itoss == 0 ) then
+  146.          if ( itype == 0 ) then
+  147.             if ( npts > 0 ) then
+  147.                $I_L147_66 = 0
+  147. !dir$ ivdep
+  147.                do
+  148.                   fwork(1 + $I_L147_66) = fld(1 + $I_L147_66)
+  149.                   $I_L147_66 = 1 + $I_L147_66
+  147.                   if ( $I_L147_66 >= npts ) exit
+  147.                enddo
+  147.             endif
+  150.          else if ( itype == 1 ) then
+  151.             if ( npts > 0 ) then
+  151.                $I_L151_64 = 0
+  151. !dir$ ivdep
+  151.                do
+  152.                   iwork(1 + $I_L151_64) = ifld(1 + $I_L151_64)
+  153.                   $I_L151_64 = 1 + $I_L151_64
+  151.                   if ( $I_L151_64 >= npts ) exit
+  151.                enddo
+  151.             endif
+  151.          endif
+  151.       endif
+  164.       if ( itype /= 0 .orelse. ibitl /= 0 ) then
+  168.          if ( itype == 1 ) then
+  168.             if ( ibitl /= 0 ) then
+  169.                if ( npts > 0 ) then
+  169.                   $I_L169_72 = 0
+  169. !dir$ ivdep
+  169.                   do
+  170.                      fwork(1 + $I_L169_72) = real( iwork(1 + $I_L169_72) )
+  171.                      $I_L169_72 = 1 + $I_L169_72
+  169.                      if ( $I_L169_72 >= npts ) exit
+  169.                   enddo
+  169.                endif
+  169.             endif
+  169.          endif
+  169.       else
+  165.          if ( npts > 0 ) then
+  165.             $I_L165_74 = 0
+  165. !dir$ ivdep
+  165.             do
+  166.                iwork(1 + $I_L165_74) = _anint( fwork(1 + $I_L165_74) )
+  167.                $I_L165_74 = 1 + $I_L165_74
+  165.                if ( $I_L165_74 >= npts ) exit
+  165.             enddo
+  165.          endif
+  165.       endif
+  176.       if ( ibdsfl(2) /= 0 ) then
+  180.          if ( ibitl == 0 ) then
+  187.             $max_S7 = iwork(1)
+  188.             $min_S8 = $max_S7
+  189.             if ( -2 + npts >= 0 ) then
+  189.                $I_L189_84 = 0
+  189. !dir$ ivdep
+  189.                do
+  190.                   if ( iwork(2 + $I_L189_84) < $min_S8 ) then
+  191.                      $min_S8 = iwork(2 + $I_L189_84)
+  191.                   else
+  192.                      $max_S7 = max( $max_S7, iwork(2 + $I_L189_84) )
+  192.                   endif
+  195.                   $I_L189_84 = 1 + $I_L189_84
+  194.                   if ( $I_L189_84 >= -1 + npts ) exit
+  194.                enddo
+  194.             endif
+  197.             if ( npts > 0 ) then
+  197.                $I_L197_86 = 0
+  197. !dir$ ivdep
+  197.                do
+  201.                   iwork(1 + $I_L197_86) = iwork(1 + $I_L197_86) + -$min_S8
+  202.                   $I_L197_86 = 1 + $I_L197_86
+  197.                   if ( $I_L197_86 >= npts ) exit
+  197.                enddo
+  197.             endif
+  203.             refnce = real( $min_S8 )
+  214.             $I_L214_88 = 0
+  214. !dir$ ivdep
+  214.             do
+  214.                if ( $max_S7 + -$min_S8 <= ibits(1 + $I_L214_88) ) then
+  214.                   kwide = ( 1 + $I_L214_88 )
+  214.                   goto 10
+  214.                endif
+  214.                $I_L214_88 = 1 + $I_L214_88
+  214.                if ( $I_L214_88 >= 31 ) exit
+  214.             enddo
+  214.             kwide = 32
+  214.    10       continue
+  216.             iscal2 = 0
+  221.             $scal2_S20 = 1.0
+  221.          else
+  231.             $rmax_S12 = fwork(1)
+  232.             $rmin_S13 = $rmax_S12
+  233.             if ( -2 + npts >= 0 ) then
+  233.                $I_L233_76 = 0
+  233. !dir$ ivdep
+  233.                do
+  234.                   if ( fwork(2 + $I_L233_76) < $rmin_S13 ) then
+  235.                      $rmin_S13 = fwork(2 + $I_L233_76)
+  235.                   else
+  236.                      $rmax_S12 = max( $rmax_S12, fwork(2 + $I_L233_76) )
+  236.                   endif
+  239.                   $I_L233_76 = 1 + $I_L233_76
+  238.                   if ( $I_L233_76 >= -1 + npts ) exit
+  238.                enddo
+  238.             endif
+  240.             refnce = $rmin_S13
+  243.             if ( npts > 0 ) then
+  243.                $I_L243_78 = 0
+  243. !dir$ ivdep
+  243.                do
+  244.                   fwork(1 + $I_L243_78) = fwork(1 + $I_L243_78) + -$rmin_S13
+  245.                   $I_L243_78 = 1 + $I_L243_78
+  243.                   if ( $I_L243_78 >= npts ) exit
+  243.                enddo
+  243.             endif
+  252.             $idelt_S17 = _anint( $rmax_S12 + -$rmin_S13 )
+  257.             $I_L257_80 = 0
+  257. !dir$ ivdep
+  257.             do
+  257.                if ( $idelt_S17 <= ibits(1 + $I_L257_80) ) then
+  257.                   $iwide_S18 = ( 1 + $I_L257_80 )
+  257.                   goto 20
+  257.                endif
+  257.                $I_L257_80 = 1 + $I_L257_80
+  257.                if ( $I_L257_80 >= 31 ) exit
+  257.             enddo
+  257.             $iwide_S18 = 32
+  257.    20       continue
+  261.             iscal2 = $iwide_S18 + -ibitl
+  267.             $scal2_S19 = 2.0 ** ( $iwide_S18 + -ibitl )
+  268.             $scal2_S20 = 1.0/$scal2_S19
+  269.             if ( npts > 0 ) then
+  269.                $I_L269_82 = 0
+  269. !dir$ ivdep
+  269.                do
+  270.                   iwork(1 + $I_L269_82) = _anint( fwork(1 + $I_L269_82) * $scal2_S20 )
+  271.                   $I_L269_82 = 1 + $I_L269_82
+  269.                   if ( $I_L269_82 >= npts ) exit
+  269.                enddo
+  269.             endif
+  272.             kwide = ibitl
+  272.          endif
+  283.          call gbytec(  _substr(pds(1),1,1), ipdsiz, 0, 24 )
+  284.          if ( ipdsiz == 50 ) then
+  292.             call w3fi82( iwork(1), fval1, fdiff1, npts,  _substr(pds(1),1,1), igds(1) )
+  319.             fval1 = fval1 + refnce * $scal2_S20
+  324.             call w3fi76( fval1, iexp, imant, 32 )
+  328.             call sbytec(  _substr(pds(1),1,1), iexp, 320, 8 )
+  329.             call sbytec(  _substr(pds(1),1,1), imant, 328, 24 )
+  332.             call w3fi76( fdiff1, iexp, imant, 32 )
+  336.             call sbytec(  _substr(pds(1),1,1), iexp, 352, 8 )
+  337.             call sbytec(  _substr(pds(1),1,1), imant, 360, 24 )
+  342.             if ( iscal2 >= 0 ) then
+  343.                call sbytec(  _substr(pds(1),1,1), iscal2, 384, 16 )
+  343.             else
+  345.                call sbytec(  _substr(pds(1),1,1), 1, 384, 1 )
+  346.                iscal2 = -iscal2
+  347.                call sbytec(  _substr(pds(1),1,1), iscal2, 385, 15 )
+  347.             endif
+  350.             $max_S22 = iwork(1)
+  351.             $min_S23 = $max_S22
+  352.             if ( -2 + npts >= 0 ) then
+  352.                $I_L352_90 = 0
+  352. !dir$ ivdep
+  352.                do
+  353.                   if ( iwork(2 + $I_L352_90) < $min_S23 ) then
+  354.                      $min_S23 = iwork(2 + $I_L352_90)
+  354.                   else
+  355.                      $max_S22 = max( $max_S22, iwork(2 + $I_L352_90) )
+  355.                   endif
+  358.                   $I_L352_90 = 1 + $I_L352_90
+  357.                   if ( $I_L352_90 >= -1 + npts ) exit
+  357.                enddo
+  357.             endif
+  360.             if ( npts > 0 ) then
+  360.                $I_L360_92 = 0
+  360. !dir$ ivdep
+  360.                do
+  361.                   iwork(1 + $I_L360_92) = iwork(1 + $I_L360_92) + -$min_S23
+  362.                   $I_L360_92 = 1 + $I_L360_92
+  360.                   if ( $I_L360_92 >= npts ) exit
+  360.                enddo
+  360.             endif
+  363.             refnce = real( $min_S23 )
+  365.             iscal2 = 0
+  371.             $I_L371_94 = 0
+  371. !dir$ ivdep
+  371.             do
+  371.                if ( $max_S22 + -$min_S23 <= ibits(1 + $I_L371_94) ) then
+  371.                   kwide = ( 1 + $I_L371_94 )
+  371.                   goto 30
+  371.                endif
+  371.                $I_L371_94 = 1 + $I_L371_94
+  371.                if ( $I_L371_94 >= 31 ) exit
+  371.             enddo
+  371.             kwide = 32
+  371.             goto 30
+  371.             goto 40
+  376.          else if ( ibdsfl(2) /= 1 ) then
+  376.             goto 30
+  376.             goto 40
+  376.          else if ( ibdsfl(7) == 0 ) then
+  379.             call fi7503( iwork(1),  _substr(ipfld(1),1,1), npts, ibdsfl(1),  _substr(bds11(1),1,1), len, lenbds,  _substr(pds(1),1,1), refnce, iscal2, kwide, igds(1) )
+    1.             _free( t$3 )
+    1.          else
+    1.    30       continue
+  392.             call fi7501( iwork(1),  _substr(ipfld(1),1,1), npts, ibdsfl(1),  _substr(bds11(1),1,1), len, lenbds,  _substr(pds(1),1,1), refnce, iscal2, kwide )
+  392.             goto 40
+  392.          endif
+  392.       else
+  402.          if ( ibitl == 0 ) then
+  409.             call w3fi58( iwork(1), npts, iwork(1),  _substr(pfld(1),1,1), nbits, len, kmin )
+  411.             refnce = real( kmin )
+  412.             iscale = 0
+  412.          else
+  426.             call w3fi59( fwork(1), npts, ibitl, iwork(1),  _substr(pfld(1),1,1), iscale, len, rmin )
+  427.             refnce = rmin
+  433.             nbits = cvmg( ibitl, 0, len /= 0 )
+  433.          endif
+  441.          $inum_S27 = 88 + npts * nbits
+  445.          nfill = 0
+  447.          if ( mod( 88 + npts * nbits, 16 ) /= 0 ) then
+  448.             $inum_S27 = -mod( 88 + npts * nbits, 16 ) + npts * nbits + 104
+  449.             nfill = 16 + -mod( 88 + npts * nbits, 16 )
+  449.          endif
+  453.          lenbds = $inum_S27 / 8
+  460.          call sbytec(  _substr(bds11(1),1,1), lenbds, 0, 24 )
+  464.          call sbytec(  _substr(bds11(1),1,1), ibdsfl(1), 24, 1 )
+  465.          call sbytec(  _substr(bds11(1),1,1), ibdsfl(2), 25, 1 )
+  466.          call sbytec(  _substr(bds11(1),1,1), ibdsfl(3), 26, 1 )
+  467.          call sbytec(  _substr(bds11(1),1,1), ibdsfl(4), 27, 1 )
+  469.          call sbytec(  _substr(bds11(1),1,1), nfill, 28, 4 )
+  474.          if ( iscale < 0 ) then
+  475.             call sbytec(  _substr(bds11(1),1,1), 1, 32, 1 )
+  476.             iscale = -iscale
+  477.             call sbytec(  _substr(bds11(1),1,1), iscale, 33, 15 )
+  477.          else
+  479.             call sbytec(  _substr(bds11(1),1,1), iscale, 32, 16 )
+  479.          endif
+  492.          call w3fi76( refnce, iexp, imant, 32 )
+  496.          call sbytec(  _substr(bds11(1),1,1), iexp, 48, 8 )
+  497.          call sbytec(  _substr(bds11(1),1,1), imant, 56, 24 )
+  503.          call sbytec(  _substr(bds11(1),1,1), nbits, 80, 8 )
+  503.    40    continue
+    1.          _free( t$3 )
+    1.       endif
+  507.       return
+  507.       end
+  507.       
+  508.       
+  508.       subroutine fi7501( iwork, ipfld, npts, ibdsfl, bds11, len, lenbds, pds, refnce, iscal2, kwide )
+  589.       $I_L589_36 = 0
+  589.       do
+  590.           _substr(ifoval(1 + $I_L589_36),1,1) = ''
+  591.           _substr(isowid(1 + $I_L589_36),1,1) = ''
+  592.          $I_L589_36 = 1 + $I_L589_36
+  589.          if ( $I_L589_36 >= 400000 ) exit
+  589.       enddo
+  594.       $I_L594_38 = 0
+  594.       do
+  595.           _substr(isobmp(1 + $I_L594_38),1,1) = ''
+  596.          $I_L594_38 = 1 + $I_L594_38
+  594.          if ( $I_L594_38 >= 65600 ) exit
+  594.       enddo
+  597.       $I_L597_40 = 0
+  597.       do
+  598.           _substr(isoval(1 + $I_L597_40),1,1) = ''
+  599.          $I_L597_40 = 1 + $I_L597_40
+  597.          if ( $I_L597_40 >= 800000 ) exit
+  597.       enddo
+  602.       iwdptr = 0
+  604.       ibmp2p = 0
+  606.       ifoptr = 0
+  608.       kbds(12) = 0
+  610.       kbds(15) = 0
+  612.       kbds(17) = 0
+  614.       kbds(19) = 0
+  616.       isoptr = 0
+  621.       kbds(11) = kwide
+  627.       istart = 1
+  633.       do
+  636.          if ( istart > npts ) then
+  715.             iptr = 16
+  718.             call sbytec(  _substr(ipfld(1),1,1), ibdsfl(5), iptr, 1 )
+  719.             iptr = 1 + iptr
+  720.             call sbytec(  _substr(ipfld(1),1,1), ibdsfl(6), iptr, 1 )
+  721.             iptr = 1 + iptr
+  722.             call sbytec(  _substr(ipfld(1),1,1), ibdsfl(7), iptr, 1 )
+  723.             iptr = 1 + iptr
+  724.             call sbytec(  _substr(ipfld(1),1,1), ibdsfl(8), iptr, 1 )
+  725.             iptr = 1 + iptr
+  726.             call sbytec(  _substr(ipfld(1),1,1), ibdsfl(9), iptr, 1 )
+  727.             iptr = 1 + iptr
+  728.             call sbytec(  _substr(ipfld(1),1,1), ibdsfl(10), iptr, 1 )
+  729.             iptr = 1 + iptr
+  730.             call sbytec(  _substr(ipfld(1),1,1), ibdsfl(11), iptr, 1 )
+  731.             iptr = 1 + iptr
+  732.             call sbytec(  _substr(ipfld(1),1,1), ibdsfl(12), iptr, 1 )
+  736.             iptr = 17 + iptr
+  739.             call sbytec(  _substr(ipfld(1),1,1), kbds(17), iptr, 16 )
+  740.             iptr = 16 + iptr
+  743.             call sbytec(  _substr(ipfld(1),1,1), kbds(19), iptr, 16 )
+  744.             iptr = 16 + iptr
+  746.             call sbytec(  _substr(ipfld(1),1,1), 0, iptr, 8 )
+  754.             $F_A33 = ( 1 + iwdptr / 8 )
+  754.             if ( iwdptr / 8 >= 0 ) then
+  754.                $I_L754_48 = 0
+  754.                do
+  754.                    _substr(ipfld($I_L754_48 + ( 8 + iptr ) / 8 + 1),1,1) =  _substr(isowid(1 + $I_L754_48),1,1)
+  754.                   $I_L754_48 = 1 + $I_L754_48
+  754.                   if ( $I_L754_48 >= $F_A33 ) exit
+  754.                enddo
+  754.             endif
+  761.             $F_A34 = ( 2 + ibmp2p / 8 )
+  761.             if ( 2 + ibmp2p / 8 > 0 ) then
+  761.                $I_L761_50 = 0
+  761.                do
+  761.                    _substr(ipfld($I_L761_50 + ( iwdptr + iptr + 8 ) / 8 + 1),1,1) =  _substr(isobmp(1 + $I_L761_50),1,1)
+  761.                   $I_L761_50 = 1 + $I_L761_50
+  761.                   if ( $I_L761_50 >= $F_A34 ) exit
+  761.                enddo
+  761.             endif
+  768.             kbds(12) = 12 + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ) / 8
+  770.             call sbytec(  _substr(ipfld(1),1,1), kbds(12), 0, 16 )
+  776.             $F_A35 = ( 2 + ifoptr / 8 )
+  776.             if ( 2 + ifoptr / 8 > 0 ) then
+  776.                $I_L776_52 = 0
+  776.                do
+  776.                    _substr(ipfld($I_L776_52 + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ) / 8 + 1),1,1) =  _substr(ifoval(1 + $I_L776_52),1,1)
+  776.                   $I_L776_52 = 1 + $I_L776_52
+  776.                   if ( $I_L776_52 >= $F_A35 ) exit
+  776.                enddo
+  776.             endif
+  784.             kbds(15) = 12 + cvmg( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), ifoptr + -mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ) + 8, mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) == 0 ) / 8
+  786.             call sbytec(  _substr(ipfld(1),1,1), kbds(15), 24, 16 )
+  792.             $F_A36 = ( 2 + isoptr / 8 )
+  792.             if ( 2 + isoptr / 8 > 0 ) then
+  792.                $I_L792_54 = 0
+  792.                do
+  792.                    _substr(ipfld($I_L792_54 + cvmg( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), ifoptr + -mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ) + 8, mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) == 0 ) / 8 + 1),1,1) =  _substr(isoval(1 + $I_L792_54),1,1)
+  792.                   $I_L792_54 = 1 + $I_L792_54
+  792.                   if ( $I_L792_54 >= $F_A36 ) exit
+  792.                enddo
+  792.             endif
+  793.             $iptr_S12 = isoptr + cvmg( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), ifoptr + -mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ) + 8, mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) == 0 )
+  794.             nleft = mod( isoptr + cvmg( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), ifoptr + -mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ) + 8, mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) == 0 ) + 88, 16 )
+  795.             if ( mod( isoptr + cvmg( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), ifoptr + -mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ) + 8, mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) == 0 ) + 88, 16 ) /= 0 ) then
+  796.                nleft = 16 + -mod( isoptr + cvmg( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), ifoptr + -mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ) + 8, mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) == 0 ) + 88, 16 )
+  797.                $iptr_S12 = isoptr + -mod( isoptr + cvmg( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), ifoptr + -mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ) + 8, mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) == 0 ) + 88, 16 ) + cvmg( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), ifoptr + -mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ) + 8, mod( ifoptr + cvmg( iwdptr + ibmp2p + iptr + 8, iwdptr + ibmp2p + iptr + -mod( iwdptr + ibmp2p + iptr + 8, 8 ) + 16, mod( iwdptr + ibmp2p + iptr + 8, 8 ) == 0 ), 8 ) == 0 ) + 16
+  797.             endif
+  800.             len = $iptr_S12 / 8
+  802.             lenbds = 11 + $iptr_S12 / 8
+  807.             call sbytec(  _substr(bds11(1),1,1), lenbds, 0, 24 )
+  809.             call sbytec(  _substr(bds11(1),1,1), ibdsfl(1), 24, 1 )
+  810.             call sbytec(  _substr(bds11(1),1,1), ibdsfl(2), 25, 1 )
+  811.             call sbytec(  _substr(bds11(1),1,1), ibdsfl(3), 26, 1 )
+  812.             call sbytec(  _substr(bds11(1),1,1), ibdsfl(4), 27, 1 )
+  814.             call sbytec(  _substr(bds11(1),1,1), nleft, 28, 4 )
+  816.             if ( iscal2 < 0 ) then
+  817.                call sbytec(  _substr(bds11(1),1,1), 1, 32, 1 )
+  818.                iscal2 = -iscal2
+  818.             else
+  820.                call sbytec(  _substr(bds11(1),1,1), 0, 32, 1 )
+  820.             endif
+  822.             call sbytec(  _substr(bds11(1),1,1), iscal2, 33, 15 )
+  832.             call w3fi76( refnce, iexp, imant, 32 )
+  836.             call sbytec(  _substr(bds11(1),1,1), iexp, 48, 8 )
+  837.             call sbytec(  _substr(bds11(1),1,1), imant, 56, 24 )
+  841.             call sbytec(  _substr(bds11(1),1,1), kbds(11), 80, 8 )
+  844.             return
+  844.             goto <unknown>
+  844.          endif
+  638.          if ( npts + -istart == 0 ) then
+  639.             kpts = 1
+  640.             $mxdiff_S5 = 0
+  640.          else
+  645.             $isame_S4 = 0
+  645.             if ( npts + -istart >= 0 ) then
+  645.                $SC_iwork_I0 = iwork(istart)
+  645.                $I_L645_42 = 0
+  645. !dir$ ivdep
+  645.                do
+  645.                   if ( $SC_iwork_I0 + -iwork(istart + $I_L645_42) /= 0 ) then
+  645.                      $isame_S4 = $I_L645_42
+  645.                      goto 10
+  645.                   endif
+  645.                   $I_L645_42 = 1 + $I_L645_42
+  645.                   if ( $I_L645_42 >= npts + -istart + 1 ) exit
+  645.                enddo
+  645.                $isame_S4 = ( npts + -istart + 1 )
+  645.             endif
+  645.    10       continue
+  646.             if ( $isame_S4 >= 15 ) then
+  649.                $mxdiff_S5 = 0
+  650.                kpts = $isame_S4
+  650.             else
+  654.                call fi7513( iwork(1), istart, npts, nmax, nmin, inrnge )
+  660.                $mxdiff_S5 = nmax + -nmin
+  661.                kpts = inrnge
+  661.             endif
+  661.          endif
+  666.          kbds(17) = 1 + kbds(17)
+  668.          if ( $mxdiff_S5 > 0 ) then
+  669.             if ( kpts > 0 ) then
+  669.                $I_L669_44 = 0
+  669. !dir$ ivdep
+  669.                do
+  670.                   iwork(istart + $I_L669_44) = iwork(istart + $I_L669_44) + -nmin
+  671.                   $I_L669_44 = 1 + $I_L669_44
+  669.                   if ( $I_L669_44 >= kpts ) exit
+  669.                enddo
+  669.             endif
+  672.             call sbytec(  _substr(ifoval(1),1,1), nmin, ifoptr, kbds(11) )
+  679.             $I_L679_46 = 0
+  679. !dir$ ivdep
+  679.             do
+  680.                if ( $mxdiff_S5 <= ibits(1 + $I_L679_46) ) then
+  679.                   kwide = ( 1 + $I_L679_46 )
+  679.                   goto 20
+  679.                endif
+  683.                $I_L679_46 = 1 + $I_L679_46
+  682.                if ( $I_L679_46 >= 31 ) exit
+  682.             enddo
+  683.             kwide = 32
+  683.          else
+  674.             call sbytec(  _substr(ifoval(1),1,1), iwork(istart), ifoptr, kbds(11) )
+  686.             kwide = 0
+  686.          endif
+  686.    20    continue
+  676.          ifoptr = ifoptr + kbds(11)
+  688.          call sbytec(  _substr(isowid(1),1,1), kwide, iwdptr, 8 )
+  689.          iwdptr = 8 + iwdptr
+  692.          if ( kwide > 0 ) then
+  693.             call sbytesc(  _substr(isoval(1),1,1), iwork(istart), isoptr, kwide, 0, kpts )
+  694.             isoptr = isoptr + kwide * kpts
+  695.             kbds(19) = kbds(19) + kpts
+  695.          endif
+  700.          call sbytec(  _substr(isobmp(1),1,1), 1, ibmp2p, 1 )
+  701.          ibmp2p = ibmp2p + kpts
+  701.       enddo
+  701.       end
+  701.       
+  845.       
+  845.       subroutine fi7502( iwork, istart, npts, isame )
+  880.       isame = 0
+  881.       if ( npts + -istart >= 0 ) then
+  882.          $SC_iwork_I0 = iwork(istart)
+  881.          $I_L881_6 = 0
+  881. !dir$ ivdep
+  881.          do
+  882.             if ( $SC_iwork_I0 + -iwork(istart + $I_L881_6) /= 0 ) then
+  885.                isame = $I_L881_6
+  885.                goto 10
+  885.             endif
+  886.             $I_L881_6 = 1 + $I_L881_6
+  884.             if ( $I_L881_6 >= npts + -istart + 1 ) exit
+  884.          enddo
+  885.          isame = ( npts + -istart + 1 )
+  885.       endif
+  885.    10 continue
+  888.       return
+  888.       end
+  888.       
+  889.       
+  889.       subroutine fi7503( iwork, ipfld, npts, ibdsfl, bds11, len, lenbds, pds, refnce, iscal2, kwide, igds )
+  957.       $I_L957_60 = 0
+  957.       do
+  958.           _substr(ifoval(1 + $I_L957_60),1,1) = ''
+  959.           _substr(isowid(1 + $I_L957_60),1,1) = ''
+  960.          $I_L957_60 = 1 + $I_L957_60
+  957.          if ( $I_L957_60 >= 400000 ) exit
+  957.       enddo
+  962.       $I_L962_62 = 0
+  962.       do
+  963.           _substr(isobmp(1 + $I_L962_62),1,1) = ''
+  964.          $I_L962_62 = 1 + $I_L962_62
+  962.          if ( $I_L962_62 >= 65600 ) exit
+  962.       enddo
+  965.       $I_L965_64 = 0
+  965.       do
+  966.           _substr(isoval(1 + $I_L965_64),1,1) = ''
+  967.          $I_L965_64 = 1 + $I_L965_64
+  965.          if ( $I_L965_64 >= 800000 ) exit
+  965.       enddo
+  970.       iwdptr = 0
+  974.       ifoptr = 0
+  976.       kbds(12) = 0
+  978.       kbds(15) = 0
+  980.       kbds(17) = 0
+  982.       kbds(19) = 0
+  984.       isoptr = 0
+  988.       if ( and( 32, igds(13) ) /= 0 ) then
+  990.          $kout_S3 = igds(4)
+  991.          $kin_S4 = igds(5)
+  991.       else
+  995.          $kout_S3 = igds(5)
+  996.          $kin_S4 = igds(4)
+  996.       endif
+  999.       kbds(17) = $kout_S3
+ 1000.       kbds(19) = npts
+ 1009.       ibmp2p = 0
+ 1011.       if ( $kout_S3 > 0 ) then
+ 1012.          if ( $kin_S4 > 0 ) then
+ 1011.             $I_L1011_82 = 0
+ 1011.             do
+ 1012.                $I_L1012_66 = 0
+ 1012.                do
+ 1013.                   if ( $I_L1012_66 == 0 ) then
+ 1014.                      call sbytec(  _substr(isobmp(1),1,1), 1, ibmp2p, 1 )
+ 1014.                   else
+ 1016.                      call sbytec(  _substr(isobmp(1),1,1), 0, ibmp2p, 1 )
+ 1016.                   endif
+ 1018.                   ibmp2p = 1 + ibmp2p
+ 1019.                   $I_L1012_66 = 1 + $I_L1012_66
+ 1017.                   if ( $I_L1012_66 >= $kin_S4 ) exit
+ 1017.                enddo
+ 1020.                $I_L1011_82 = 1 + $I_L1011_82
+ 1019.                if ( $I_L1011_82 >= $kout_S3 ) exit
+ 1019.             enddo
+ 1019.          endif
+ 1019.       endif
+ 1027.       kbds(11) = kwide
+ 1028.       if ( $kout_S3 > 0 ) then
+ 1028.          $I_L1028_84 = 0
+ 1028.          do
+ 1032.             lowest = iwork(1 + $kin_S4 * $I_L1028_84)
+ 1033.             if ( $kin_S4 > 0 ) then
+ 1033.                $I_L1033_68 = 0
+ 1033. !dir$ ivdep
+ 1033.                do
+ 1034.                   lowest = min( lowest, iwork($I_L1033_68 + $kin_S4 * $I_L1028_84 + 1) )
+ 1038.                   $I_L1033_68 = 1 + $I_L1033_68
+ 1033.                   if ( $I_L1033_68 >= $kin_S4 ) exit
+ 1033.                enddo
+ 1033.             endif
+ 1040.             call sbytec(  _substr(ifoval(1),1,1), lowest, ifoptr, kwide )
+ 1041.             ifoptr = ifoptr + kwide
+ 1046.             ibig = iwork(1 + $kin_S4 * $I_L1028_84) + -lowest
+ 1047.             if ( $kin_S4 > 0 ) then
+ 1047.                $I_L1047_70 = 0
+ 1047. !dir$ ivdep
+ 1047.                do
+ 1048.                   $iwork_WR0_R0 = iwork($I_L1047_70 + $kin_S4 * $I_L1028_84 + 1) + -lowest
+ 1048.                   iwork($I_L1047_70 + $kin_S4 * $I_L1028_84 + 1) = $iwork_WR0_R0
+ 1049.                   ibig = max( ibig, $iwork_WR0_R0 )
+ 1053.                   $I_L1047_70 = 1 + $I_L1047_70
+ 1047.                   if ( $I_L1047_70 >= $kin_S4 ) exit
+ 1047.                enddo
+ 1047.             endif
+ 1056.             $I_L1056_72 = 0
+ 1056. !dir$ ivdep
+ 1056.             do
+ 1056.                if ( ibig <= ibits(1 + $I_L1056_72) ) then
+ 1056.                   nwide = ( 1 + $I_L1056_72 )
+ 1056.                   goto 10
+ 1056.                endif
+ 1056.                $I_L1056_72 = 1 + $I_L1056_72
+ 1056.                if ( $I_L1056_72 >= 31 ) exit
+ 1056.             enddo
+ 1056.             nwide = 32
+ 1056.    10       continue
+ 1058.             call sbytec(  _substr(isowid(1),1,1), nwide, iwdptr, 8 )
+ 1059.             iwdptr = 8 + iwdptr
+ 1063.             if ( $kin_S4 > 0 ) then
+ 1063.                $I_L1063_74 = 0
+ 1063.                do
+ 1064.                   call sbytec(  _substr(isoval(1),1,1), iwork($I_L1063_74 + $kin_S4 * $I_L1028_84 + 1), isoptr, nwide )
+ 1065.                   isoptr = isoptr + nwide
+ 1066.                   $I_L1063_74 = 1 + $I_L1063_74
+ 1065.                   if ( $I_L1063_74 >= $kin_S4 ) exit
+ 1065.                enddo
+ 1065.             endif
+ 1068.             $I_L1028_84 = 1 + $I_L1028_84
+ 1066.             if ( $I_L1028_84 >= $kout_S3 ) exit
+ 1066.          enddo
+ 1066.       endif
+ 1077.       iptr = 16
+ 1080.       call sbytec(  _substr(ipfld(1),1,1), ibdsfl(5), iptr, 1 )
+ 1081.       iptr = 1 + iptr
+ 1082.       call sbytec(  _substr(ipfld(1),1,1), ibdsfl(6), iptr, 1 )
+ 1083.       iptr = 1 + iptr
+ 1084.       call sbytec(  _substr(ipfld(1),1,1), ibdsfl(7), iptr, 1 )
+ 1085.       iptr = 1 + iptr
+ 1086.       call sbytec(  _substr(ipfld(1),1,1), ibdsfl(8), iptr, 1 )
+ 1087.       iptr = 1 + iptr
+ 1088.       call sbytec(  _substr(ipfld(1),1,1), ibdsfl(9), iptr, 1 )
+ 1089.       iptr = 1 + iptr
+ 1090.       call sbytec(  _substr(ipfld(1),1,1), ibdsfl(10), iptr, 1 )
+ 1091.       iptr = 1 + iptr
+ 1092.       call sbytec(  _substr(ipfld(1),1,1), ibdsfl(11), iptr, 1 )
+ 1093.       iptr = 1 + iptr
+ 1094.       call sbytec(  _substr(ipfld(1),1,1), ibdsfl(12), iptr, 1 )
+ 1098.       iptr = 17 + iptr
+ 1101.       call sbytec(  _substr(ipfld(1),1,1), kbds(17), iptr, 16 )
+ 1102.       iptr = 16 + iptr
+ 1105.       call sbytec(  _substr(ipfld(1),1,1), kbds(19), iptr, 16 )
+ 1106.       iptr = 16 + iptr
+ 1108.       call sbytec(  _substr(ipfld(1),1,1), 0, iptr, 8 )
+ 1116.       $F_A33 = ( 1 + iwdptr / 8 )
+ 1116.       if ( iwdptr / 8 >= 0 ) then
+ 1116.          $I_L1116_76 = 0
+ 1116.          do
+ 1116.              _substr(ipfld($I_L1116_76 + ( 8 + iptr ) / 8 + 1),1,1) =  _substr(isowid(1 + $I_L1116_76),1,1)
+ 1116.             $I_L1116_76 = 1 + $I_L1116_76
+ 1116.             if ( $I_L1116_76 >= $F_A33 ) exit
+ 1116.          enddo
+ 1116.       endif
+ 1125.       kbds(12) = 12 + ( iwdptr + iptr + 8 ) / 8
+ 1127.       call sbytec(  _substr(ipfld(1),1,1), kbds(12), 0, 16 )
+ 1133.       $F_A34 = ( 2 + ifoptr / 8 )
+ 1133.       if ( 2 + ifoptr / 8 > 0 ) then
+ 1133.          $I_L1133_78 = 0
+ 1133.          do
+ 1133.              _substr(ipfld($I_L1133_78 + ( iwdptr + iptr + 8 ) / 8 + 1),1,1) =  _substr(ifoval(1 + $I_L1133_78),1,1)
+ 1133.             $I_L1133_78 = 1 + $I_L1133_78
+ 1133.             if ( $I_L1133_78 >= $F_A34 ) exit
+ 1133.          enddo
+ 1133.       endif
+ 1143.       kbds(15) = 12 + cvmg( iwdptr + ifoptr + iptr + 8, iwdptr + ifoptr + iptr + -mod( iwdptr + ifoptr + iptr + 8, 8 ) + 16, mod( iwdptr + ifoptr + iptr + 8, 8 ) == 0 ) / 8
+ 1145.       call sbytec(  _substr(ipfld(1),1,1), kbds(15), 24, 16 )
+ 1151.       $F_A35 = ( 2 + isoptr / 8 )
+ 1151.       if ( 2 + isoptr / 8 > 0 ) then
+ 1151.          $I_L1151_80 = 0
+ 1151.          do
+ 1151.              _substr(ipfld($I_L1151_80 + cvmg( iwdptr + ifoptr + iptr + 8, iwdptr + ifoptr + iptr + -mod( iwdptr + ifoptr + iptr + 8, 8 ) + 16, mod( iwdptr + ifoptr + iptr + 8, 8 ) == 0 ) / 8 + 1),1,1) =  _substr(isoval(1 + $I_L1151_80),1,1)
+ 1151.             $I_L1151_80 = 1 + $I_L1151_80
+ 1151.             if ( $I_L1151_80 >= $F_A35 ) exit
+ 1151.          enddo
+ 1151.       endif
+ 1152.       $iptr_S18 = isoptr + cvmg( iwdptr + ifoptr + iptr + 8, iwdptr + ifoptr + iptr + -mod( iwdptr + ifoptr + iptr + 8, 8 ) + 16, mod( iwdptr + ifoptr + iptr + 8, 8 ) == 0 )
+ 1155.       nleft = mod( isoptr + cvmg( iwdptr + ifoptr + iptr + 8, iwdptr + ifoptr + iptr + -mod( iwdptr + ifoptr + iptr + 8, 8 ) + 16, mod( iwdptr + ifoptr + iptr + 8, 8 ) == 0 ) + 88, 16 )
+ 1156.       if ( mod( isoptr + cvmg( iwdptr + ifoptr + iptr + 8, iwdptr + ifoptr + iptr + -mod( iwdptr + ifoptr + iptr + 8, 8 ) + 16, mod( iwdptr + ifoptr + iptr + 8, 8 ) == 0 ) + 88, 16 ) /= 0 ) then
+ 1157.          nleft = 16 + -mod( isoptr + cvmg( iwdptr + ifoptr + iptr + 8, iwdptr + ifoptr + iptr + -mod( iwdptr + ifoptr + iptr + 8, 8 ) + 16, mod( iwdptr + ifoptr + iptr + 8, 8 ) == 0 ) + 88, 16 )
+ 1158.          $iptr_S18 = isoptr + -mod( isoptr + cvmg( iwdptr + ifoptr + iptr + 8, iwdptr + ifoptr + iptr + -mod( iwdptr + ifoptr + iptr + 8, 8 ) + 16, mod( iwdptr + ifoptr + iptr + 8, 8 ) == 0 ) + 88, 16 ) + cvmg( iwdptr + ifoptr + iptr + 8, iwdptr + ifoptr + iptr + -mod( iwdptr + ifoptr + iptr + 8, 8 ) + 16, mod( iwdptr + ifoptr + iptr + 8, 8 ) == 0 ) + 16
+ 1158.       endif
+ 1161.       len = $iptr_S18 / 8
+ 1163.       lenbds = 11 + $iptr_S18 / 8
+ 1168.       call sbytec(  _substr(bds11(1),1,1), lenbds, 0, 24 )
+ 1170.       call sbytec(  _substr(bds11(1),1,1), ibdsfl(1), 24, 1 )
+ 1171.       call sbytec(  _substr(bds11(1),1,1), ibdsfl(2), 25, 1 )
+ 1172.       call sbytec(  _substr(bds11(1),1,1), ibdsfl(3), 26, 1 )
+ 1173.       call sbytec(  _substr(bds11(1),1,1), ibdsfl(4), 27, 1 )
+ 1175.       call sbytec(  _substr(bds11(1),1,1), nleft, 28, 4 )
+ 1177.       if ( iscal2 < 0 ) then
+ 1178.          call sbytec(  _substr(bds11(1),1,1), 1, 32, 1 )
+ 1179.          iscal2 = -iscal2
+ 1179.       else
+ 1181.          call sbytec(  _substr(bds11(1),1,1), 0, 32, 1 )
+ 1181.       endif
+ 1183.       call sbytec(  _substr(bds11(1),1,1), iscal2, 33, 15 )
+ 1193.       call w3fi76( refnce, iexp, imant, 32 )
+ 1197.       call sbytec(  _substr(bds11(1),1,1), iexp, 48, 8 )
+ 1198.       call sbytec(  _substr(bds11(1),1,1), imant, 56, 24 )
+ 1202.       call sbytec(  _substr(bds11(1),1,1), kbds(11), 80, 8 )
+ 1210.       return
+ 1210.       end
+ 1210.       
+ 1211.       
+ 1211.       subroutine fi7505( n, nbits )
+ 1248.       $I_L1248_4 = 0
+ 1248. !dir$ ivdep
+ 1248.       do
+ 1249.          if ( n <= ibits(1 + $I_L1248_4) ) then
+ 1248.             nbits = ( 1 + $I_L1248_4 )
+ 1248.             goto 10
+ 1248.          endif
+ 1252.          $I_L1248_4 = 1 + $I_L1248_4
+ 1251.          if ( $I_L1248_4 >= 31 ) exit
+ 1251.       enddo
+ 1252.       nbits = 32
+ 1252.    10 continue
+ 1254.       return
+ 1254.       end
+ 1254.       
+ 1255.       
+ 1255.       subroutine fi7513( iwork, istart, npts, max, min, inrnge )
+ 1299.       istrta = istart
+ 1302.       call fi7516( iwork(1), npts, inrnga, istrta, max, min, mxval, lwide )
+ 1306.       istrtb = istrta + inrnga
+ 1307.       do
+ 1309.          if ( istrtb > npts ) then
+ 1311.             inrnge = inrnga
+ 1311.             goto 30
+ 1311.          endif
+ 1315.          $isame_S1 = 0
+ 1315.          if ( npts + -istrtb >= 0 ) then
+ 1315.             $SC_iwork_I0 = iwork(istrtb)
+ 1315.             $I_L1315_6 = 0
+ 1315. !dir$ ivdep
+ 1315.             do
+ 1315.                if ( $SC_iwork_I0 + -iwork(istrtb + $I_L1315_6) /= 0 ) then
+ 1315.                   $isame_S1 = $I_L1315_6
+ 1315.                   goto 10
+ 1315.                endif
+ 1315.                $I_L1315_6 = 1 + $I_L1315_6
+ 1315.                if ( $I_L1315_6 >= npts + -istrtb + 1 ) exit
+ 1315.             enddo
+ 1315.             $isame_S1 = ( npts + -istrtb + 1 )
+ 1315.          endif
+ 1315.    10    continue
+ 1316.          if ( $isame_S1 >= 15 ) then
+ 1320.             inrnge = inrnga
+ 1320.             goto 30
+ 1320.          endif
+ 1326.          istrtb = istrta + inrnga
+ 1327.          call fi7516( iwork(1), npts, inrngb, istrtb, maxb, minb, mxvalb, lwideb )
+ 1336.          if ( lwide + -lwideb > 0 ) then
+ 1358.             mxvalb = ibits(lwideb)
+ 1365.             call fi7517( iret, iwork(1), npts, istrtb, inrnga, maxb, minb, lwideb, mxvalb )
+ 1365.             goto 20
+ 1365.          endif
+ 1338.          mxval = ibits(lwide)
+ 1347.          call fi7518( iret, iwork(1), npts, istrta, inrnga, inrngb, max, min, lwide, mxval )
+ 1349.          if ( iret == 1 ) then
+ 1349.    20       continue
+ 1374.             inrnge = inrnga
+ 1374.             goto 30
+ 1374.          endif
+ 1351.          if ( inrngb < 20 ) exit
+ 1351.       enddo
+ 1351.    30 continue
+ 1378.       return
+ 1378.       end
+ 1378.       
+ 1379.       
+ 1379.       subroutine fi7516( iwork, npts, inrng, istart, max, min, mxval, lwidth )
+ 1429.       max = iwork(istart)
+ 1430.       min = max
+ 1431.       $I_L1431_16 = 0
+ 1442.       if ( 0 > npts + -istart + -1 ) then
+ 1379.          goto 10
+ 1379.       else
+ 1431.          $I_L1431_31 = 0
+ 1431.          do
+ 1432.             $SC_iwork_I0 = iwork(istart + $I_L1431_31 + 1)
+ 1432.             $I_L1432_25 = 0
+ 1432. !dir$ ivdep
+ 1432.             do
+ 1432.                if ( $SC_iwork_I0 + -iwork(istart + $I_L1432_25 + $I_L1431_31 + 1) /= 0 ) then
+ 1432.                   $isame_S2 = $I_L1432_25
+ 1432.                   goto 30
+ 1432.                endif
+ 1432.                $I_L1432_25 = 1 + $I_L1432_25
+ 1432.                if ( $I_L1432_25 >= npts + -istart + -$I_L1431_31 ) exit
+ 1432.             enddo
+ 1432.             $isame_S2 = ( npts + -istart + -$I_L1431_31 )
+ 1432.    30       continue
+ 1433.             if ( $isame_S2 >= 15 ) then
+ 1436.                inrng = ( 1 + $I_L1431_31 )
+ 1436.                goto 40
+ 1436.             endif
+ 1437.             if ( $SC_iwork_I0 > max ) then
+ 1438.                max = $SC_iwork_I0
+ 1438.             else
+ 1439.                min = min( min, $SC_iwork_I0 )
+ 1439.             endif
+ 1442.             $I_L1431_31 = 1 + $I_L1431_31
+ 1441.             if ( $I_L1431_31 >= min( 19, npts + -istart ) ) exit
+ 1441.          enddo
+ 1442.          $I_L1431_16 = min( 19, npts + -istart )
+ 1442.          if ( npts + -istart >= 19 ) then
+ 1442.             goto 20
+ 1442.          else
+ 1442.    10       continue
+ 1431.             $I_L1431_29 = 0
+ 1431. !dir$ ivdep
+ 1431.             do
+ 1437.                if ( iwork(istart + $I_L1431_16 + $I_L1431_29 + 1) > max ) then
+ 1438.                   max = iwork(istart + $I_L1431_16 + $I_L1431_29 + 1)
+ 1438.                else
+ 1439.                   min = min( min, iwork(istart + $I_L1431_16 + $I_L1431_29 + 1) )
+ 1439.                endif
+ 1442.                $I_L1431_29 = 1 + $I_L1431_29
+ 1441.                if ( $I_L1431_29 >= 19 + -$I_L1431_16 ) exit
+ 1441.             enddo
+ 1441.    20       continue
+ 1436.             inrng = 20
+ 1436.          endif
+ 1436.       endif
+ 1436.    40 continue
+ 1446.       $I_L1446_27 = 0
+ 1446. !dir$ ivdep
+ 1446.       do
+ 1447.          if ( max + -min <= ibits(1 + $I_L1446_27) ) then
+ 1446.             lwidth = ( 1 + $I_L1446_27 )
+ 1446.             goto 50
+ 1446.          endif
+ 1451.          $I_L1446_27 = 1 + $I_L1446_27
+ 1450.          if ( $I_L1446_27 >= 31 ) exit
+ 1450.       enddo
+ 1451.       lwidth = 32
+ 1451.    50 continue
+ 1453.       return
+ 1453.       end
+ 1453.       
+ 1454.       
+ 1454.       subroutine fi7517( iret, iwork, npts, istrtb, inrnga, maxb, minb, mxvalb, lwideb )
+ 1501.       iret = 0
+ 1505.       $kset_S1 = inrnga
+ 1510.       if ( 0 < inrnga ) then
+ 1507.          $I_itst_0 = 0
+ 1507.          do
+ 1511.             if ( iwork(istrtb + -$I_itst_0 + -1) > maxb ) then
+ 1512.                if ( iwork(istrtb + -$I_itst_0 + -1) + -minb <= mxvalb ) then
+ 1517.                   maxb = iwork(istrtb + -$I_itst_0 + -1)
+ 1510.                   $I_itst_0 = 1 + $I_itst_0
+ 1507.                else
+ 1507.                endif
+ 1519.             else if ( iwork(istrtb + -$I_itst_0 + -1) >= minb ) then
+ 1519.             else if ( maxb + -iwork(istrtb + -$I_itst_0 + -1) <= mxvalb ) then
+ 1519.             else
+ 1519.             endif
+ 1519.             if ( $I_itst_0 >= inrnga ) exit
+ 1519.          enddo
+ 1528.          inrnga = 0
+ 1528.       endif
+ 1536.       return
+ 1536.       end
+ 1536.       
+ 1537.       
+ 1537.       subroutine fi7518( iret, iwork, npts, istrta, inrnga, inrngb, maxa, mina, lwidea, mxvala )
+ 1585.       iret = 0
+ 1592.       if ( 0 < inrngb ) then
+ 1590.          $I_itst_0 = 0
+ 1590.          do
+ 1594.             if ( iwork(istrta + inrnga + $I_itst_0) > maxa ) then
+ 1595.                if ( iwork(istrta + inrnga + $I_itst_0) + -mina <= mxvala ) then
+ 1600.                   maxa = iwork(istrta + inrnga + $I_itst_0)
+ 1592.                   $I_itst_0 = 1 + $I_itst_0
+ 1590.                else
+ 1590.                endif
+ 1602.             else if ( iwork(istrta + inrnga + $I_itst_0) >= mina ) then
+ 1602.             else if ( maxa + -iwork(istrta + inrnga + $I_itst_0) <= mxvala ) then
+ 1602.             else
+ 1602.             endif
+ 1602.             if ( $I_itst_0 >= inrngb ) exit
+ 1602.          enddo
+ 1611.          inrnga = inrnga + inrngb
+ 1611.       endif
+ 1619.       return
+ 1619.       end
+ 1619.       

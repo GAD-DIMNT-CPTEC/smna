@@ -1,0 +1,319 @@
+       !        
+       !        Cray Inc. Decompilation
+       !        Notice - This output is provided for information only.
+       !        
+       !        Cray Inc. reserves the right to change the format of this
+       !        information at any time and does not guarantee the
+       !        readability or accuracy of this information.
+       !        
+       !        This information may not be compilable and corresponds to
+       !        the internal representation of the program during the
+       !        optimization phase of the compilation process.
+       !        
+       !        Source                :  w3fi74.f
+       !        File                  :  /scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.2/pos/source/w3lib-1.4/w3fi74.opt
+       !        Network               :  Gemini interconnect
+       !        Target                :  X86, 64-bit, sse3
+       !        
+    1.       
+    1.       subroutine w3fi74( igds, icomp, gds, lengds, npts, igerr )
+   49.       isum = 0
+   50.       igerr = 0
+   63.       if ( igds(3) == 0 ) then
+    1.          goto 10
+    1.          goto 20
+   63.       else if ( igds(3) == 2 ) then
+   63.          goto 10
+   63.          goto 20
+   63.       else if ( igds(3) == 4 ) then
+   63.          goto 10
+   63.          goto 20
+   63.       else if ( igds(3) == 5 ) then
+   63.          goto 10
+   63.          goto 20
+   63.       else if ( igds(3) == 50 ) then
+   63.          goto 10
+   63.          goto 20
+   63.       else if ( igds(3) == 201 ) then
+   63.          goto 10
+   63.          goto 20
+   63.       else if ( igds(3) == 202 ) then
+   63.          goto 10
+   63.          goto 20
+   63.       else if ( igds(3) == 203 ) then
+   63.          goto 10
+   63.          goto 20
+   63.       else if ( igds(3) == 204 ) then
+   63.    10    continue
+   68.          lengds = 32
+   72.          if ( igds(3) == 0 ) then
+   72.             if ( igds(1) == 0 ) then
+   72.                if ( igds(2) /= 255 ) then
+   74.                   lengds = 32 + 2 * igds(5)
+   74.                endif
+   74.             endif
+   74.          endif
+   74.          goto 20
+   74.       else if ( igds(3) == 1 ) then
+   74.          goto 50
+   74.          goto 20
+   74.       else if ( igds(3) == 3 ) then
+   74.          goto 50
+   74.          goto 20
+   74.       else if ( igds(3) == 13 ) then
+   74.    50    continue
+   78.          lengds = 42
+   78.    20    continue
+   87.           _substr(gds(1),1,1) = character*1( mod( lengds / 65536, 256 ) )
+   88.           _substr(gds(2),1,1) = character*1( mod( lengds / 256, 256 ) )
+   89.           _substr(gds(3),1,1) = character*1( mod( lengds, 256 ) )
+   95.           _substr(gds(4),1,1) = character*1( igds(1) )
+   96.           _substr(gds(5),1,1) = character*1( igds(2) )
+   97.           _substr(gds(6),1,1) = character*1( igds(3) )
+  106.          if ( igds(3) == 0 .orelse. igds(3) == 4 .orelse. igds(3) == 201 .orelse. igds(3) == 202 .orelse. igds(3) == 203 .orelse. igds(3) == 204 ) then
+  109.              _substr(gds(7),1,1) = character*1( mod( igds(4) / 256, 256 ) )
+  110.              _substr(gds(8),1,1) = character*1( mod( igds(4), 256 ) )
+  111.              _substr(gds(9),1,1) = character*1( mod( igds(5) / 256, 256 ) )
+  112.              _substr(gds(10),1,1) = character*1( mod( igds(5), 256 ) )
+  113.             $lato_S10 = igds(6)
+  114.             if ( $lato_S10 < 0 ) then
+  116.                $lato_S10 = or( 0x800000, -$lato_S10 )
+  116.             endif
+  118.              _substr(gds(11),1,1) = character*1( mod( $lato_S10 / 65536, 256 ) )
+  119.              _substr(gds(12),1,1) = character*1( mod( $lato_S10 / 256, 256 ) )
+  120.              _substr(gds(13),1,1) = character*1( mod( $lato_S10, 256 ) )
+  121.             $lono_S11 = igds(7)
+  122.             if ( $lono_S11 < 0 ) then
+  124.                $lono_S11 = or( 0x800000, -$lono_S11 )
+  124.             endif
+  126.              _substr(gds(14),1,1) = character*1( mod( $lono_S11 / 65536, 256 ) )
+  127.              _substr(gds(15),1,1) = character*1( mod( $lono_S11 / 256, 256 ) )
+  128.              _substr(gds(16),1,1) = character*1( mod( $lono_S11, 256 ) )
+  129.             $latext_S12 = igds(9)
+  130.             if ( $latext_S12 < 0 ) then
+  132.                $latext_S12 = or( 0x800000, -$latext_S12 )
+  132.             endif
+  134.              _substr(gds(18),1,1) = character*1( mod( $latext_S12 / 65536, 256 ) )
+  135.              _substr(gds(19),1,1) = character*1( mod( $latext_S12 / 256, 256 ) )
+  136.              _substr(gds(20),1,1) = character*1( mod( $latext_S12, 256 ) )
+  137.             $lonext_S13 = igds(10)
+  138.             if ( $lonext_S13 < 0 ) then
+  140.                $lonext_S13 = or( 0x800000, -$lonext_S13 )
+  140.             endif
+  142.              _substr(gds(21),1,1) = character*1( mod( $lonext_S13 / 65536, 256 ) )
+  143.              _substr(gds(22),1,1) = character*1( mod( $lonext_S13 / 256, 256 ) )
+  144.              _substr(gds(23),1,1) = character*1( mod( $lonext_S13, 256 ) )
+  145.             $ires_S14 = and( 128, igds(8) )
+  146.             if ( igds(3) == 201 .orelse. igds(3) == 202 .orelse. igds(3) == 203 .orelse. igds(3) == 204 ) then
+  148.                 _substr(gds(24),1,1) = character*1( mod( igds(11) / 256, 256 ) )
+  149.                 _substr(gds(25),1,1) = character*1( mod( igds(11), 256 ) )
+  149.             else
+  150.                if ( $ires_S14 == 0 ) then
+  151.                    _substr(gds(24),1,1) = 'ÿ'
+  152.                    _substr(gds(25),1,1) = 'ÿ'
+  152.                else
+  154.                    _substr(gds(24),1,1) = character*1( mod( igds(12) / 256, 256 ) )
+  155.                    _substr(gds(25),1,1) = character*1( mod( igds(12), 256 ) )
+  155.                endif
+  155.             endif
+  157.             if ( igds(3) == 4 ) then
+  158.                 _substr(gds(26),1,1) = character*1( mod( igds(11) / 256, 256 ) )
+  159.                 _substr(gds(27),1,1) = character*1( mod( igds(11), 256 ) )
+  160.             else if ( igds(3) == 201 ) then
+  160.                goto 30
+  160.             else if ( igds(3) == 202 ) then
+  160.                goto 30
+  160.             else if ( igds(3) == 203 ) then
+  160.                goto 30
+  160.             else if ( igds(3) == 204 ) then
+  160.    30          continue
+  162.                 _substr(gds(26),1,1) = character*1( mod( igds(12) / 256, 256 ) )
+  163.                 _substr(gds(27),1,1) = character*1( mod( igds(12), 256 ) )
+  163.             else if ( $ires_S14 == 0 ) then
+  165.                 _substr(gds(26),1,1) = 'ÿ'
+  166.                 _substr(gds(27),1,1) = 'ÿ'
+  166.             else
+  168.                 _substr(gds(26),1,1) = character*1( mod( igds(11) / 256, 256 ) )
+  169.                 _substr(gds(27),1,1) = character*1( mod( igds(11), 256 ) )
+  169.             endif
+  171.              _substr(gds(28),1,1) = character*1( igds(13) )
+  172.              _substr(gds(29),1,1) = ''
+  173.              _substr(gds(30),1,1) = ''
+  174.              _substr(gds(31),1,1) = ''
+  175.              _substr(gds(32),1,1) = ''
+  176.             if ( lengds > 32 ) then
+  177.                isum = 0
+  179.                $I_L179_6 = 0
+  179. !dir$ unroll 4
+  179.                do
+  181.                    _substr(gds(33 + 2 * $I_L179_6),1,1) = character*1( mod( igds(19 + $I_L179_6) / 256, 256 ) )
+  182.                    _substr(gds(34 + 2 * $I_L179_6),1,1) = character*1( mod( igds(19 + $I_L179_6), 256 ) )
+  184.                   $I_L179_6 = 1 + $I_L179_6
+  179.                   if ( $I_L179_6 >= ( -31 + lengds ) / 2 ) exit
+  179.                enddo
+  179.                $I_L179_8 = 0
+  179. !dir$ unroll 4
+  179.                do
+  180.                   isum = isum + igds(19 + $I_L179_8)
+  184.                   $I_L179_8 = 1 + $I_L179_8
+  179.                   if ( $I_L179_8 >= ( -31 + lengds ) / 2 ) exit
+  179.                enddo
+  179.             endif
+  179.          else
+  189.             if ( igds(3) == 1 ) then
+  190.                 _substr(gds(7),1,1) = character*1( mod( igds(4) / 256, 256 ) )
+  191.                 _substr(gds(8),1,1) = character*1( mod( igds(4), 256 ) )
+  192.                 _substr(gds(9),1,1) = character*1( mod( igds(5) / 256, 256 ) )
+  193.                 _substr(gds(10),1,1) = character*1( mod( igds(5), 256 ) )
+  194.                $lato_S0 = igds(6)
+  195.                if ( $lato_S0 < 0 ) then
+  197.                   $lato_S0 = or( 0x800000, -$lato_S0 )
+  197.                endif
+  199.                 _substr(gds(11),1,1) = character*1( mod( $lato_S0 / 65536, 256 ) )
+  200.                 _substr(gds(12),1,1) = character*1( mod( $lato_S0 / 256, 256 ) )
+  201.                 _substr(gds(13),1,1) = character*1( mod( $lato_S0, 256 ) )
+  202.                $lono_S1 = igds(7)
+  203.                if ( $lono_S1 < 0 ) then
+  205.                   $lono_S1 = or( 0x800000, -$lono_S1 )
+  205.                endif
+  207.                 _substr(gds(14),1,1) = character*1( mod( $lono_S1 / 65536, 256 ) )
+  208.                 _substr(gds(15),1,1) = character*1( mod( $lono_S1 / 256, 256 ) )
+  209.                 _substr(gds(16),1,1) = character*1( mod( $lono_S1, 256 ) )
+  210.                $latext_S2 = igds(9)
+  211.                if ( $latext_S2 < 0 ) then
+  213.                   $latext_S2 = or( 0x800000, -$latext_S2 )
+  213.                endif
+  215.                 _substr(gds(18),1,1) = character*1( mod( $latext_S2 / 65536, 256 ) )
+  216.                 _substr(gds(19),1,1) = character*1( mod( $latext_S2 / 256, 256 ) )
+  217.                 _substr(gds(20),1,1) = character*1( mod( $latext_S2, 256 ) )
+  218.                $lonext_S3 = igds(10)
+  219.                if ( $lonext_S3 < 0 ) then
+  221.                   $lonext_S3 = or( 0x800000, -$lonext_S3 )
+  221.                endif
+  223.                 _substr(gds(21),1,1) = character*1( mod( $lonext_S3 / 65536, 256 ) )
+  224.                 _substr(gds(22),1,1) = character*1( mod( $lonext_S3 / 256, 256 ) )
+  225.                 _substr(gds(23),1,1) = character*1( mod( $lonext_S3, 256 ) )
+  226.                 _substr(gds(24),1,1) = character*1( mod( igds(13) / 65536, 256 ) )
+  227.                 _substr(gds(25),1,1) = character*1( mod( igds(13) / 256, 256 ) )
+  228.                 _substr(gds(26),1,1) = character*1( mod( igds(13), 256 ) )
+  229.                 _substr(gds(27),1,1) = ''
+  230.                 _substr(gds(28),1,1) = character*1( igds(14) )
+  231.                 _substr(gds(29),1,1) = character*1( mod( igds(12) / 65536, 256 ) )
+  232.                 _substr(gds(30),1,1) = character*1( mod( igds(12) / 256, 256 ) )
+  233.                 _substr(gds(31),1,1) = character*1( mod( igds(12), 256 ) )
+  234.                 _substr(gds(32),1,1) = character*1( mod( igds(11) / 65536, 256 ) )
+  235.                 _substr(gds(33),1,1) = character*1( mod( igds(11) / 256, 256 ) )
+  236.                 _substr(gds(34),1,1) = character*1( mod( igds(11), 256 ) )
+  237.                 _substr(gds(35),1,1) = ''
+  238.                 _substr(gds(36),1,1) = ''
+  239.                 _substr(gds(37),1,1) = ''
+  240.                 _substr(gds(38),1,1) = ''
+  241.                 _substr(gds(39),1,1) = ''
+  242.                 _substr(gds(40),1,1) = ''
+  243.                 _substr(gds(41),1,1) = ''
+  244.                 _substr(gds(42),1,1) = ''
+  246.             else if ( igds(3) == 3 ) then
+  247.                 _substr(gds(7),1,1) = character*1( mod( igds(4) / 256, 256 ) )
+  248.                 _substr(gds(8),1,1) = character*1( mod( igds(4), 256 ) )
+  249.                 _substr(gds(9),1,1) = character*1( mod( igds(5) / 256, 256 ) )
+  250.                 _substr(gds(10),1,1) = character*1( mod( igds(5), 256 ) )
+  251.                $lato_S4 = igds(6)
+  252.                if ( $lato_S4 < 0 ) then
+  254.                   $lato_S4 = or( 0x800000, -$lato_S4 )
+  254.                endif
+  256.                 _substr(gds(11),1,1) = character*1( mod( $lato_S4 / 65536, 256 ) )
+  257.                 _substr(gds(12),1,1) = character*1( mod( $lato_S4 / 256, 256 ) )
+  258.                 _substr(gds(13),1,1) = character*1( mod( $lato_S4, 256 ) )
+  259.                $lono_S5 = igds(7)
+  260.                if ( $lono_S5 < 0 ) then
+  262.                   $lono_S5 = or( 0x800000, -$lono_S5 )
+  262.                endif
+  264.                 _substr(gds(14),1,1) = character*1( mod( $lono_S5 / 65536, 256 ) )
+  265.                 _substr(gds(15),1,1) = character*1( mod( $lono_S5 / 256, 256 ) )
+  266.                 _substr(gds(16),1,1) = character*1( mod( $lono_S5, 256 ) )
+  267.                $lonm_S6 = igds(9)
+  268.                if ( $lonm_S6 < 0 ) then
+  270.                   $lonm_S6 = or( 0x800000, -$lonm_S6 )
+  270.                endif
+  272.                 _substr(gds(18),1,1) = character*1( mod( $lonm_S6 / 65536, 256 ) )
+  273.                 _substr(gds(19),1,1) = character*1( mod( $lonm_S6 / 256, 256 ) )
+  274.                 _substr(gds(20),1,1) = character*1( mod( $lonm_S6, 256 ) )
+  275.                 _substr(gds(21),1,1) = character*1( mod( igds(10) / 65536, 256 ) )
+  276.                 _substr(gds(22),1,1) = character*1( mod( igds(10) / 256, 256 ) )
+  277.                 _substr(gds(23),1,1) = character*1( mod( igds(10), 256 ) )
+  278.                 _substr(gds(24),1,1) = character*1( mod( igds(11) / 65536, 256 ) )
+  279.                 _substr(gds(25),1,1) = character*1( mod( igds(11) / 256, 256 ) )
+  280.                 _substr(gds(26),1,1) = character*1( mod( igds(11), 256 ) )
+  281.                 _substr(gds(27),1,1) = character*1( igds(12) )
+  282.                 _substr(gds(28),1,1) = character*1( igds(13) )
+  283.                 _substr(gds(29),1,1) = character*1( mod( igds(15) / 65536, 256 ) )
+  284.                 _substr(gds(30),1,1) = character*1( mod( igds(15) / 256, 256 ) )
+  285.                 _substr(gds(31),1,1) = character*1( mod( igds(15), 256 ) )
+  286.                 _substr(gds(32),1,1) = character*1( mod( igds(16) / 65536, 256 ) )
+  287.                 _substr(gds(33),1,1) = character*1( mod( igds(16) / 256, 256 ) )
+  288.                 _substr(gds(34),1,1) = character*1( mod( igds(16), 256 ) )
+  289.                 _substr(gds(35),1,1) = character*1( mod( igds(17) / 65536, 256 ) )
+  290.                 _substr(gds(36),1,1) = character*1( mod( igds(17) / 256, 256 ) )
+  291.                 _substr(gds(37),1,1) = character*1( mod( igds(17), 256 ) )
+  292.                 _substr(gds(38),1,1) = character*1( mod( igds(18) / 65536, 256 ) )
+  293.                 _substr(gds(39),1,1) = character*1( mod( igds(18) / 256, 256 ) )
+  294.                 _substr(gds(40),1,1) = character*1( mod( igds(18), 256 ) )
+  295.                 _substr(gds(41),1,1) = ''
+  296.                 _substr(gds(42),1,1) = ''
+  296.             else if ( igds(3) == 5 ) then
+  299.                 _substr(gds(7),1,1) = character*1( mod( igds(4) / 256, 256 ) )
+  300.                 _substr(gds(8),1,1) = character*1( mod( igds(4), 256 ) )
+  301.                 _substr(gds(9),1,1) = character*1( mod( igds(5) / 256, 256 ) )
+  302.                 _substr(gds(10),1,1) = character*1( mod( igds(5), 256 ) )
+  303.                $lato_S7 = igds(6)
+  304.                if ( $lato_S7 < 0 ) then
+  306.                   $lato_S7 = or( 0x800000, -$lato_S7 )
+  306.                endif
+  308.                 _substr(gds(11),1,1) = character*1( mod( $lato_S7 / 65536, 256 ) )
+  309.                 _substr(gds(12),1,1) = character*1( mod( $lato_S7 / 256, 256 ) )
+  310.                 _substr(gds(13),1,1) = character*1( mod( $lato_S7, 256 ) )
+  311.                $lono_S8 = igds(7)
+  312.                if ( $lono_S8 < 0 ) then
+  314.                   $lono_S8 = or( 0x800000, -$lono_S8 )
+  314.                endif
+  316.                 _substr(gds(14),1,1) = character*1( mod( $lono_S8 / 65536, 256 ) )
+  317.                 _substr(gds(15),1,1) = character*1( mod( $lono_S8 / 256, 256 ) )
+  318.                 _substr(gds(16),1,1) = character*1( mod( $lono_S8, 256 ) )
+  319.                $lonm_S9 = igds(9)
+  320.                if ( $lonm_S9 < 0 ) then
+  322.                   $lonm_S9 = or( 0x800000, -$lonm_S9 )
+  322.                endif
+  324.                 _substr(gds(18),1,1) = character*1( mod( $lonm_S9 / 65536, 256 ) )
+  325.                 _substr(gds(19),1,1) = character*1( mod( $lonm_S9 / 256, 256 ) )
+  326.                 _substr(gds(20),1,1) = character*1( mod( $lonm_S9, 256 ) )
+  327.                 _substr(gds(21),1,1) = character*1( mod( igds(10) / 65536, 256 ) )
+  328.                 _substr(gds(22),1,1) = character*1( mod( igds(10) / 256, 256 ) )
+  329.                 _substr(gds(23),1,1) = character*1( mod( igds(10), 256 ) )
+  330.                 _substr(gds(24),1,1) = character*1( mod( igds(11) / 65536, 256 ) )
+  331.                 _substr(gds(25),1,1) = character*1( mod( igds(11) / 256, 256 ) )
+  332.                 _substr(gds(26),1,1) = character*1( mod( igds(11), 256 ) )
+  333.                 _substr(gds(27),1,1) = character*1( igds(12) )
+  334.                 _substr(gds(28),1,1) = character*1( igds(13) )
+  335.                 _substr(gds(29),1,1) = ''
+  336.                 _substr(gds(30),1,1) = ''
+  337.                 _substr(gds(31),1,1) = ''
+  338.                 _substr(gds(32),1,1) = ''
+  338.             endif
+  338.          endif
+  346.          if ( igds(3) /= 0 ) then
+  339.             goto 40
+  346.          else if ( igds(1) /= 0 ) then
+  346.             goto 40
+  346.          else if ( igds(2) /= 255 ) then
+  348.             npts = isum
+  348.          else
+  348.    40       continue
+  350.             npts = igds(5) * igds(4)
+  350.          endif
+  362.           _substr(gds(17),1,1) = character*1( or( igds(8), 8 * _fsb( icomp, 8 ) ) )
+  362.       else
+   81.          igerr = 1
+   81.       endif
+  365.       return
+  365.       end
+  365.       
