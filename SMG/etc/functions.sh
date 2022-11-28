@@ -95,57 +95,11 @@ copy_fixed_files(){
      ln -s /cray_home/joao_gerd/BAMFIX/pre/datain/* ${subt_pre_bam}/datain/
      ln -s /cray_home/joao_gerd/BAMFIX/pre/dataout/* ${subt_pre_bam}/dataout/
      ln -s /cray_home/joao_gerd/BAMFIX/pre/databcs/* ${subt_pre_bam}/databcs/
-     ln -s cray_home/joao_gerd/BAMFIX/pre/dataco2/* ${subt_pre_bam}/dataco2/
-     ln -s cray_home/joao_gerd/BAMFIX/pre/datasst/* ${subt_pre_bam}/datasst/
-     ln -s cray_home/joao_gerd/BAMFIX/pre/dataTop/* ${subt_pre_bam}/dataTop/
+     ln -s /cray_home/joao_gerd/BAMFIX/pre/dataco2/* ${subt_pre_bam}/dataco2/
+     ln -s /cray_home/joao_gerd/BAMFIX/pre/datasst/* ${subt_pre_bam}/datasst/
+     ln -s /cray_home/joao_gerd/BAMFIX/pre/dataTop/* ${subt_pre_bam}/dataTop/
 
 
-#      echo -e '\033[31;1m-------------------------------------------------------------------\033[m'
-#      echo -e '\033[31;1mATENÇÃO:\033[m\033[33;1m É necessário verificar com o administrador\033[m'
-#      echo -e '\033[33;1m         onde estão os arquivos fixos para o modelo BAM\033[m'
-#      echo -e ''
-#      echo -e '\033[33;1m Entre em contato com \033[m\033[34;1meduardo.khamis@inpe.br\033[m ou \033[34;1mjoao.gerd@inpe.br\033[m'
-#      echo -e '\033[31;1m-------------------------------------------------------------------\033[m'
-#
-#     cp -pf ${home_model_bam_datain}/* ${subt_model_bam}/datain/
-#   
-#     scp ${USER//_/.}@tupa:${public_bam}/MODEL/datain/AeroVar.Tab ${subt_model_bam}/datain/
-#     scp ${USER//_/.}@tupa:${public_bam}/MODEL/datain/ETAMPNEW_DATA ${subt_model_bam}/datain/
-#     scp ${USER//_/.}@tupa:${public_bam}/MODEL/datain/F_nwvl200_mu20_lam50_res64_t298_c080428.bin ${subt_model_bam}/datain/
-#     scp ${USER//_/.}@tupa:${public_bam}/MODEL/datain/iceoptics_c080917.bin ${subt_model_bam}/datain/
-#     scp ${USER//_/.}@tupa:${public_bam}/MODEL/datain/ocnalbtab24bnd.bin ${subt_model_bam}/datain/
-#   
-#     #-----------------------------------------------------------------------------------------
-#     # pre/datain
-#   
-#     cp -pf ${home_pre_bam_datain}/* ${subt_pre_bam}/datain/
-#   
-#     #-----------------------------------------------------------------------------------------
-#     # pre/dataout
-#   
-#     cp -pf ${home_pre_bam_dataout}/* ${subt_pre_bam}/dataout/
-#   
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/dataout/WaterNavy.dat ${subt_pre_bam}/dataout/
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/dataout/TopoNavy.dat ${subt_pre_bam}/dataout/
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/dataout/HPRIME.dat ${subt_pre_bam}/dataout/
-#   
-#     #-----------------------------------------------------------------------------------------
-#     # pre/databcs
-#   
-#     cp -pf ${home_pre_bam_databcs}/* ${subt_pre_bam}/databcs/
-#   
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/sib2soilms.form ${subt_pre_bam}/databcs/
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/FluxCO2.bin ${subt_pre_bam}/databcs/
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/FluxCO2.ctl ${subt_pre_bam}/databcs/
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/claymsk.form ${subt_pre_bam}/databcs/
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/clmt.form ${subt_pre_bam}/databcs/
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/deltat.form ${subt_pre_bam}/databcs/
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/ersst.bin ${subt_pre_bam}/databcs/
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/ibismsk.form ${subt_pre_bam}/databcs/
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/ndviclm.form ${subt_pre_bam}/databcs/
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/sandmsk.form ${subt_pre_bam}/databcs/
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/sib2msk.form ${subt_pre_bam}/databcs/
-#     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/soiltext.form ${subt_pre_bam}/databcs/
   fi
 
 }
@@ -164,7 +118,7 @@ configurar(){
   echo ""
   echo -e "\033[34;1m > SMG HOME: \033[36;1m${home_smg}\033[m \033[m"
   echo -e "\033[34;1m > SMG SUBM: \033[36;1m${subt_smg}\033[m \033[m"
-  echo -e "\033[34;1m > SMG WORK: \033[36;1m${work_smg}\033[m \033[m" 
+  echo -e "\033[34;1m > SMG WORK: \033[36;1m${subt_smg}\033[m \033[m" 
   if [ "/"${home_smg}"/" == "/"${HOME}/${nome_smg}"/" ] 
   then 
      echo ""
@@ -250,11 +204,18 @@ configurar(){
   sed -i "/DirMain='\//,1d" ${home_run_bam}/PostGridHistory.nml
   sed -i "/!DirMain=subt_bam/a\DirMain=\'"${subt_bam}"\'" ${home_run_bam}/PostGridHistory.nml
 
-  sed -i "/export HOMEBASE=\//,1d" ${home_run_bam}/EnvironmentalVariables
-  sed -i "/# Caminho do BAM no HOME/a\export HOMEBASE="${home_bam}"" ${home_run_bam}/EnvironmentalVariables
+# configure HOMEBASE
+  sed -i -e "/export HOMEBASE/d" \
+         -e "/# Caminho do BAM no HOME/a\export HOMEBASE="${home_bam}"" ${home_run_bam}/EnvironmentalVariables
 
-  sed -i "/export SUBTBASE=\//,1d" ${home_run_bam}/EnvironmentalVariables
-  sed -i "/# Caminho do BAM no scratchin (SUBMIT_HOME)/a\export SUBTBASE="${subt_bam}"" ${home_run_bam}/EnvironmentalVariables
+# configure SUBTBASE
+  sed -i -e "/export SUBTBASE/d" \
+         -e "/# Caminho do BAM no scratchin (SUBMIT_HOME)/a\export SUBTBASE="${subt_bam}"" ${home_run_bam}/EnvironmentalVariables
+
+# configure WORKBASE
+  sed -i -e "/export WORKBASE/d" \
+         -e "/# Caminho do BAM no scratchout (SUBMIT_WORK)/a\export WORKBASE="${subt_bam}"" ${home_run_bam}/EnvironmentalVariables
+
 
 
   # Copiando arquivos necessários
