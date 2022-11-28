@@ -366,7 +366,7 @@ getSoilFiles(){
      for path in ${preDataIn[@]};do
         file=$( ${inctime} ${LABELI} +0h ${path}/${smcFile} )
         if [ -e ${file} ];then
-           echo "ln -s ${file} ${fileOut} > /dev/null 2>&1"
+           ln -s ${file} ${fileOut} > /dev/null 2>&1
            return 0
         fi
      done
