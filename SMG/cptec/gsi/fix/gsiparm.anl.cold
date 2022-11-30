@@ -1,0 +1,215 @@
+ &SETUP
+   !-------------------------------------------------------!
+   ! Analysis loops
+   !    * miter : number of outer analysis loops
+   !    * niter : maximun iteration number of inner loop 
+   !              iteration by each outer loop
+   miter    =   0,
+   niter(1) =   1,
+   niter(2) = 100,
+   niter_no_qc(1) = 50,
+   niter_no_qc(2) =  0,
+   !
+   !
+   !-------------------------------------------------------!
+   ! Write diagnostic files
+   !
+   !    The (miter + 1) diag file will contain innovations
+   ! with respect to analysis.
+   !
+   write_diag(1) = .true., ! (OmF)
+   write_diag(2) = .false.,
+   write_diag(3) = .true., ! (OmA)
+   !
+   !-------------------------------------------------------!
+   ! Humidity options
+   !
+   !    qoption : Set the moisture analysis variable:
+   !              (1) - the moisture analysis variable is pseudo-relative humidity. 
+   !                    The saturation specific humidity, qsatg, is computed from 
+   !                    the guess and held constant during the inner loop. Thus, 
+   !                    the relative humidity control variable can only change via 
+   !                    changes in specific humidity, q.
+   !              (2) - the moisture analysis variable is normalized relative humidity. 
+   !                    This formulation allows relative humidity to change in the 
+   !                    inner loop via changes to surface pressure, temperature, or 
+   !                    specific humidity.
+   !
+   !   factqmin : weighting factor for negative moisture constraint
+   !   factqmax : weighting factor for supersaturated moisture constraint
+   !   clip_supersaturation : flag to remove supersaturation during each outer loop
+   !
+   qoption  = 1,
+   factqmin = 0.005,
+   factqmax = 0.905,
+   clip_supersaturation = .true.,
+   !
+    !-------------------------------------------------------!
+   ! Miscellany setup options
+   !
+   center_name    = '#CENTER#',    ! NCEP or CPTEC
+   iguess         =  -1,           ! guess solution (currently not working)
+   use_compress   = .true.,        ! turn on the use of compressibility factors 
+                                   ! in geopotential heights
+   oneobtest      = .#ONEOBTEST#., ! one observation test flag true=on
+   print_diag_pcg = .true.,        ! logical turn on of printing of GMAO diagnostics 
+                                   ! in pcgsoi.f90
+   lwrite_peakwt  = .true.,        ! write out the approximate pressure of the peak
+                                   ! of the weighting function for satellite data
+                                   ! to the radiance diagnostic files
+   lwrite_predterms=.true.,        ! write out actual predictor terms instead of predicted bias
+                                   ! to the radiance diagnostic files
+   lread_obs_save = .true.,        ! option to write out collective obs selection info
+   lread_obs_skip = .false.,       ! option to read in collective obs selection info
+   nsig_ext       = 12,            ! number of layers above the model top which 
+                                   ! are necessary to compute the bending angle for gpsro
+   gpstop         = 50.0,          ! Maximum height for gpsro data assimilation.
+                                   ! Reject anything above this height. (km)
+   !-------------------------------------------------------!
+   ! Cost function precondition options
+   !
+   step_start     = 1.0e-4,        ! Initial stepSize in minimization (use if diag_precon = .false.)
+   diag_precon    = .true.,        ! do preconditioning
+   newpc4pred     = .true.,        ! option for additional preconditioning for pred coef
+   !
+   !
+   !-------------------------------------------------------!
+   ! For Radiance 
+   !
+
+   adp_anglebc    = .true.,       ! Perform variational angle bias correction
+   angord         = 4,            ! order of polynomial for variational angle bias correction
+   passive_bc     = .true.,       ! Turn on bias correction for passive (monitored) channels
+   use_edges      = .false.,      ! Exclude radiance data on scan edges.
+   emiss_bc       = .true.,       ! Turn on emissivity bias predictor
+   upd_pred       = 1,            ! bias update indicator for radiance bias correction; 
+                                  ! 1.0=bias correction coefficients evolve
+   !
+   !-------------------------------------------------------!
+ /
+ /
+ &GRIDOPTS
+   JCAP=#TRUNC#,JCAP_B=#TRUNCB#,NLAT=#JMAX#,NLON=#IMAX#,nsig=#KMAX#,
+   regional=.false.,nlayers(#NLVL#)=3,nlayers(#NLV#)=6,
+ /
+ &BKGERR
+   !-------------------------------------------------------!
+   ! Background error related variables
+   !
+   vs            = 0.7,
+   hzscl         = 1.7,0.8,0.5,
+   hswgt         = 0.45,0.3,0.25,
+   norsp         = 4,
+   bkgv_flowdep  = .true.,
+   bkgv_rewgtfct = 1.5,
+   cwcoveqqcov   = .false.,
+   !
+   !-------------------------------------------------------!
+ /
+ &ANBKGERR
+   !-------------------------------------------------------!
+   ! Anisotropic background error
+   !
+   anisotropic = .false.,
+!   normal      = -200,
+!   rgaus  = 0.5, 1.0, 2.0,
+!   an_flen_u   = -1,
+!   an_flen_t   = -1,
+!   an_flen_z   = -1,
+   !
+   !-------------------------------------------------------!
+ /
+ &JCOPTS
+   !-------------------------------------------------------!
+   ! Constraint term in cost funtion JC
+   ! Dry pressure constaint on increment
+   !
+   switch_on_derivatives = .true.,
+   tendsflag   = .true.,
+   ljcpdry     = .true.,
+   bamp_jcpdry = 5e4,
+   !
+   !-------------------------------------------------------!
+ /
+ &STRONGOPTS
+   !-------------------------------------------------------!
+   ! Strong dynamic constraint
+   !
+   ! valores de acordo com:
+   ! Temperton, C., 1989: Implicit normal mode initialization 
+   !                      for spectral models. Mon. Wea. Rev., 
+   !                      117, 436–451.
+   ! Kleist, D. T., 2009: Improving Incremental Balance in the 
+   !                      GSI 3DVAR Analysis System, Monthly 
+   !                      Weather Review, 137(3), 1046-1060.
+   !
+   tlnmc_option = 0,
+   nstrong      = 1,
+   period_max   = 6.,
+   period_width = 1.5,
+   nvmodes_keep = 8,
+   baldiag_full =.false.,
+   baldiag_inc  =.false.,
+   !
+   !-------------------------------------------------------!
+ /
+ &OBSQC
+   dfact   = 0.75,
+   dfact1  = 3.0,
+   noiqc   = .true.,
+   c_varqc = 0.004,
+   vadfile = 'prepbufr',
+ /
+ &OBS_INPUT
+dmesh(1)=145.0,dmesh(2)=150.0,dmesh(3)=100.0,time_window_max=3.0,
+ /
+OBS_INPUT::
+!  dfile          dtype       dplat     dsis                 dval    dthin dsfcalc
+   prepbufr       ps          null      ps                   0.0     0     0
+   prepbufr       t           null      t                    0.0     0     0
+   prepbufr       q           null      q                    0.0     0     0
+   prepbufr       pw          null      pw                   0.0     0     0
+   satwnd         uv          null      uv                   0.0     0     0   
+   prepbufr       uv          null      uv                   0.0     0     0
+   prepbufr       spd         null      spd                  0.0     0     0
+   prepbufr       dw          null      dw                   0.0     0     0
+   prepbufr       sst         null      sst                  0.0     0     0
+   gpsrobufr      gps_ba      null      gps                  0.0     0     0
+   amsuabufr      amsua       n15       amsua_n15            0.0     1     1
+   amsuabufr      amsua       n18       amsua_n18            0.0     1     1
+   amsuabufr      amsua       n19       amsua_n19            0.0     1     1
+   amsuabufr      amsua       metop-a   amsua_metop-a        0.0     1     1
+   amsuabufr      amsua       metop-b   amsua_metop-b        0.0     1     1
+!   hirs4bufr      hirs4       metop-a   hirs4_metop-a        0.0     1     1
+!   hirs4bufr      hirs4       n18       hirs4_n18            0.0     1     1
+!   hirs4bufr      hirs4       n19       hirs4_n19            0.0     1     1
+!   hirs4bufr      hirs4       metop-b   hirs4_metop-b        0.0     1     1
+!   airsbufr       airs        aqua      airs281SUBSET_aqua   0.0     1     1
+!   airsbufr       amsua       aqua      amsua_aqua           0.0     1     1
+!   mhsbufr        mhs         n18       mhs_n18              0.0     1     1
+!   mhsbufr        mhs         n19       mhs_n19              0.0     1     1
+!   mhsbufr        mhs         metop-a   mhs_metop-a          0.0     1     1
+!   mhsbufr        mhs         metop-b   mhs_metop-b          0.0     1     1
+!   iasibufr       iasi        metop-a   iasi616_metop-a      0.0     1     1
+!   iasibufr       iasi        metop-b   iasi616_metop-b      0.0     1     1
+!   atmsbufr       atms        npp       atms_npp             0.0     1     1
+!   crisbufr       cris        npp       cris_npp             0.0     1     0
+::
+ &SUPEROB_RADAR
+   del_azimuth=5.,del_elev=.25,del_range=5000.,del_time=.5,elev_angle_max=5.,minnum=50,range_max=100000.,
+   l2superob_only=.false.,
+ /
+ &LAG_DATA
+ /
+ &HYBRID_ENSEMBLE
+   l_hyb_ens=.false.,
+ /
+ &RAPIDREFRESH_CLDSURF
+ /
+ &CHEM
+ /
+ &SINGLEOB_TEST
+   maginnov=1.0,magoberr=0.8,oneob_type='t',
+   oblat=38.,oblon=279.,obpres=500.,obdattim=#LABELANL#,
+   obhourset=0.,
+ /
