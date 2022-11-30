@@ -546,7 +546,7 @@ export ATP_ENABLED=1
 
 cd \${PBS_O_WORKDIR}
 
-aprun -n ${PEs} -N ${TasksPerNode} -d ${ThreadsPerMPITask} $(basename ${execGSI}) > gsiStdout_${andt}.${runTime}.log
+aprun -n ${PEs} -N ${TasksPerNode} -d ${ThreadsPerMPITask} ./$(basename ${execGSI}) > gsiStdout_${andt}.${runTime}.log
 
 EOF
 
