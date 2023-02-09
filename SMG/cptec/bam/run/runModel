@@ -310,6 +310,7 @@ BAMRUN=${SUBTBASE}/model/exec_${PREFIX}${LABELI}
 BAMEXE=${SUBTBASE}/model/exec/ParModel_MPI
 BAMSCP=${BAMRUN}/qsub_bam.qsb
 BAMLOG=${BAMRUN}/setout/Print.model.${LABELI}.${LABELF}.${tmstp}.MPI${MPITasks}.out
+PBSLOG=${BAMRUN}/setout/Out.model.${PREFIX}.${LABELI}.${tmstp}.MPI${MPITasks}.out
 
 PATHIN=${SUBTBASE}/model/datain
 PATHOU=${WORKBASE}/model/dataout/${MRES}/${LABELI}
@@ -453,7 +454,7 @@ sed  -e "s;#TRUNC#;${TRC};g" \
 
 cat << EOF > ${BAMSCP}
 #!/bin/bash
-#PBS -o ${BAMRUN}/setout/Out.model.${PREFIX}.${LABELI}.${tmstp}.MPI${MPITasks}.out
+#PBS -o ${PBSLOG}
 #PBS -j oe
 #PBS -l walltime=${walltime}
 #PBS -l nodes=${Nodes}:ppn=${MaxCoresPerNode}
@@ -502,6 +503,9 @@ cd ${BAMRUN}
 
 PID=$(qsub -W block=true ${BAMSCP}; exit ${PIPESTATUS[0]})
 qstatus=$?
+
+chmod 644 ${PBSLOG}
+chmod 644 ${BAMLOG}
 
 if [ ${qstatus} -eq 0 ];then
    echo -e "\033[34;1m [\033[m\033[32;2m OK \033[m\033[34;1m]\033[m"

@@ -553,8 +553,12 @@ EOF
 cd ${runDir}
 
 PID=$(qsub -W block=true gsi.qsb; exit ${PIPESTATUS[0]})
-return $?
-exit 1
+status=$?
+
+chmod 644 ${runDir}/gsiAnl.${andt}.${runTime}.out
+chmod 644 ${runDir}/gsiStdout_${andt}.${runTime}.log
+
+return $status
 }
 
 #-----------------------------------------------------------------------------#
@@ -597,8 +601,12 @@ EOF
 cd ${runDir}
 
 PID=$(qsub -W block=true angupdate.qsb; exit ${PIPESTATUS[0]})
-return $?
+status=$?
 
+chmod 644 ${runDir}/gsiAngUpdateStdout_${andt}.${runTime}.log
+chmod 644 ${runDir}/gsiAngUpdate.${andt}.${runTime}.out
+
+return $status
 }
 teste(){
 echo 'hello'
@@ -661,33 +669,33 @@ copyFiles (){
    local fromDir=${1}
    local toDir=${2}
 
-   local CP='cp -pf'
-#   local MV='mv -f'
-   local MV='cp -pf'
+#   local CP='cp -pf'
+##   local MV='mv -f'
+#   local MV='cp -pf'
 
    # arquivos gerados pelo gsi
-   find -P -O3 ${fromDir} -maxdepth 1 -type f -iname "diag_*" -exec mv -f {} ${toDir} \;
-   find -P -O3 ${fromDir} -maxdepth 1 -type f -iname "fort.*" -exec mv -f {} ${toDir} \;
+   find -P -O3 ${fromDir} -maxdepth 1 -type f -iname "diag_*" -exec rsync -p --chmod=644 {} ${toDir} \;
+   find -P -O3 ${fromDir} -maxdepth 1 -type f -iname "fort.*" -exec rsync -p --chmod=644 {} ${toDir} \;
    
-   mv -f ${fromDir}/diag ${toDir}
+   rsync -p -r --chmod=644 ${fromDir}/diag ${toDir}
 
-   ${MV} ${fromDir}/BAM.anl ${toDir}/GANL${BkgPrefix}${AnlDate}S.unf.${BkgMRES}
-   ${MV} ${fromDir}/${satbiasIn} ${toDir}
-   ${MV} ${fromDir}/${satbiasOu} ${toDir}
-   ${MV} ${fromDir}/${satbiasPCIn} ${toDir}
-   ${MV} ${fromDir}/${satbiasPCOu} ${toDir}
-   ${MV} ${fromDir}/${satbiasAngIn} ${toDir}
-   ${MV} ${fromDir}/${satbiasAngOu} ${toDir}
+   rsync -p --chmod=644 ${fromDir}/BAM.anl ${toDir}/GANL${BkgPrefix}${AnlDate}S.unf.${BkgMRES}
+   rsync -p --chmod=644 ${fromDir}/${satbiasIn} ${toDir}
+   rsync -p --chmod=644 ${fromDir}/${satbiasOu} ${toDir}
+   rsync -p --chmod=644 ${fromDir}/${satbiasPCIn} ${toDir}
+   rsync -p --chmod=644 ${fromDir}/${satbiasPCOu} ${toDir}
+   rsync -p --chmod=644 ${fromDir}/${satbiasAngIn} ${toDir}
+   rsync -p --chmod=644 ${fromDir}/${satbiasAngOu} ${toDir}
 
    # arquivos de configuracao
-   ${MV} ${fromDir}/gsiparm.anl ${toDir}
-   ${CP} ${fromDir}/anavinfo ${toDir}
-   ${CP} ${fromDir}/satinfo  ${toDir}
-   ${CP} ${fromDir}/convinfo ${toDir}
+   rsync -p --chmod=644 ${fromDir}/gsiparm.anl ${toDir}
+   rsync -p --chmod=644 ${fromDir}/anavinfo ${toDir}
+   rsync -p --chmod=644 ${fromDir}/satinfo  ${toDir}
+   rsync -p --chmod=644 ${fromDir}/convinfo ${toDir}
 
    # arquivos de log
-   ${MV} ${fromDir}/gsiAnl.* ${toDir}
-   ${MV} ${fromDir}/gsiStdout* ${toDir}
+   rsync -p --chmod=644 ${fromDir}/gsiAnl.* ${toDir}
+   rsync -p --chmod=644 ${fromDir}/gsiStdout* ${toDir}
 #   mv -f ${fromDir}/gsiAngUpdate* ${toDir}
    
 }

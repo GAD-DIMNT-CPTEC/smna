@@ -42,6 +42,14 @@
 #       outro truncamento, porém o arquivo gerado estará no truncamento
 #       do modelo BAM, assim como deve ocorrer com o arquivo de background.
 #
+#     * Códigios de falhas:
+#        # 1 : Falha ao copiar executável do GSI
+#        # 2 : Executável do GSI não encontrado
+#        # 3 : Falha ao copiar executával do Angle Update
+#        # 4 : Executável do Angle Update não encontrado
+#        # 5 : Arquivos de backgrouds não encontrados
+#        # 6 : Falha no processo de Bias Correction Inicial
+#
 # !BUGS:
 #     Not yet!
 #
@@ -57,7 +65,7 @@
 WhereIam=$(dirname ${BASH_SOURCE})
 
 # Carregando as variaveis do sistema
-source /lustre_xc50/joao_gerd/SMG/config_smg.ksh vars_export
+source /media/extra/wrk/dev/SMNA-Oper/SMG/config_smg.ksh vars_export
 
 # load functions used by runGSI script
 source ${WhereIam}/gsi_scripts/runGSI_Functions.sh
@@ -110,7 +118,7 @@ else
   echo -e "\033[31;1m !!! Arquivo Nao Encontrado !!! \033[m"
   echo -e "\033[31;1m ${execGSI} \033[m"
   rm -fr ${RunGSI}
-  exit 1
+  exit 2
 fi
 
 #
@@ -126,14 +134,14 @@ if [ -e ${execBCAng} ];then
     echo -e "\033[34;1m Copy failed !\033[m"
     echo -e "\033[34;1m trying copy ${execBCAng} to ${RunDir}\033[m"
     echo -e ""
-    exit 1
+    exit 3
   fi
 else
   echo -e "\033[34;1m[\033[m\033[31;1m Falhou \033[m\033[34;1m]\033[m"
   echo -e "\033[31;1m !!! Arquivo Nao Encontrado !!! \033[m"
   echo -e "\033[31;1m ${execBCAng} \033[m"
   rm -fr ${RunGSI}
-  exit 1
+  exit 4
 fi
 
 
@@ -166,7 +174,7 @@ for inc in $(seq -3 3 3); do
       echo -e "\033[31;1m File not found !\033[m"
       echo -e "\033[31;1m ${FFCT}\033[m"
       echo -e ""
-      exit 1
+      exit 5
    fi
 
    # Description file
@@ -178,7 +186,7 @@ for inc in $(seq -3 3 3); do
       echo -e "\033[31;1m File not found !\033[m"
       echo -e "\033[31;1m ${FDIR}\033[m"
       echo -e ""
-      exit 1
+      exit 5
    fi
    
 done
@@ -232,7 +240,7 @@ for cycle in $(seq 0 ${BcCycles} ); do
       echo -e "\033[34;1m [\033[m\033[32;2m OK \033[m\033[34;1m]\033[m"
    else
       echo -e "\033[34;1m[\033[m\033[31;1m Fail \033[m\033[34;1m]\033[m"
-      exit 1
+      exit 6
    fi
 
    mergeDiagFiles ${RunDir} ${AnlDate}
@@ -263,9 +271,9 @@ for cycle in $(seq 0 ${BcCycles} ); do
          # copy satellite bias.out to bias.in for next cycle
          #
 
-         cp -pfr ${BcDirOut}/${satbiasOu} ${RunDir}/${satbiasIn}
-         cp -pfr ${BcDirOut}/${satbiasPCOu} ${RunDir}/${satbiasPCIn}
-         cp -pfr ${BcDirOut}/${satbiasAngOu} ${RunDir}/${satbiasAngIn}
+         rsync --chmod=644 ${BcDirOut}/${satbiasOu} ${RunDir}/${satbiasIn}
+         rsync --chmod=644 ${BcDirOut}/${satbiasPCOu} ${RunDir}/${satbiasPCIn}
+         rsync --chmod=644 ${BcDirOut}/${satbiasAngOu} ${RunDir}/${satbiasAngIn}
 
       fi
       

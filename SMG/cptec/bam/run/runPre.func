@@ -173,7 +173,7 @@ submitPre(){
 
 cat <<EOT1 > ${dirEXEC}/pre.qsb
 #!/bin/bash
-#PBS -o ${dirEXEC}/Out.MPI${MPITasks}
+#PBS -o ${dirEXEC}/Out_${labelOut}.MPI${MPITasks}
 #PBS -j oe
 #PBS -l walltime=00:15:00
 #PBS -A CPTEC
@@ -197,6 +197,9 @@ EOT1
 cd ${dirEXEC}
 PID=$(qsub -W block=true pre.qsb; exit ${PIPESTATUS[0]})
 status=$?
+
+chmod 644 ${dirEXEC}/Out_${labelOut}.MPI${MPITasks}
+chmod 644 ${dirEXEC}/saida_${labelOut}.txt
 
 return $status
 
