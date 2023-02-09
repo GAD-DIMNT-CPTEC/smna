@@ -501,7 +501,7 @@ echo -ne "\033[34;1m Running BAM \033[m"
 
 cd ${BAMRUN}
 
-PID=$(qsub -W block=true ${BAMSCP}; exit ${PIPESTATUS[0]})
+PID=$(qsub -W block=true -W umask=33 ${BAMSCP}; exit ${PIPESTATUS[0]})
 qstatus=$?
 
 chmod 644 ${PBSLOG}

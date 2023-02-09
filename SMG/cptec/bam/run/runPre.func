@@ -195,10 +195,9 @@ rm -f ${dirExec}/Dump.* > /dev/null 2>&1
 EOT1
 
 cd ${dirEXEC}
-PID=$(qsub -W block=true pre.qsb; exit ${PIPESTATUS[0]})
+PID=$(qsub -W block=true -W umask=33 pre.qsb; exit ${PIPESTATUS[0]})
 status=$?
 
-chmod 644 ${dirEXEC}/Out_${labelOut}.MPI${MPITasks}
 chmod 644 ${dirEXEC}/saida_${labelOut}.txt
 
 return $status

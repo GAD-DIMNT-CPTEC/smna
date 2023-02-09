@@ -552,7 +552,7 @@ EOF
 
 cd ${runDir}
 
-PID=$(qsub -W block=true gsi.qsb; exit ${PIPESTATUS[0]})
+PID=$(qsub -W block=true -W umask=33 gsi.qsb; exit ${PIPESTATUS[0]})
 status=$?
 
 chmod 644 ${runDir}/gsiAnl.${andt}.${runTime}.out
