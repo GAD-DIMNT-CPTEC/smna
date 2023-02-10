@@ -504,7 +504,6 @@ cd ${BAMRUN}
 PID=$(qsub -W block=true -W umask=33 ${BAMSCP}; exit ${PIPESTATUS[0]})
 qstatus=$?
 
-chmod 644 ${PBSLOG}
 chmod 644 ${BAMLOG}
 
 if [ ${qstatus} -eq 0 ];then
