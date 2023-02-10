@@ -555,7 +555,6 @@ cd ${runDir}
 PID=$(qsub -W block=true -W umask=33 gsi.qsb; exit ${PIPESTATUS[0]})
 status=$?
 
-chmod 644 ${runDir}/gsiAnl.${andt}.${runTime}.out
 chmod 644 ${runDir}/gsiStdout_${andt}.${runTime}.log
 
 return $status
@@ -694,7 +693,7 @@ copyFiles (){
    rsync -p --chmod=644 ${fromDir}/convinfo ${toDir}
 
    # arquivos de log
-   rsync -p --chmod=644 ${fromDir}/gsiAnl.* ${toDir}
+#   rsync -p --chmod=644 ${fromDir}/gsiAnl.* ${toDir}
    rsync -p --chmod=644 ${fromDir}/gsiStdout* ${toDir}
 #   mv -f ${fromDir}/gsiAngUpdate* ${toDir}
    

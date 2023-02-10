@@ -65,7 +65,7 @@
 WhereIam=$(dirname ${BASH_SOURCE})
 
 # Carregando as variaveis do sistema
-source /media/extra/wrk/dev/SMNA-Oper/SMG/config_smg.ksh vars_export
+source ${WhereIam}/../../config_smg.ksh vars_export
 
 # load functions used by runGSI script
 source ${WhereIam}/gsi_scripts/runGSI_Functions.sh
