@@ -242,7 +242,7 @@ fi
 
 # Tipo de arquivo GDAS (spec or grid) [default: grid]
 if [ -z ${GDASType} ];then
-   GDASType='grid'
+   GDASType='Netcdf'
 fi
 
 # Gera arquivo de ozonio [default: off]
@@ -388,7 +388,7 @@ if [ ${Chopping} -eq 1 ];then
    fi
    
    if [ ${GDASPrefix} = 'gdas' -a -z ${GDASType} ];then
-      GDASType='grid'
+      GDASType='Netcdf'
    fi
 
    if [ ${GDASPrefix} = 'gdas1' -a -z ${GDASType} ];then
