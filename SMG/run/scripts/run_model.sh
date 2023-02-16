@@ -4,8 +4,11 @@
 #set -o xtrace
 
 
+WhereIam=$(dirname ${BASH_SOURCE})
+
 # Carregando as variaveis do sistema
-source /lustre_xc50/joao_gerd/SMG/config_smg.ksh vars_export
+source ${WhereIam}/../../config_smg.ksh vars_export
+
 
 # carregando funcoes do pre-processamento
 
@@ -91,7 +94,7 @@ cd ${home_run_bam}
 #
 
 
-/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -s -n 2 -O
+/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -s -n chp -O
 STATUS=$?
 if [ ${STATUS} -ne 0 ];then
    exit ${STATUS}
@@ -117,7 +120,7 @@ cp -pfr ${gsiDataOut}/GANL${PREFIX}${LABELANL}S.unf.${MRES} ${modelDataIn}
 # Rodando os demais processos do pré e usando a análise do GSI
 #
 
-/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -p CPT -n 3
+/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -p CPT -n das
 STATUS=$?
 if [ ${STATUS} -ne 0 ];then
    exit ${STATUS}
@@ -132,25 +135,25 @@ if [ ${STATUS} -ne 0 ];then
 fi
 
 # Pos-processa as previsoes caso a variavel RUNPOS possua o valor Yes ou Y
-if [ ${RUNPOS} == "yes" -o ${RUNPOS} == "y" ]
-then
-
-  # Verifica se o executavel se encontra em ${subt_pos_bam_run}
-  if [ ! -e ${subt_pos_bam}/exec/PostGrib ]
-  then 
-  
-    cp -v ${home_pos_bam}/source/PostGrib ${subt_pos_bam}/exec
-  
-  fi
-
-  cd ${home_run_bam}
-  echo   "./runPos -np 120 -N 12 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1"
-  /bin/bash runPos -np 120 -N 12 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1
-  STATUS=$?
-   if [ ${STATUS} -ne 0 ];then
-      exit ${STATUS}
-   fi
-
-fi
+#if [ ${RUNPOS} == "yes" -o ${RUNPOS} == "y" ]
+#then
+#
+#  # Verifica se o executavel se encontra em ${subt_pos_bam_run}
+#  if [ ! -e ${subt_pos_bam}/exec/PostGrib ]
+#  then 
+#  
+#    cp -v ${home_pos_bam}/source/PostGrib ${subt_pos_bam}/exec
+#  
+#  fi
+#
+#  cd ${home_run_bam}
+#  echo   "./runPos -np 120 -N 12 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1"
+#  /bin/bash runPos -np 120 -N 12 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1
+#  STATUS=$?
+#   if [ ${STATUS} -ne 0 ];then
+#      exit ${STATUS}
+#   fi
+#
+#fi
 
 exit 0
