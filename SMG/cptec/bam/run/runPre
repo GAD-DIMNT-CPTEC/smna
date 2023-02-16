@@ -335,6 +335,7 @@ if [ -z ${nmlFile} ];then
       1|  opt) nml=opt;;
       2|debug) nml=debug;;
       3|  das) nml=das;;
+      4|   oz) nml=oz; GetOzone='.TRUE.' ;;
             *) echo -e "\033[31;1m Lista de processos desconhecida:\033[m \`-n ${NMLOPT}\`"
                echo -e "for help try:"
                echo -e "${0} -h"
