@@ -479,7 +479,7 @@ submitPre ${MPITasks} ${TasksPerNode} ${ThreadsPerMPITask} ${labelOut}
 status=$?
 if [ $status -eq 0 ];then
    echo -e "\033[34;1m [\033[m\033[32;2m OK \033[m\033[34;1m]\033[m"
-   cat ${dirExec}/saida_${labelOut}.txt | grep -i warning | sort -u
+   #cat ${dirExec}/saida_${labelOut}.txt | grep -i warning | sort -u
    exit $status
 else
    echo -e "\033[34;1m[\033[m\033[31;1m Fail \033[m\033[34;1m]\033[m"

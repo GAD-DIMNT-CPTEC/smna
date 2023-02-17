@@ -38,8 +38,8 @@ eval export $1=$2
 #-----------------------------------------------------------------------------#
 
 subwrd(){
-   str=$(printf "%s " "${@}" | awk '{ for (i=1; i<=NF-1; i++) printf("%s ",$i)}')
-   n=$(printf "%s " "${@}" | awk '{ print $NF }')
+   local str=$(printf "%s " "${@}" | awk '{ for (i=1; i<=NF-1; i++) printf("%s ",$i)}')
+   local n=$(printf "%s " "${@}" | awk '{ print $NF }')
    printf "%s " "${str}" | awk -v var=${n} '{print $var}'
 }
 
@@ -60,7 +60,7 @@ max ( ){
       echo $1
       return 0
    fi
-   max=${1}
+   local max=${1}
    for n in ${@} ; do
        ((n > max)) && max=$n
    done
@@ -117,7 +117,7 @@ getMPIinfo(){
 #-----------------------------------------------------------------------------#
 getBAMSize(){
 
-   trunc=${1}
+   local trunc=${1}
 
    case ${trunc} in
       21)   IM=64;    JM=32;    timestep=3600;;
@@ -159,13 +159,13 @@ submitPre(){
    #  and to format properly the file for SSTWeekly)
    #
  
-   dirEXEC=${SUBTBASE}/pre/exec
+   local dirEXEC=${SUBTBASE}/pre/exec
 
    # get MPI requested
-   MPITasks=${1}
-   TasksPerNode=${2}
-   ThreadsPerMPITask=${3}
-   labelOut=${4}
+   local MPITasks=${1}
+   local TasksPerNode=${2}
+   local ThreadsPerMPITask=${3}
+   local labelOut=${4}
 
    # adjust MPI info from MPI resource requested
    getMPIinfo -np ${MPITasks} -N ${TasksPerNode} -d ${ThreadsPerMPITask}
@@ -195,8 +195,8 @@ rm -f ${dirExec}/Dump.* > /dev/null 2>&1
 EOT1
 
 cd ${dirEXEC}
-PID=$(qsub -W block=true -W umask=33 pre.qsb; exit ${PIPESTATUS[0]})
-status=$?
+local PID=$(qsub -W block=true -W umask=33 pre.qsb; exit ${PIPESTATUS[0]})
+local status=$?
 
 chmod 644 ${dirEXEC}/saida_${labelOut}.txt
 
@@ -254,7 +254,7 @@ function getSST(){
 
    echo -e "\033[34;1m Getting SST file for:\033[m \033[32;1m${runDate}\033[m"
 
-   local LABELI=${runDate}
+   local LABEL=${runDate}
    local fileOut=$(${inctime} ${runDate} +0h ${PREIN}/${fileNameOut})
    c=0
    while [ ${c} -le 4 ];do
@@ -265,7 +265,7 @@ function getSST(){
 
          for file in ${files[@]};do
 
-            local arq=$(${inctime} ${LABELI} +0h ${path}/${file})
+            local arq=$(${inctime} ${LABEL} +0h ${path}/${file})
 
             if [ -e ${arq} ];then
 
@@ -306,16 +306,16 @@ function getSST(){
 
       echo -e "[\033[31;1m FAIL \033[m]"
 
-      LABELI=$(${inctime} ${LABELI} -6h %y4%m2%d2%h2)
+      LABEL=$(${inctime} ${LABEL} -6h %y4%m2%d2%h2)
       if [ ${c} -lt 4 ];then
-         echo -e "\033[35;1m buscando em um horário anterior\033[m [\033[33;1m${LABELI}\033[m]"
+         echo -e "\033[35;1m buscando em um horário anterior\033[m [\033[33;1m${LABEL}\033[m]"
       fi
       c=$((c+1))
 
    
       echo -en "\033[34;1m Arquivo convertido previamente \033[m"
       
-      prevFile=$(${inctime} ${LABELI} +0h ${PREIN}/${fileNameOut})
+      local prevFile=$(${inctime} ${LABEL} +0h ${PREIN}/${fileNameOut})
       if [ -e ${prevFile} ];then
          echo -e "[\033[32;1m OK \033[m]"
          cp -pvfr ${prevFile}  ${fileOut} > /dev/null 2>&1 
@@ -335,19 +335,19 @@ getSoilFiles(){
   #
   . ${WhereIam}/EnvironmentalVariables
 
-  PREIN=${SUBTBASE}/pre/datain
+  local PREIN=${SUBTBASE}/pre/datain
 
   #
   # get date from command line
   #
 
-  runDate=${1}
+  local runDate=${1}
 
   #
   # soil moisture File
   #
 
-  smcFile=GL_SM.GPNR.%y4%m2%d2%h2.vfm
+  local smcFile=GL_SM.GPNR.%y4%m2%d2%h2.vfm
 
 
   #
@@ -360,19 +360,19 @@ getSoilFiles(){
 
   echo -e "\033[34;1m Getting Soil Moisture file for:\033[m \033[32;1m${runDate}\033[m"
 
-  LABELI=${runDate}
-  fileOut=$( ${inctime} ${runDate} +0h ${PREIN}/${smcFile} )
+  local LABEL=${runDate}
+  local fileOut=$( ${inctime} ${runDate} +0h ${PREIN}/${smcFile} )
 
-  count=0
+  local count=0
   while [ ${count} -le 3 ];do
      for path in ${preDataIn[@]};do
-        file=$( ${inctime} ${LABELI} +0h ${path}/${smcFile} )
+        local file=$( ${inctime} ${LABEL} +0h ${path}/${smcFile} )
         if [ -e ${file} ];then
            ln -s ${file} ${fileOut} > /dev/null 2>&1
            return 0
         fi
      done
-     LABELI=$( ${inctime} ${LABELI} -6h %y4%m2%d2%h2) 
+     LABEL=$( ${inctime} ${LABEL} -6h %y4%m2%d2%h2) 
      count=$((count+1))
   done
   echo -e "\033[32;1m Soil moisture file for\033[m: \033[34;1m${runDate}\033[m \033[32;1m Not Found\033[m"
@@ -402,7 +402,7 @@ getAnlNCEP(){
   #
   # path to search
   # 
-
+  local preInDir
   preInDir=${preDataIn}
   preInDir=${preInDir}:${dadosExternos}/${runDate}/dataout/NCEP
 
