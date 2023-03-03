@@ -473,8 +473,9 @@ for file in ${files[@]};do
 done
 
 # submit Pre-process
-echo -ne "\033[34;1m Running Pre-processes \033[m"
 labelOut=${LABELI}_${tmstp}
+echo -e "\033[34;1m Log Label:\033[m \033[32;1m${labelOut}\033[m"
+echo -ne "\033[34;1m Running Pre-processes \033[m"
 submitPre ${MPITasks} ${TasksPerNode} ${ThreadsPerMPITask} ${labelOut}
 status=$?
 if [ $status -eq 0 ];then

@@ -27,107 +27,79 @@
 #-----------------------------------------------------------------------------#
 #BOC
 
-# Carregando as variaveis do sistema
-source /lustre_xc50/joao_gerd/SMG/config_smg.ksh vars_export
+WhereIam=$(dirname ${BASH_SOURCE})
 
-#-----------------------------------------------------------------------------#
-# return usage from main program
-#-----------------------------------------------------------------------------#
-usage() {
-   echo
-   echo "Usage:"
-   sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' ${BASH_SOURCE} 
+# Carregando as variaveis do sistema
+source ${WhereIam}/../../config_smg.ksh vars_export
+
+subwrd ( ) {
+   str=$(echo "${@}" | awk '{ for (i=1; i<=NF-1; i++) printf("%s ",$i)}')
+   n=$(echo "${@}" | awk '{ print $NF }')
+   echo "${str}" | awk -v var=${n} '{print $var}'
 }
 
-# Data da condição inicial
-if [ -z ${1} ]; then
-   echo -e "\e[31;1m >> Erro: \e[m\e[33;1m Data da condição inicial do modelo não foi passada\e[m"
-   usage
-   exit -1
-fi
+# parse options
 
-export START_DATE=${1}
-
-DATE=${START_DATE}
-
-echo ""
-echo -e "\033[34;1m >>  Descompactando Observacoes... \033[m"
-echo ""
-
-YMD=${START_DATE:0:8}
-HH=${START_DATE:8:10}
-YM=${START_DATE:0:6}
-DH=${START_DATE:6:10}
-Y=${START_DATE:0:4}
-DIRFILES=${ncep_ext}/ASSIMDADOS
-
-count=0
-ls -1 ${DIRFILES}/*${YMD}*.gz | while read file; do
-    echo -e "\e[32;1m${file}\e[m"
-    tar -xvzf ${file} -C ${subt_gsi_datain_obs}
-    if [ $? -eq 0 ];then
-       count=$((count+1))
-    fi
+args=${@} #save arguments temporarily
+while (( $# )); do
+   opt=$1
+   case ${opt} in
+       -I) runDate=$2; shift 2;;
+       -u) userSSH=$2; shift 2;;
+       -h) cat < ${0} | sed -n '/^#BOP/,/^#EOP/p' ; exit 0;;
+       *) echo -e "\033[31;1mWarning:\033[m Unknown argument:\033[33;1m $opt\033[m"; shift 1;;
+   esac
 done
-if [ ${count} -gt 0 ];then
-   echo -e ""
-   echo -e "\e[34;1m Foram obtidos\e[m \e[37;1m${count}\e[m \e[34;1marquivos.\e[m"
-   echo -e ""
-   exit 0
-else
-   echo -e "\033[31;1m !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \033[m"
-   echo -e "\033[31;1m !!! Nenhum Arquivo de Observacoes disponível !!! \033[m"
-   echo -e "\033[31;1m !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \033[m"
+set -- $args #restore arguments
+
+
+if [ -z ${runDate} ];then
+   echo -e "\033[31;1m runDate not set \033[m"
    exit 1
 fi
 
-## Primeiro verifica se os arquivos existem no seguinte diretório
-##
-## Obs.: Trocar pelo diretorio da DMD
-#DMD='/stornext/online6/das/bruna.silveira/dados_testecase_AD'
-#DMD='/stornext/online6/das/gdad/OBS_prepbufr'
-#
-#DirFiles=${DMD}/${YM}/${DH}
-#
-#if [ "$(ls -A ${DirFiles})" ]; then
-#   count=0
-#   while read line; do
-#      count=$((count+1))
-#      echo -e "\e[32;1m$line\e[m"
-#      cp -pfr ${DirFiles}/${line} ${subt_gsi_datain_obs}
-#   done < <(ls -1 ${DirFiles})
-#
-#   echo -e ""
-#   echo -e "\e[34;1m Foram obtidos\e[m \e[37;1m${count}\e[m \e[34;1marquivos.\e[m"
-#   echo -e ""
-#else
-#
-#   # Descompacta os arquivos de observacao que estao em $ncep_ext:
-##   file=${ncep_ext}/${YM}/${DH}/gdas1.bufr_${START_DATE}.tgz
-##   file=${ncep_ext}/ASSIMDADOS/gdas1.bufr_${START_DATE}.tgz
-#
-#   if [ -e ${file} ]; then
-#     count=0
-#     while read line; do
-#        count=$((count + 1))
-#        echo -e "\e[32;1m$line\e[m"
-#     done  < <(tar -zxvf ${file} -C ${subt_gsi_datain_obs})
-#
-#     echo -e ""
-#     echo -e "\e[34;1m Foram obtidos\e[m \e[37;1m${count}\e[m \e[34;1marquivos.\e[m"
-#     echo -e ""
-#   else
-#      echo ""
-#      echo -e "\033[31;1m !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \033[m"
-#      echo -e "\033[31;1m !!! Arquivo de Observacoes não disponível !!! \033[m"
-#      echo ""
-#      echo -e "\033[32;1m ${file} \033[m"
-#      echo ""
-#      echo -e "\033[31;1m !!! Abortando .....                       !!! \033[m"
-#      echo -e "\033[31;1m !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \033[m"
-#      echo ""
-#      exit 1
-#   fi
-#fi
-#
-#exit 0
+
+ 
+# define parameters
+parmGSI=${home_gsi_fix}/gsiparm.anl
+obsGSI=${home_gsi_fix}/obsfiles.rc
+
+# define dirs to find observations
+obsDir=${ncep_ext}/${runDate}/dataout/NCEP
+obsDir=${obsDir}:${subt_obs_run}/${runDate}
+
+
+# define scp command
+SCP="scp -pC"
+if [ ! -z ${userSSH} ];then
+   SCP+=" ${userSSH}"
+fi
+SCP+="@egeon:/oper/dados/preproc/brutos/model/gdas/"
+
+
+
+IFS=":"; read -a obsPath < <(echo "${obsDir}")
+nPaths=${#obsPath[@]}
+IFS=" "
+
+names=$(sed -n '/OBS_INPUT::/,/::/{/OBS_INPUT/d;/::/d;/^!/d;p}' ${parmGSI} | awk '{print $1}' | sort -u | xargs)
+for name in ${names};do
+   i=0
+   while [ $i -le $((nPaths-1)) ];do
+      filemask=$(grep -iw ${name} ${obsGSI} | awk '{print $1}'; exit ${PIPESTATUS[0]} )
+      if [ $? -eq 0 ];then
+         file=$(${inctime} ${runDate} +0h ${filemask})
+         if [ -e ${obsPath[$i]}/${file} ];then break ;fi
+
+         if [ $i -eq $((nPaths-1)) ];then
+            dirOut=${subt_obs_run}/${runDate}
+            dirIn=${runDate:0:4}/${runDate:4:2}/${runDate:6:2}
+            if [ ! -e ${dirOut} ];then
+               mkdir -p ${dirOut}
+            fi
+            ${SCP}${dirIn}/${file%%.${runDate:0:8}}* ${dirOut}/${file}
+         fi
+      fi
+      i=$((i+1))
+   done
+done

@@ -25,6 +25,9 @@
 #            * -ts <val> : TimeStep da previsão [default: 6]
 #            * -r  <val> : Generate Restart Files [default: .FALSE.]
 #            * -tr <val> : TimeStep do Restart  [default: 6]
+#            * -u        : Enable Unified Physics [default: .FALSE.]
+#            * -slagr    : Enable Semi-Lagrangian run  (.FALSE. for Eulerian Model, but .TRUE. for TQ0666)
+#            * -rrst     : Remove Restart files [default: .FALSE.]
 #            * -rnm      : Remove Normal Mode file if it exist [default: .FALSE.]
 #            * -rgaus    : Remove Gaussian file if it exist [default: .FALSE.]
 #            * -rmw      : Remove Mwaves file if it exist [default: .FALSE.]
@@ -103,7 +106,7 @@ while (( $# )); do
    case ${opt} in
        -t) TRC=$2; shift 2;; # shift twice [p.e. -t 299 ]
        -l) LV=$2; shift 2;;
-       -p) PREFIX=$2; shift 2;;
+       -p) PREFY=$2; shift 2;;
        -I) LABELI=$2; shift 2;;
        -W) LABELW=$2; shift 2;;
        -F) LABELF=$2; shift 2;;
@@ -116,12 +119,19 @@ while (( $# )); do
        -N) TasksPerNode=$2; shift 2;;
        -d) ThreadsPerMPITask=$2; shift 2;;
        -c) CoresPerNode=$2; shift 2;;
-       -r) GENRES='.TRUE.'; shift 1;;
+       -u) UNIFIED='.TRUE.';shift 1;;
+       -r) GENRST='.TRUE.'; shift 1;;
+    -rrst) RMRST='.TRUE.';shift 1;;
      -rnm) RMNMF='.TRUE.'; shift 1;;
    -rgaus) RMGAU='.TRUE.'; shift 1;;
      -rmw) RMMWF='.TRUE.'; shift 1;;
        -v) verbose='.TRUE.'; shift 1;;
      -das) DAS='.TRUE.'; shift 1;;
+   -slagr) SLAGR='.TRUE.';shift 1;;
+       -f) FCT='.TRUE.';shift 1;;
+      -pw) walltime=$2;shift 2;;
+      -pq) queue=$2; shift 2;;
+      -pn) queue_name=$2; shift 2;;
        -h) cat < ${0} | sed -n '/^#BOP/,/^#EOP/p' ; exit 0;;
        *) echo -e "\033[31;1mWarning:\033[m Unknown argument:\033[33;1m $opt\033[m"; shift 1;;
    esac
@@ -202,9 +212,19 @@ if [ -z ${NMSOILM} ];then
    NMSOILM='soilmwkl'
 fi
 
+# Unified Physics
+if [ -z ${UNIFIED} ];then
+   UNIFIED='.FALSE.'
+fi
+
 # Genetate Restart Files
-if [ -z ${GENRES} ];then
-   GENRES='.FALSE.'
+if [ -z ${GENRST} ];then
+   GENRST='.FALSE.'
+fi
+
+# Remove Restart files
+if [ -z ${RMRST} ];then
+   RMRST='.FALSE.'
 fi
 
 # TimeStep do Restart
@@ -254,6 +274,33 @@ if [ -z ${DAS} ];then
    DAS='.FALSE.'
 fi
 
+# Usa configuração para DAS 
+if [ -z ${FCT} ];then
+   FCT='.FALSE.'
+fi
+
+# Verifica opcao semi-lagrangeana
+if [ -z ${SLAGR} ];then
+   SLAGR='.FALSE.'
+   if [ ${TRC} -ge 666 ];then
+      SLAGR='.TRUE.'
+   fi
+fi
+# define PBS walltime 
+if [ -z ${walltime} ];then
+   walltime=00:45:00
+fi
+
+# define PBS queue
+if [ -z ${queue} ];then
+   queue=pesq
+fi
+
+# define PBS queue
+if [ -z ${queue_name} ];then
+   queue_name="BAM${TRC}"
+fi
+
 #
 # Definindo TimeStep/Imax/JMax do BAM dependente do Truncamento
 #
@@ -270,7 +317,7 @@ case ${TRC} in
    170)TimeStep=450; IMax=512; JMax=256;;
    213)TimeStep=300; IMax=640; JMax=320;;
    254)TimeStep=255; IMax=768; JMax=384;;
-   299)TimeStep=180; IMax=900; JMax=450;;
+   299)TimeStep=240; IMax=900; JMax=450;;
    319)TimeStep=225; IMax=960; JMax=480;;
    341)TimeStep=200; IMax=1024; JMax=512;;
    382)TimeStep=180; IMax=1152; JMax=576;;
@@ -295,10 +342,15 @@ LABELR=$(date -u -d "${LABELI:0:4}-${LABELI:4:2}-${LABELI:6:2} ${LABELI:8:2}:00:
 
 MRES=$(printf "TQ%04dL%03d" ${TRC} ${LV}) 
 
+# SETTING MODELIN NAME
+
+modelIn='MODELIN.default'
+
 # PBS
-walltime=00:45:00
-queue=pesq
-queue_name="BAM${TRC}"
+#walltime=00:45:00
+#queue=pesq
+#queue_name="BAM${TRC}"
+
 # Tupa
 #MaxCoresPerNode=24
 # XC50
@@ -306,16 +358,27 @@ MaxCoresPerNode=40
 
 # Diretorios das simulações
 
-BAMRUN=${SUBTBASE}/model/exec_${PREFIX}${LABELI}
 BAMEXE=${SUBTBASE}/model/exec/ParModel_MPI
-BAMSCP=${BAMRUN}/qsub_bam.qsb
-BAMLOG=${BAMRUN}/setout/Print.model.${LABELI}.${LABELF}.${tmstp}.MPI${MPITasks}.out
-PBSLOG=${BAMRUN}/setout/Out.model.${PREFIX}.${LABELI}.${tmstp}.MPI${MPITasks}.out
-
 PATHIN=${SUBTBASE}/model/datain
-PATHOU=${WORKBASE}/model/dataout/${MRES}/${LABELI}
-RSTIN=${WORKBASE}/model/dataout/${MRES}/${LABELI}/RST
-RSTOU=${WORKBASE}/model/dataout/${MRES}/${LABELR}/RST
+
+
+if [ ${DAS} = '.TRUE.' -a ${FCT} = '.FALSE.' ];then
+   BAMRUN=${SUBTBASE}/model/DAS/exec_${PREFIX}${LABELI}
+   BAMSCP=${BAMRUN}/qsub_bam.qsb
+   BAMLOG=${BAMRUN}/setout/Print.model.${LABELI}.${LABELF}.${tmstp}.MPI${MPITasks}.out
+   PBSLOG=${BAMRUN}/setout/Out.model.${PREFIX}.${LABELI}.${tmstp}.MPI${MPITasks}.out
+   PATHOU=${WORKBASE}/model/dataout/${MRES}/DAS/${LABELI}
+   RSTIN=${WORKBASE}/model/dataout/${MRES}/DAS/${LABELI}/RST
+   RSTOU=${WORKBASE}/model/dataout/${MRES}/DAS/${LABELR}/RST
+else
+   BAMRUN=${SUBTBASE}/model/exec_${PREFIX}${LABELI}
+   BAMSCP=${BAMRUN}/qsub_bam.qsb
+   BAMLOG=${BAMRUN}/setout/Print.model.${LABELI}.${LABELF}.${tmstp}.MPI${MPITasks}.out
+   PBSLOG=${BAMRUN}/setout/Out.model.${PREFIX}.${LABELI}.${tmstp}.MPI${MPITasks}.out
+   PATHOU=${WORKBASE}/model/dataout/${MRES}/${LABELI}
+   RSTIN=${WORKBASE}/model/dataout/${MRES}/${LABELI}/RST
+   RSTOU=${WORKBASE}/model/dataout/${MRES}/${LABELR}/RST
+fi
 
 # Arquivo para a inicialização por modos normais
 # não lineares.
@@ -390,9 +453,19 @@ fi
 
 # define modelin
 if [ $DAS = '.TRUE.' ];then
-   modelIn='MODELIN.das'
+   PREFX='CPT'
+   if [ ${FCT} = '.FALSE.' ];then
+      SWINT=1800.000
+      TRINT=1800.000
+   else
+      SWINT=3600.000
+      TRINT=10800.000
+   fi
+
 else
-   modelIn='MODELIN.default'
+   PREFX='NMC'
+   SWINT=3600.000
+   TRINT=10800.000
 fi
 #
 # COPY BAM EXECUTABLE FILE
@@ -433,8 +506,12 @@ sed  -e "s;#TRUNC#;${TRC};g" \
      -e "s;#LABELF#;${LABELF:8:2},${LABELF:6:2},${LABELF:4:2},${LABELF:0:4};g" \
      -e "s;#DHFCT#;${DHFCT};g" \
      -e "s;#DHRES#;${DHRES};g" \
-     -e "s;#GENRES#;${GENRES};g" \
-     -e "s;#PREFIX#;${PREFIX};g" \
+     -e "s;#SLAGR#;${SLAGR};g" \
+     -e "s;#GENRST#;${GENRST};g" \
+     -e "s;#RMRST#;${RMRST};g" \
+     -e "s;#PREFX#;${PREFX};g" \
+     -e "s;#PREFY#;${PREFY};g" \
+     -e "s;#UNIFIED#;${UNIFIED};g" \
      -e "s;#NMSST#;${NMSST};g" \
      -e "s;#NMSOILM#;${NMSOILM};g" \
      -e "s;#PATHIN#;${PATHIN};g" \
@@ -445,6 +522,8 @@ sed  -e "s;#TRUNC#;${TRC};g" \
      -e "s;#MGIVEN#;${MGIVEN};g" \
      -e "s;#GAUSSGIVEN#;${GAUSSGIVEN};g" \
      -e "s;#INITLZ#;${INITLZ};g" \
+     -e "s;#SWINT#;${SWINT};g" \
+     -e "s;#TRINT#;${TRINT};g" \
      ${LOCALDIR}/${modelIn} > ${BAMRUN}/MODELIN
 
 

@@ -166,7 +166,7 @@ for inc in $(seq -3 3 3); do
    FDIR=GFCT${BkgPrefix}${BkgDate}${Date}F.dir.${BkgMRES}
 
    # Forecast file
-   file=${subt_model_bam}/dataout/${BkgMRES}/${BkgDate}/${FFCT}
+   file=${subt_model_bam}/dataout/${BkgMRES}/DAS/${BkgDate}/${FFCT}
    if [ -e ${file} ];then
       cp -pfr ${file} ${RunDir}/BAM.fct.${TIME}
    else
@@ -178,7 +178,7 @@ for inc in $(seq -3 3 3); do
    fi
 
    # Description file
-   file=${subt_model_bam}/dataout/${BkgMRES}/${BkgDate}/${FDIR}
+   file=${subt_model_bam}/dataout/${BkgMRES}/DAS/${BkgDate}/${FDIR}
    if [ -e ${file} ];then
       cp -pfr ${file} ${RunDir}/BAM.dir.${TIME}
    else

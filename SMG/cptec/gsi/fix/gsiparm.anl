@@ -174,7 +174,7 @@ OBS_INPUT::
    prepbufr       spd         null      spd                  0.0     0     0
    prepbufr       dw          null      dw                   0.0     0     0
    prepbufr       sst         null      sst                  0.0     0     0
-   gpsrobufr      gps_ba      null      gps                  0.0     0     0
+   gpsrobufr      gps_bnd     null      gps                  0.0     0     0
    amsuabufr      amsua       n15       amsua_n15            0.0     1     1
    amsuabufr      amsua       n18       amsua_n18            0.0     1     1
    amsuabufr      amsua       n19       amsua_n19            0.0     1     1

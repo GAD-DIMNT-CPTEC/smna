@@ -68,8 +68,8 @@
  StrFormat = 'new',              ! Get NCEP Analysis and dumping to 'old' format or 'new' format
  FIELDGAUS = .FALSE.,
  FILELIST  = .FALSE.,
- PREFX     = 'CPT' ,             ! PREFX : preffix for name of output files
- PREFY     = '#PREFIX#', 	      ! PREFY : preffix for name of input files
+ PREFX     = '#PREFX#',          ! PREFX : preffix for name of output files
+ PREFY     = '#PREFY#', 	      ! PREFY : preffix for name of input files
  TABLE     ='p',                 ! TABLE : indicator of the desire table:          
                                  !                     n => for desirtable (default)
                                  !                     p => for desirtable.pnt
@@ -85,7 +85,7 @@
  dirRstOutput   = '#RSTOU#', 
 /
 &MODEL_IN
- slagr              =.FALSE.,       ! Semi-Lagrangian option (.FALSE. for Eulerian Model) (TRUE for TQ666)
+ slagr              =#SLAGR#,       ! Semi-Lagrangian option (.FALSE. for Eulerian Model) (TRUE for TQ666)
  slhum              =.TRUE.,       ! Humidit should be lagrangian  ? (Eulerian Model)
 grid_difus          =.TRUE.,       !
  microphys          =.TRUE.,       ! Microphysics requires slhum to be true
@@ -97,8 +97,8 @@ grid_difus          =.TRUE.,       !
  reducedGrid        =.TRUE.,       ! reduced    --> .TRUE. 
  linearGrid         =.FALSE.,      ! lineargrid --> .FALSE.
  GenAssFiles        =.FALSE.,      ! .TRUE. flag to generate  assimilation files
- GenRestFiles       =#GENRES#,     ! .TRUE. to generate restart files.
- rmRestFiles        =.FALSE.,      ! .TRUE. to remove restart files after read them.
+ GenRestFiles       =#GENRST#,     ! .TRUE. to generate restart files.
+ rmRestFiles        =#RMRST#,      ! .TRUE. to remove restart files after read them.
  MasCon             =.TRUE.,     ! .TRUE. to do Mass Conservation: ln(ps)
  MasCon_ps          =.FALSE.,    ! .TRUE. to do Mass Conservation: ps
  FluxCon_co2        =.FALSE.
@@ -112,7 +112,7 @@ grid_difus          =.TRUE.,       !
 !     ixxxx=yes  the physical process included
 !     ixxxx=no   the physical process excluded
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- UNIFIED = .FALSE.,    !
+ UNIFIED = #UNIFIED#,  ! Enable Unified Physics
  !rootmode='MILENA'    ! rootmode='JACKSON' ! Jackson et al., 1996: or rootmode='MILENA' Milena et al., 2020:
 
  ISWRAD  = 'CRD'       ! iswrad = NON: don't do sw radiation, LCH: lacis & hansen
@@ -173,13 +173,13 @@ grid_difus          =.TRUE.,       !
 !   used in cldgen.  correct settings for these parameters need to be
 !   determined experimentally.
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
- swint   = 1800.000, ! short wave radiation call interval in hours swint=1.0e0
- trint   = 1800.000, ! ir subr. call interval in hours  trint=3.0e0
-                     ! long  wave radiation call interval in hours
-                     ! physical constants for simple physics options
- co2val  =370.0,     ! co2val is wgne standard value in ppm 
-                     ! co2val=345.0 old value 
-                     ! co2val=370.0 new value
+ swint   = #SWINT#, ! short wave radiation call interval in hours swint=1.0e0
+ trint   = #TRINT#, ! ir subr. call interval in hours  trint=3.0e0
+                    ! long  wave radiation call interval in hours
+                    ! physical constants for simple physics options
+ co2val  =370.0,    ! co2val is wgne standard value in ppm 
+                    ! co2val=345.0 old value 
+                    ! co2val=370.0 new value
  /
 
 &COMCON

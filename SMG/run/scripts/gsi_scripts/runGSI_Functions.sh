@@ -254,9 +254,8 @@ linkObs ( ){
    local verbose=true
 
    local obsDir=${ncep_ext}/${runDate}/dataout/NCEP
+   local obsDir=${obsDir}:${subt_obs_run}/${runDate}
    local obsDir=${obsDir}:/lustre_xc50/ioper/data/external/ASSIMDADOS
-   local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/${runDate}
-   local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/obs/${runDate:0:6}/${runDate:6:4}
 
    local IFS=":"; read -a obsPath < <(echo "${obsDir}")
    local nPaths=${#obsPath[@]}

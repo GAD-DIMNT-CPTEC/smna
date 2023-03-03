@@ -186,8 +186,6 @@ configurar(){
 
 
 # Altera scripts e Makefiles do SMG
-  sed -i "/# Carregando as variaveis do sistema/{n;d}" ${run_smg}/run_cycle.sh ${scripts_smg}/runGSI ${scripts_smg}/run_model.sh ${scripts_smg}/run_obsmake.sh ${scripts_smg}/run_blsdas.sh
-  sed -i "/# Carregando as variaveis do sistema/a\source "${home_smg}"\/config_smg.ksh vars_export"  ${run_smg}/run_cycle.sh ${scripts_smg}/runGSI ${scripts_smg}/run_model.sh ${scripts_smg}/run_obsmake.sh ${scripts_smg}/run_blsdas.sh
 
   sed -i "/# Caminho onde devera fica o arquivo executavel do Model/{n;d}" ${home_model_bam}/source/Makefile
   sed -i "/# Caminho onde devera fica o arquivo executavel do Model/a\PATH2="${home_model_bam}/exec"" ${home_model_bam}/source/Makefile
