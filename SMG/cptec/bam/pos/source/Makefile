@@ -19,7 +19,7 @@ SHELL=/bin/sh
 # then builds the nedit and nc executables in the source/ directory.
 #
 MAKE=make
-PATH2=/scratchin/grupos/bam/home/paulo.kubota/bam_hybrid-2.0//pos/exec
+PATH2=../exec
 
 all:
 	@echo "Please specify target:"

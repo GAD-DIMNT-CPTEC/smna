@@ -16,7 +16,7 @@
 # 
 AR=ar
 ARFLAGS = 
-F90=ftn  -fconvert=big-endian
+F90=ftn -ffast-math -fconvert=big-endian  -ffree-line-length-none -ffast-math -funroll-loops -ftree-vectorizer-verbose=2  ${OPENMP} 
 
 F90_32FLAGS = 
 F90_32BITS = 
