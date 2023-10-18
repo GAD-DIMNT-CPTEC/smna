@@ -5,7 +5,7 @@
 
 
 # Carregando as variaveis do sistema
-source /lustre_xc50/joao_gerd/SMG/config_smg.ksh vars_export
+source ${SMG_ROOT}/config_smg.ksh vars_export
 
 # carregando funcoes do pre-processamento
 
@@ -14,35 +14,35 @@ source ${home_run_bam}/runPre.func
 # Verificando argumentos de entrada
 if [ -z "${1}" ]
 then
-  echo "LABELANL is not set" 
+  echo "LABELANL is not set"
   exit 3
 else
   export LABELANL=${1}
 fi
 if [ -z "${2}" ]
 then
-  echo "LABELFCT is not set" 
+  echo "LABELFCT is not set"
   exit 3
 else
-  export LABELFCT=${2} 
+  export LABELFCT=${2}
 fi
 if [ -z "${3}" ]
 then
-  echo "PREFIX is not set" 
+  echo "PREFIX is not set"
   exit 3
 else
   export PREFIX=${3}
 fi
 if [ -z "${4}" ]
 then
-  echo "TRC is not set" 
+  echo "TRC is not set"
   exit 3
 else
   export TRC=${4}
 fi
 if [ -z "${5}" ]
 then
-  echo "NLV is not set" 
+  echo "NLV is not set"
   exit 3
 else
   export NLV=${5}
@@ -56,9 +56,9 @@ else
   export NPROC=${6}
 fi
 if [ "$#" == 7 ]
-then 
-  export RUNPOS=$(echo ${7} | tr [:upper:] [:lower:])   
-else 
+then
+  export RUNPOS=$(echo ${7} | tr [:upper:] [:lower:])
+else
   export RUNPOS="yes"
 fi
 
@@ -137,10 +137,10 @@ then
 
   # Verifica se o executavel se encontra em ${subt_pos_bam_run}
   if [ ! -e ${subt_pos_bam}/exec/PostGrib ]
-  then 
-  
+  then
+
     cp -v ${home_pos_bam}/source/PostGrib ${subt_pos_bam}/exec
-  
+
   fi
 
   cd ${home_run_bam}

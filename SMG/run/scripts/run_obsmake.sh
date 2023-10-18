@@ -4,7 +4,7 @@
 #-----------------------------------------------------------------------------#
 #BOP
 #
-# !SCRIPT: script utilizado para extrair as observações para os ciclos de 
+# !SCRIPT: script utilizado para extrair as observações para os ciclos de
 #          assimilação de dados
 #
 # !DESCRIPTION:
@@ -14,12 +14,12 @@
 #   ./run_obsmake.sh <opções>
 #
 #      As <opções> válidas são
-#          * START_DATE : Data da condição inicial 
+#          * START_DATE : Data da condição inicial
 #
 #          exemplo:
 #          ./run_obsmake.sh 2015043006
-# 
-# !REVISION HISTORY: 
+#
+# !REVISION HISTORY:
 #
 # !REMARKS:
 #
@@ -28,7 +28,7 @@
 #BOC
 
 # Carregando as variaveis do sistema
-source /lustre_xc50/joao_gerd/SMG/config_smg.ksh vars_export
+source ${SMG_ROOT}/config_smg.ksh vars_export
 
 #-----------------------------------------------------------------------------#
 # return usage from main program
@@ -36,7 +36,7 @@ source /lustre_xc50/joao_gerd/SMG/config_smg.ksh vars_export
 usage() {
    echo
    echo "Usage:"
-   sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' ${BASH_SOURCE} 
+   sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' ${BASH_SOURCE}
 }
 
 # Data da condição inicial

@@ -13,21 +13,21 @@
 #   ./run_cycle.sh <opções>
 #
 #      As <opções> válidas são
-#          * -t   <val> : truncamento das previsões do BAM [default: XX] 
+#          * -t   <val> : truncamento das previsões do BAM [default: XX]
 #          * -l   <val> : número de níveis [default: XX]
 #          * -gt  <val> : truncamento das condições iniciais do BAM [default: XX]
 #          * -p   <val> : prefixo dos arquivos do BAM (condição inicial e previsões) [default: CPT]
 #          * -I   <val> : Data da primeira condição inicial do ciclo
 #          * -F   <val> : Data da útima condição inicial do ciclo
 #          * -bc  <val> : Número de ciclo da correção de viés do satélite [default: 0]
-#          * -bcI <val> : Data inicial do primeiro ciclo de correção de viés do satélite 
-#          * -bcF <val> : Data final do último ciclo de correção de viés do satélite 
+#          * -bcI <val> : Data inicial do primeiro ciclo de correção de viés do satélite
+#          * -bcF <val> : Data final do último ciclo de correção de viés do satélite
 #          * -h   <val> : Mostra este help
 #
 #          exemplo:
 #          ./run_cycle.sh -t 62 -l 28 -gt 62 -p CPT -I 2015043006 -F 2015043006 -gt 62 -bc 10 -bcI 2015043006 -bcF 2015043006
-# 
-# !REVISION HISTORY: 
+#
+# !REVISION HISTORY:
 # 05 Set 2018 - J. G. de Mattos - Initial Version
 #
 # !REMARKS:
@@ -40,7 +40,7 @@
 # return a subword of a string
 #-----------------------------------------------------------------------------#
 # Carregando as variaveis do sistema
-source /lustre_xc50/joao_gerd/SMG/config_smg.ksh vars_export
+source ${SMG_ROOT}/config_smg.ksh vars_export
 
 subwrd() {
    str=$(echo "${@}" | awk '{ for (i=1; i<=NF-1; i++) printf("%s ",$i)}')
@@ -54,7 +54,7 @@ subwrd() {
 usage() {
    echo
    echo "Usage:"
-   sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' ${BASH_SOURCE} 
+   sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' ${BASH_SOURCE}
 }
 
 modelMPITasks=480  # Number of Processors used by model
@@ -140,7 +140,7 @@ fi
 
 # Truncamento em que a análise será calculada
 # Obs: Este é o mesmo truncamento utilizado no
-#      cálculo prévio da matriz de covariância 
+#      cálculo prévio da matriz de covariância
 #      do erro. Então esta será a resolução em
 #      que o GSI irá processar internamente a
 #      análise. Pode ser diferente do Truncamento
@@ -215,7 +215,7 @@ if  [ ! -z ${BcLABELI} ] || [ ! -z ${BcLABELF} ] || [ ! -z ${BcCycles} ]; then
 #      duration=$SECONDS
 #      echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
 #      echo -e "\033[34;1m > Fim do Observer \033[m"
-    
+
       echo ""
       echo -e "\033[34;1m > Executando o GSI \033[m"
 
@@ -254,7 +254,7 @@ fi
 
 while [ ${LABELI} -le ${LABELF} ]; do
    cd ${run_smg}
-   
+
    echo ""
    echo -e "\033[34;1m >>> Submetendo o Sistema ${nome_smg} para o dia \033[31;1m${LABELI}\033[m \033[m"
    echo ""
@@ -270,7 +270,7 @@ while [ ${LABELI} -le ${LABELF} ]; do
 #   duration=$SECONDS
 #   echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
 #   echo -e "\033[34;1m > Fim do Observer \033[m"
-   
+
    echo ""
    echo -e "\033[34;1m > Executando o GSI \033[m"
 

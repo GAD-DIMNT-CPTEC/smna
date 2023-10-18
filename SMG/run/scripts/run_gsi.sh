@@ -5,12 +5,12 @@
 #set -o xtrace
 
 # Carregando as variaveis do sistema
-source /scratchin/grupos/das/home/carlos.bastarz/SMG.trunk/config_smg.ksh vars_export
+source ${SMG_ROOT}/config_smg.ksh vars_export
 
 # Lendo parametros de entrada
 if [ -z "${1}" ]
 then
-  echo "LABELANL is not set" 
+  echo "LABELANL is not set"
   exit 3
 else
   export LABELANL=${1}
@@ -19,41 +19,41 @@ else
 fi
 if [ -z "${2}" ]
 then
-  echo "PREFIX is not set" 
+  echo "PREFIX is not set"
   exit 3
 else
-  export PREFIX=${2}  
+  export PREFIX=${2}
 fi
 if [ -z "${3}" ]
 then
-  echo "TRC is not set" 
+  echo "TRC is not set"
   exit 3
 else
-  export TRC=${3}  
+  export TRC=${3}
 fi
 if [ -z "${4}" ]
 then
-  echo "NLV is not set" 
+  echo "NLV is not set"
   exit 3
 else
-  export NLV=${4}  
+  export NLV=${4}
 fi
 if [ -z "${5}" ]
 then
-  echo "NPROC is not set" 
+  echo "NPROC is not set"
   exit 3
 else
-  export NPROC=${5}  
+  export NPROC=${5}
   if [ ${NPROC} -lt 24 ]
   then
     echo "NPROC less then 24"
     echo "setting NPROC to 24"
-    export NPROC=24  
+    export NPROC=24
   fi
 fi
 if [ -z "${6}" ]
 then
-  echo "TRC Model is not set" 
+  echo "TRC Model is not set"
   TRCB=${TRC}
 else
   export TRCB=${6}
@@ -70,10 +70,10 @@ case ${TRC} in
    62) IMAX=192; JMAX=96;;
    126)IMAX=384; JMAX=192;;
    213)IMAX=640; JMAX=320;;
-   254)IMAX=768; JMAX=384;;   
+   254)IMAX=768; JMAX=384;;
    299)IMAX=900; JMAX=450;;
    666)IMAX=2000; JMAX=1000;;
-   *)echo "Truncamento desconhecido ${MRES}"  
+   *)echo "Truncamento desconhecido ${MRES}"
 esac
 KMAX=${NLV}
 JMAX=$((JMAX+2))
@@ -89,11 +89,11 @@ BYTE_ORDER=Big_Endian
 
 
 # Configurando os Diretorios
-# Considera-se que o sistema sera rodado no scratchin por isso tudo 
+# Considera-se que o sistema sera rodado no scratchin por isso tudo
 # sera configurado a partir do home do usuario no scratch1 (${SUBMIT_HOME})
 # Diretorio temporario para a rodada do SMG
 RunGSI=${subt_run_gsi}
-if [ -e ${RunGSI} ]; then 
+if [ -e ${RunGSI} ]; then
    rm -fr ${RunGSI}/*
 else
    mkdir -p ${RunGSI}
@@ -105,7 +105,7 @@ export OutGSI=${work_gsi_dataout}
 
 # Preparing the environment for GSI run
 export MPICH_UNEX_BUFFER_SIZE=100000000
-export MPICH_MAX_SHORT_MSG_SIZE=4096      
+export MPICH_MAX_SHORT_MSG_SIZE=4096
 export MPICH_PTL_UNEX_EVENTS=50000
 export MPICH_PTL_OTHER_EVENTS=2496
 
@@ -152,7 +152,7 @@ ObsDir=${work_gsi_datain_obs}
 
 cat << EOF > ${RunGSI}/nmlobs.gsi
 #
-#Simple namelist for GSI observations selection 
+#Simple namelist for GSI observations selection
 #
 
 FLAG                  FILENAME                                     ALIAS
@@ -297,7 +297,7 @@ else
    echo -e " "
 
    cp -pfr ${sample} ${fileOut}
- 
+
 fi
 
 
@@ -353,7 +353,7 @@ sed -i -e "s/#IMAX#/${IMAX}/g" \
 TIME=`date '+%H:%M:%S'`
 
 cat<< EOF > ${RunGSI}/qsub_gdad.qsb
-#!/bin/bash 
+#!/bin/bash
 #PBS -o ${save}/gdad_anl.${LABELANL}_${TIME}.out
 #PBS -e ${save}/gdad_anl.${LABELANL}_${TIME}.err
 #PBS -l walltime=00:45:00
@@ -446,7 +446,7 @@ for loop in $loops; do
             amsua_aqua imgr_g08 imgr_g11 imgr_g12 ssmi_f13 ssmi_f14 imgr_g14 imgr_g15 ssmi_f15 hirs4_n18 hirs4_metop-a amsua_n18
             amsua_metop-a mhs_n18 mhs_metop-a amsre_low_aqua amsre_mid_aqua amsre_hig_aqua ssmis_las_f16 ssmis_uas_f16 ssmis_img_f16
             ssmis_env_f16 ssmis_las_f17 ssmis_uas_f17 ssmis_img_f17 ssmis_env_f17 ssmis_las_f18 ssmis_uas_f18 ssmis_img_f18 ssmis_env_f18
-            ssmis_las_f19 ssmis_uas_f19 ssmis_img_f19 ssmis_env_f19 ssmis_las_f20 ssmis_uas_f20 ssmis_img_f20 ssmis_env_f20 iasi_metop-a 
+            ssmis_las_f19 ssmis_uas_f19 ssmis_img_f19 ssmis_env_f19 ssmis_las_f20 ssmis_uas_f20 ssmis_img_f20 ssmis_env_f20 iasi_metop-a
             hirs4_n19 amsua_n19 mhs_n19 seviri_m08 seviri_m09 seviri_m10 cris_npp atms_npp hirs4_metop-b amsua_metop-b mhs_metop-b iasi_metop-b"
    for type in $listall; do
       count=0
@@ -476,10 +476,10 @@ cp -pfr pe* ${save}/diag
 cd ${save}/diag
 ln -s ../gsiparm.anl .
 echo "      Run gsidiags ${yyyymmdd} ${hh0}0000 cptec set"
-${scripts_smg}/gsi_scripts/gsidiags ${yyyymmdd} ${hh0}0000 cptec set > gsidiags.log 2>&1 
+${scripts_smg}/gsi_scripts/gsidiags ${yyyymmdd} ${hh0}0000 cptec set > gsidiags.log 2>&1
 cd ..
 
-# Remover os arquivos de BKG do diretorio /scratchin/grupos/assim_dados/home/gdad/GSI/Ana/Bkg/cptec e remover as Observacoes 
+# Remover os arquivos de BKG do diretorio /scratchin/grupos/assim_dados/home/gdad/GSI/Ana/Bkg/cptec e remover as Observacoes
 #rm -fr ${RunGSI}/*
 
 ##################################################################################################################
@@ -505,7 +505,7 @@ cd ${workdirSatAng}
 #
 ls -l ${RunGSI}/diag_* > listpe
 #  Collect diagnostic files for obs types (groups) below
-  listall="hirs2_n14 msu_n14 sndr_g08 sndr_g11 sndr_g12 sndr_g13 sndr_g08_prep sndr_g11_prep 
+  listall="hirs2_n14 msu_n14 sndr_g08 sndr_g11 sndr_g12 sndr_g13 sndr_g08_prep sndr_g11_prep
            sndr_g12_prep sndr_g13_prep sndrd1_g11 sndrd2_g11 sndrd3_g11 sndrd4_g11 sndrd1_g12
            sndrd2_g12 sndrd3_g12 sndrd4_g12 sndrd1_g13 sndrd2_g13 sndrd3_g13 sndrd4_g13 sndrd1_g14
            sndrd2_g14 sndrd3_g14 sndrd4_g14 sndrd1_g15 sndrd2_g15 sndrd3_g15 sndrd4_g15 hirs3_n15
@@ -541,7 +541,7 @@ else
   echo -e "\033[34;1m[\033[m\033[31;1m Falhou \033[m\033[34;1m]\033[m"
   echo -e "\033[31;1m !!! Arquivo Nao Encontrado !!! \033[m"
   echo -e "\033[31;1m ${ANGEXE} \033[m"
-  
+
   exit 1
 fi
 
@@ -621,7 +621,7 @@ EOF
 ###################################################
 #fila=$(cat $home_mod_scp/fila)
 # Build the PBS script on-the-fly and run
-            
+
 cat << EOF > ${workdirSatAng}/qsub.satbang.qsb
 #!/bin/csh -x
 #PBS -o ${workdirSatAng}/satbang.${LABELANL}_${TIME}.out
@@ -638,7 +638,7 @@ cat << EOF > ${workdirSatAng}/qsub.satbang.qsb
 
 cd ${workdirSatAng}/
 
-time aprun -n 1 ${workdirSatAng}/gsi_angupdate.exe 
+time aprun -n 1 ${workdirSatAng}/gsi_angupdate.exe
 
 #touch ${workdirSatAng}/monitor.t
 EOF

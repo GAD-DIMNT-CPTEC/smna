@@ -4,11 +4,11 @@
 #-----------------------------------------------------------------------------#
 #BOP
 #
-# !DESCRIPTION: script utilizado para rodar o GSI. 
+# !DESCRIPTION: script utilizado para rodar o GSI.
 #
 #
 # !CALLING SEQUENCE:
-#      
+#
 #   ./runGSI <opções>
 #
 #      As <opções> válidas são:
@@ -28,17 +28,17 @@
 #
 #         ./runGSI -t 299 -l 64 -p CPT -T 254 -I 2015050100 -bc 10 -om true
 #
-# !REVISION HISTORY: 
+# !REVISION HISTORY:
 #    20 Ago 2018 - J. G. de Mattos - Initial Version
 #
 # !REMARKS:
 #
 #     * Neste momento está apto somente para utilizar
 #       a combinação GSI+BAM
-#   
+#
 #     * Por padrão o truncamento utilizado no GSI é o mesmo do modelo.
 #       Porém existe a possibilidade de utilizar um truncamento diferente
-#       daquele utilizado pelo BAM. Com isto, a análise é calculada em 
+#       daquele utilizado pelo BAM. Com isto, a análise é calculada em
 #       outro truncamento, porém o arquivo gerado estará no truncamento
 #       do modelo BAM, assim como deve ocorrer com o arquivo de background.
 #
@@ -46,7 +46,7 @@
 #     Not yet!
 #
 # !USES:
-#  
+#
 #   runGSI_functions.sh - script que contém as funções utilizadas por este
 #                         script.
 #
@@ -57,7 +57,7 @@
 WhereIam=$(dirname ${BASH_SOURCE})
 
 # Carregando as variaveis do sistema
-source /lustre_xc50/joao_gerd/SMG/config_smg.ksh vars_export
+source ${SMG_ROOT}/config_smg.ksh vars_export
 
 # load functions used by runGSI script
 source ${WhereIam}/gsi_scripts/runGSI_Functions.sh
@@ -148,7 +148,7 @@ fi
 
 #-----------------------------------------------------------#
 # link/copy background files to be used by GSI
-# 
+#
 
 for inc in $(seq -3 3 3); do
 
@@ -180,7 +180,7 @@ for inc in $(seq -3 3 3); do
       echo -e ""
       exit 1
    fi
-   
+
 done
 #
 #-----------------------------------------------------------#
@@ -196,7 +196,7 @@ FixedFiles ${AnlTrunc} ${AnlNLevs} ${RunDir}
 getSatBias ${AnlDate} ${BkgDate} ${RunDir} ${subt_gsi_dataout}
 BcCycles=$?
 #------------------------------------------------------------#
-# running GSI at tupa 
+# running GSI at tupa
 #
 
 #if [ ${BcCycles} -gt 0 ];then
@@ -206,8 +206,8 @@ BcCycles=$?
 for cycle in $(seq 0 ${BcCycles} ); do
 
    if [ ${BcCycles} -gt 0 ];then
-      
-      echo -ne "\033[34;1m Running GSI at BC cycle\033[m\033[32;1m $(( ${cycle} + 1 ))\033[m" 
+
+      echo -ne "\033[34;1m Running GSI at BC cycle\033[m\033[32;1m $(( ${cycle} + 1 ))\033[m"
 
       if [ ${cycle} -ne ${BcCycles} ];then
 
@@ -215,11 +215,11 @@ for cycle in $(seq 0 ${BcCycles} ); do
          mkdir -p ${BcDirOut}
 
       fi
-   
+
    else
 
-      echo -ne "\033[34;1m Running GSI \033[m" 
-      
+      echo -ne "\033[34;1m Running GSI \033[m"
+
    fi
 
    if [ ${cycle} -eq 0 -a ${BcCycles} -gt 0 ];then
@@ -237,7 +237,7 @@ for cycle in $(seq 0 ${BcCycles} ); do
 
    mergeDiagFiles ${RunDir} ${AnlDate}
 
-#   echo -ne "\033[34;1m Running GSI Angle Update tool \033[m" 
+#   echo -ne "\033[34;1m Running GSI Angle Update tool \033[m"
 #
 #   subBCAng ${RunDir} ${AnlDate}
 #
@@ -268,7 +268,7 @@ for cycle in $(seq 0 ${BcCycles} ); do
          cp -pfr ${BcDirOut}/${satbiasAngOu} ${RunDir}/${satbiasAngIn}
 
       fi
-      
+
    else
       copyFiles ${RunDir} ${DataOutDir}
    fi
@@ -279,4 +279,3 @@ done
 
 #EOC
 #-----------------------------------------------------------------------------#
-

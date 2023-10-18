@@ -19,8 +19,15 @@
 #                                    * etc/paths.sh -> caminhos
 #                                    * etc/functions.sh -> funcoes
 #
+#    Oct 2023 - J. A. Aravequia - acrescenta identificação do sistema de HPC
+#                                 acrescenta a variável global hpc_name
+#                                permite definições para diferentes computadores:
+#                                    * etc/mach/XC50_paths.conf
+#                                    * etc/mach/egeon_paths.conf
+#                                    * etc/mach/new_system_avail.conf
+#
 # !REMARKS:
-#  
+#
 #    * Os caminhos do SMG estao contidos no arquivo etc/paths.sh
 #    * As funcoes que podem ser executadas estao no arquivo etc/functions.sh
 #
@@ -29,11 +36,36 @@
 #BOC
 
 RootDir=$(dirname ${BASH_SOURCE})
+
+export SMG_ROOT=$RootDir
+
+lognode=`cat /proc/sys/kernel/hostname | cut  -b 1-6`
+
+case $lognode in
+
+  clogin)
+    echo -n "This will run on XC50 ..."
+    export hpc_name="XC50"
+    ;;
+
+  headno)
+    echo -n "This will run on EGEON Cluster ..."
+    export hpc_name="egeon"
+    ;;
+
+  *)
+    mach=`cat /proc/sys/kernel/hostname`
+    echo -n "Path definitions for "$mach" is not defined yet !"
+    echo -n "See defined systems in etc/mach ."
+    exit
+    ;;
+esac
+
 . ${RootDir}/etc/functions.sh
 
 #
 # Verifica os argumentos passados junto com o script
-# 
+#
 
 echo -e ""
 echo -e "\e[36;1m >>> ${BASH_SOURCE##*/} executado a partir de\e[m \e[32;1m${0##*/}\e[m"
@@ -59,10 +91,10 @@ for function in $(grep -i '(){$' ${RootDir}/etc/functions.sh | sed 's/(){//g');d
 done
 
 #------------------------------------------------------------#
-# Pipes create SubShells, so the while read is running on a 
-# different shell than your script, that makes my f variable 
+# Pipes create SubShells, so the while read is running on a
+# different shell than your script, that makes my f variable
 # never changes (only the one inside the pipe subshell).
-# Passing the data in a sub-shell instead, like it's a file 
+# Passing the data in a sub-shell instead, like it's a file
 # before the while loop. This assumes that I don't want some
 # intermittent file:
 
@@ -79,7 +111,7 @@ done
 #------------------------------------------------------------#
 
 if [ ${f} -eq 0 ];then
-  
+
   echo -e "\e[37;1m[\e[m\e[31;1m FAIL \e[m\e[37;1m]\e[m"
   echo -e ""
   echo -e "\e[37;1m Opcao desconhecida, <ajuda>: \e[m"
@@ -90,7 +122,3 @@ fi
 
 #EOC
 #-----------------------------------------------------------------------------#
-
-
-
-
