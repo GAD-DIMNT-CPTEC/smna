@@ -8,11 +8,11 @@
 #               as funções utilizadas pelo script runGSI.
 #
 #
-# !REVISION HISTORY: 
+# !REVISION HISTORY:
 # 20 Ago 2018 - J. G. de Mattos - Initial Version
 #
 # !REMARKS:
-#    
+#
 #    * para o correto funcionamento deve-se primeiro carregar este script
 #      com o comando source
 #      - source runGSI_functions.sh
@@ -48,14 +48,14 @@ subwrd ( ) {
 usage ( ){
    echo
    echo "Usage:"
-   sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' ${runGSI} 
+   sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' ${runGSI}
 }
 
 #-----------------------------------------------------------------------------#
 # Define some constants to GSI use
 #-----------------------------------------------------------------------------#
 constants ( ) {
-   
+
    # Get local run of the runGSI
     for i in $(seq 0 $((${#FUNCNAME[@]}-1)) );do
        if [ ${FUNCNAME[$i]} == 'main' ];then
@@ -67,28 +67,50 @@ constants ( ) {
 
    # Define endianness
    export BYTE_ORDER=Big_Endian
-   
+
    # PBS default variables
    #
    #   * Some of these variables
    #     can be modified by command
    #     line
+  case ${hpc_name} in
 
-   export MaxCoresPerNode=40
-   export MPITasks=120                    # Number of Processors
-   export ThreadsPerMPITask=1             # Number of cores hosting OpenMP threads
-   export TasksPerNode=$((${MaxCoresPerNode}/${ThreadsPerMPITask})) # Number of Processors used by each MPI tasks
-   export PEs=$((${MPITasks}/${ThreadsPerMPITask}))
-   export Nodes=$(((${MPITasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
-   export Queue=pesq 
-   export WallTime=00:45:00
-   export BcCycles=0
+    egeon)
+        export MaxCoresPerNode=80
+        export MPITasks=160                    # Number of Processors
+        export ThreadsPerMPITask=1             # Number of cores hosting OpenMP threads
+        export TasksPerNode=$((${MaxCoresPerNode}/${ThreadsPerMPITask})) # Number of Processors used by each MPI tasks
+        export PEs=$((${MPITasks}/${ThreadsPerMPITask}))
+        export Nodes=$(((${MPITasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
+        export Queue=PESQ1
+        export WallTime=00:45:00
+        export BcCycles=0
 
-   # MPI environmental variables
-   export MPICH_UNEX_BUFFER_SIZE=100000000
-   export MPICH_MAX_SHORT_MSG_SIZE=4096      
-   export MPICH_PTL_UNEX_EVENTS=50000
-   export MPICH_PTL_OTHER_EVENTS=2496
+        # MPI environmental variables
+        export MPICH_UNEX_BUFFER_SIZE=100000000
+        export MPICH_MAX_SHORT_MSG_SIZE=4096
+        export MPICH_PTL_UNEX_EVENTS=50000
+        export MPICH_PTL_OTHER_EVENTS=2496
+    ;;
+    XC50)
+       export MaxCoresPerNode=40
+       export MPITasks=120                    # Number of Processors
+       export ThreadsPerMPITask=1             # Number of cores hosting OpenMP threads
+       export TasksPerNode=$((${MaxCoresPerNode}/${ThreadsPerMPITask})) # Number of Processors used by each MPI tasks
+       export PEs=$((${MPITasks}/${ThreadsPerMPITask}))
+       export Nodes=$(((${MPITasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
+       export Queue=pesq
+       export WallTime=00:45:00
+       export BcCycles=0
+
+       # MPI environmental variables
+       export MPICH_UNEX_BUFFER_SIZE=100000000
+       export MPICH_MAX_SHORT_MSG_SIZE=4096
+       export MPICH_PTL_UNEX_EVENTS=50000
+       export MPICH_PTL_OTHER_EVENTS=2496
+   ;;
+
+ esac
 
    # files used by this script
    export execGSI=${home_cptec}/bin/gsi.exe
@@ -111,7 +133,7 @@ constants ( ) {
    export satbiasAngIn=satbias_angle.in
    export satbiasAngOu=satbias_angle.out
 
-   
+
 }
 #-----------------------------------------------------------------------------#
 # Get BAM trunc
@@ -223,7 +245,7 @@ ParseOpts( ) {
 
    # Truncamento em que a análise será calculada
    # Obs: Este é o mesmo truncamento utilizado no
-   #      cálculo prévio da matriz de covariância 
+   #      cálculo prévio da matriz de covariância
    #      do erro. Então esta será a resolução em
    #      que o GSI irá processar internamente a
    #      análise. Pode ser diferente do Truncamento
@@ -234,11 +256,11 @@ ParseOpts( ) {
 
    # Não haverá modificações na coordenada vertical
    export AnlNLevs=${BkgNLevs}
-      
+
    # Configurando datas
    export BkgDate=$(${inctime} ${AnlDate} -6h %y4%m2%d2%h2)
    export FctDate=$(${inctime} ${AnlDate} +6h %y4%m2%d2%h2)
-   
+
    # Configurando Sulfixo dos arquivos do Modelo
    export AnlMRES=$(printf 'TQ%4.4dL%3.3d' ${AnlTrunc} ${AnlNLevs})
    export BkgMRES=$(printf 'TQ%4.4dL%3.3d' ${BkgTrunc} ${BkgNLevs})
@@ -250,10 +272,12 @@ ParseOpts( ) {
 linkObs ( ){
    local runDate=${1}
    local runDir=${2}
-   
+
    local verbose=true
 
-   local obsDir=${ncep_ext}/${runDate:0:8}00/dataout/NCEP
+   # add bufr path in EGEON
+   local obsDir=${ncep_ext}/${runDate:0:4}/${runDate:4:2}/${runDate:6:2}
+   local obsDir=${obsDir}:${ncep_ext}/${runDate:0:8}00/dataout/NCEP
    local obsDir=${obsDir}:/lustre_xc50/ioper/data/external/ASSIMDADOS
    local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/${runDate}
    local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/obs/${runDate:0:6}/${runDate:6:4}
@@ -297,7 +321,7 @@ linkObs ( ){
             echo -e "\033[31;1m Error trying link\033[m\033[34;1m ${name}\033[m\033[31;1m observation file \033[m"
             echo -e "\033[31;1m Observation not found in\033[m\033[34;1m ${obsGSI}\033[m\033[31;1m file ! \033[m"
             echo -e " "
-         fi 
+         fi
          i=$((i+1))
       done
 
@@ -316,7 +340,7 @@ FixedFiles ( ) {
 
    local mres=$(printf 'TQ%4.4dL%3.3d' ${Trunc} ${NLevs})
 
-   # Public fixed files 
+   # Public fixed files
    # (GSI)
    cp -pfr ${public_fix}/gsir4.berror_stats.gcv.BAM.${mres} ${runDir}/berror_stats
    cp -pfr ${public_fix}/atms_beamwidth.txt                 ${runDir}/atms_beamwidth.txt
@@ -351,7 +375,7 @@ FixedFiles ( ) {
    #-------------------------------------------------------------------------------#
    # Copy CRTM coefficient files based on entries in satinfo file
    #
-   
+
    for file in $(awk '{if($1!~"!"){print $1}}' ${runDir}/satinfo | sort | uniq) ;do
       ln -s ${public_crtm}/${BYTE_ORDER}/${file}.SpcCoeff.bin ${runDir}
       ln -s ${public_crtm}/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
@@ -369,7 +393,7 @@ getInfoFiles (){
          infoDate=${file##*.}
          #echo -e $infoFile "${file##*.} -- $anlDate"
          if [ $anlDate -ge ${infoDate} ];then
-            assign ${infoFile} ${file}   
+            assign ${infoFile} ${file}
          fi
       done < <(ls -1 ${infoFiles}/global_*${infoFile}* )
    done
@@ -380,8 +404,8 @@ getInfoFiles (){
 
 }
 #-----------------------------------------------------------------------------#
-# Link/Copy coefficient files for both air bias correction and angle dependent 
-# bias into the GSI run directory before running the GSI executable. 
+# Link/Copy coefficient files for both air bias correction and angle dependent
+# bias into the GSI run directory before running the GSI executable.
 #-----------------------------------------------------------------------------#
 getSatBias ( ){
 
@@ -395,7 +419,7 @@ getSatBias ( ){
    # Find for a bias corrected file
 
    # if are running a bias correcion cycle
-   # find in current GSI running dir by 
+   # find in current GSI running dir by
    # satbias file
    FindDir01=${runDir}
 
@@ -425,7 +449,7 @@ getSatBias ( ){
      cold=1
 
    else
-     
+
      cp -pfr ${FileSatbiasOu} ${runDir}/${satbiasIn}
 
    fi
@@ -440,7 +464,7 @@ getSatBias ( ){
      echo -e "\033[31;1m #    porque não copiou o arquivo       #\033[m"
      echo -e "\033[31;1m #          ${satbiasAngOu}         #\033[m"
      echo -e "\033[31;1m #--------------------------------------#\033[m"
-     
+
      if [ -e ${runDir}/${satbiasAngIn} ];then
         #
         # if file exist, may be corrupted!
@@ -451,7 +475,7 @@ getSatBias ( ){
      cp -pfr ${SatBiasAngSample} ${runDir}/${satbiasAngIn}
 
    else
-     
+
      cp -pfr ${FileSatbiasAngOu} ${runDir}/${satbiasAngIn}
 
    fi
@@ -466,7 +490,7 @@ getSatBias ( ){
      echo -e "\033[31;1m #    porque não copiou o arquivo       #\033[m"
      echo -e "\033[31;1m #          ${satbiasPCOu}         #\033[m"
      echo -e "\033[31;1m #--------------------------------------#\033[m"
-     
+
      if [ -e ${runDir}/${satbiasPCIn} ];then
         #
         # if file exist, may be corrupted!
@@ -477,7 +501,7 @@ getSatBias ( ){
      cp -pfr ${SatBiasPCSample} ${runDir}/${satbiasPCIn}
 
    else
-     
+
      cp -pfr ${FileSatbiasPCOu} ${runDir}/${satbiasPCIn}
 
    fi
@@ -488,7 +512,7 @@ getSatBias ( ){
 
 
 #-----------------------------------------------------------------------------#
-# Function to submit GSI job at tupa supercomputer 
+# Function to submit GSI job at tupa supercomputer
 #-----------------------------------------------------------------------------#
 subGSI() {
    runDir=${1}
@@ -500,7 +524,7 @@ subGSI() {
    andt=${7}
    onet=${8}
    cold=${9}
-   
+
    if [ $cold == '.true.' ];then
       sed "s/#CENTER#/cptec/g" ${parmGSI}.cold > ${runDir}/$(basename ${parmGSI})
    else
@@ -527,8 +551,37 @@ subGSI() {
      echo -e "\e[31;1m >> Erro: \e[m\e[33;1m Redefina Numero de Processos MPI e openMP\e[m"
      exit -1
   fi
+case ${hpc_name} in
+  egeon)
+     cat << EOF > ${runDir}/gsi.qsb
+#!/bin/bash
+#SBATCH --nodes=${Nodes}
+#SBATCH --time=00:30:00
+#SBATCH --ntasks=${MPITasks}
+#SBATCH --job-name=gsiAnl
+#SBATCH --mem=480G
+#SBATCH --cpus-per-task=1
+#SBATCH --partition=${Queue}
 
-cat << EOF > ${runDir}/gsi.qsb
+ulimit -c unlimited
+ulimit -s unlimited
+
+# Enable ro debug after run gsi
+# must use Stack Trace Analysis Tool (STAT)
+export ATP_ENABLED=1
+
+cd \${PBS_O_WORKDIR}
+
+sbatch -n ${PEs} -N ${TasksPerNode} -d ${ThreadsPerMPITask} $(basename ${execGSI}) > gsiStdout_${andt}.${runTime}.log
+
+EOF
+
+    cd ${runDir}
+
+    PID=$(sbatch -W block=true gsi.qsb; exit ${PIPESTATUS[0]})
+  ;;
+  XC50)
+     cat << EOF > ${runDir}/gsi.qsb
 #!/bin/bash
 #PBS -o \${PBS_O_WORKDIR}/gsiAnl.${andt}.${runTime}.out
 #PBS -S /bin/bash
@@ -541,7 +594,7 @@ ulimit -c unlimited
 ulimit -s unlimited
 
 # Enable ro debug after run gsi
-# must use Stack Trace Analysis Tool (STAT) 
+# must use Stack Trace Analysis Tool (STAT)
 export ATP_ENABLED=1
 
 cd \${PBS_O_WORKDIR}
@@ -550,17 +603,20 @@ aprun -n ${PEs} -N ${TasksPerNode} -d ${ThreadsPerMPITask} $(basename ${execGSI}
 
 EOF
 
-cd ${runDir}
+     cd ${runDir}
 
-PID=$(qsub -W block=true gsi.qsb; exit ${PIPESTATUS[0]})
+     PID=$(qsub -W block=true gsi.qsb; exit ${PIPESTATUS[0]})
+
+   ;;
+esac
 return $?
 exit 1
 }
 
 #-----------------------------------------------------------------------------#
-# Function to submet radiance Bias Correction from satellite angle 
+# Function to submet radiance Bias Correction from satellite angle
 #-----------------------------------------------------------------------------#
-subBCAng ( ) { 
+subBCAng ( ) {
 
    runDir=${1}
    andt=${2}
@@ -585,7 +641,7 @@ cat << EOF > ${runDir}/angupdate.qsb
 #PBS -A CPTEC
 
 # Enable to debug after run gsi angupdate
-# must use Stack Trace Analysis Tool (STAT) 
+# must use Stack Trace Analysis Tool (STAT)
 export ATP_ENABLED=1
 
 cd \${PBS_O_WORKDIR}
@@ -604,9 +660,9 @@ teste(){
 echo 'hello'
 }
 #-----------------------------------------------------------------------------#
-# Function to Merge diagnostic files from GSI run 
+# Function to Merge diagnostic files from GSI run
 #-----------------------------------------------------------------------------#
-mergeDiagFiles ( ) { 
+mergeDiagFiles ( ) {
 
    local runDir=${1}
    local AnDate=${2}
@@ -615,13 +671,13 @@ mergeDiagFiles ( ) {
    local files=$(find -P -O3 ${runDir} -maxdepth 1 -iname "pe*.*" -printf '%f\n'| awk -F"." '{print $2}' | sort -u)
 
    for file in $(echo ${files});do
-   
+
       #tmpv=${file##pe0000.}
       #loop=$(echo ${tmpv}|awk -F"_" '{print $NF}')
       #type=${tmpv%%_${loop}}
       loop=$(echo ${file}|awk -F"_" '{print $NF}')
       type=${file%%_${loop}}
-      echo -en "\033[34;1mMerging diag files \033[m\033[32;1m${type}\033[m\033[34;1m, outer loop \033[m\033[32;1m${loop}\033[m \033[34;1m[\033[m" 
+      echo -en "\033[34;1mMerging diag files \033[m\033[32;1m${type}\033[m\033[34;1m, outer loop \033[m\033[32;1m${loop}\033[m \033[34;1m[\033[m"
 
       cat $(find -P -O3 ${runDir} -maxdepth 1 -iname "pe*${type}*${loop}" | sort -n) > ${runDir}/diag_${type}_${loop}.${AnDate} 2> /dev/null
 
@@ -657,7 +713,7 @@ mergeDiagFiles ( ) {
 # Function to copy files generated by gsi and gsiAngUpdate
 #-----------------------------------------------------------------------------#
 copyFiles (){
-   
+
    local fromDir=${1}
    local toDir=${2}
 
@@ -668,7 +724,7 @@ copyFiles (){
    # arquivos gerados pelo gsi
    find -P -O3 ${fromDir} -maxdepth 1 -type f -iname "diag_*" -exec mv -f {} ${toDir} \;
    find -P -O3 ${fromDir} -maxdepth 1 -type f -iname "fort.*" -exec mv -f {} ${toDir} \;
-   
+
    mv -f ${fromDir}/diag ${toDir}
 
    ${MV} ${fromDir}/BAM.anl ${toDir}/GANL${BkgPrefix}${AnlDate}S.unf.${BkgMRES}
@@ -689,7 +745,7 @@ copyFiles (){
    ${MV} ${fromDir}/gsiAnl.* ${toDir}
    ${MV} ${fromDir}/gsiStdout* ${toDir}
 #   mv -f ${fromDir}/gsiAngUpdate* ${toDir}
-   
+
 }
 #EOC
 #-----------------------------------------------------------------------------#

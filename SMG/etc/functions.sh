@@ -10,7 +10,7 @@
 #
 # !CALLING SEQUENCE:
 #
-# !REVISION HISTORY: 
+# !REVISION HISTORY:
 # 20 Dec 2017 - J. G. de Mattos - Initial Version
 #
 # !REMARKS:
@@ -26,7 +26,7 @@ eval export $1=$2
 # Variaveis principais
 vars_export(){
 #DESCRIPTION: Exporta as variáveis de ambiente do SMG
-FilePaths=$(dirname ${BASH_SOURCE})/paths.conf
+FilePaths=$(dirname ${BASH_SOURCE})/mach/${hpc_name}_paths.conf
 while read line;do
 
    assign $line
@@ -45,38 +45,38 @@ copy_fixed_files(){
 
   #
   # BAM
-  # 
+  #
 
   #-----------------------------------------------------------------------------------------
   # model/datain
-  if [ ${HOSTNAME:0:1} = 'e' ];then
+  if [ ${HOSTNAME:0:1} = 'e' ] || [ ${hpc_name} = "egeon" ];then
      cp -pf ${home_model_bam}/datain/* ${subt_model_bam}/datain/
-   
+
      cp -pf ${public_bam}/MODEL/datain/AeroVar.Tab ${subt_model_bam}/datain/
      cp -pf ${public_bam}/MODEL/datain/ETAMPNEW_DATA ${subt_model_bam}/datain/
      cp -pf ${public_bam}/MODEL/datain/F_nwvl200_mu20_lam50_res64_t298_c080428.bin ${subt_model_bam}/datain/
      cp -pf ${public_bam}/MODEL/datain/iceoptics_c080917.bin ${subt_model_bam}/datain/
      cp -pf ${public_bam}/MODEL/datain/ocnalbtab24bnd.bin ${subt_model_bam}/datain/
-   
+
      #-----------------------------------------------------------------------------------------
      # pre/datain
-   
+
      cp -pf ${home_pre_bam}/datain/* ${subt_pre_bam}/datain/
-   
+
      #-----------------------------------------------------------------------------------------
      # pre/dataout
-   
+
      cp -pf ${home_pre_bam}/dataout/* ${subt_pre_bam}/dataout/
-   
+
      cp -pf ${public_bam}/PRE/dataout/WaterNavy.dat ${subt_pre_bam}/dataout/
      cp -pf ${public_bam}/PRE/dataout/TopoNavy.dat ${subt_pre_bam}/dataout/
      cp -pf ${public_bam}/PRE/dataout/HPRIME.dat ${subt_pre_bam}/dataout/
-   
+
      #-----------------------------------------------------------------------------------------
      # pre/databcs
-   
+
      cp -pf ${home_pre_bam}/databcs/* ${subt_pre_bam}/databcs/
-   
+
      cp -pf ${public_bam}/PRE/databcs/sib2soilms.form ${subt_pre_bam}/databcs/
      cp -pf ${public_bam}/PRE/databcs/FluxCO2.bin ${subt_pre_bam}/databcs/
      cp -pf ${public_bam}/PRE/databcs/FluxCO2.ctl ${subt_pre_bam}/databcs/
@@ -108,32 +108,32 @@ copy_fixed_files(){
 #      echo -e '\033[31;1m-------------------------------------------------------------------\033[m'
 #
 #     cp -pf ${home_model_bam_datain}/* ${subt_model_bam}/datain/
-#   
+#
 #     scp ${USER//_/.}@tupa:${public_bam}/MODEL/datain/AeroVar.Tab ${subt_model_bam}/datain/
 #     scp ${USER//_/.}@tupa:${public_bam}/MODEL/datain/ETAMPNEW_DATA ${subt_model_bam}/datain/
 #     scp ${USER//_/.}@tupa:${public_bam}/MODEL/datain/F_nwvl200_mu20_lam50_res64_t298_c080428.bin ${subt_model_bam}/datain/
 #     scp ${USER//_/.}@tupa:${public_bam}/MODEL/datain/iceoptics_c080917.bin ${subt_model_bam}/datain/
 #     scp ${USER//_/.}@tupa:${public_bam}/MODEL/datain/ocnalbtab24bnd.bin ${subt_model_bam}/datain/
-#   
+#
 #     #-----------------------------------------------------------------------------------------
 #     # pre/datain
-#   
+#
 #     cp -pf ${home_pre_bam_datain}/* ${subt_pre_bam}/datain/
-#   
+#
 #     #-----------------------------------------------------------------------------------------
 #     # pre/dataout
-#   
+#
 #     cp -pf ${home_pre_bam_dataout}/* ${subt_pre_bam}/dataout/
-#   
+#
 #     scp ${USER//_/.}@tupa:${public_bam}/PRE/dataout/WaterNavy.dat ${subt_pre_bam}/dataout/
 #     scp ${USER//_/.}@tupa:${public_bam}/PRE/dataout/TopoNavy.dat ${subt_pre_bam}/dataout/
 #     scp ${USER//_/.}@tupa:${public_bam}/PRE/dataout/HPRIME.dat ${subt_pre_bam}/dataout/
-#   
+#
 #     #-----------------------------------------------------------------------------------------
 #     # pre/databcs
-#   
+#
 #     cp -pf ${home_pre_bam_databcs}/* ${subt_pre_bam}/databcs/
-#   
+#
 #     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/sib2soilms.form ${subt_pre_bam}/databcs/
 #     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/FluxCO2.bin ${subt_pre_bam}/databcs/
 #     scp ${USER//_/.}@tupa:${public_bam}/PRE/databcs/FluxCO2.ctl ${subt_pre_bam}/databcs/
@@ -164,9 +164,9 @@ configurar(){
   echo ""
   echo -e "\033[34;1m > SMG HOME: \033[36;1m${home_smg}\033[m \033[m"
   echo -e "\033[34;1m > SMG SUBM: \033[36;1m${subt_smg}\033[m \033[m"
-  echo -e "\033[34;1m > SMG WORK: \033[36;1m${work_smg}\033[m \033[m" 
-  if [ "/"${home_smg}"/" == "/"${HOME}/${nome_smg}"/" ] 
-  then 
+  echo -e "\033[34;1m > SMG WORK: \033[36;1m${work_smg}\033[m \033[m"
+  if [ "/"${home_smg}"/" == "/"${HOME}/${nome_smg}"/" ]
+  then
      echo ""
      echo -e "\033[31;1m > O sistema detectou que voce esta tentando instalar o \033[m"
      echo -e "\033[31;1m > SMG no home, o que nao e recomendado, pois podera haver falta de espaco. \033[m"
@@ -302,12 +302,12 @@ compilar(){
            echo "# $ ssh eslogin02 -XC                                               #"
            echo "#                                                                   #"
            echo "#####################################################################"
-      
+
            exit
       fi
    fi
- 
-   echo "" 
+
+   echo ""
    echo "%%%"
    echo " Compilando utilitarios do SMG:  "
    echo "%%%"
@@ -332,7 +332,7 @@ compilar(){
 #############################################################################
 # Compilacao gsi
 ##############################################################################
-   
+
    cd ${home_gsi}
 
    echo ""
@@ -363,7 +363,7 @@ compilar(){
    echo "+++++++++++++++++++++++++"
    echo ""
    echo " com ./clean -a"
-   echo "" 
+   echo ""
    ./clean -a
 
    if [ ${HOSTNAME:0:1} = 's' ];then
@@ -373,21 +373,21 @@ compilar(){
    fi
 
    echo "1" | perl arch/Config.pl -corepath=$(pwd) -os=Cray -mach=x86_64 -comp=${compiler} -usewrf=0 -netcdf=${NETCDF}
- 
+
 # Compilando o GSI
    echo ""
    echo "+++++++++++++++++++++++++"
    echo "   Compilando o GSI:     "
-   echo "+++++++++++++++++++++++++" 
+   echo "+++++++++++++++++++++++++"
    echo ""
    echo " Time: "  `date`
    echo " !!! Tempo previsto para compilacao 30 minutos !!!"
-   sleep 1  
+   sleep 1
    echo ""
-   
+
    cd ${home_gsi}
    ./compile 2>&1 | tee ${home_gsi}/compile.log
- 
+
    if [ -e ${home_gsi_src}/gsi.exe  ]; then
      echo ""
      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -396,7 +396,7 @@ compilar(){
      echo "!                                                !"
      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
      echo ""
-   else 
+   else
      echo ""
      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
      echo "!                                          !"
@@ -408,18 +408,18 @@ compilar(){
      echo ""
      exit -9
    fi
- 
+
 # Compilando do utilitario para geracão de bias relacionado com o ângulo
- 
+
    echo ""
    echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
    echo "   Compilando utilitário de gereção de correção de bias do GSI:     "
-   echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" 
- 
+   echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+
    cd ${home_gsi}/util/gsi_angupdate
    make
- 
- 
+
+
    if [ -e ${home_gsi}/util/gsi_angupdate/gsi_angupdate.exe  ]; then
      echo ""
      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -428,10 +428,10 @@ compilar(){
      echo "!                                                                                           !"
      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
      echo ""
- 
+
      cp -pfvr ${home_gsi}/util/gsi_angupdate/gsi_angupdate.exe ${home_cptec}/bin/gsi_angupdate.exe
- 
-   else 
+
+   else
      echo ""
      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
      echo "!                                                                      !"
@@ -462,28 +462,28 @@ compilar(){
 
    echo "+++++++++++++++++++++++++"
    echo "   Compilando o pre:     "
-   echo "+++++++++++++++++++++++++" 
- 
+   echo "+++++++++++++++++++++++++"
+
    cd ${home_pre_bam}/build
    make clean gnu_cray
    make gnu_cray
    make install
-   
+
    echo "+++++++++++++++++++++++++"
    echo "   Compilando o pos:     "
-   echo "+++++++++++++++++++++++++"   
-   
+   echo "+++++++++++++++++++++++++"
+
    cd ${home_pos_bam}/source
    make clean gnu_cray
-  
-  
+
+
 #########################################
 # Compilacao model
 #########################################
 
    echo "+++++++++++++++++++++++++"
    echo "   Compilando o model:   "
-   echo "+++++++++++++++++++++++++"   
+   echo "+++++++++++++++++++++++++"
 
 #  . /opt/modules/default/etc/modules.sh
 #  module swap PrgEnv-pgi PrgEnv-cray
@@ -502,13 +502,13 @@ compilar(){
 #
 #   echo "+++++++++++++++++++++++++"
 #   echo "   Compilando o BLSDAS:   "
-#   echo "+++++++++++++++++++++++++"   
-# 
+#   echo "+++++++++++++++++++++++++"
+#
 #   . /opt/modules/default/etc/modules.sh
 #   module swap PrgEnv-pgi PrgEnv-gnu
 #
 #   export ARCH=linux_gnu
-#   
+#
 #   cd ${home_blsdas}
 #   make clean
 #   make
@@ -519,7 +519,7 @@ compilar(){
 #      make clean
 #      make
 #   done
-# 
+#
 #   # compilando codigo fonte
 #   cd ${home_blsdas_src}
 #   make clean
@@ -648,4 +648,3 @@ teste(){
 
 #EOC
 #-----------------------------------------------------------------------------#
-

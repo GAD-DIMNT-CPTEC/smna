@@ -44,19 +44,29 @@ lognode=`cat /proc/sys/kernel/hostname | cut  -b 1-6`
 case $lognode in
 
   clogin)
-    echo -n "This will run on XC50 ..."
-    export hpc_name="XC50"
+    STR=`uname -a`
+    SUB='cray'
+    if [[ "$STR" == *"$SUB"* ]]; then
+      echo -n "This will run on cray XC50 ..."
+      export hpc_name="XC50"
+    fi
     ;;
 
   headno)
-    echo -n "This will run on EGEON Cluster ..."
-    export hpc_name="egeon"
+    STR=`uname -a`
+    SUB='egeon'
+    if [[ "$STR" == *"$SUB"* ]]; then
+      echo -n "This will run on EGEON Cluster ..."
+      export hpc_name="egeon"
+      echo "It's there."
+    fi
     ;;
 
   *)
     mach=`cat /proc/sys/kernel/hostname`
-    echo -n "Path definitions for "$mach" is not defined yet !"
-    echo -n "See defined systems in etc/mach ."
+    echo -n "The configurations for "$mach" is not defined yet !"
+    echo -n "1) Add the machine to the defined systems in etc/mach ; and"
+    echo -n "2) add an option for it in the function copy_fixed_files in etc/functions"
     exit
     ;;
 esac
