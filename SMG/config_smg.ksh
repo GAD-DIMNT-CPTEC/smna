@@ -35,9 +35,10 @@
 #-----------------------------------------------------------------------------#
 #BOC
 
-RootDir=$(dirname ${BASH_SOURCE})
-
+# RootDir=$(dirname ${BASH_SOURCE})
+RootDir=`pwd`
 export SMG_ROOT=$RootDir
+echo "Path de instalação: SMG_ROOT="$SMG_ROOT
 
 lognode=`cat /proc/sys/kernel/hostname | cut  -b 1-6`
 

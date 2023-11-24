@@ -83,7 +83,7 @@ constants ( ) {
         export PEs=$((${MPITasks}/${ThreadsPerMPITask}))
         export Nodes=$(((${MPITasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
         export Queue=PESQ1
-        export WallTime=00:45:00
+        export WallTime=01:00:00
         export BcCycles=0
 
         # MPI environmental variables
@@ -100,7 +100,7 @@ constants ( ) {
        export PEs=$((${MPITasks}/${ThreadsPerMPITask}))
        export Nodes=$(((${MPITasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
        export Queue=pesq
-       export WallTime=00:45:00
+       export WallTime=01:00:00
        export BcCycles=0
 
        # MPI environmental variables
