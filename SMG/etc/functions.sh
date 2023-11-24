@@ -317,14 +317,20 @@ compilar(){
    echo ""
    echo "%%% Inctime:"
    cd ${util_inctime}
+   make clean
    ./autogen.sh
    ./configure --prefix=${home_cptec}
    if [ $? -ne 0 ];then
       echo ''
       echo -e '\033[31;1mErro ao compilar inctime[m'
-      echo -e '\033[32;1mProvavelmente não esta carregado o ambiente PrgEnv-gnu\033[m'
+      echo -e '\033[32;1mProvavelmente não esta definido FC (fortran compiler)\033[m'
       echo ''
    fi
+   if [ ${hpc_name} = "egeon" ];then
+      # remove extra "-module ../include"  that messed with linking
+      sed -i 's/\-module\ \.\.\/include/ /g' src/Makefile
+   fi
+
    make
    make install
 
@@ -340,39 +346,14 @@ compilar(){
    echo " Compilando o GSI:  "
    echo "%%%%%%%%%%%%%%%%%%%%"
    echo ""
-# Pacote NETCDF
-   if [ ${HOSTNAME:0:1} = 'e' ];then
-      . /opt/modules/default/etc/modules.sh
-      module load netcdf/4.2.0
-   fi
-
-# NETCDF_DIR=/opt/cray/netcdf/4.2.0/pgi/119
-   export NETCDF=${NETCDF_DIR}
-   echo "Diretorio NETCDF:    " $NETCDF
-
-# Bilioteca LAPACK
-   if [ ${HOSTNAME:0:1} = 'e' ];then
-      export LAPACK_PATH=/opt/lapack/3.1.1
-      echo "Bilioteca LAPACK:    " $LAPACK_PATH
-   fi
 
 # Configurando o GSI
-   echo ""
-   echo "+++++++++++++++++++++++++"
-   echo "Limpando o diretorio GSI:"
-   echo "+++++++++++++++++++++++++"
-   echo ""
-   echo " com ./clean -a"
-   echo ""
-   ./clean -a
 
-   if [ ${HOSTNAME:0:1} = 's' ];then
-      compiler=PGI
-   elif [ ${HOSTNAME:0:1} = 'c' ];then
-      compiler=gfortran
+   if [ ${hpc_name} = 'XC50' ];then
+        source ./env.sh xc50 gnu
+   elif [ ${hpc_name} = 'egeon' ];then
+        source ./env.sh egeon intel
    fi
-
-   echo "1" | perl arch/Config.pl -corepath=$(pwd) -os=Cray -mach=x86_64 -comp=${compiler} -usewrf=0 -netcdf=${NETCDF}
 
 # Compilando o GSI
    echo ""
@@ -386,9 +367,10 @@ compilar(){
    echo ""
 
    cd ${home_gsi}
-   ./compile 2>&1 | tee ${home_gsi}/compile.log
+   pwd
+   ./compile.sh 2>&1 | tee ${home_gsi}/compile.log
 
-   if [ -e ${home_gsi_src}/gsi.exe  ]; then
+   if [ -e ${home_gsi_src}/gsi.x  ]; then
      echo ""
      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
      echo "!                                                !"
