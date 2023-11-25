@@ -398,11 +398,14 @@ compilar(){
    echo "   Compilando utilitário de gereção de correção de bias do GSI:     "
    echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
-   cd ${home_gsi}/util/gsi_angupdate
-   make
-
-
-   if [ -e ${home_gsi}/util/gsi_angupdate/gsi_angupdate.exe  ]; then
+   ## OLD GSI version : cd ${home_gsi}/util/gsi_angupdate
+   cd ${home_gsi}/util/global_angupdate
+   ln -sf Makefile.conf.$(hpc_name) Makefile.conf
+   make -f Makefile clean
+   make -f Makefile
+   
+   ## OLD GSI version :if [ -e ${home_gsi}/util/gsi_angupdate/gsi_angupdate.exe  ]; then
+   if [ -e ${home_gsi}/util/global_angupdate/global_angupdate ]; then
      echo ""
      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
      echo "!                                                                                           !"
@@ -411,7 +414,7 @@ compilar(){
      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
      echo ""
 
-     cp -pfvr ${home_gsi}/util/gsi_angupdate/gsi_angupdate.exe ${home_cptec}/bin/gsi_angupdate.exe
+     cp -pfvr ${home_gsi}/util/global_angupdate/global_angupdate ${home_cptec}/bin/global_angupdate
 
    else
      echo ""
