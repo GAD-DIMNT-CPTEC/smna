@@ -350,9 +350,9 @@ compilar(){
 # Configurando o GSI
 
    if [ ${hpc_name} = 'XC50' ];then
-        source ./env.sh xc50 gnu
+        source ./env.sh xc50 ${compiler}
    elif [ ${hpc_name} = 'egeon' ];then
-        source ./env.sh egeon intel
+        source ./env.sh egeon ${compiler}
    fi
 
 # Compilando o GSI
@@ -400,7 +400,7 @@ compilar(){
 
    ## OLD GSI version : cd ${home_gsi}/util/gsi_angupdate
    cd ${home_gsi}/util/global_angupdate
-   ln -sf Makefile.conf.$(hpc_name) Makefile.conf
+   ln -sf Makefile.conf.$(hpc_name)-$(compiler) Makefile.conf
    make -f Makefile clean
    make -f Makefile
    
@@ -436,8 +436,14 @@ compilar(){
    echo " Compilando o BAM:  "
    echo "%%%%%%%%%%%%%%%%%%%%"
    echo ""
-
-
+ 
+   export mkname=${compiler}_${SUB}
+   if [ ${hpc_name} = "egeon" ];then
+      module swap gnu9 intel/2022.1.0
+      module load openmpi4/4.1.1
+      module load netcdf/4.7.4
+      module load netcdf-fortran/4.5.3
+   fi
 #########################################
 # Compilacao pre/pos
 #########################################
@@ -449,9 +455,14 @@ compilar(){
    echo "   Compilando o pre:     "
    echo "+++++++++++++++++++++++++"
 
+  ## As instalacoes NETCDF separam C da Fortran , mas no XC50 estão no mesmo diretório
+   if [ ${SUB} = "cray" ];then 
+      export NETCDF_FORTRAN_DIR = ${NETCDF_DIR}
+   fi
+
    cd ${home_pre_bam}/build
-   make clean gnu_cray
-   make gnu_cray
+   make clean ${mkname}
+   make ${mkname}
    make install
 
    echo "+++++++++++++++++++++++++"
@@ -459,7 +470,9 @@ compilar(){
    echo "+++++++++++++++++++++++++"
 
    cd ${home_pos_bam}/source
-   make clean gnu_cray
+   make clean 
+
+   make clean ${mkname}
 
 
 #########################################
@@ -475,7 +488,7 @@ compilar(){
 
    cd ${home_model_bam}/source
 #   make clean cray_cray32
-   make clean gnu_cray
+   make clean $mkname
 
 
    echo -e "\033[34;1m ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \033[m"

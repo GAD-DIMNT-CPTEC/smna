@@ -122,7 +122,7 @@ constants ( ) {
    export SatBiasPCSample=${public_fix}/gdas1.t00z.abias_pc
    export ScanInfo=${public_fix}/global_scaninfo.txt
    export SatBiasAngSample=${public_fix}/global_satangbias.txt
-   export execBCAng=${home_cptec}/bin/gsi_angupdate.exe
+   export execBCAng=${home_cptec}/bin/global_angupdate
    export parmBCAng=${home_gsi_fix}/global_angupdate.nml
 
    # Satbias files
