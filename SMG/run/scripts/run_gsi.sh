@@ -14,8 +14,10 @@ then
   exit 3
 else
   export LABELANL=${1}
-  export LABELFGS=`${inctime} ${LABELANL} -6h %y4%m2%d2%h2`
-  export LABELFCT=`${inctime} ${LABELANL} +6h %y4%m2%d2%h2`
+  ### export LABELFGS=`${inctime} ${LABELANL} -6h %y4%m2%d2%h2`
+  export LABELFGS=`date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} -6 hours" `
+  ### export LABELFCT=`${inctime} ${LABELANL} +6h %y4%m2%d2%h2`
+  export LABELFCT=`date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} +6 hours" `
 fi
 if [ -z "${2}" ]
 then
@@ -138,9 +140,12 @@ mm1=`echo ${LABELANL}|cut -c 5-6`
 dd1=`echo ${LABELANL}|cut -c 7-8`
 
 yymmdd=${LABELANL:2:${#LABELANL}}
-hm3=`${inctime} ${LABELANL} -3h %h2` #15
-hh0=`${inctime} ${LABELANL} +0h %h2` #18
-hp3=`${inctime} ${LABELANL} +3h %h2` #21
+### hm3=`${inctime} ${LABELANL} -3h %h2` #15
+hm3=`date -u +%H -d "${LABELANL:0:8} ${LABELANL:8:2} -3 hours" `
+## hh0=`${inctime} ${LABELANL} +0h %h2` #18
+hh0=${LABELANL:8:2} 
+### hp3=`${inctime} ${LABELANL} +3h %h2` #21
+hp3=`date -u +%H -d "${LABELANL:0:8} ${LABELANL:8:2} +3 hours" `
 expid=cptec
 bkg=bkg
 
@@ -231,7 +236,8 @@ echo ""
 
 for inc in $(seq -3 3 3); do
    TIME=$(printf "%02g" $((inc+6)))
-   LABEL=$(${inctime} ${LABELANL} ${inc}h %y4%m2%d2%h2)
+   ### LABEL=$(${inctime} ${LABELANL} ${inc}h %y4%m2%d2%h2)
+   LABEL=`date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} +${inc} hours" `
    FFCT=GFCT${PREFIX}${LABELFGS}${LABEL}F.fct.${MRESB}
    FDIR=GFCT${PREFIX}${LABELFGS}${LABEL}F.dir.${MRESB}
 

@@ -57,7 +57,7 @@
 WhereIam=$(dirname ${BASH_SOURCE})
 
 # Carregando as variaveis do sistema
-source ${SMG_ROOT}/config_smg.ksh vars_export
+source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
 
 # load functions used by runGSI script
 source ${WhereIam}/gsi_scripts/runGSI_Functions.sh
@@ -153,7 +153,8 @@ fi
 for inc in $(seq -3 3 3); do
 
    TIME=$(printf "%02g" $((inc+6)))
-   Date=$(${inctime} ${AnlDate} ${inc}h %y4%m2%d2%h2)
+   ### Date=$(${inctime} ${AnlDate} ${inc}h %y4%m2%d2%h2)
+   Date=`date -u +%Y%m%d%H -d "${AnlDate:0:8} ${AnlDate:8:2} +{inc} hours" `
    FFCT=GFCT${BkgPrefix}${BkgDate}${Date}F.fct.${BkgMRES}
    FDIR=GFCT${BkgPrefix}${BkgDate}${Date}F.dir.${BkgMRES}
 

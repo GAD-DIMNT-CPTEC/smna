@@ -28,7 +28,7 @@
 #BOC
 
 # Carregando as variaveis do sistema
-source ${SMG_ROOT}/config_smg.ksh vars_export
+source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
 
 #-----------------------------------------------------------------------------#
 # return usage from main program

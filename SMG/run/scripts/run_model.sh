@@ -5,7 +5,7 @@
 
 
 # Carregando as variaveis do sistema
-source ${SMG_ROOT}/config_smg.ksh vars_export
+source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
 
 # carregando funcoes do pre-processamento
 
@@ -66,8 +66,10 @@ getBAMSize ${TRC}
 export postfix=$(printf "G%5.5dL%3.3d \n" $JM $NLV)
 export MRES=`echo ${TRC} ${NLV} | awk '{printf("TQ%4.4dL%3.3d\n",$1,$2)}'`
 export ANL="GANL${PREFIX}${LABELANL}S.unf.${MRES}"
-export LABELFGS=`${inctime} ${LABELANL} +6h %y4%m2%d2%h2`
-export YESTERDAY=$(${inctime} ${LABELANL} -1d %y4%m2%d200)
+### export LABELFGS=`${inctime} ${LABELANL} +6h %y4%m2%d2%h2`
+export LABELFGS=`date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} +6 hours" `
+### export YESTERDAY=$(${inctime} ${LABELANL} -1d %y4%m2%d200)
+export YESTERDAY=`date -u +%Y%m%d00 -d "${LABELANL:0:8} ${LABELANL:8:2} -1 days" `
 export modelDataIn=${subt_model_bam}/datain
 export gsiDataOut=${subt_gsi_dataout}/${LABELANL}
 

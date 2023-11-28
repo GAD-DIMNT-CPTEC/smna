@@ -61,6 +61,8 @@ copy_fixed_files(){
      #-----------------------------------------------------------------------------------------
      # pre/datain
 
+     echo " home_pre_bam :" ${home_pre_bam} " --->>>  subt_pre_bam :"${subt_pre_bam}
+
      cp -pf ${home_pre_bam}/datain/* ${subt_pre_bam}/datain/
 
      #-----------------------------------------------------------------------------------------
@@ -281,7 +283,7 @@ compilar(){
 
 # Exportando variaveis principais
    vars_export
-
+   echo "Compiler : " $compiler
 # Criando diretório onde estarão os executáveis
    if [ ! -e ${home_cptec}/bin ];then
        mkdir -p ${home_cptec}/bin
@@ -307,32 +309,47 @@ compilar(){
       fi
    fi
 
+## Liga ou desliga compilação de componentes
+# 
+
+# 0: Não compila;
+# 1: Compila.
+
+compgsi=0
+compang=1
+compbam=0
+
+#################
+
+
+
+
    echo ""
    echo "%%%"
    echo " Compilando utilitarios do SMG:  "
    echo "%%%"
 
-
+#### Comando `date ...` do Linux substitui o inctime 
 ## Compilando utilitario inctime
-   echo ""
-   echo "%%% Inctime:"
-   cd ${util_inctime}
-   make clean
-   ./autogen.sh
-   ./configure --prefix=${home_cptec}
-   if [ $? -ne 0 ];then
-      echo ''
-      echo -e '\033[31;1mErro ao compilar inctime[m'
-      echo -e '\033[32;1mProvavelmente não esta definido FC (fortran compiler)\033[m'
-      echo ''
-   fi
-   if [ ${hpc_name} = "egeon" ];then
-      # remove extra "-module ../include"  that messed with linking
-      sed -i 's/\-module\ \.\.\/include/ /g' src/Makefile
-   fi
+#   echo ""
+#   echo "%%% Inctime:"
+#   cd ${util_inctime}
+#   make clean
+#   ./autogen.sh
+#   ./configure --prefix=${home_cptec}
+#   if [ $? -ne 0 ];then
+#      echo ''
+#      echo -e '\033[31;1mErro ao compilar inctime[m'
+#      echo -e '\033[32;1mProvavelmente não esta definido FC (fortran compiler)\033[m'
+#      echo ''
+#   fi
+#   if [ ${hpc_name} = "egeon" ];then
+#      # remove extra "-module ../include"  that messed with linking
+#      sed -i 's/\-module\ \.\.\/include/ /g' src/Makefile
+#   fi
 
-   make
-   make install
+#   make
+#   make install
 
 #
 #############################################################################
@@ -346,6 +363,8 @@ compilar(){
    echo " Compilando o GSI:  "
    echo "%%%%%%%%%%%%%%%%%%%%"
    echo ""
+
+if [ ${compgsi} -eq 1 ]; then
 
 # Configurando o GSI
 
@@ -370,7 +389,7 @@ compilar(){
    pwd
    ./compile.sh 2>&1 | tee ${home_gsi}/compile.log
 
-   if [ -e ${home_gsi_src}/gsi.x  ]; then
+   if [ -e ${home_gsi_src}/gsi.x ]; then
      echo ""
      echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
      echo "!                                                !"
@@ -391,8 +410,17 @@ compilar(){
      exit -9
    fi
 
+fi
+
+if [ ${compang} -eq 1 ]; then
+
 # Compilando do utilitario para geracão de bias relacionado com o ângulo
 
+   if [ ${hpc_name} = 'XC50' ];then
+        source ./env.sh xc50 ${compiler}
+   elif [ ${hpc_name} = 'egeon' ];then
+        source ./env.sh egeon ${compiler}
+   fi
    echo ""
    echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
    echo "   Compilando utilitário de gereção de correção de bias do GSI:     "
@@ -400,7 +428,8 @@ compilar(){
 
    ## OLD GSI version : cd ${home_gsi}/util/gsi_angupdate
    cd ${home_gsi}/util/global_angupdate
-   ln -sf Makefile.conf.$(hpc_name)-$(compiler) Makefile.conf
+   echo ln -sf Makefile.conf.${hpc_name}-${compiler} Makefile.conf
+   ln -sf Makefile.conf.${hpc_name}-${compiler} Makefile.conf
    make -f Makefile clean
    make -f Makefile
    
@@ -426,11 +455,12 @@ compilar(){
      exit -9
    fi
 
-
+fi
 #############################################################################
 # Compilacao bam
 #############################################################################
 
+if [ ${compbam} -eq 1 ]; then
    echo ""
    echo "%%%%%%%%%%%%%%%%%%%%"
    echo " Compilando o BAM:  "
@@ -439,7 +469,8 @@ compilar(){
  
    export mkname=${compiler}_${SUB}
    if [ ${hpc_name} = "egeon" ];then
-      module swap gnu9 intel/2022.1.0
+      module purge
+      module load intel/2022.1.0
       module load openmpi4/4.1.1
       module load netcdf/4.7.4
       module load netcdf-fortran/4.5.3
@@ -494,6 +525,8 @@ compilar(){
    echo -e "\033[34;1m ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \033[m"
    echo -e "\033[34;1m > Compilacao SMG completa.# Verifique possiveis erros no arquivo de log, caso o tenha criado. \033[m"
    echo -e "\033[34;1m ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \033[m"
+
+fi   
 #########################################
 # Compilacao do blsdas
 #########################################
@@ -530,7 +563,7 @@ compilar(){
 # Copia todos os executaveis para a pasta cptec/bin
 
 
-   cp -pfr ${home_gsi}/src/main/gsi.exe ${home_cptec}/bin
+   cp -pfr ${home_gsi_src}/gsi.x ${home_cptec}/bin
 
 #
 # exec BAM

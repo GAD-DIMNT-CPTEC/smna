@@ -35,7 +35,7 @@
 #-----------------------------------------------------------------------------#
 #BOC
 # Carregando as variaveis do sistema
-source ${SMG_ROOT}/config_smg.ksh vars_export
+source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
 
 subwrd ( ) {
    str=$(echo "${@}" | awk '{ for (i=1; i<=NF-1; i++) printf("%s ",$i)}')
@@ -106,7 +106,8 @@ if [ -z ${LABELI} ];then
    echo -e "\033[31;1m LABELI not set \033[m"
    exit 1
 else
-   LABELFGS=$(${inctime} ${LABELI} -6h %y4%m2%d2%h2)
+   ### LABELFGS=$(${inctime} ${LABELI} -6h %y4%m2%d2%h2)
+   LABELFGS=`date -u +%Y%m%d%H -d "${LABELI:0:8} ${LABELI:8:2} -6 hours" `
 fi
 
 # Numero de processadores que foram utilizados pelo BAM

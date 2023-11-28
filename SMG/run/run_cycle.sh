@@ -29,7 +29,7 @@
 #
 # !REVISION HISTORY:
 # 05 Set 2018 - J. G. de Mattos - Initial Version
-#
+# 28 Nov 2023 - Aravequia, J. A. - Changing the use of "inctime"  for `date ` Linux command 
 # !REMARKS:
 #
 #EOP
@@ -40,7 +40,7 @@
 # return a subword of a string
 #-----------------------------------------------------------------------------#
 # Carregando as variaveis do sistema
-source ${SMG_ROOT}/config_smg.ksh vars_export
+source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
 
 subwrd() {
    str=$(echo "${@}" | awk '{ for (i=1; i<=NF-1; i++) printf("%s ",$i)}')
@@ -231,7 +231,11 @@ if  [ ! -z ${BcLABELI} ] || [ ! -z ${BcLABELF} ] || [ ! -z ${BcCycles} ]; then
 
       # Executa o MCGA com as analises do GSI
       SECONDS=0
-      FCT_DATE=$(${inctime} ${BcLABELI} +${modelFCT}h %y4%m2%d2%h2)
+
+      ### FCT_DATE=$(${inctime} ${BcLABELI} +${modelFCT}h %y4%m2%d2%h2)
+      ## using built in Linux command to increment the date
+      FCT_DATE=`date -u +%Y%m%d%H -d "${BcLABELI:0:8} ${BcLABELI:8:2} +${modelFCT} hours" `
+
 
       echo ""
       echo -e "\033[34;1m > Executando o MCGA \033[m"
@@ -244,12 +248,14 @@ if  [ ! -z ${BcLABELI} ] || [ ! -z ${BcLABELF} ] || [ ! -z ${BcCycles} ]; then
       echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
       echo -e "\033[34;1m > Fim do MCGA \033[m"
 
-      BcLABELI=$(${inctime} ${BcLABELI} +6h %y4%m2%d2%h2)
+      ### BcLABELI=$(${inctime} ${BcLABELI} +6h %y4%m2%d2%h2)
+      BcLABELI=`date -u +%Y%m%d%H -d "${BcLABELI:0:8} ${BcLABELI:8:2} +6 hours" `
+
 
    done
 
-   LABELI=$(${inctime} ${BcLABELF} +6h %y4%m2%d2%h2)
-
+   ### LABELI=$(${inctime} ${BcLABELF} +6h %y4%m2%d2%h2)
+   LABELI=`date -u +%Y%m%d%H -d "${BcLABELF:0:8} ${BcLABELF:8:2} +6 hours" `
 fi
 
 while [ ${LABELI} -le ${LABELF} ]; do
@@ -300,8 +306,8 @@ while [ ${LABELI} -le ${LABELF} ]; do
 
    # Executa o MCGA com as analises do GSI
    SECONDS=0
-   FCT_DATE=$(${inctime} ${LABELI} +${modelFCT}h %y4%m2%d2%h2)
-
+   ### FCT_DATE=$(${inctime} ${LABELI} +${modelFCT}h %y4%m2%d2%h2)
+   FCT_DATE=`date -u +%Y%m%d%H -d "${LABELI:0:8} ${LABELI:8:2} +${modelFCT} hours" `
    echo ""
    echo -e "\033[34;1m > Executando o MCGA \033[m"
    /bin/bash ${scripts_smg}/run_model.sh ${LABELI} ${FCT_DATE} ${modelPrefix} ${modelTrunc} ${modelNLevs} ${modelMPITasks} No
@@ -312,7 +318,8 @@ while [ ${LABELI} -le ${LABELF} ]; do
    echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
    echo -e "\033[34;1m > Fim do MCGA \033[m"
 
-   LABELI=$(${inctime} ${LABELI} +6h %y4%m2%d2%h2)
+   ### LABELI=$(${inctime} ${LABELI} +6h %y4%m2%d2%h2)
+   LABELI=`date -u +%Y%m%d%H -d "${LABELI:0:8} ${LABELI:8:2} +6 hours" ` 
 
 done
 
