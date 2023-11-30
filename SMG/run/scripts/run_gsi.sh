@@ -5,8 +5,11 @@
 #set -o xtrace
 
 # Carregando as variaveis do sistema
+dir_now=`pwd`
+cd $SMG_ROOT
+echo pwd
 source ${SMG_ROOT}/config_smg.ksh vars_export
-
+cd $dir_now
 # Lendo parametros de entrada
 if [ -z "${1}" ]
 then
@@ -112,7 +115,7 @@ export MPICH_PTL_UNEX_EVENTS=50000
 export MPICH_PTL_OTHER_EVENTS=2496
 
 # Copiando executavel do gsi para o diretorio de rodada
-FILE=${home_cptec_bin}/gsi.exe
+FILE=${home_cptec_bin}/gsi.x
 if [ -e ${FILE} ]
 then
   ExecGSI=$(basename ${FILE})
@@ -262,7 +265,7 @@ cp -pfr ${public_fix}/prepobs_prep.bufrtable             prepobs_prep.bufrtable
 cp -pfr ${public_fix}/bufrtab.012                        bftab_sstphr
 
 # Copiando arquivos de configuracao do usuário
-cp -pfr ${home_gsi_fix}//global_anavinfo.l${NLV}.txt       anavinfo
+cp -pfr ${home_gsi_fix}/global_anavinfo.l${NLV}.txt       anavinfo
 cp -pfr ${home_gsi_fix}/global_satinfo.txt                 satinfo
 cp -pfr ${home_gsi_fix}/global_convinfo.txt                convinfo
 
@@ -537,7 +540,7 @@ ls -l ${RunGSI}/diag_* > listpe
 echo -e "\033[32;2m > Copiando o executável da atualização da correção do bias do ângulo \033[m"
 
 # Copiando executavel do gsi para o diretorio de rodada
-ANGEXE=${home_cptec_bin}/gsi_angupdate.exe
+ANGEXE=${home_cptec_bin}/global_angupdate
 if [ -e ${ANGEXE} ]
 then
   Execang=$(basename ${ANGEXE})
@@ -644,7 +647,7 @@ cat << EOF > ${workdirSatAng}/qsub.satbang.qsb
 
 cd ${workdirSatAng}/
 
-time aprun -n 1 ${workdirSatAng}/gsi_angupdate.exe
+time aprun -n 1 ${workdirSatAng}/global_angupdate
 
 #touch ${workdirSatAng}/monitor.t
 EOF

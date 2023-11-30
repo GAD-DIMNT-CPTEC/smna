@@ -154,12 +154,13 @@ for inc in $(seq -3 3 3); do
 
    TIME=$(printf "%02g" $((inc+6)))
    ### Date=$(${inctime} ${AnlDate} ${inc}h %y4%m2%d2%h2)
-   Date=`date -u +%Y%m%d%H -d "${AnlDate:0:8} ${AnlDate:8:2} +{inc} hours" `
+   Date=`date -u +%Y%m%d%H -d "${AnlDate:0:8} ${AnlDate:8:2} +${inc} hours" `
    FFCT=GFCT${BkgPrefix}${BkgDate}${Date}F.fct.${BkgMRES}
    FDIR=GFCT${BkgPrefix}${BkgDate}${Date}F.dir.${BkgMRES}
 
    # Forecast file
-   file=${subt_model_bam}/dataout/${BkgMRES}/${BkgDate}/${FFCT}
+   file=${subt_model_bam}/dataout/${BkgMRES}/DAS/${BkgDate}/${FFCT}
+   echo "Forecast file : " $file
    if [ -e ${file} ];then
       cp -pfr ${file} ${RunDir}/BAM.fct.${TIME}
    else
@@ -171,7 +172,7 @@ for inc in $(seq -3 3 3); do
    fi
 
    # Description file
-   file=${subt_model_bam}/dataout/${BkgMRES}/${BkgDate}/${FDIR}
+   file=${subt_model_bam}/dataout/${BkgMRES}/DAS/${BkgDate}/${FDIR}
    if [ -e ${file} ];then
       cp -pfr ${file} ${RunDir}/BAM.dir.${TIME}
    else

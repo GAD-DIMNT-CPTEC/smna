@@ -76,13 +76,13 @@ constants ( ) {
   case ${hpc_name} in
 
     egeon)
-        export MaxCoresPerNode=80
-        export MPITasks=160                    # Number of Processors
+        export MaxCoresPerNode=120
+        export MTasks=80                     # Number of Processors
         export ThreadsPerMPITask=1             # Number of cores hosting OpenMP threads
         export TasksPerNode=$((${MaxCoresPerNode}/${ThreadsPerMPITask})) # Number of Processors used by each MPI tasks
-        export PEs=$((${MPITasks}/${ThreadsPerMPITask}))
-        export Nodes=$(((${MPITasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
-        export Queue=PESQ1
+        export PEs=$((${MTasks}/${ThreadsPerMPITask}))
+        export Nodes=$(((${MTasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
+        export Queue=PESQ2
         export WallTime=01:00:00
         export BcCycles=0
 
@@ -113,9 +113,10 @@ constants ( ) {
  esac
 
    # files used by this script
-   export execGSI=${home_cptec}/bin/gsi.exe
+   export execGSI=${home_cptec}/bin/gsi.x
    export parmGSI=${home_gsi_fix}/gsiparm.anl
    export obsGSI=${home_gsi_fix}/obsfiles.rc
+   export cldRadInfo=${home_gsi_fix}/cloudy_radiance_info.txt
 #   export SatBiasSample=${public_fix}/comgsi_satbias_in
 #   export SatBiasPCSample=${public_fix}/comgsi_satbias_pc_in
    export SatBiasSample=${public_fix}/gdas1.t00z.abias
@@ -274,7 +275,7 @@ linkObs ( ){
    local runDir=${2}
 
    local verbose=true
-
+   
    # add bufr path in EGEON
    local obsDir=${ncep_ext}/${runDate:0:4}/${runDate:4:2}/${runDate:6:2}
    local obsDir=${obsDir}:${ncep_ext}/${runDate:0:8}00/dataout/NCEP
@@ -284,8 +285,10 @@ linkObs ( ){
 
    local IFS=":"; read -a obsPath < <(echo "${obsDir}")
    local nPaths=${#obsPath[@]}
+   # echo "@linkObs : obsPath : " $obsPath
    local IFS=" "
    local names=$(sed -n '/OBS_INPUT::/,/::/{/OBS_INPUT/d;/::/d;/^!/d;p}' ${parmGSI} | awk '{print $1}' | sort -u | xargs)
+   # echo "parmGSI : names : " $names
    count=0
    for name in ${names};do
       i=0
@@ -293,6 +296,7 @@ linkObs ( ){
          filemask=${obsPath[$i]}/$(grep -iw ${name} ${obsGSI} | awk '{print $1}'; exit ${PIPESTATUS[0]} )
          if [ $? -eq 0 ];then
             file=$(${inctime} ${runDate} +0h ${filemask})
+            echo "Is the $file "`ls -l $file`
             if [ -e ${file} ];then
                cp -pfr  ${file} ${runDir}/${name} 2> /dev/null
 
@@ -342,7 +346,8 @@ FixedFiles ( ) {
 
    # Public fixed files
    # (GSI)
-   cp -pfr ${public_fix}/gsir4.berror_stats.gcv.BAM.${mres} ${runDir}/berror_stats
+   ### cp -pfr ${public_fix}/gsir4.berror_stats.gcv.BAM.${mres} ${runDir}/berror_stats  
+   cp -pfr ${public_fix}/gsir4.berror_stats.gcv.BAM.TQ0254L064 ${runDir}/berror_stats        ### using TQ0254 for TQ0299 for now
    cp -pfr ${public_fix}/atms_beamwidth.txt                 ${runDir}/atms_beamwidth.txt
    cp -pfr ${public_fix}/global_ozinfo.txt                  ${runDir}/ozinfo
    cp -pfr ${public_fix}/global_pcpinfo.txt                 ${runDir}/pcpinfo
@@ -375,11 +380,37 @@ FixedFiles ( ) {
    #-------------------------------------------------------------------------------#
    # Copy CRTM coefficient files based on entries in satinfo file
    #
-
    for file in $(awk '{if($1!~"!"){print $1}}' ${runDir}/satinfo | sort | uniq) ;do
-      ln -s ${public_crtm}/${BYTE_ORDER}/${file}.SpcCoeff.bin ${runDir}
-      ln -s ${public_crtm}/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
+      ln -sf ${plus_crtm}/SpcCoeff/${BYTE_ORDER}/${file}.SpcCoeff.bin ${runDir}
+      # ln -s ${public_crtm}/${BYTE_ORDER}/${file}.SpcCoeff.bin ${runDir}
+      ln -sf ${plus_crtm}/TauCoeff/ODAS/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
+      # ln -s ${public_crtm}/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
    done
+
+   emiscoef_IRwater=${plus_crtm}/EmisCoeff/IR_Water/${BYTE_ORDER}/Nalli.IRwater.EmisCoeff.bin
+   emiscoef_IRice=${plus_crtm}/EmisCoeff/IR_Ice/SEcategory/${BYTE_ORDER}/NPOESS.IRice.EmisCoeff.bin
+   emiscoef_IRland=${plus_crtm}/EmisCoeff/IR_Land/SEcategory/${BYTE_ORDER}/NPOESS.IRland.EmisCoeff.bin
+   emiscoef_IRsnow=${plus_crtm}/EmisCoeff/IR_Snow/SEcategory/${BYTE_ORDER}/NPOESS.IRsnow.EmisCoeff.bin
+   emiscoef_VISice=${plus_crtm}/EmisCoeff/VIS_Ice/SEcategory/${BYTE_ORDER}/NPOESS.VISice.EmisCoeff.bin
+   emiscoef_VISland=${plus_crtm}/EmisCoeff/VIS_Land/SEcategory/${BYTE_ORDER}/NPOESS.VISland.EmisCoeff.bin
+   emiscoef_VISsnow=${plus_crtm}/EmisCoeff/VIS_Snow/SEcategory/${BYTE_ORDER}/NPOESS.VISsnow.EmisCoeff.bin
+   emiscoef_VISwater=${plus_crtm}/EmisCoeff/VIS_Water/SEcategory/${BYTE_ORDER}/NPOESS.VISwater.EmisCoeff.bin
+   emiscoef_MWwater=${plus_crtm}/EmisCoeff/MW_Water/${BYTE_ORDER}/FASTEM6.MWwater.EmisCoeff.bin
+   aercoef=${plus_crtm}/AerosolCoeff/${BYTE_ORDER}/AerosolCoeff.bin
+   cldcoef=${plus_crtm}/CloudCoeff/${BYTE_ORDER}/CloudCoeff.bin
+
+   ln -sf $emiscoef_IRwater ${runDir}/Nalli.IRwater.EmisCoeff.bin
+   ln -sf $emiscoef_IRice ${runDir}/NPOESS.IRice.EmisCoeff.bin
+   ln -sf $emiscoef_IRsnow ${runDir}/NPOESS.IRsnow.EmisCoeff.bin
+   ln -sf $emiscoef_IRland ${runDir}/NPOESS.IRland.EmisCoeff.bin
+   ln -sf $emiscoef_VISice ${runDir}/NPOESS.VISice.EmisCoeff.bin
+   ln -sf $emiscoef_VISland ${runDir}/NPOESS.VISland.EmisCoeff.bin
+   ln -sf $emiscoef_VISsnow ${runDir}/NPOESS.VISsnow.EmisCoeff.bin
+   ln -sf $emiscoef_VISwater ${runDir}/NPOESS.VISwater.EmisCoeff.bin
+   ln -sf $emiscoef_MWwater ${runDir}/FASTEM6.MWwater.EmisCoeff.bin
+   ln -sf $aercoef  ${runDir}/AerosolCoeff.bin
+   ln -sf $cldcoef  ${runDir}/CloudCoeff.bin
+
 }
 #-----------------------------------------------------------------------------#
 # Link/Copy info Files (satinfo, convinfo, ozinfo). These files are dependent
@@ -434,7 +465,7 @@ getSatBias ( ){
      echo -e "\033[31;1m #    1° ciclo de assimilação           #\033[m"
      echo -e "\033[31;1m #  Caso não seja o 1° ciclo verificar  #\033[m"
      echo -e "\033[31;1m #    porque não copiou o arquivo       #\033[m"
-     echo -e "\033[31;1m #            ${satbiasOu}         #\033[m"
+     echo -e "\033[31;1m #            ${satbiasOu}            #\033[m"
      echo -e "\033[31;1m #--------------------------------------#\033[m"
 
      if [ -e ${runDir}/${satbiasIn} ];then
@@ -525,6 +556,8 @@ subGSI() {
    onet=${8}
    cold=${9}
 
+   cp ${cldRadInfo} ${runDir}/$(basename ${cldRadInfo})
+
    if [ $cold == '.true.' ];then
       sed "s/#CENTER#/cptec/g" ${parmGSI}.cold > ${runDir}/$(basename ${parmGSI})
    else
@@ -556,8 +589,8 @@ case ${hpc_name} in
      cat << EOF > ${runDir}/gsi.qsb
 #!/bin/bash
 #SBATCH --nodes=${Nodes}
-#SBATCH --time=00:30:00
-#SBATCH --ntasks=${MPITasks}
+#SBATCH --time=${WallTime}
+#SBATCH --ntasks=${MTasks}
 #SBATCH --job-name=gsiAnl
 #SBATCH --mem=480G
 #SBATCH --cpus-per-task=1
@@ -570,15 +603,29 @@ ulimit -s unlimited
 # must use Stack Trace Analysis Tool (STAT)
 export ATP_ENABLED=1
 
-cd \${PBS_O_WORKDIR}
+cd ${runDir}
+pwd
 
-sbatch -n ${PEs} -N ${TasksPerNode} -d ${ThreadsPerMPITask} $(basename ${execGSI}) > gsiStdout_${andt}.${runTime}.log
+export OMP_NUM_THREADS=\$SLURM_CPUS_PER_TASK
+
+source ${home_gsi}/env.sh egeon ${compiler}
+
+module list
+
+echo  "STARTING AT `date` "
+
+ulimit -c unlimited
+ulimit -s unlimited
+
+export I_MPI_DEBUG=15
+
+mpirun -np \${SLURM_NTASKS} ./$(basename ${execGSI}) > gsiStdout_${andt}.${runTime}.log
 
 EOF
 
     cd ${runDir}
 
-    PID=$(sbatch -W block=true gsi.qsb; exit ${PIPESTATUS[0]})
+    PID=$(sbatch -W  gsi.qsb; exit ${PIPESTATUS[0]})
   ;;
   XC50)
      cat << EOF > ${runDir}/gsi.qsb
@@ -630,6 +677,51 @@ subBCAng ( ) {
 
   runTime=$(date '+runTime-%H:%M:%S')
 
+case ${hpc_name} in
+  egeon)
+     cat << EOF > ${runDir}/angupdate.qsb
+#!/bin/bash
+#SBATCH --nodes=${Nodes}
+#SBATCH --time=00:05:00
+#SBATCH --ntasks=${MTasks}
+#SBATCH --job-name=AngUpdate
+#SBATCH --mem=480G
+#SBATCH --cpus-per-task=1
+#SBATCH --partition=${Queue}
+
+ulimit -c unlimited
+ulimit -s unlimited
+
+# Enable ro debug after run gsi
+# must use Stack Trace Analysis Tool (STAT)
+export ATP_ENABLED=1
+
+cd ${runDir}
+pwd
+
+export OMP_NUM_THREADS=\$SLURM_CPUS_PER_TASK
+
+source ${home_gsi}/env.sh egeon ${compiler}
+
+module list
+
+echo  "STARTING AT `date` "
+
+ulimit -c unlimited
+ulimit -s unlimited
+
+export I_MPI_DEBUG=15
+
+mpirun -np \${SLURM_NTASKS} ./$(basename ${execBCAng}) > gsiAngUpdateStdout_${andt}.${runTime}.log
+
+EOF
+
+    cd ${runDir}
+
+    PID=$(sbatch -W  angupdate.qsb; exit ${PIPESTATUS[0]})
+  ;;
+  XC50)
+
 cat << EOF > ${runDir}/angupdate.qsb
 #!/bin/bash
 #PBS -o \${PBS_O_WORKDIR}/gsiAngUpdate.${andt}.${runTime}.out
@@ -653,6 +745,9 @@ EOF
 cd ${runDir}
 
 PID=$(qsub -W block=true angupdate.qsb; exit ${PIPESTATUS[0]})
+   ;;
+esac
+
 return $?
 
 }
@@ -697,7 +792,7 @@ mergeDiagFiles ( ) {
 
          find -P -O3 ${runDir} -maxdepth 1 -iname "pe*${type}*${loop}" -exec mv -f {} ${runDir}/diag \;
 
-         # link to be used by gsi_angleupdate.exe
+         # link to be used by global_angleupdate
          if [ ${loop} = ${miter} ];then
             ln -sf ${runDir}/diag_${type}_${loop}.${AnDate} ${runDir}/diag_${type}.${AnDate}
          fi
