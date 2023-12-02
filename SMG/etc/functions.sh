@@ -469,11 +469,7 @@ if [ ${compbam} -eq 1 ]; then
  
    export mkname=${compiler}_${SUB}
    if [ ${hpc_name} = "egeon" ];then
-      module purge
-      module load intel/2022.1.0
-      module load openmpi4/4.1.1
-      module load netcdf/4.7.4
-      module load netcdf-fortran/4.5.3
+      . /mnt/beegfs/jose.aravequia/libs_impi/env_libs_impi.sh
    fi
 #########################################
 # Compilacao pre/pos
