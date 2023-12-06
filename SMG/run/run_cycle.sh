@@ -247,8 +247,8 @@ if  [ ! -z ${BcLABELI} ] || [ ! -z ${BcLABELF} ] || [ ! -z ${BcCycles} ]; then
 
          echo ""
          echo -e "\033[34;1m > Executando o MCGA \033[m"
-
-         /bin/bash ${scripts_smg}/run_model.sh ${BcLABELI} ${FCT_DATE} ${modelPrefix} ${modelTrunc} ${modelNLevs} ${modelMPITasks} No
+                                                                                                                               ##  Pos-Proc (Yes/No)
+         /bin/bash ${scripts_smg}/run_model.sh ${BcLABELI} ${FCT_DATE} ${modelPrefix} ${modelTrunc} ${modelNLevs} ${modelMPITasks} Yes
          if [ $? -ne 0 ]; then echo -e "\033[31;1m > Falha no MCGA \033[m"; exit 1; fi
 
          echo ""

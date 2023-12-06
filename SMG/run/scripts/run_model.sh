@@ -50,8 +50,8 @@ fi
 if [ -z "${6}" ]
 then
   echo "NPROC is not set"
-  echo "setting to 480"
-  export NPROC=480
+  echo "setting to 64"
+  export NPROC=64
 else
   export NPROC=${6}
 fi
@@ -93,14 +93,16 @@ cd ${home_run_bam}
 #
 
 
-/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -s -n 2 -O
+/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -s -n chp -O
 STATUS=$?
 if [ ${STATUS} -ne 0 ];then
    exit ${STATUS}
 fi
 
-
 mv -f ${modelDataIn}/OZONSMT${LABELANL}S.grd.${postfix} ${modelDataIn}/OZON${PREFIX}${LABELANL}S.grd.${postfix}
+
+### DEBUG
+exit
 
 #
 # remove arquivos desnecessarios
@@ -119,19 +121,31 @@ cp -pfr ${gsiDataOut}/GANL${PREFIX}${LABELANL}S.unf.${MRES} ${modelDataIn}
 # Rodando os demais processos do pré e usando a análise do GSI
 #
 
-/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -p CPT -n 3
+/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -p CPT -n das
+
 STATUS=$?
 if [ ${STATUS} -ne 0 ];then
    exit ${STATUS}
 fi
 
 # Rodando o Modelo
+case ${hpc_name} in
+   egeon) echo "Call model Job on EGEON , path: "`pwd` 
+          /bin/bash runModel -das -v -np ${NPROC} -N 16 -d 8 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -p SMT -s sstwkl
+          STATUS=$?
+          if [ ${STATUS} -ne 0 ];then
+            exit ${STATUS}
+          fi
+   ;;
+   XC50) echo "Call model Job on XC50"
+         /bin/bash runModel -das -v -np ${NPROC} -N 10 -d 4 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -p SMT -s sstwkl
+          STATUS=$?
+          if [ ${STATUS} -ne 0 ];then
+            exit ${STATUS}
+          fi
+   ;;
+esac
 
-/bin/bash runModel -das -v -np ${NPROC} -N 10 -d 4 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i -3
-STATUS=$?
-if [ ${STATUS} -ne 0 ];then
-   exit ${STATUS}
-fi
 
 # Pos-processa as previsoes caso a variavel RUNPOS possua o valor Yes ou Y
 if [ ${RUNPOS} == "yes" -o ${RUNPOS} == "y" ]
@@ -141,7 +155,7 @@ then
   if [ ! -e ${subt_pos_bam}/exec/PostGrib ]
   then
 
-    cp -v ${home_pos_bam}/source/PostGrib ${subt_pos_bam}/exec
+    cp -v ${home_pos_bam}/exec/PostGrib ${subt_pos_bam}/exec
 
   fi
 
