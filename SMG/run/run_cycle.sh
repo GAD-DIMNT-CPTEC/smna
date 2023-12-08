@@ -63,7 +63,7 @@ modelMPITasks=480  # Number of Processors used by model
 modelFCT=09        # Time length of model forecasts
 gsiMPITasks=144    # Number of Processors used by gsi
 
-do_gsi=0 
+do_gsi=1 
 do_bam=1
 
 i=1
@@ -224,7 +224,7 @@ if  [ ! -z ${BcLABELI} ] || [ ! -z ${BcLABELF} ] || [ ! -z ${BcCycles} ]; then
       echo ""
       echo -e "\033[34;1m > Executando o GSI \033[m"
 
-      if [ ${do_gsi} -eq 1 ]; then
+      if [ ${do_gsi} -eq 1 ] ; then
 #      # Executa o GSI
          SECONDS=0
          /bin/bash ${scripts_smg}/runGSI -t ${modelTrunc} -T ${gsiTrunc} -l ${modelNLevs} -p ${modelPrefix} -np ${gsiMPITasks} -I ${BcLABELI} -bc ${BcCycles}
@@ -285,19 +285,20 @@ while [ ${LABELI} -le ${LABELF} ]; do
 #   echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
 #   echo -e "\033[34;1m > Fim do Observer \033[m"
 
-   echo ""
-   echo -e "\033[34;1m > Executando o GSI \033[m"
+   if [ ${do_gsi} -eq 1 ] ; then
+      echo ""
+      echo -e "\033[34;1m > Executando o GSI \033[m"
 
-   # Executa o GSI
-   SECONDS=0
-   /bin/bash ${scripts_smg}/runGSI -t ${modelTrunc} -T ${gsiTrunc} -l ${modelNLevs} -p ${modelPrefix} -np ${gsiMPITasks} -I ${LABELI}
-   if [ $? -ne 0 ]; then echo -e "\033[31;1m > Falha no GSI \033[m"; exit 1; fi
+      # Executa o GSI
+      SECONDS=0
+      /bin/bash ${scripts_smg}/runGSI -t ${modelTrunc} -T ${gsiTrunc} -l ${modelNLevs} -p ${modelPrefix} -np ${gsiMPITasks} -I ${LABELI}
+      if [ $? -ne 0 ]; then echo -e "\033[31;1m > Falha no GSI \033[m"; exit 1; fi
 
-   echo ""
-   duration=$SECONDS
-   echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
-   echo -e "\033[34;1m > Fim do GSI \033[m"
-
+      echo ""
+      duration=$SECONDS
+      echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
+      echo -e "\033[34;1m > Fim do GSI \033[m"
+   fi
 #   # Executa o BLSDAS
 #   echo ""
 #   echo -e "\033[34;1m > Executando o BLSDAS \033[m"
@@ -311,21 +312,21 @@ while [ ${LABELI} -le ${LABELF} ]; do
 #   echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
 #   echo -e "\033[34;1m > Fim do GSI \033[m"
 
+   if [ ${do_bam} -eq 1 ] ; then
+      # Executa o MCGA com as analises do GSI
+      SECONDS=0
+      ### FCT_DATE=$(${inctime} ${LABELI} +${modelFCT}h %y4%m2%d2%h2)
+      FCT_DATE=`date -u +%Y%m%d%H -d "${LABELI:0:8} ${LABELI:8:2} +${modelFCT} hours" `
+      echo ""
+      echo -e "\033[34;1m > Executando o MCGA \033[m"
+      /bin/bash ${scripts_smg}/run_model.sh ${LABELI} ${FCT_DATE} ${modelPrefix} ${modelTrunc} ${modelNLevs} ${modelMPITasks} No
+      if [ $? -ne 0 ]; then echo -e "\033[31;1m > Falha no modelo :\033[m \033[33;1mVerifique PRE, BAM ou POS\033[m"; exit 1; fi
 
-   # Executa o MCGA com as analises do GSI
-   SECONDS=0
-   ### FCT_DATE=$(${inctime} ${LABELI} +${modelFCT}h %y4%m2%d2%h2)
-   FCT_DATE=`date -u +%Y%m%d%H -d "${LABELI:0:8} ${LABELI:8:2} +${modelFCT} hours" `
-   echo ""
-   echo -e "\033[34;1m > Executando o MCGA \033[m"
-   /bin/bash ${scripts_smg}/run_model.sh ${LABELI} ${FCT_DATE} ${modelPrefix} ${modelTrunc} ${modelNLevs} ${modelMPITasks} No
-   if [ $? -ne 0 ]; then echo -e "\033[31;1m > Falha no modelo :\033[m \033[33;1mVerifique PRE, BAM ou POS\033[m"; exit 1; fi
-
-   echo ""
-   duration=$SECONDS
-   echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
-   echo -e "\033[34;1m > Fim do MCGA \033[m"
-
+      echo ""
+      duration=$SECONDS
+      echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
+      echo -e "\033[34;1m > Fim do MCGA \033[m"
+   fi
    ### LABELI=$(${inctime} ${LABELI} +6h %y4%m2%d2%h2)
    LABELI=`date -u +%Y%m%d%H -d "${LABELI:0:8} ${LABELI:8:2} +6 hours" ` 
 

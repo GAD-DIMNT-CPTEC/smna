@@ -77,7 +77,7 @@ constants ( ) {
 
     egeon)
         export MaxCoresPerNode=120
-        export MTasks=80                     # Number of Processors
+        export MTasks=120                     # Number of Processors
         export ThreadsPerMPITask=1             # Number of cores hosting OpenMP threads
         export TasksPerNode=$((${MaxCoresPerNode}/${ThreadsPerMPITask})) # Number of Processors used by each MPI tasks
         export PEs=$((${MTasks}/${ThreadsPerMPITask}))
