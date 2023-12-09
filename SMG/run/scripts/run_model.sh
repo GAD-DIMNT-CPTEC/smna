@@ -3,6 +3,39 @@
 # Descomentar para debugar
 #set -o xtrace
 
+### Define hpc_name below is needed because in some cases (ex.: First Run),
+### this script may be called from the command line.
+### 
+lognode=`cat /proc/sys/kernel/hostname | cut  -b 1-6`
+
+case $lognode in
+
+  clogin)
+    STR=`uname -a`
+    SUB='cray'
+    if [[ "$STR" == *"$SUB"* ]]; then
+      echo -n "This will run on cray XC50 ..."
+      export hpc_name="XC50"
+    fi
+    ;;
+
+  headno)
+    STR=`uname -a`
+    SUB='egeon'
+    if [[ "$STR" == *"$SUB"* ]]; then
+      echo -n "This will run on EGEON Cluster ..."
+      export hpc_name="egeon"
+    fi
+    ;;
+
+  *)
+    mach=`cat /proc/sys/kernel/hostname`
+    echo -n "The configurations for "$mach" is not defined yet !"
+    echo -n "1) Add the machine to the defined systems in etc/mach ; and"
+    echo -n "2) add an option for it in the function copy_fixed_files in etc/functions"
+    exit
+    ;;
+esac
 
 # Carregando as variaveis do sistema
 source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
@@ -90,19 +123,17 @@ cd ${home_run_bam}
 
 #
 # rodando o somente o Chopping do pré para pegar o arquivo de ozônio
-#
-
+# saida gerada no bam/model/datain/ 
 
 /bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -s -n chp -O
 STATUS=$?
+echo "1st call to runPre. Status: "${STATUS}
+
 if [ ${STATUS} -ne 0 ];then
    exit ${STATUS}
 fi
 
-mv -f ${modelDataIn}/OZONSMT${LABELANL}S.grd.${postfix} ${modelDataIn}/OZON${PREFIX}${LABELANL}S.grd.${postfix}
-
-### DEBUG
-exit
+cp -f ${modelDataIn}/OZONSMT${LABELANL}S.grd.${postfix} ${modelDataIn}/OZON${PREFIX}${LABELANL}S.grd.${postfix}
 
 #
 # remove arquivos desnecessarios
@@ -120,25 +151,27 @@ cp -pfr ${gsiDataOut}/GANL${PREFIX}${LABELANL}S.unf.${MRES} ${modelDataIn}
 #
 # Rodando os demais processos do pré e usando a análise do GSI
 #
+# /bin/bash runPre -v -t 299 -l 64 -I ${LABELANL}  -n 0 -p SMT -s -O -T -G -Gp gblav -Gt Grid
 
 /bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -p CPT -n das
 
 STATUS=$?
+echo "2nd call to runPre. Status: "${STATUS}
 if [ ${STATUS} -ne 0 ];then
-   exit ${STATUS}
+  exit ${STATUS}
 fi
 
 # Rodando o Modelo
 case ${hpc_name} in
    egeon) echo "Call model Job on EGEON , path: "`pwd` 
-          /bin/bash runModel -das -v -np ${NPROC} -N 16 -d 8 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -p SMT -s sstwkl
+          /bin/bash runModel -das -v -np ${NPROC} -N 16 -d 8 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -s sstwkl
           STATUS=$?
           if [ ${STATUS} -ne 0 ];then
             exit ${STATUS}
           fi
    ;;
    XC50) echo "Call model Job on XC50"
-         /bin/bash runModel -das -v -np ${NPROC} -N 10 -d 4 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -p SMT -s sstwkl
+         /bin/bash runModel -das -v -np ${NPROC} -N 10 -d 4 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -s sstwkl
           STATUS=$?
           if [ ${STATUS} -ne 0 ];then
             exit ${STATUS}

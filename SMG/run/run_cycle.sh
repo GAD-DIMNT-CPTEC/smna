@@ -37,10 +37,7 @@
 #BOC
 
 #-----------------------------------------------------------------------------#
-# return a subword of a string
-#-----------------------------------------------------------------------------#
 # Carregando as variaveis do sistema
-
 cd ..
 source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
 cd run
@@ -59,13 +56,14 @@ usage() {
    sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' ${BASH_SOURCE}
 }
 
-modelMPITasks=480  # Number of Processors used by model
+modelMPITasks=64  # Number of Processors used by model
 modelFCT=09        # Time length of model forecasts
 gsiMPITasks=144    # Number of Processors used by gsi
 
 do_gsi=1 
 do_bam=1
 
+echo "Now on line $LINENO !"
 i=1
 flag=0
 while true; do
@@ -107,7 +105,7 @@ while true; do
    if [ ${flag} -eq 1 ]; then break; fi
 
 done
-
+echo "Now on line $LINENO !"
 # Truncamento do background
 if [ -z ${modelTrunc} ]; then
    echo -e "\e[31;1m >> Erro: \e[m\e[33;1m Truncamento do modelo não foi passado\e[m"
@@ -248,7 +246,8 @@ if  [ ! -z ${BcLABELI} ] || [ ! -z ${BcLABELF} ] || [ ! -z ${BcCycles} ]; then
          echo ""
          echo -e "\033[34;1m > Executando o MCGA \033[m"
                                                                                                                                ##  Pos-Proc (Yes/No)
-         /bin/bash ${scripts_smg}/run_model.sh ${BcLABELI} ${FCT_DATE} ${modelPrefix} ${modelTrunc} ${modelNLevs} ${modelMPITasks} Yes
+         echo "/bin/bash ${scripts_smg}/run_model.sh ${BcLABELI} ${FCT_DATE} ${modelPrefix} ${modelTrunc} ${modelNLevs} ${modelMPITasks} No"
+         /bin/bash ${scripts_smg}/run_model.sh ${BcLABELI} ${FCT_DATE} ${modelPrefix} ${modelTrunc} ${modelNLevs} ${modelMPITasks} No
          if [ $? -ne 0 ]; then echo -e "\033[31;1m > Falha no MCGA \033[m"; exit 1; fi
 
          echo ""
@@ -258,7 +257,6 @@ if  [ ! -z ${BcLABELI} ] || [ ! -z ${BcLABELF} ] || [ ! -z ${BcCycles} ]; then
       fi
       ### BcLABELI=$(${inctime} ${BcLABELI} +6h %y4%m2%d2%h2)
       BcLABELI=`date -u +%Y%m%d%H -d "${BcLABELI:0:8} ${BcLABELI:8:2} +6 hours" `
-
 
    done
 

@@ -296,7 +296,7 @@ linkObs ( ){
          filemask=${obsPath[$i]}/$(grep -iw ${name} ${obsGSI} | awk '{print $1}'; exit ${PIPESTATUS[0]} )
          if [ $? -eq 0 ];then
             file=$(${inctime} ${runDate} +0h ${filemask})
-            echo "Is the $file "`ls -l $file`
+            # echo "Is the $file "`ls -l $file`
             if [ -e ${file} ];then
                cp -pfr  ${file} ${runDir}/${name} 2> /dev/null
 
@@ -322,8 +322,8 @@ linkObs ( ){
             fi
          else
             echo -e " "
-            echo -e "\033[31;1m Error trying link\033[m\033[34;1m ${name}\033[m\033[31;1m observation file \033[m"
-            echo -e "\033[31;1m Observation not found in\033[m\033[34;1m ${obsGSI}\033[m\033[31;1m file ! \033[m"
+            echo -e "\033[31;1m Dont seach for \033[m\033[34;1m ${name}\033[m\033[31;1m observation file \033[m"
+            echo -e "\033[31;1m Observation not included in\033[m\033[34;1m ${obsGSI}\033[m\033[31;1m file ! \033[m"
             echo -e " "
          fi
          i=$((i+1))

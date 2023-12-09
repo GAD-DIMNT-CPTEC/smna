@@ -58,10 +58,6 @@ case $lognode in
     SUB='egeon'
     if [[ "$STR" == *"$SUB"* ]]; then
       echo -n "This will run on EGEON Cluster ..."
-      module purge
-      module load ohpc
-      module swap gnu9 intel
-      export FC=ifort
       echo "It's there."
       export hpc_name="egeon"
     fi
