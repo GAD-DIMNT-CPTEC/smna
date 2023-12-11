@@ -9,6 +9,9 @@ dir_now=`pwd`
 cd $SMG_ROOT
 echo pwd
 source ${SMG_ROOT}/config_smg.ksh vars_export
+
+source ${SMG_ROOT}/run/smg_functions.sh     ## has inctime function wrote in bash script
+
 cd $dir_now
 # Lendo parametros de entrada
 if [ -z "${1}" ]
@@ -17,10 +20,10 @@ then
   exit 3
 else
   export LABELANL=${1}
-  ### export LABELFGS=`${inctime} ${LABELANL} -6h %y4%m2%d2%h2`
-  export LABELFGS=`date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} -6 hours" `
-  ### export LABELFCT=`${inctime} ${LABELANL} +6h %y4%m2%d2%h2`
-  export LABELFCT=`date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} +6 hours" `
+export LABELFGS=`${inctime} ${LABELANL} -6h %y4%m2%d2%h2`
+  ###   export LABELFGS=`date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} -6 hours" `
+export LABELFCT=`${inctime} ${LABELANL} +6h %y4%m2%d2%h2`
+  ###   export LABELFCT=`date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} +6 hours" `
 fi
 if [ -z "${2}" ]
 then
@@ -143,12 +146,12 @@ mm1=`echo ${LABELANL}|cut -c 5-6`
 dd1=`echo ${LABELANL}|cut -c 7-8`
 
 yymmdd=${LABELANL:2:${#LABELANL}}
-### hm3=`${inctime} ${LABELANL} -3h %h2` #15
-hm3=`date -u +%H -d "${LABELANL:0:8} ${LABELANL:8:2} -3 hours" `
-## hh0=`${inctime} ${LABELANL} +0h %h2` #18
-hh0=${LABELANL:8:2} 
-### hp3=`${inctime} ${LABELANL} +3h %h2` #21
-hp3=`date -u +%H -d "${LABELANL:0:8} ${LABELANL:8:2} +3 hours" `
+hm3=`${inctime} ${LABELANL} -3h %h2` #15
+## hm3=`date -u +%H -d "${LABELANL:0:8} ${LABELANL:8:2} -3 hours" `
+hh0=`${inctime} ${LABELANL} +0h %h2` #18
+## hh0=${LABELANL:8:2} 
+hp3=`${inctime} ${LABELANL} +3h %h2` #21
+## hp3=`date -u +%H -d "${LABELANL:0:8} ${LABELANL:8:2} +3 hours" `
 expid=cptec
 bkg=bkg
 
@@ -160,7 +163,7 @@ ObsDir=${work_gsi_datain_obs}
 
 cat << EOF > ${RunGSI}/nmlobs.gsi
 #
-#Simple namelist for GSI observations selection
+#Simple namelist for GSI observations selection 
 #
 
 FLAG                  FILENAME                                     ALIAS
@@ -239,8 +242,8 @@ echo ""
 
 for inc in $(seq -3 3 3); do
    TIME=$(printf "%02g" $((inc+6)))
-   ### LABEL=$(${inctime} ${LABELANL} ${inc}h %y4%m2%d2%h2)
-   LABEL=`date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} +${inc} hours" `
+   LABEL=$(${inctime} ${LABELANL} ${inc}h %y4%m2%d2%h2)
+   ### LABEL=`date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} +${inc} hours" `
    FFCT=GFCT${PREFIX}${LABELFGS}${LABEL}F.fct.${MRESB}
    FDIR=GFCT${PREFIX}${LABELFGS}${LABEL}F.dir.${MRESB}
 
@@ -455,7 +458,7 @@ for loop in $loops; do
             amsua_aqua imgr_g08 imgr_g11 imgr_g12 ssmi_f13 ssmi_f14 imgr_g14 imgr_g15 ssmi_f15 hirs4_n18 hirs4_metop-a amsua_n18
             amsua_metop-a mhs_n18 mhs_metop-a amsre_low_aqua amsre_mid_aqua amsre_hig_aqua ssmis_las_f16 ssmis_uas_f16 ssmis_img_f16
             ssmis_env_f16 ssmis_las_f17 ssmis_uas_f17 ssmis_img_f17 ssmis_env_f17 ssmis_las_f18 ssmis_uas_f18 ssmis_img_f18 ssmis_env_f18
-            ssmis_las_f19 ssmis_uas_f19 ssmis_img_f19 ssmis_env_f19 ssmis_las_f20 ssmis_uas_f20 ssmis_img_f20 ssmis_env_f20 iasi_metop-a
+            ssmis_las_f19 ssmis_uas_f19 ssmis_img_f19 ssmis_env_f19 ssmis_las_f20 ssmis_uas_f20 ssmis_img_f20 ssmis_env_f20 iasi_metop-a 
             hirs4_n19 amsua_n19 mhs_n19 seviri_m08 seviri_m09 seviri_m10 cris_npp atms_npp hirs4_metop-b amsua_metop-b mhs_metop-b iasi_metop-b"
    for type in $listall; do
       count=0
@@ -485,10 +488,10 @@ cp -pfr pe* ${save}/diag
 cd ${save}/diag
 ln -s ../gsiparm.anl .
 echo "      Run gsidiags ${yyyymmdd} ${hh0}0000 cptec set"
-${scripts_smg}/gsi_scripts/gsidiags ${yyyymmdd} ${hh0}0000 cptec set > gsidiags.log 2>&1
+${scripts_smg}/gsi_scripts/gsidiags ${yyyymmdd} ${hh0}0000 cptec set > gsidiags.log 2>&1 
 cd ..
 
-# Remover os arquivos de BKG do diretorio /scratchin/grupos/assim_dados/home/gdad/GSI/Ana/Bkg/cptec e remover as Observacoes
+# Remover os arquivos de BKG do diretorio /scratchin/grupos/assim_dados/home/gdad/GSI/Ana/Bkg/cptec e remover as Observacoes 
 #rm -fr ${RunGSI}/*
 
 ##################################################################################################################
@@ -514,7 +517,7 @@ cd ${workdirSatAng}
 #
 ls -l ${RunGSI}/diag_* > listpe
 #  Collect diagnostic files for obs types (groups) below
-  listall="hirs2_n14 msu_n14 sndr_g08 sndr_g11 sndr_g12 sndr_g13 sndr_g08_prep sndr_g11_prep
+  listall="hirs2_n14 msu_n14 sndr_g08 sndr_g11 sndr_g12 sndr_g13 sndr_g08_prep sndr_g11_prep 
            sndr_g12_prep sndr_g13_prep sndrd1_g11 sndrd2_g11 sndrd3_g11 sndrd4_g11 sndrd1_g12
            sndrd2_g12 sndrd3_g12 sndrd4_g12 sndrd1_g13 sndrd2_g13 sndrd3_g13 sndrd4_g13 sndrd1_g14
            sndrd2_g14 sndrd3_g14 sndrd4_g14 sndrd1_g15 sndrd2_g15 sndrd3_g15 sndrd4_g15 hirs3_n15

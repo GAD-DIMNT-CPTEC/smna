@@ -39,7 +39,7 @@ esac
 
 # Carregando as variaveis do sistema
 source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
-
+source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/run/smg_functions.sh    ## has inctime function wrote in bash script
 # carregando funcoes do pre-processamento
 
 source ${home_run_bam}/runPre.func
@@ -47,35 +47,35 @@ source ${home_run_bam}/runPre.func
 # Verificando argumentos de entrada
 if [ -z "${1}" ]
 then
-  echo "LABELANL is not set"
+  echo "LABELANL is not set" 
   exit 3
 else
   export LABELANL=${1}
 fi
 if [ -z "${2}" ]
 then
-  echo "LABELFCT is not set"
+  echo "LABELFCT is not set" 
   exit 3
 else
-  export LABELFCT=${2}
+  export LABELFCT=${2} 
 fi
 if [ -z "${3}" ]
 then
-  echo "PREFIX is not set"
+  echo "PREFIX is not set" 
   exit 3
 else
   export PREFIX=${3}
 fi
 if [ -z "${4}" ]
 then
-  echo "TRC is not set"
+  echo "TRC is not set" 
   exit 3
 else
   export TRC=${4}
 fi
 if [ -z "${5}" ]
 then
-  echo "NLV is not set"
+  echo "NLV is not set" 
   exit 3
 else
   export NLV=${5}
@@ -83,17 +83,32 @@ fi
 if [ -z "${6}" ]
 then
   echo "NPROC is not set"
-  echo "setting to 64"
-  export NPROC=64
+  case ${hpc_name} in
+     	egeon)  echo "setting to 64"
+             	export NPROC=64  # ntasks
+	;;
+  	XC50)  	echo "setting to 480"
+  		export NPROC=480             	
+	;;
+  esac
 else
   export NPROC=${6}
 fi
 if [ "$#" == 7 ]
-then
-  export RUNPOS=$(echo ${7} | tr [:upper:] [:lower:])
-else
+then 
+  export RUNPOS=$(echo ${7} | tr [:upper:] [:lower:])   
+else 
   export RUNPOS="yes"
 fi
+
+case ${hpc_name} in
+   egeon) tasks_per_node=16
+	        cpus_per_task=8
+	;;
+   XC50)  tasks_per_node=10
+	        cpus_per_task=4
+   ;;
+esac
 
 getBAMSize ${TRC}
 export postfix=$(printf "G%5.5dL%3.3d \n" $JM $NLV)
@@ -126,9 +141,9 @@ cd ${home_run_bam}
 # saida gerada no bam/model/datain/ 
 
 /bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -s -n chp -O
+
 STATUS=$?
 echo "1st call to runPre. Status: "${STATUS}
-
 if [ ${STATUS} -ne 0 ];then
    exit ${STATUS}
 fi
@@ -154,30 +169,16 @@ cp -pfr ${gsiDataOut}/GANL${PREFIX}${LABELANL}S.unf.${MRES} ${modelDataIn}
 # /bin/bash runPre -v -t 299 -l 64 -I ${LABELANL}  -n 0 -p SMT -s -O -T -G -Gp gblav -Gt Grid
 
 /bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -p CPT -n das
-
 STATUS=$?
 echo "2nd call to runPre. Status: "${STATUS}
 if [ ${STATUS} -ne 0 ];then
-  exit ${STATUS}
+   exit ${STATUS}
 fi
 
 # Rodando o Modelo
-case ${hpc_name} in
-   egeon) echo "Call model Job on EGEON , path: "`pwd` 
-          /bin/bash runModel -das -v -np ${NPROC} -N 16 -d 8 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -s sstwkl
-          STATUS=$?
-          if [ ${STATUS} -ne 0 ];then
-            exit ${STATUS}
-          fi
-   ;;
-   XC50) echo "Call model Job on XC50"
-         /bin/bash runModel -das -v -np ${NPROC} -N 10 -d 4 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -s sstwkl
-          STATUS=$?
-          if [ ${STATUS} -ne 0 ];then
-            exit ${STATUS}
-          fi
-   ;;
-esac
+/bin/bash runModel -das -v -np ${NPROC} -N ${tasks_per_node} -d ${cpus_per_task} \
+                   -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} \
+                   -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -s sstwkl
 
 
 # Pos-processa as previsoes caso a variavel RUNPOS possua o valor Yes ou Y

@@ -63,7 +63,6 @@ gsiMPITasks=144    # Number of Processors used by gsi
 do_gsi=1 
 do_bam=1
 
-echo "Now on line $LINENO !"
 i=1
 flag=0
 while true; do
@@ -105,7 +104,7 @@ while true; do
    if [ ${flag} -eq 1 ]; then break; fi
 
 done
-echo "Now on line $LINENO !"
+
 # Truncamento do background
 if [ -z ${modelTrunc} ]; then
    echo -e "\e[31;1m >> Erro: \e[m\e[33;1m Truncamento do modelo não foi passado\e[m"
@@ -225,6 +224,7 @@ if  [ ! -z ${BcLABELI} ] || [ ! -z ${BcLABELF} ] || [ ! -z ${BcCycles} ]; then
       if [ ${do_gsi} -eq 1 ] ; then
 #      # Executa o GSI
          SECONDS=0
+         echo /bin/bash ${scripts_smg}/runGSI -t ${modelTrunc} -T ${gsiTrunc} -l ${modelNLevs} -p ${modelPrefix} -np ${gsiMPITasks} -I ${BcLABELI} -bc ${BcCycles}
          /bin/bash ${scripts_smg}/runGSI -t ${modelTrunc} -T ${gsiTrunc} -l ${modelNLevs} -p ${modelPrefix} -np ${gsiMPITasks} -I ${BcLABELI} -bc ${BcCycles}
          if [ $? -ne 0 ]; then echo -e "\033[31;1m > Falha no GSI \033[m"; exit 1; fi
 

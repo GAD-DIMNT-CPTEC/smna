@@ -279,25 +279,34 @@ linkObs ( ){
    # add bufr path in EGEON
    local obsDir=${ncep_ext}/${runDate:0:4}/${runDate:4:2}/${runDate:6:2}
    local obsDir=${obsDir}:${ncep_ext}/${runDate:0:8}00/dataout/NCEP
-   local obsDir=${obsDir}:/lustre_xc50/ioper/data/external/ASSIMDADOS
-   local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/${runDate}
-   local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/obs/${runDate:0:6}/${runDate:6:4}
+#   local obsDir=${obsDir}:/lustre_xc50/ioper/data/external/ASSIMDADOS
+#   local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/${runDate}
+#   local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/obs/${runDate:0:6}/${runDate:6:4}
 
    local IFS=":"; read -a obsPath < <(echo "${obsDir}")
    local nPaths=${#obsPath[@]}
-   # echo "@linkObs : obsPath : " $obsPath
+   echo "@linkObs : obsPath : " $obsPath
+   echo "obsGSI : "${obsGSI}
    local IFS=" "
    local names=$(sed -n '/OBS_INPUT::/,/::/{/OBS_INPUT/d;/::/d;/^!/d;p}' ${parmGSI} | awk '{print $1}' | sort -u | xargs)
-   # echo "parmGSI : names : " $names
+   echo "parmGSI : names : " $names
    count=0
    for name in ${names};do
       i=0
+      IsObsList=$(grep -iw ${name} ${obsGSI} | wc -l)
+      if [ $IsObsList -eq 0 ]; then
+         echo -e " " 
+         echo $name" não está na lista de "$obsGSI;
+         echo -e " "
+         continue                                     # skip to the next name in $names
+      fi
       while [ $i -le $((nPaths-1)) ];do
          filemask=${obsPath[$i]}/$(grep -iw ${name} ${obsGSI} | awk '{print $1}'; exit ${PIPESTATUS[0]} )
          if [ $? -eq 0 ];then
             file=$(${inctime} ${runDate} +0h ${filemask})
-            # echo "Is the $file "`ls -l $file`
-            if [ -e ${file} ];then
+            ## change -e to -f avoid that cases when grep return empty and the if test the whole obsPath 
+            #  which causes a entire directory copy to $rundir/$name ....
+            if [ -f ${file} ];then
                cp -pfr  ${file} ${runDir}/${name} 2> /dev/null
 
                if [ $? -eq 0 ];then
