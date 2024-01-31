@@ -177,9 +177,9 @@ cd ${home_run_bam}
 
 # Rodando o Modelo  
 # Obs.: This script is for long run, e.g. 240 h, when data assimilition cycle was already done
-#       then, here "runModel" is called without -das option
+#       then, here "runModel" is called with -f (forecast only mode)
 
-/bin/bash runModel -v -np ${NPROC} -N ${tasks_per_node} -d ${cpus_per_task} \
+/bin/bash runModel -f -das -v -np ${NPROC} -N ${tasks_per_node} -d ${cpus_per_task} \
                    -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} \
                    -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -s sstwkl
 
