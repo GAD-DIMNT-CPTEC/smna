@@ -76,7 +76,7 @@ constants ( ) {
   case ${hpc_name} in
 
     egeon)
-        export MaxCoresPerNode=120
+        export MaxCoresPerNode=60
         export MTasks=120                     # Number of Processors
         export ThreadsPerMPITask=1             # Number of cores hosting OpenMP threads
         export TasksPerNode=$((${MaxCoresPerNode}/${ThreadsPerMPITask})) # Number of Processors used by each MPI tasks
@@ -593,6 +593,7 @@ subGSI() {
      echo -e "\e[31;1m >> Erro: \e[m\e[33;1m Redefina Numero de Processos MPI e openMP\e[m"
      exit -1
   fi
+ana_date=${andt:4:6}
 case ${hpc_name} in
   egeon)
      cat << EOF > ${runDir}/gsi.qsb
@@ -600,7 +601,7 @@ case ${hpc_name} in
 #SBATCH --nodes=${Nodes}
 #SBATCH --time=${WallTime}
 #SBATCH --ntasks=${MTasks}
-#SBATCH --job-name=gsiAnl
+#SBATCH --job-name=An${ana_date}
 #SBATCH --mem=480G
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=${Queue}
