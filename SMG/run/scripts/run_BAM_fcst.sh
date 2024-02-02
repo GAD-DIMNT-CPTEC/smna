@@ -181,7 +181,7 @@ cd ${home_run_bam}
 
 /bin/bash runModel -f -das -v -np ${NPROC} -N ${tasks_per_node} -d ${cpus_per_task} \
                    -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} \
-                   -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -s sstwkl
+                   -p ${PREFIX} -s sstwkl -ts 6 -r -tr 6 -i 2 -s sstwkl
 
 # Pos-processa as previsoes caso a variavel RUNPOS possua o valor Yes ou Y
 if [ ${RUNPOS} == "yes" -o ${RUNPOS} == "y" ]
@@ -196,13 +196,13 @@ then
   fi
 
   cd ${home_run_bam}
-  echo   "./runPos -np 120 -N 120 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1"
-  /bin/bash ./runPos -np 120 -N 120 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} 
+  echo   "./runPos -np 1 -N 1 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1"
+  /bin/bash ./runPos -np 1 -N 1 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} 
   ## > /dev/null 2>&1
-  STATUS=$?
-   if [ ${STATUS} -ne 0 ];then
-      exit ${STATUS}
-   fi
+  # STATUS=$?
+  # if [ ${STATUS} -ne 0 ];then
+  #    exit ${STATUS}
+  # fi
 
 fi
 

@@ -606,9 +606,6 @@ case ${hpc_name} in
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=${Queue}
 
-ulimit -c unlimited
-ulimit -s unlimited
-
 # Enable ro debug after run gsi
 # must use Stack Trace Analysis Tool (STAT)
 export ATP_ENABLED=1
