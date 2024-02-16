@@ -194,8 +194,8 @@ then
   fi
 
   cd ${home_run_bam}
-  echo   "./runPos -np 120 -N 12 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1"
-  /bin/bash runPos -np 120 -N 12 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1
+  echo   "./runPos -np 15 -N 3 -d 8 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1"
+  /bin/bash runPos -np 15 -N 3 -d 8 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1
   STATUS=$?
    if [ ${STATUS} -ne 0 ];then
       exit ${STATUS}

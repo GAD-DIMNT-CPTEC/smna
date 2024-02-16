@@ -181,7 +181,9 @@ cd ${home_run_bam}
 
 /bin/bash runModel -f -das -v -np ${NPROC} -N ${tasks_per_node} -d ${cpus_per_task} \
                    -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} \
-                   -p ${PREFIX} -s sstwkl -ts 6 -r -tr 6 -i 2 -s sstwkl
+                   -p ${PREFIX} -s sstwkl -ts 6 -tr 6 -i 2 -s sstwkl
+
+                                               ## -r  removed to avoid writing restart files
 
 # Pos-processa as previsoes caso a variavel RUNPOS possua o valor Yes ou Y
 if [ ${RUNPOS} == "yes" -o ${RUNPOS} == "y" ]
@@ -196,8 +198,15 @@ then
   fi
 
   cd ${home_run_bam}
-  echo   "./runPos -np 1 -N 1 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1"
-  /bin/bash ./runPos -np 1 -N 1 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} 
+  
+## NOTES FOR PostGrib 
+## @egeon: ntasks-per-node  must be <=6 (6, 4), 8 or more creates some corrupted grib files
+## @egeon: ThreadsPerMPITask do not seems to speed the processing time  
+
+  ###       -np  (MPI Tasks) ; -N (tasks_per node)  ; -d (ThreadsperMPItasks)
+
+  echo   "./runPos -np 6 -N 6 -d 8 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1"
+  /bin/bash ./runPos -np 6 -N 6 -d 8 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} 
   ## > /dev/null 2>&1
   # STATUS=$?
   # if [ ${STATUS} -ne 0 ];then

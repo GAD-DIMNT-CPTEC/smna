@@ -82,7 +82,7 @@ constants ( ) {
         export TasksPerNode=$((${MaxCoresPerNode}/${ThreadsPerMPITask})) # Number of Processors used by each MPI tasks
         export PEs=$((${MTasks}/${ThreadsPerMPITask}))
         export Nodes=$(((${MTasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
-        export Queue=PESQ2
+        export Queue=PESQ1
         export WallTime=01:00:00
         export BcCycles=0
 

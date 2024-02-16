@@ -317,9 +317,12 @@ while [ ${LABELI} -le ${LABELF} ]; do
       FCT_DATE=`date -u +%Y%m%d%H -d "${LABELI:0:8} ${LABELI:8:2} +${modelFCT} hours" `
       echo ""
       echo -e "\033[34;1m > Executando o MCGA \033[m"
+      echo  "/bin/bash ${scripts_smg}/run_model.sh ${LABELI} ${FCT_DATE} ${modelPrefix} ${modelTrunc} ${modelNLevs} ${modelMPITasks} No"
       /bin/bash ${scripts_smg}/run_model.sh ${LABELI} ${FCT_DATE} ${modelPrefix} ${modelTrunc} ${modelNLevs} ${modelMPITasks} No
-      if [ $? -ne 0 ]; then echo -e "\033[31;1m > Falha no modelo :\033[m \033[33;1mVerifique PRE, BAM ou POS\033[m"; exit 1; fi
-
+      if [ $? -ne 0 ]; then 
+          echo -e "\033[31;1m > Falha no modelo :\033[m \033[33;1mVerifique PRE, BAM ou POS\033[m" 
+          exit 1 
+      fi
       echo ""
       duration=$SECONDS
       echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
