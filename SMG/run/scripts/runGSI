@@ -78,7 +78,7 @@ JMax=$((JMax+2)) # This is for GSI horizontal interpolation
 #
 # define running diretory. Here we will put all
 # files necessary to run GSI for AnlDate
-RunDir=${subt_run_gsi}
+RunDir=${subt_run_gsi}/${AnlDate}
 if [ -e ${RunDir} ];then
    rm -fr ${RunDir}/*
 else
