@@ -84,7 +84,7 @@ constants ( ) {
         export Nodes=$(((${MTasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
         export Queue=PESQ2
         export WallTime=01:00:00
-        export BcCycles=0
+        export BcCycles=1
 
         # MPI environmental variables
         export MPICH_UNEX_BUFFER_SIZE=100000000
@@ -101,7 +101,7 @@ constants ( ) {
        export Nodes=$(((${MPITasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
        export Queue=pesq
        export WallTime=01:00:00
-       export BcCycles=0
+       export BcCycles=1
 
        # MPI environmental variables
        export MPICH_UNEX_BUFFER_SIZE=100000000
