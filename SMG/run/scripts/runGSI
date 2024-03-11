@@ -196,7 +196,7 @@ FixedFiles ${AnlTrunc} ${AnlNLevs} ${RunDir}
 
 # Get Satellite bias files
 getSatBias ${AnlDate} ${BkgDate} ${RunDir} ${subt_gsi_dataout}
-BcCycles=$?
+##  BcCycles=$?  ### Altera BcCycles para 1 e impede o procedimento de warmup dos coeficientes do Bias 
 #------------------------------------------------------------#
 # running GSI at tupa
 #
@@ -205,6 +205,7 @@ BcCycles=$?
 #   BcCycles=$((${BcCycles}-1))
 #fi
 
+echo " Entrando no ciclo de BcCycles para "$(seq 0 ${BcCycles} )
 for cycle in $(seq 0 ${BcCycles} ); do
 
    if [ ${BcCycles} -gt 0 ];then
@@ -224,7 +225,8 @@ for cycle in $(seq 0 ${BcCycles} ); do
 
    fi
 
-   if [ ${cycle} -eq 0 -a ${BcCycles} -gt 0 ];then
+#   if [ ${cycle} -eq 0 -a ${BcCycles} -gt 0 ];then
+   if [ ${BcCycles} -gt 0 ];then
       subGSI ${RunDir} ${IMax} ${JMax} ${KMax} ${AnlTrunc} ${BkgTrunc} ${AnlDate} ${ObsMod} .true.
    else
       subGSI ${RunDir} ${IMax} ${JMax} ${KMax} ${AnlTrunc} ${BkgTrunc} ${AnlDate} ${ObsMod} .false.
@@ -239,9 +241,17 @@ for cycle in $(seq 0 ${BcCycles} ); do
 
    mergeDiagFiles ${RunDir} ${AnlDate}
 
+## Create links for diag satellite files 
+   for diagfn in diag_amsua_* 
+   do 
+      lennm=${#diagfn} 
+      lenbase=$(( lennm -14 ))  # length of file name without date
+      ln $diagfn ${diagfn:0:$lenbase}
+   done
+
 #   echo -ne "\033[34;1m Running GSI Angle Update tool \033[m"
 #
-#   subBCAng ${RunDir} ${AnlDate}
+#    subBCAng ${RunDir} ${AnlDate}
 #
 #   if [ $? -eq 0 ];then
 #      echo -e "\033[34;1m [\033[m\033[32;2m OK \033[m\033[34;1m]\033[m"

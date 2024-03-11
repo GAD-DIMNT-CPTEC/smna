@@ -84,7 +84,7 @@ constants ( ) {
         export Nodes=$(((${MTasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
         export Queue=PESQ2
         export WallTime=01:00:00
-        export BcCycles=1
+       # export BcCycles=1
 
         # MPI environmental variables
         export MPICH_UNEX_BUFFER_SIZE=100000000
@@ -121,18 +121,18 @@ constants ( ) {
 #   export SatBiasPCSample=${public_fix}/comgsi_satbias_pc_in
    export SatBiasSample=${public_fix}/gdas1.t00z.abias
    export SatBiasPCSample=${public_fix}/gdas1.t00z.abias_pc
-   export ScanInfo=${public_fix}/global_scaninfo.txt
-   export SatBiasAngSample=${public_fix}/global_satangbias.txt
+   export ScanInfo=${home_gsi_fix}/global_scaninfo.txt
+   export SatBiasAngSample=${home_gsi_fix}/global_satangbias.txt
    export execBCAng=${home_cptec}/bin/global_angupdate
-   export parmBCAng=${home_gsi_fix}/global_angupdate.nml
+   export parmBCAng=${home_gsi_fix}/global_angupdate.namelist
 
    # Satbias files
    export satbiasIn=satbias.in
    export satbiasOu=satbias.out
    export satbiasPCIn=satbias_pc
    export satbiasPCOu=satbias_pc.out
-   export satbiasAngIn=satbias_angle.in
-   export satbiasAngOu=satbias_angle.out
+   export satbiasAngIn=satbias_ang.in
+   export satbiasAngOu=satbias_ang.out
 
 
 }
@@ -568,9 +568,11 @@ subGSI() {
    cp ${cldRadInfo} ${runDir}/$(basename ${cldRadInfo})
 
    if [ $cold == '.true.' ];then
+     echo "  using "${parmGSI}.cold " to setup GSI run"
       sed "s/#CENTER#/cptec/g" ${parmGSI}.cold > ${runDir}/$(basename ${parmGSI})
    else
-      sed "s/#CENTER#/cptec/g" ${parmGSI} > ${runDir}/$(basename ${parmGSI})
+     echo "  using "${parmGSI} " to setup GSI run"
+     sed "s/#CENTER#/cptec/g" ${parmGSI} > ${runDir}/$(basename ${parmGSI})
    fi
 
    sed -i -e "s/#IMAX#/${imax}/g" \
@@ -670,7 +672,7 @@ exit 1
 #-----------------------------------------------------------------------------#
 # Function to submet radiance Bias Correction from satellite angle
 #-----------------------------------------------------------------------------#
-subBCAng ( ) {
+subBCAng() {
 
    runDir=${1}
    andt=${2}
@@ -689,9 +691,9 @@ case ${hpc_name} in
      cat << EOF > ${runDir}/angupdate.qsb
 #!/bin/bash
 #SBATCH --nodes=${Nodes}
-#SBATCH --time=00:05:00
+#SBATCH --time=00:15:00
 #SBATCH --ntasks=${MTasks}
-#SBATCH --job-name=AngUpdate
+#SBATCH --job-name=AngUp${ana_date}
 #SBATCH --mem=480G
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=${Queue}
@@ -710,6 +712,17 @@ export OMP_NUM_THREADS=\$SLURM_CPUS_PER_TASK
 
 source ${home_gsi}/env.sh egeon ${compiler}
 
+export LD_LIBRARY_PATH=${home_gsi}/libsrc/crtm/lib64:${LD_LIBRARY_PATH}
+module load intel
+module load impi
+module load curl-7.85.0-gcc-9.4.0-qbney7y
+module load cmake/3.21.3
+module load openblas
+module load netcdf
+module load netcdf-fortran
+
+
+ldd ./$(basename ${execBCAng})
 module list
 
 echo  "STARTING AT `date` "
