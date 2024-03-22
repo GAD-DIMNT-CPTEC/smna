@@ -196,14 +196,14 @@ FixedFiles ${AnlTrunc} ${AnlNLevs} ${RunDir}
 
 # Get Satellite bias files
 getSatBias ${AnlDate} ${BkgDate} ${RunDir} ${subt_gsi_dataout}
-##  BcCycles=$?  ### Altera BcCycles para 1 e impede o procedimento de warmup dos coeficientes do Bias 
+BcCycles=$?  ### recebe =1 se não encontrar satbias_out no diretorio BkgDate (rodada anterior) 
 #------------------------------------------------------------#
 # running GSI at tupa
 #
 
-#if [ ${BcCycles} -gt 0 ];then
-#   BcCycles=$((${BcCycles}-1))
-#fi
+if [ ${BcCycles} -gt 0 ];then
+   BcCycles=$((${BcCycles}-1))
+fi
 
 echo " Entrando no ciclo de BcCycles para "$(seq 0 ${BcCycles} )
 for cycle in $(seq 0 ${BcCycles} ); do
@@ -267,6 +267,7 @@ for cycle in $(seq 0 ${BcCycles} ); do
    if [ ${BcCycles} -gt 0 ];then
 
       if [ ${cycle} -eq ${BcCycles} ];then
+         # save data, diag and bias corretions files
          copyFiles ${RunDir} ${DataOutDir}
       else
          copyFiles ${RunDir} ${BcDirOut}
@@ -274,9 +275,12 @@ for cycle in $(seq 0 ${BcCycles} ); do
          #
          # copy satellite bias.out to bias.in for next cycle
          #
-
+         # while in BC Cycle update In satbias with thoses new ones (Ou) 
+         echo cp -pfr ${BcDirOut}/${satbiasOu} ${RunDir}/${satbiasIn}
          cp -pfr ${BcDirOut}/${satbiasOu} ${RunDir}/${satbiasIn}
+         echo cp -pfr ${BcDirOut}/${satbiasPCOu} ${RunDir}/${satbiasPCIn}
          cp -pfr ${BcDirOut}/${satbiasPCOu} ${RunDir}/${satbiasPCIn}
+         echo cp -pfr ${BcDirOut}/${satbiasAngOu} ${RunDir}/${satbiasAngIn}
          cp -pfr ${BcDirOut}/${satbiasAngOu} ${RunDir}/${satbiasAngIn}
 
       fi

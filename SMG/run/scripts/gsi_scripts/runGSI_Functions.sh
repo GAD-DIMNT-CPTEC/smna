@@ -82,9 +82,9 @@ constants ( ) {
         export TasksPerNode=$((${MaxCoresPerNode}/${ThreadsPerMPITask})) # Number of Processors used by each MPI tasks
         export PEs=$((${MTasks}/${ThreadsPerMPITask}))
         export Nodes=$(((${MTasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
-        export Queue=PESQ2
+        export Queue=PESQ1
         export WallTime=01:00:00
-       # export BcCycles=1
+        export BcCycles=0
 
         # MPI environmental variables
         export MPICH_UNEX_BUFFER_SIZE=100000000
@@ -101,7 +101,7 @@ constants ( ) {
        export Nodes=$(((${MPITasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
        export Queue=pesq
        export WallTime=01:00:00
-       export BcCycles=1
+       export BcCycles=0
 
        # MPI environmental variables
        export MPICH_UNEX_BUFFER_SIZE=100000000
@@ -127,8 +127,8 @@ constants ( ) {
    export parmBCAng=${home_gsi_fix}/global_angupdate.namelist
 
    # Satbias files
-   export satbiasIn=satbias.in
-   export satbiasOu=satbias.out
+   export satbiasIn=satbias_in
+   export satbiasOu=satbias_out
    export satbiasPCIn=satbias_pc
    export satbiasPCOu=satbias_pc.out
    export satbiasAngIn=satbias_ang.in
@@ -484,41 +484,48 @@ getSatBias ( ){
         rm -fr ${runDir}/${satbiasIn}
      fi
 
+     echo cp -pfr ${SatBiasSample} ${runDir}/${satbiasIn}
      cp -pfr ${SatBiasSample} ${runDir}/${satbiasIn}
 
      cold=1
 
    else
 
+     echo cp -pfr ${FileSatbiasOu} ${runDir}/${satbiasIn}
      cp -pfr ${FileSatbiasOu} ${runDir}/${satbiasIn}
 
    fi
 
    local FileSatbiasAngOu=$(find ${FindDir01} ${FindDir02} -iname "${satbiasAngOu}*" -print 2> /dev/null | sort -nr | head -n 1)
 
-   if [ ${#FileSatbiasAngOu} -eq 0 ];then
-
-     echo -e "\033[31;1m #--------------------------------------#\033[m"
-     echo -e "\033[31;1m #    1° ciclo de assimilação           #\033[m"
-     echo -e "\033[31;1m #  Caso não seja o 1° ciclo verificar  #\033[m"
-     echo -e "\033[31;1m #    porque não copiou o arquivo       #\033[m"
-     echo -e "\033[31;1m #          ${satbiasAngOu}         #\033[m"
-     echo -e "\033[31;1m #--------------------------------------#\033[m"
-
-     if [ -e ${runDir}/${satbiasAngIn} ];then
-        #
-        # if file exist, may be corrupted!
-        #
-        rm -fr ${runDir}/${satbiasAngIn}
-     fi
-
-     cp -pfr ${SatBiasAngSample} ${runDir}/${satbiasAngIn}
-
-   else
-
-     cp -pfr ${FileSatbiasAngOu} ${runDir}/${satbiasAngIn}
-
-   fi
+##     See AdvancedGSIUserGuide_v3.5.0.0.pdf , Ming Hu
+##     Using 8.4.4 Enhanced Radiance Bias Correction, so SatbiasAng is not used 
+#
+#  if [ ${#FileSatbiasAngOu} -eq 0 ];then
+#
+#     echo -e "\033[31;1m #--------------------------------------#\033[m"
+#     echo -e "\033[31;1m #    1° ciclo de assimilação           #\033[m"
+#     echo -e "\033[31;1m #  Caso não seja o 1° ciclo verificar  #\033[m"
+#     echo -e "\033[31;1m #    porque não copiou o arquivo       #\033[m"
+#     echo -e "\033[31;1m #          ${satbiasAngOu}         #\033[m"
+#     echo -e "\033[31;1m #--------------------------------------#\033[m"
+#
+#     if [ -e ${runDir}/${satbiasAngIn} ];then
+#        #
+#        # if file exist, may be corrupted!
+#        #
+#        rm -fr ${runDir}/${satbiasAngIn}
+#     fi
+#
+#     echo cp -pfr ${SatBiasAngSample} ${runDir}/${satbiasAngIn}
+#     cp -pfr ${SatBiasAngSample} ${runDir}/${satbiasAngIn}
+#
+#   else
+#
+#     echo cp -pfr ${FileSatbiasAngOu} ${runDir}/${satbiasAngIn}
+#     cp -pfr ${FileSatbiasAngOu} ${runDir}/${satbiasAngIn}
+#
+#   fi
 
    local FileSatbiasPCOu=$(find ${FindDir01} ${FindDir02} -iname "${satbiasPCOu}*" -print 2> /dev/null | sort -nr | head -n 1)
 
@@ -538,10 +545,11 @@ getSatBias ( ){
         rm -fr ${runDir}/${satbiasPCIn}
      fi
 
+     echo cp -pfr ${SatBiasPCSample} ${runDir}/${satbiasPCIn}
      cp -pfr ${SatBiasPCSample} ${runDir}/${satbiasPCIn}
 
    else
-
+     echo cp -pfr ${FileSatbiasPCOu} ${runDir}/${satbiasPCIn}
      cp -pfr ${FileSatbiasPCOu} ${runDir}/${satbiasPCIn}
 
    fi
@@ -810,12 +818,12 @@ mergeDiagFiles ( ) {
             mkdir -p ${runDir}/diag
          fi
 
-         find -P -O3 ${runDir} -maxdepth 1 -iname "pe*${type}*${loop}" -exec mv -f {} ${runDir}/diag \;
+         find -P -O3 ${runDir} -maxdepth 1 -iname "pe*${type}*${loop}" -exec cp -f {} ${runDir}/diag \;
 
          # link to be used by global_angleupdate
-         if [ ${loop} = ${miter} ];then
-            ln -sf ${runDir}/diag_${type}_${loop}.${AnDate} ${runDir}/diag_${type}.${AnDate}
-         fi
+         #if [ ${loop} = ${miter} ];then
+         #   ln -sf ${runDir}/diag_${type}_${loop}.${AnDate} ${runDir}/diag_${type}.${AnDate}
+         #fi
       else
          echo -e "\033[31;1m FAIL \033[m\033[34;1m]\033[m"
       fi
@@ -843,12 +851,16 @@ copyFiles (){
    mv -f ${fromDir}/diag ${toDir}
 
    ${MV} ${fromDir}/BAM.anl ${toDir}/GANL${BkgPrefix}${AnlDate}S.unf.${BkgMRES}
-   ${MV} ${fromDir}/${satbiasIn} ${toDir}
-   ${MV} ${fromDir}/${satbiasOu} ${toDir}
-   ${MV} ${fromDir}/${satbiasPCIn} ${toDir}
-   ${MV} ${fromDir}/${satbiasPCOu} ${toDir}
-   ${MV} ${fromDir}/${satbiasAngIn} ${toDir}
-   ${MV} ${fromDir}/${satbiasAngOu} ${toDir}
+   # copy para manter 
+   ${CP} ${fromDir}/${satbiasIn} ${toDir}/.
+   echo ${CP} ${fromDir}/${satbiasOu} ${toDir}/.
+   ${CP} ${fromDir}/${satbiasOu} ${toDir}/.
+   ${CP} ${fromDir}/${satbiasPCIn} ${toDir}/.
+   echo ${CP} ${fromDir}/${satbiasPCOu} ${toDir}/.
+   ${CP} ${fromDir}/${satbiasPCOu} ${toDir}/.
+   ${CP} ${fromDir}/${satbiasAngIn} ${toDir}/.
+   echo ${CP} ${fromDir}/${satbiasAngOu} ${toDir}/.
+   ${CP} ${fromDir}/${satbiasAngOu} ${toDir}/.
 
    # arquivos de configuracao
    ${MV} ${fromDir}/gsiparm.anl ${toDir}
