@@ -38,7 +38,7 @@
 RootDir=$(dirname ${BASH_SOURCE})
 
 #export SMG_ROOT=${HOME}/SMNA_v3.0.0.t11889/SMG
-export SMG_ROOT=/mnt/beegfs/${USER}/SMNA_v3.0.0.t11889/SMG
+export SMG_ROOT=/mnt/beegfs/${USER}/SMNA_v3.0.0.t12230/SMG
 echo "Path de instalação: SMG_ROOT="$SMG_ROOT
 
 lognode=`cat /proc/sys/kernel/hostname | cut  -b 1-6`
