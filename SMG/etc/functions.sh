@@ -50,47 +50,48 @@ copy_fixed_files(){
   #-----------------------------------------------------------------------------------------
   # model/datain
   if [ ${HOSTNAME:0:1} = 'e' ] || [ ${hpc_name} = "egeon" ];then
-     cp -pf ${home_model_bam}/datain/* ${subt_model_bam}/datain/
+     cp -pf ${local_bam}/model/datain/* ${subt_model_bam}/datain/
 
-     cp -pf ${public_bam}/MODEL/datain/AeroVar.Tab ${subt_model_bam}/datain/
-     cp -pf ${public_bam}/MODEL/datain/ETAMPNEW_DATA ${subt_model_bam}/datain/
-     cp -pf ${public_bam}/MODEL/datain/F_nwvl200_mu20_lam50_res64_t298_c080428.bin ${subt_model_bam}/datain/
-     cp -pf ${public_bam}/MODEL/datain/iceoptics_c080917.bin ${subt_model_bam}/datain/
-     cp -pf ${public_bam}/MODEL/datain/ocnalbtab24bnd.bin ${subt_model_bam}/datain/
+#     cp -pf ${public_bam}/MODEL/datain/AeroVar.Tab ${subt_model_bam}/datain/
+#     cp -pf ${public_bam}/MODEL/datain/ETAMPNEW_DATA ${subt_model_bam}/datain/
+#     cp -pf ${public_bam}/MODEL/datain/F_nwvl200_mu20_lam50_res64_t298_c080428.bin ${subt_model_bam}/datain/
+#     cp -pf ${public_bam}/MODEL/datain/iceoptics_c080917.bin ${subt_model_bam}/datain/
+#     cp -pf ${public_bam}/MODEL/datain/ocnalbtab24bnd.bin ${subt_model_bam}/datain/
 
      #-----------------------------------------------------------------------------------------
      # pre/datain
 
-     echo " home_pre_bam :" ${home_pre_bam} " --->>>  subt_pre_bam :"${subt_pre_bam}
-
-     cp -pf ${home_pre_bam}/datain/* ${subt_pre_bam}/datain/
+     cp -pf ${local_bam}/pre/datain/* ${subt_pre_bam}/datain/
 
      #-----------------------------------------------------------------------------------------
      # pre/dataout
+     
+     cp -pf ${local_bam}/pre/dataout/* ${subt_pre_bam}/dataout/
 
-     cp -pf ${home_pre_bam}/dataout/* ${subt_pre_bam}/dataout/
-
-     cp -pf ${public_bam}/PRE/dataout/WaterNavy.dat ${subt_pre_bam}/dataout/
-     cp -pf ${public_bam}/PRE/dataout/TopoNavy.dat ${subt_pre_bam}/dataout/
-     cp -pf ${public_bam}/PRE/dataout/HPRIME.dat ${subt_pre_bam}/dataout/
+#     cp -pf ${public_bam}/PRE/dataout/WaterNavy.dat ${subt_pre_bam}/dataout/
+#     cp -pf ${public_bam}/PRE/dataout/TopoNavy.dat ${subt_pre_bam}/dataout/
+#     cp -pf ${public_bam}/PRE/dataout/HPRIME.dat ${subt_pre_bam}/dataout/
 
      #-----------------------------------------------------------------------------------------
      # pre/databcs
 
-     cp -pf ${home_pre_bam}/databcs/* ${subt_pre_bam}/databcs/
+     cp -pfr ${local_bam}/pre/databcs/* ${subt_pre_bam}/databcs/
+     cp -pfr ${local_bam}/pre/dataco2/* ${subt_pre_bam}/dataco2/
+     cp -pfr ${local_bam}/pre/dataTop/* ${subt_pre_bam}/dataTop/
+     cp -pfr ${local_bam}/pre/datasst/* ${subt_pre_bam}/datasst/
 
-     cp -pf ${public_bam}/PRE/databcs/sib2soilms.form ${subt_pre_bam}/databcs/
-     cp -pf ${public_bam}/PRE/databcs/FluxCO2.bin ${subt_pre_bam}/databcs/
-     cp -pf ${public_bam}/PRE/databcs/FluxCO2.ctl ${subt_pre_bam}/databcs/
-     cp -pf ${public_bam}/PRE/databcs/claymsk.form ${subt_pre_bam}/databcs/
-     cp -pf ${public_bam}/PRE/databcs/clmt.form ${subt_pre_bam}/databcs/
-     cp -pf ${public_bam}/PRE/databcs/deltat.form ${subt_pre_bam}/databcs/
-     cp -pf ${public_bam}/PRE/databcs/ersst.bin ${subt_pre_bam}/databcs/
-     cp -pf ${public_bam}/PRE/databcs/ibismsk.form ${subt_pre_bam}/databcs/
-     cp -pf ${public_bam}/PRE/databcs/ndviclm.form ${subt_pre_bam}/databcs/
-     cp -pf ${public_bam}/PRE/databcs/sandmsk.form ${subt_pre_bam}/databcs/
-     cp -pf ${public_bam}/PRE/databcs/sib2msk.form ${subt_pre_bam}/databcs/
-     cp -pf ${public_bam}/PRE/databcs/soiltext.form ${subt_pre_bam}/databcs/
+#     cp -pfr ${public_bam}/PRE/databcs/sib2soilms.form ${subt_pre_bam}/databcs/
+#     cp -pfr ${public_bam}/PRE/databcs/FluxCO2.bin ${subt_pre_bam}/databcs/
+#     cp -pfr ${public_bam}/PRE/databcs/FluxCO2.ctl ${subt_pre_bam}/databcs/
+#     cp -pfr ${public_bam}/PRE/databcs/claymsk.form ${subt_pre_bam}/databcs/
+#     cp -pfr ${public_bam}/PRE/databcs/clmt.form ${subt_pre_bam}/databcs/
+#     cp -pfr ${public_bam}/PRE/databcs/deltat.form ${subt_pre_bam}/databcs/
+#     cp -pfr ${public_bam}/PRE/databcs/ersst.bin ${subt_pre_bam}/databcs/
+#     cp -pfr ${public_bam}/PRE/databcs/ibismsk.form ${subt_pre_bam}/databcs/
+#     cp -pfr ${public_bam}/PRE/databcs/ndviclm.form ${subt_pre_bam}/databcs/
+#     cp -pfr ${public_bam}/PRE/databcs/sandmsk.form ${subt_pre_bam}/databcs/
+#     cp -pfr ${public_bam}/PRE/databcs/sib2msk.form ${subt_pre_bam}/databcs/
+#     cp -pfr ${public_bam}/PRE/databcs/soiltext.form ${subt_pre_bam}/databcs/
   elif [ ${HOSTNAME:0:1} = 'c' ];then
 
      ln -s /cray_home/joao_gerd/BAMFIX/model/datain/* ${subt_model_bam}/datain/
@@ -289,25 +290,25 @@ compilar(){
        mkdir -p ${home_cptec}/bin
    fi
 # Verificando se esta logado no eslogin01
-   if [ ${HOSTNAME:0:1} = 'e' ];then
-      if [ ${HOSTNAME} != "eslogin01" -a ${HOSTNAME} != "eslogin02" ];then
-           echo "#####################################################################"
-           echo "#                                                                   #"
-           echo "#               Voce esta logado no ${HOSTNAME}                       #"
-           echo "#                                                                   #"
-           echo "# Antes de proceder com a Instalacao logar em um destes servidores: #"
-           echo "#                                                                   #"
-           echo "# $ ssh eslogin01 -XC                                               #"
-           echo "#                                                                   #"
-           echo "#  ou                                                               #"
-           echo "#                                                                   #"
-           echo "# $ ssh eslogin02 -XC                                               #"
-           echo "#                                                                   #"
-           echo "#####################################################################"
-
-           exit
-      fi
-   fi
+#   if [ ${HOSTNAME:0:1} = 'e' ];then
+#      if [ ${HOSTNAME} != "eslogin01" -a ${HOSTNAME} != "eslogin02" ];then
+#           echo "#####################################################################"
+#           echo "#                                                                   #"
+#           echo "#               Voce esta logado no ${HOSTNAME}                       #"
+#           echo "#                                                                   #"
+#           echo "# Antes de proceder com a Instalacao logar em um destes servidores: #"
+#           echo "#                                                                   #"
+#           echo "# $ ssh eslogin01 -XC                                               #"
+#           echo "#                                                                   #"
+#           echo "#  ou                                                               #"
+#           echo "#                                                                   #"
+#           echo "# $ ssh eslogin02 -XC                                               #"
+#           echo "#                                                                   #"
+#           echo "#####################################################################"
+#
+#           exit
+#      fi
+#   fi
 
 ## Liga ou desliga compilação de componentes
 # 
@@ -315,9 +316,9 @@ compilar(){
 # 0: Não compila;
 # 1: Compila.
 
-compgsi=0
+compgsi=1
 compang=1
-compbam=0
+compbam=1
 
 #################
 
