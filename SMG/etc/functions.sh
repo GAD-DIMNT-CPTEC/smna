@@ -348,9 +348,16 @@ compbam=1
 #      # remove extra "-module ../include"  that messed with linking
 #      sed -i 's/\-module\ \.\.\/include/ /g' src/Makefile
 #   fi
-
+#
 #   make
 #   make install
+
+  export ARCH=Darwin_intel
+  cd ${util_inctime}/src
+
+  make
+
+  cp -v ${util_inctime}/src/inctime ${home_cptec}/bin
 
 #
 #############################################################################
