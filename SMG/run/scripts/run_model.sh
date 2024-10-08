@@ -3,6 +3,8 @@
 # Descomentar para debugar
 #set -o xtrace
 
+source /mnt/beegfs/$USER/SMNA_v3.0.0.t12230/SMG/config_smg.ksh vars_export
+
 ### Define hpc_name below is needed because in some cases (ex.: First Run),
 ### this script may be called from the command line.
 ### 
@@ -28,6 +30,15 @@ case $lognode in
     fi
     ;;
 
+  egeon-)
+    STR=`uname -a`
+    SUB='egeon'
+    if [[ "$STR" == *"$SUB"* ]]; then
+      echo -n "This will run on EGEON Cluster ..."
+      export hpc_name="egeon"
+    fi
+    ;;
+
   *)
     mach=`cat /proc/sys/kernel/hostname`
     echo -n "The configurations for "$mach" is not defined yet !"
@@ -38,9 +49,15 @@ case $lognode in
 esac
 
 # Carregando as variaveis do sistema
-source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
-source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/run/smg_functions.sh    ## has inctime function wrote in bash script
+#source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
+#source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/run/smg_functions.sh    ## has inctime function wrote in bash script
 # carregando funcoes do pre-processamento
+
+# Carregando as variaveis do sistema
+#dir_now=`pwd`
+#cd $SMG_ROOT
+#echo pwd
+#source ${SMG_ROOT}/config_smg.ksh vars_export
 
 source ${home_run_bam}/runPre.func
 
@@ -84,8 +101,8 @@ if [ -z "${6}" ]
 then
   echo "NPROC is not set"
   case ${hpc_name} in
-     	egeon)  echo "setting to 64"
-             	export NPROC=64  # ntasks
+  	egeon-)  echo "setting to 128"
+             	export NPROC=128  # ntasks
 	;;
   	XC50)  	echo "setting to 480"
   		export NPROC=480             	
@@ -102,8 +119,8 @@ else
 fi
 
 case ${hpc_name} in
-   egeon) tasks_per_node=16
-	        cpus_per_task=8
+   egeon-) tasks_per_node=10
+	        cpus_per_task=2
 	;;
    XC50)  tasks_per_node=10
 	        cpus_per_task=4

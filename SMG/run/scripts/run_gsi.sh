@@ -5,12 +5,15 @@
 #set -o xtrace
 
 # Carregando as variaveis do sistema
-dir_now=`pwd`
-cd $SMG_ROOT
-echo pwd
-source ${SMG_ROOT}/config_smg.ksh vars_export
+#dir_now=`pwd`
+#cd $SMG_ROOT
+#echo pwd
+#source ${SMG_ROOT}/config_smg.ksh vars_export
 
-source ${SMG_ROOT}/run/smg_functions.sh     ## has inctime function wrote in bash script
+source /mnt/beegfs/$USER/SMNA_v3.0.0.t12230/SMG/config_smg.ksh vars_export
+
+#source ${SMG_ROOT}/run/smg_functions.sh     ## has inctime function wrote in bash script
+source /mnt/beegfs/$USER/SMNA_v3.0.0.t12230/SMG/run/smg_functions.sh
 
 cd $dir_now
 # Lendo parametros de entrada
@@ -320,17 +323,17 @@ fi
 # link CRTM Spectral and Transmittance coefficients
 #
 
-ln -sf ${public_crtm}/${BYTE_ORDER}/Nalli.IRwater.EmisCoeff.bin    Nalli.IRwater.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRice.EmisCoeff.bin     NPOESS.IRice.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRland.EmisCoeff.bin    NPOESS.IRland.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRsnow.EmisCoeff.bin    NPOESS.IRsnow.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISice.EmisCoeff.bin    NPOESS.VISice.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISland.EmisCoeff.bin   NPOESS.VISland.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISsnow.EmisCoeff.bin   NPOESS.VISsnow.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISwater.EmisCoeff.bin  NPOESS.VISwater.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/FASTEM5.MWwater.EmisCoeff.bin  FASTEM5.MWwater.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/AerosolCoeff.bin               AerosolCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 CloudCoeff.bin
+ln -sfv ${public_crtm}/${BYTE_ORDER}/Nalli.IRwater.EmisCoeff.bin    Nalli.IRwater.EmisCoeff.bin
+ln -sfv ${public_crtm}/${BYTE_ORDER}/NPOESS.IRice.EmisCoeff.bin     NPOESS.IRice.EmisCoeff.bin
+ln -sfv ${public_crtm}/${BYTE_ORDER}/NPOESS.IRland.EmisCoeff.bin    NPOESS.IRland.EmisCoeff.bin
+ln -sfv ${public_crtm}/${BYTE_ORDER}/NPOESS.IRsnow.EmisCoeff.bin    NPOESS.IRsnow.EmisCoeff.bin
+ln -sfv ${public_crtm}/${BYTE_ORDER}/NPOESS.VISice.EmisCoeff.bin    NPOESS.VISice.EmisCoeff.bin
+ln -sfv ${public_crtm}/${BYTE_ORDER}/NPOESS.VISland.EmisCoeff.bin   NPOESS.VISland.EmisCoeff.bin
+ln -sfv ${public_crtm}/${BYTE_ORDER}/NPOESS.VISsnow.EmisCoeff.bin   NPOESS.VISsnow.EmisCoeff.bin
+ln -sfv ${public_crtm}/${BYTE_ORDER}/NPOESS.VISwater.EmisCoeff.bin  NPOESS.VISwater.EmisCoeff.bin
+ln -sfv ${public_crtm}/${BYTE_ORDER}/FASTEM5.MWwater.EmisCoeff.bin  FASTEM5.MWwater.EmisCoeff.bin
+ln -sfv ${public_crtm}/${BYTE_ORDER}/AerosolCoeff.bin               AerosolCoeff.bin
+ln -sfv ${public_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 CloudCoeff.bin
 
 #
 #-------------------------------------------------------------------------------#

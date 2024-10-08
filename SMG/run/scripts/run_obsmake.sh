@@ -28,7 +28,15 @@
 #BOC
 
 # Carregando as variaveis do sistema
-source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
+#source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
+
+source /mnt/beegfs/$USER/SMNA_v3.0.0.t12230/SMG/config_smg.ksh vars_export
+
+# Carregando as variaveis do sistema
+#dir_now=`pwd`
+#cd $SMG_ROOT
+#echo pwd
+#source ${SMG_ROOT}/config_smg.ksh vars_export
 
 #-----------------------------------------------------------------------------#
 # return usage from main program

@@ -38,9 +38,11 @@
 
 #-----------------------------------------------------------------------------#
 # Carregando as variaveis do sistema
-cd ..
-source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
-cd run
+#cd ..
+#source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
+source /mnt/beegfs/$USER/SMNA_v3.0.0.t12230/SMG/config_smg.ksh vars_export
+#cd run
+
 subwrd() {
    str=$(echo "${@}" | awk '{ for (i=1; i<=NF-1; i++) printf("%s ",$i)}')
    n=$(echo "${@}" | awk '{ print $NF }')

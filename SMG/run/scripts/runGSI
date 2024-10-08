@@ -57,10 +57,19 @@
 WhereIam=$(dirname ${BASH_SOURCE})
 
 # Carregando as variaveis do sistema
-source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
+#source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
+
+# Carregando as variaveis do sistema
+#dir_now=`pwd`
+#cd $SMG_ROOT
+#echo pwd
+#source ${SMG_ROOT}/config_smg.ksh vars_export
 
 # load functions used by runGSI script
-source ${WhereIam}/gsi_scripts/runGSI_Functions.sh
+#source ${WhereIam}/gsi_scripts/runGSI_Functions.sh
+
+source /mnt/beegfs/$USER/SMNA_v3.0.0.t12230/SMG/config_smg.ksh vars_export
+source /mnt/beegfs/$USER/SMNA_v3.0.0.t12230/SMG/run/scripts/gsi_scripts/runGSI_Functions.sh
 
 # Define some constants
 constants
