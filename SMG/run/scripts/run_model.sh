@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/bash -x
 
 # Descomentar para debugar
 #set -o xtrace
@@ -101,7 +101,7 @@ if [ -z "${6}" ]
 then
   echo "NPROC is not set"
   case ${hpc_name} in
-  	egeon-)  echo "setting to 128"
+  	egeon)  echo "setting to 128"
              	export NPROC=128  # ntasks
 	;;
   	XC50)  	echo "setting to 480"
@@ -119,7 +119,7 @@ else
 fi
 
 case ${hpc_name} in
-   egeon-) tasks_per_node=10
+   egeon) tasks_per_node=10
 	        cpus_per_task=2
 	;;
    XC50)  tasks_per_node=10
@@ -157,7 +157,8 @@ cd ${home_run_bam}
 # rodando o somente o Chopping do pré para pegar o arquivo de ozônio
 # saida gerada no bam/model/datain/ 
 
-/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -s -n chp -O
+#/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -s -n chp -O
+/bin/bash runPre.v1.3.0 ${TRC} ${NLV} ${LABELANL} CPT 2 T F 574 64
 
 STATUS=$?
 echo "1st call to runPre. Status: "${STATUS}
@@ -185,7 +186,9 @@ cp -pfr ${gsiDataOut}/GANL${PREFIX}${LABELANL}S.unf.${MRES} ${modelDataIn}
 #
 # /bin/bash runPre -v -t 299 -l 64 -I ${LABELANL}  -n 0 -p SMT -s -O -T -G -Gp gblav -Gt Grid
 
-/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -p CPT -n das
+#/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -p CPT -n das
+/bin/bash runPre.v1.3.0 ${TRC} ${NLV} ${LABELANL} CPT 0 T F 574 64
+
 STATUS=$?
 echo "2nd call to runPre. Status: "${STATUS}
 if [ ${STATUS} -ne 0 ];then
