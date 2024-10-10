@@ -157,6 +157,9 @@ cd ${home_run_bam}
 # rodando o somente o Chopping do pré para pegar o arquivo de ozônio
 # saida gerada no bam/model/datain/ 
 
+# Copy NCEP analysis to retrieve the ozone information
+ln -sfv /mnt/beegfs/carlos.bastarz/DATA/${LABELANL}/gblav.T${LABELANL:8:2}Z.atmanl.nemsio.${LABELANL} ${subt_bam}/pre/datain/ 
+
 #/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -s -n chp -O
 # OPT 2 - debug (processes from the "debug" namelist in namelist.runPre)
 /bin/bash runPre.v1.3.0 ${TRC} ${NLV} ${LABELANL} CPT 2 T F 574 64

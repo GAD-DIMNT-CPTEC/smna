@@ -66,7 +66,7 @@ constants ( ) {
     done
 
    # Define endianness
-   export BYTE_ORDER=Big_Endian
+   export BYTE_ORDER=Little_Endian
 
    # PBS default variables
    #
