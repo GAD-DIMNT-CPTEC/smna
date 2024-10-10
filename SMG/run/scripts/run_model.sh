@@ -158,6 +158,7 @@ cd ${home_run_bam}
 # saida gerada no bam/model/datain/ 
 
 #/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -s -n chp -O
+# OPT 2 - debug (processes from the "debug" namelist in namelist.runPre)
 /bin/bash runPre.v1.3.0 ${TRC} ${NLV} ${LABELANL} CPT 2 T F 574 64
 
 STATUS=$?
@@ -181,12 +182,16 @@ rm -fr ${modelDataIn}/OZONSMT${LABELANL}S.unf.*
 
 cp -pfr ${gsiDataOut}/GANL${PREFIX}${LABELANL}S.unf.${MRES} ${modelDataIn}
 
+# Dirty fix to let the remainder pre-processing precesses to use the GSI analysis with the SMT preffix
+ln -sf ${modelDataIn}/GANL${PREFIX}${LABELANL}S.unf.${MRES} ${modelDataIn}/GANLSMT${LABELANL}S.unf.${MRES}
+
 #
 # Rodando os demais processos do pré e usando a análise do GSI
 #
 # /bin/bash runPre -v -t 299 -l 64 -I ${LABELANL}  -n 0 -p SMT -s -O -T -G -Gp gblav -Gt Grid
 
 #/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -p CPT -n das
+# OPT 0 - opt (processes from the "opt" namelist in namelist.runPre)
 /bin/bash runPre.v1.3.0 ${TRC} ${NLV} ${LABELANL} CPT 0 T F 574 64
 
 STATUS=$?
