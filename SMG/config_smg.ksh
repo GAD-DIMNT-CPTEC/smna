@@ -6,30 +6,30 @@
 #
 # !SCRIPT: config_smg.sh
 #
-# !DESCRIPTION: Script utilizado para a configuracao e instacao do SMG
+# !DESCRIPTION: Script used for SMG configuration and installation
 #
-# !CALLING SEQUENCE: ./config_smg.sh <opcoes>
-#                    nota: Para saber mais sobre as opcoes disponiveis
-#                          execute ./config_smg.sh ajuda
+# !CALLING SEQUENCE: ./config_smg.sh <options>
+#                    note: To learn more about the available options
+#                          execute ./config_smg.sh help
 #
 # !REVISION HISTORY:
 #
 #    ?? ??? ???? - ??????????????? - Initial Version
-#    20 Dec 2017 - J. G. de Mattos - separa em diferentes arquivos
-#                                    * etc/paths.sh -> caminhos
-#                                    * etc/functions.sh -> funcoes
+#    20 Dec 2017 - J. G. de Mattos - split into different files
+#                                    * etc/paths.sh -> paths
+#                                    * etc/functions.sh -> functions
 #
-#    Oct 2023 - J. A. Aravequia - acrescenta identificação do sistema de HPC
-#                                 acrescenta a variável global hpc_name
-#                                permite definições para diferentes computadores:
+#    Oct 2023 - J. A. Aravequia - added HPC system identification
+#                                 added the global variable hpc_name
+#                                 allows definitions for different computers:
 #                                    * etc/mach/XC50_paths.conf
 #                                    * etc/mach/egeon_paths.conf
 #                                    * etc/mach/new_system_avail.conf
 #
 # !REMARKS:
 #
-#    * Os caminhos do SMG estao contidos no arquivo etc/paths.sh
-#    * As funcoes que podem ser executadas estao no arquivo etc/functions.sh
+#    * SMG paths are contained in the etc/paths.sh file
+#    * Functions that can be executed are in the etc/functions.sh file
 #
 #EOP
 #-----------------------------------------------------------------------------#
@@ -38,58 +38,54 @@
 RootDir=$(dirname ${BASH_SOURCE})
 
 export SMG_ROOT=${HOME}/SMNA_v3.0.0.t11889/SMG
-echo "Path de instalação: SMG_ROOT="$SMG_ROOT
+echo "Installation path: SMG_ROOT=$SMG_ROOT"
 
-lognode=`cat /proc/sys/kernel/hostname | cut  -b 1-6`
+lognode=$(cat /proc/sys/kernel/hostname | cut -b 1-6)
 
 case $lognode in
 
   clogin)
-    STR=`uname -a`
+    STR=$(uname -a)
     SUB='cray'
     if [[ "$STR" == *"$SUB"* ]]; then
-      echo -n "This will run on cray XC50 ..."
+      echo "This will run on Cray XC50 ..."
       export hpc_name="XC50"
     fi
     ;;
 
   headno)
-    STR=`uname -a`
+    STR=$(uname -a)
     SUB='egeon'
     if [[ "$STR" == *"$SUB"* ]]; then
-      echo -n "This will run on EGEON Cluster ..."
-      echo "It's there."
+      echo "This will run on EGEON Cluster ..."
       export hpc_name="egeon"
     fi
     ;;
 
   *)
-    mach=`cat /proc/sys/kernel/hostname`
-    echo -n "The configurations for "$mach" is not defined yet !"
-    echo -n "1) Add the machine to the defined systems in etc/mach ; and"
-    echo -n "2) add an option for it in the function copy_fixed_files in etc/functions"
+    mach=$(cat /proc/sys/kernel/hostname)
+    echo "The configurations for $mach are not defined yet!"
+    echo "1) Add the machine to the defined systems in etc/mach; and"
+    echo "2) Add an option for it in the function copy_fixed_files in etc/functions"
     exit
     ;;
 esac
 
 . ${SMG_ROOT}/etc/functions.sh
 
-#
-# Verifica os argumentos passados junto com o script
-#
-
+# Check the arguments passed with the script
 echo -e ""
-echo -e "\e[36;1m >>> ${BASH_SOURCE##*/} executado a partir de\e[m \e[32;1m${0##*/}\e[m"
+echo -e "\e[36;1m >>> ${BASH_SOURCE##*/} executed from \e[m \e[32;1m${0##*/}\e[m"
 
-if [ $# = 0 ];then
+if [ $# -eq 0 ]; then
   echo -e ""
-  echo -e "\e[31;1m > Nao foi passado nenhum argumento! \e[m"
-  ajuda
+  echo -e "\e[31;1m > No arguments were passed! \e[m"
+  help
   banner
   exit -1
 fi
 
-echo -en "\e[34;1m Opcao escolhida: \e[m \e[37;1m ${1} \e[m"
+echo -en "\e[34;1m Selected option: \e[m \e[37;1m ${1} \e[m"
 
 f=0
 for function in $(grep -i '(){$' ${RootDir}/etc/functions.sh | sed 's/(){//g');do
@@ -125,11 +121,12 @@ if [ ${f} -eq 0 ];then
 
   echo -e "\e[37;1m[\e[m\e[31;1m FAIL \e[m\e[37;1m]\e[m"
   echo -e ""
-  echo -e "\e[37;1m Opcao desconhecida, <ajuda>: \e[m"
+  echo -e "\e[37;1m Unknown option, <help>: \e[m"
   vars_export
-  ajuda
+  help
   banner
 fi
 
 #EOC
 #-----------------------------------------------------------------------------#
+
