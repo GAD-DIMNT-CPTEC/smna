@@ -27,7 +27,7 @@
 
 # Ensure SUB is defined before using it
 if [[ -z "$SUB" ]]; then
-    echo "⚠️  Warning: SUB was not set before loading smg_setup.sh!"
+    echo "[WARNING]  Warning: SUB was not set before loading smg_setup.sh!"
     echo "Using default value: 'unknown'"
     export SUB="unknown"
 fi
@@ -56,7 +56,7 @@ vars_export(){
   FilePaths=$(dirname ${BASH_SOURCE})/mach/${hpc_name}_paths.conf
   
   if [[ ! -f ${FilePaths} ]]; then
-    echo "❌ Error: Configuration file ${FilePaths} not found!" >&2
+    echo "[FAIL] Error: Configuration file ${FilePaths} not found!" >&2
     exit 1
   fi
 
@@ -65,6 +65,7 @@ vars_export(){
   done < <(sed -r 's/^[ \t]*(.*[^ \t])[ \t]*$/\1/;/^$/d;/^#/d' ${FilePaths})
 }
 #EOC
+
 #BOP
 # !FUNCTION: disable_conda
 # !DESCRIPTION:
@@ -73,25 +74,26 @@ vars_export(){
 #BOC
 disable_conda() {
     if [[ -n "$CONDA_PREFIX" ]]; then
-        echo "⚠️  Conda environment detected: $CONDA_PREFIX"
-        echo "🚫 Deactivating Conda..."
+        echo "[WARNING]  Conda environment detected: $CONDA_PREFIX"
+        echo "[ACTION] Deactivating Conda..."
         
         # Tenta desativar Conda
         if command -v conda &> /dev/null; then
             conda deactivate 2>/dev/null || source deactivate 2>/dev/null
         else
-            echo "⚠️  Warning: Conda command not found, but CONDA_PREFIX is set!"
+            echo "[WARNING]  Warning: Conda command not found, but CONDA_PREFIX is set!"
         fi
         
         unset CONDA_PREFIX
         unset CONDA_DEFAULT_ENV
         unset CONDA_PROMPT_MODIFIER
-        echo "✅ Conda has been disabled."
+        echo "[ OK ] Conda has been disabled."
     else
-        echo "✅ No active Conda environment detected."
+        echo "[ OK ] No active Conda environment detected."
     fi
 }
 #EOC
+
 #BOP
 #  !FUNCTION: copy_fixed_files
 #  !INTERFACE: copy_fixed_files
@@ -104,7 +106,7 @@ copy_fixed_files(){
   vars_export
 
   if [ ${HOSTNAME:0:1} = 'e' ] || [ ${hpc_name} = "egeon" ]; then
-     echo "🚀 Copying fixed files..."
+     echo "[INFO] Copying fixed files..."
      
      filesDataIn=(
        "AeroVar.Tab" 
@@ -140,7 +142,7 @@ copy_fixed_files(){
        "sib2msk.form" 
        "soiltext.form"
      ) 
-     for file in "${filesDatBC[@]}"; do
+     for file in "${filesDataBC[@]}"; do
        cp -pf ${public_bam}/PRE/databcs/$file ${subt_pre_bam}/databcs/
      done
    
@@ -149,7 +151,7 @@ copy_fixed_files(){
      cp -pf ${home_pre_bam}/dataout/* ${subt_pre_bam}/dataout/
      
   elif [ ${HOSTNAME:0:1} = 'c' ]; then
-     echo "🚀 Linking fixed files..."
+     echo "[INFO] Linking fixed files..."
      ln -s /cray_home/joao_gerd/BAMFIX/model/datain/* ${subt_model_bam}/datain/
      ln -s /cray_home/joao_gerd/BAMFIX/pre/datain/* ${subt_pre_bam}/datain/
      ln -s /cray_home/joao_gerd/BAMFIX/pre/dataout/* ${subt_pre_bam}/dataout/
@@ -180,7 +182,7 @@ copy_fixed_files(){
 configure(){
   vars_export
   
-  echo "🚀 Configuring SMG..."
+  echo "[INFO] Configuring SMG..."
   
   # Confirm before proceeding unless AUTO_ACCEPT is enabled
   if [[ "${AUTO_ACCEPT}" != "yes" ]]; then
@@ -227,7 +229,7 @@ configure(){
   # Modify scripts and Makefiles
   modify_scripts
 
-  echo "✅ Configuration completed successfully."
+  echo "[ OK ] Configuration completed successfully."
 }
 #EOC
 
@@ -246,7 +248,7 @@ configure(){
 #EOP
 #BOC
 modify_scripts(){
-  echo "🚀 Modifying SMG scripts and Makefiles..."
+  echo "[INFO] Modifying SMG scripts and Makefiles..."
   
   # List of scripts to update
   smg_scripts=(
@@ -298,11 +300,9 @@ modify_scripts(){
     sed -i "/# BAM path in HOME/a\\export ${key}=\"${env_replacements[$key]}\"" "${home_run_bam}/EnvironmentalVariables"
   done
 
-  echo "✅ Script modifications completed."
+  echo "[ OK ] Script modifications completed."
 }
-
 #EOC
-
 
 #BOP
 #  !FUNCTION: compile
@@ -320,32 +320,31 @@ modify_scripts(){
 #BOC
 compile(){
   vars_export
-  echo "🚀 Starting compilation..."
+  echo "[INFO] Starting compilation..."
   
   # Verify necessary directories
   [[ ! -d ${home_cptec}/bin ]] && mkdir -p ${home_cptec}/bin
 
-  if [[ ${HOSTNAME:0:1} == 'e' ]] && [[ ${HOSTNAME} != "eslogin01" && ${HOSTNAME} != "eslogin02" ]]; then
-    echo "Please login to eslogin01 or eslogin02 before proceeding with the installation."
-    exit 1
-  fi
+  #if [[ ${HOSTNAME:0:1} == 'e' ]] && [[ ${HOSTNAME} != "eslogin01" && ${HOSTNAME} != "eslogin02" ]]; then
+  #  echo "Please login to eslogin01 or eslogin02 before proceeding with the installation."
+  #  exit 1
+  #fi
 
 
-  echo "🚀 Compiling SMG utilities..."
+  echo "[INFO] Compiling SMG utilities..."
   cd ${home_gsi}
 
   if [[ ${compgsi} -eq 1 ]]; then
-    echo "🚀 Compiling GSI..."
-    echo "./compile.sh -G -C ${compiler} 2>&1 | tee ${home_gsi}/compile.log"
+    echo "[INFO] Compiling GSI..."
     ./compile.sh -C ${compiler} 2>&1 | tee ${home_gsi}/compile.log
     if [[ ! -e ${home_gsi_src}/gsi.x ]]; then
-      echo "❌ Error: GSI compilation failed. Check compile.log."
+      echo "[FAIL] Error: GSI compilation failed. Check compile.log."
       exit 1
     fi
   fi
 
   if [[ ${compang} -eq 1 ]]; then
-    echo "🚀 Compiling GSI bias correction utility..."
+    echo "[INFO] Compiling GSI bias correction utility..."
 
     if [ ${hpc_name} = 'XC50' ]; then
       source ./env.sh xc50 ${compiler}
@@ -353,20 +352,19 @@ compile(){
       source ./env.sh egeon ${compiler}
     fi
 
-
     cd ${home_gsi}/util/global_angupdate
     ln -sf Makefile.conf.${hpc_name}-${compiler} Makefile.conf
     make -f Makefile clean
     make -f Makefile
     if [[ ! -e ${home_gsi}/util/global_angupdate/global_angupdate ]]; then
-      echo "❌ Error: GSI bias correction utility compilation failed."
+      echo "[FAIL] Error: GSI bias correction utility compilation failed."
       exit 1
     fi
     cp -pfvr ${home_gsi}/util/global_angupdate/global_angupdate ${home_cptec}/bin/global_angupdate
   fi
 
   if [[ ${compbam} -eq 1 ]]; then
-    echo "🚀 Compiling BAM..."
+    echo "[INFO] Compiling BAM..."
     export mkname=${compiler}_${SUB}
     if [[ ${hpc_name} == "egeon" ]]; then
       module purge
@@ -384,7 +382,7 @@ compile(){
     make install
 
     for component in pos model; do
-      echo "🚀 Compiling ${component}..."
+      echo "[INFO] Compiling ${component}..."
       cd ${home_${component}_bam}/source
       make clean ${mkname}
       make ${mkname}
@@ -396,9 +394,10 @@ compile(){
   cp -pfr ${home_model_bam}/exec/* ${subt_model_bam}/exec
   cp -pfr ${home_pos_bam}/exec/* ${subt_pos_bam}/exec
 
-  echo "✅ Compilation completed successfully."
+  echo "[ OK ] Compilation completed successfully."
 }
 #EOC
+
 #BOP
 #  !FUNCTION: testcase
 #  !INTERFACE: testcase
@@ -443,8 +442,6 @@ help(){
   echo "\nUsage: ${0##*/} <option>\n"
   echo "Available options:"
   grep -oP '^[a-z_]+(?=\(\)\{)' ${BASH_SOURCE} | while read function; do
-  #grep -i '(){$' ${BASH_SOURCE} | sed 's/(){//g' | while read function; do
-    #dsc=$(sed -n "/${function}()\{/ {n;p}" ${BASH_SOURCE} | sed "s/#DESCRIPTION: //g")
     dsc=$(sed -n "/${function}(){$/ {n;p}" ${BASH_SOURCE} | sed "s/#*[DdEeSsCcRrIiPpTtIiOoNn]*://g")
     printf " * \e[1;31m%s\e[m --> \e[1;34m%s\e[m\n" "$function" "$dsc"
   done

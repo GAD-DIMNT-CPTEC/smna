@@ -6,126 +6,111 @@
 #
 # !SCRIPT: config_smg.sh
 #
-# !DESCRIPTION: Script used for SMG configuration and installation
+# !DESCRIPTION:
+#   Script used for SMG configuration and installation.
 #
-# !CALLING SEQUENCE: ./config_smg.sh <options>
-#                    note: To learn more about the available options
-#                          execute ./config_smg.sh help
+# !CALLING SEQUENCE:
+#   ./config_smg.sh <option>
+#   To learn more about the available options, execute:
+#   ./config_smg.sh help
 #
 # !REVISION HISTORY:
 #
-#    ?? ??? ???? - ??????????????? - Initial Version
-#    20 Dec 2017 - J. G. de Mattos - split into different files
-#                                    * etc/paths.sh -> paths
-#                                    * etc/functions.sh -> functions
-#
-#    Oct 2023 - J. A. Aravequia - added HPC system identification
-#                                 added the global variable hpc_name
-#                                 allows definitions for different computers:
-#                                    * etc/mach/XC50_paths.conf
-#                                    * etc/mach/egeon_paths.conf
-#                                    * etc/mach/new_system_avail.conf
+#   20 Dec 2017 - J. G. de Mattos - Initial Version
+#   Oct 2023 - J. A. Aravequia - Added HPC system identification
 #
 # !REMARKS:
-#
-#    * SMG paths are contained in the etc/paths.sh file
-#    * Functions that can be executed are in the etc/functions.sh file
+#   - SMG paths are defined in etc/paths.sh
+#   - Functions are contained in etc/smg_setup.sh
 #
 #EOP
 #-----------------------------------------------------------------------------#
 #BOC
 
-RootDir=$(dirname ${BASH_SOURCE})
+RootDir=$(dirname "${BASH_SOURCE}")
+export SMG_ROOT=${RootDir}
 
-export SMG_ROOT=${HOME}/SMNA_v3.0.0.t11889/SMG
-echo "Installation path: SMG_ROOT=$SMG_ROOT"
+echo "[INFO] Installation path: SMG_ROOT=$SMG_ROOT"
 
-lognode=$(cat /proc/sys/kernel/hostname | cut -b 1-6)
+#BOP
+# !FUNCTION: detect_hpc_system
+# !DESCRIPTION:
+#   Identifies the HPC system and sets global variables accordingly.
+#EOP
+detect_hpc_system() {
+    local sys_info=$(uname -a)
 
-case $lognode in
-
-  clogin)
-    STR=$(uname -a)
-    SUB='cray'
-    if [[ "$STR" == *"$SUB"* ]]; then
-      echo "This will run on Cray XC50 ..."
-      export hpc_name="XC50"
+    if echo "$sys_info" | grep -q "cray_ari_s"; then
+        export hpc_name="XC50"
+        export SUB="cray"
+        echo "[INFO] Detected: Cray XC50"
+    
+    elif echo "$sys_info" | grep -q "egeon-login1.cptec.inpe.br"; then
+        export hpc_name="egeon"
+        export SUB="egeon"
+        echo "[INFO] Detected: EGEON Cluster"
+    
+    else
+        echo "[ERROR] Unknown machine: $(hostname)"
+        echo "[ACTION] 1) Add the machine to the defined systems in etc/mach/"
+        echo "[ACTION] 2) Define an option for it in the function copy_fixed_files inside etc/smg_setup.sh"
+        return 1
     fi
-    ;;
+}
 
-  headno)
-    STR=$(uname -a)
-    SUB='egeon'
-    if [[ "$STR" == *"$SUB"* ]]; then
-      echo "This will run on EGEON Cluster ..."
-      export hpc_name="egeon"
+#BOP
+# !FUNCTION: execute_function
+# !DESCRIPTION:
+#   Verifies if the function exists in `smg_setup.sh` and executes it.
+#EOP
+execute_function() {
+    local function_name=$1
+
+    if declare -f "$function_name" > /dev/null; then
+        echo "[ OK ] Running: $function_name"
+        vars_export
+        "$function_name"
+    else
+        echo "[FAIL] Unknown option: $function_name"
+        vars_export
+        help
     fi
-    ;;
+}
 
-  *)
-    mach=$(cat /proc/sys/kernel/hostname)
-    echo "The configurations for $mach are not defined yet!"
-    echo "1) Add the machine to the defined systems in etc/mach; and"
-    echo "2) Add an option for it in the function copy_fixed_files in etc/functions"
-    exit
-    ;;
-esac
+#BOP
+# !FUNCTION: main
+# !DESCRIPTION:
+#   Main execution logic of the script, handling input arguments.
+#EOP
+main() {
+    if [[ $# -eq 0 ]]; then
+        echo "[WARNING] No arguments were passed!"
+        help
+        exit 1
+    fi
 
-. ${SMG_ROOT}/etc/functions.sh
+    local option=$1
+    echo "[INFO] Selected option: $option"
 
-# Check the arguments passed with the script
-echo -e ""
-echo -e "\e[36;1m >>> ${BASH_SOURCE##*/} executed from \e[m \e[32;1m${0##*/}\e[m"
+    # Default values if not set by the user
+    export compgsi=${compgsi:-1}
+    export compang=${compang:-1}
+    export compbam=${compbam:-1}
+    # Call HPC system detection function
+    detect_hpc_system
 
-if [ $# -eq 0 ]; then
-  echo -e ""
-  echo -e "\e[31;1m > No arguments were passed! \e[m"
-  help
-  banner
-  exit -1
-fi
+    # Load functions from the external file
+    source "${SMG_ROOT}/etc/smg_setup.sh"
+    
+    # Checks if Conda is active and deactivates it if necessary
+    disable_conda
+    
+    # Execute the requested function if it exists
+    execute_function "$option"
+}
 
-echo -en "\e[34;1m Selected option: \e[m \e[37;1m ${1} \e[m"
-
-f=0
-for function in $(grep -i '(){$' ${RootDir}/etc/functions.sh | sed 's/(){//g');do
-   if [ ${1} == ${function} ];then
-     f=1
-     echo -e "\e[37;1m[\e[m\e[32;1m OK \e[m\e[37;1m]\e[m"
-     vars_export
-     ${1}
-   fi
-done
-
-#------------------------------------------------------------#
-# Pipes create SubShells, so the while read is running on a
-# different shell than your script, that makes my f variable
-# never changes (only the one inside the pipe subshell).
-# Passing the data in a sub-shell instead, like it's a file
-# before the while loop. This assumes that I don't want some
-# intermittent file:
-
-#while read function; do
-#   if [ ${1} == ${function} ];then
-#     f=1
-#     echo -e "\e[37;1m[\e[m\e[32;1m OK \e[m\e[37;1m]\e[m"
-#     vars_export
-#     ${1}
-#     banner
-#   fi
-#done < <(grep -i '(){$' ${RootDir}/etc/functions.sh | sed 's/(){//g')
-
-#------------------------------------------------------------#
-
-if [ ${f} -eq 0 ];then
-
-  echo -e "\e[37;1m[\e[m\e[31;1m FAIL \e[m\e[37;1m]\e[m"
-  echo -e ""
-  echo -e "\e[37;1m Unknown option, <help>: \e[m"
-  vars_export
-  help
-  banner
-fi
+# Call the main function
+main "$@"
 
 #EOC
 #-----------------------------------------------------------------------------#
