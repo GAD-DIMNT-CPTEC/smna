@@ -45,7 +45,7 @@ detect_hpc_system() {
         export SUB="cray"
         echo "[INFO] Detected: Cray XC50"
     
-    elif echo "$sys_info" | grep -q "headnode.cptec.inpe.br"; then
+    elif echo "$sys_info" | grep -q "headnode.egeon.cptec.inpe.br"; then
         export hpc_name="egeon"
         export SUB="egeon"
         echo "[INFO] Detected: EGEON Cluster"
