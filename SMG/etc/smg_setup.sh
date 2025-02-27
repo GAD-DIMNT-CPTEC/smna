@@ -343,25 +343,25 @@ compile(){
     fi
   fi
 
-  if [[ ${compang} -eq 1 ]]; then
-    echo "[INFO] Compiling GSI bias correction utility..."
-
-    if [ ${hpc_name} = 'XC50' ]; then
-      source ./env.sh xc50 ${compiler}
-    elif [ ${hpc_name} = 'egeon' ]; then
-      source ./env.sh egeon ${compiler}
-    fi
-
-    cd ${home_gsi}/util/global_angupdate
-    ln -sf Makefile.conf.${hpc_name}-${compiler} Makefile.conf
-    make -f Makefile clean
-    make -f Makefile
-    if [[ ! -e ${home_gsi}/util/global_angupdate/global_angupdate ]]; then
-      echo "[FAIL] Error: GSI bias correction utility compilation failed."
-      exit 1
-    fi
-    cp -pfvr ${home_gsi}/util/global_angupdate/global_angupdate ${home_cptec}/bin/global_angupdate
-  fi
+#  if [[ ${compang} -eq 1 ]]; then
+#    echo "[INFO] Compiling GSI bias correction utility..."
+#
+#    if [ ${hpc_name} = 'XC50' ]; then
+#      source ./env.sh xc50 ${compiler}
+#    elif [ ${hpc_name} = 'egeon' ]; then
+#      source ./env.sh egeon ${compiler}
+#    fi
+#
+#    cd ${home_gsi}/util/global_angupdate
+#    ln -sf Makefile.conf.${hpc_name}-${compiler} Makefile.conf
+#    make -f Makefile clean
+#    make -f Makefile
+#    if [[ ! -e ${home_gsi}/util/global_angupdate/global_angupdate ]]; then
+#      echo "[FAIL] Error: GSI bias correction utility compilation failed."
+#      exit 1
+#    fi
+#    cp -pfvr ${home_gsi}/util/global_angupdate/global_angupdate ${home_cptec}/bin/global_angupdate
+#  fi
 
   if [[ ${compbam} -eq 1 ]]; then
     echo "[INFO] Compiling BAM..."

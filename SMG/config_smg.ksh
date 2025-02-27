@@ -26,8 +26,8 @@
 #EOP
 #-----------------------------------------------------------------------------#
 #BOC
-
-RootDir=$(dirname "${BASH_SOURCE}")
+SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
+RootDir="$(dirname "$SCRIPT_PATH")"
 export SMG_ROOT=${RootDir}
 
 echo "[INFO] Installation path: SMG_ROOT=$SMG_ROOT"
