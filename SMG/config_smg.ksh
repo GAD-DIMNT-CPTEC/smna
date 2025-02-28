@@ -26,8 +26,18 @@
 #EOP
 #-----------------------------------------------------------------------------#
 #BOC
+<<<<<<< .mine
+
+#!/bin/bash
 SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
 RootDir="$(dirname "$SCRIPT_PATH")"
+||||||| .r95
+
+RootDir=$(dirname "${BASH_SOURCE}")
+=======
+SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
+RootDir="$(dirname "$SCRIPT_PATH")"
+>>>>>>> .r96
 export SMG_ROOT=${RootDir}
 
 echo "[INFO] Installation path: SMG_ROOT=$SMG_ROOT"
@@ -43,11 +53,13 @@ detect_hpc_system() {
     if echo "$sys_info" | grep -q "cray_ari_s"; then
         export hpc_name="XC50"
         export SUB="cray"
+        export WRAPPER="ftn"
         echo "[INFO] Detected: Cray XC50"
     
     elif echo "$sys_info" | grep -q "headnode.egeon.cptec.inpe.br"; then
         export hpc_name="egeon"
         export SUB="egeon"
+        export WRAPPER="mpif90"
         echo "[INFO] Detected: EGEON Cluster"
     
     else
@@ -94,7 +106,7 @@ main() {
 
     # Default values if not set by the user
     export compgsi=${compgsi:-1}
-    export compang=${compang:-1}
+    export compang=${compang:-0}
     export compbam=${compbam:-1}
     # Call HPC system detection function
     detect_hpc_system

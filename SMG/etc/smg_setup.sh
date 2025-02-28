@@ -343,28 +343,30 @@ compile(){
     fi
   fi
 
-#  if [[ ${compang} -eq 1 ]]; then
-#    echo "[INFO] Compiling GSI bias correction utility..."
-#
-#    if [ ${hpc_name} = 'XC50' ]; then
-#      source ./env.sh xc50 ${compiler}
-#    elif [ ${hpc_name} = 'egeon' ]; then
-#      source ./env.sh egeon ${compiler}
-#    fi
-#
-#    cd ${home_gsi}/util/global_angupdate
-#    ln -sf Makefile.conf.${hpc_name}-${compiler} Makefile.conf
-#    make -f Makefile clean
-#    make -f Makefile
-#    if [[ ! -e ${home_gsi}/util/global_angupdate/global_angupdate ]]; then
-#      echo "[FAIL] Error: GSI bias correction utility compilation failed."
-#      exit 1
-#    fi
-#    cp -pfvr ${home_gsi}/util/global_angupdate/global_angupdate ${home_cptec}/bin/global_angupdate
-#  fi
+  if [[ ${compang} -eq 1 ]]; then
+    echo "[INFO] Compiling GSI bias correction utility..."
+
+    if [ ${hpc_name} = 'XC50' ]; then
+      source ./env.sh xc50 ${compiler}
+    elif [ ${hpc_name} = 'egeon' ]; then
+      source ./env.sh egeon ${compiler}
+    fi
+
+    cd ${home_gsi}/util/global_angupdate
+    ln -sf Makefile.conf.${hpc_name}-${compiler} Makefile.conf
+    make -f Makefile clean
+    make -f Makefile
+    if [[ ! -e ${home_gsi}/util/global_angupdate/global_angupdate ]]; then
+      echo "[FAIL] Error: GSI bias correction utility compilation failed."
+      exit 1
+    fi
+    cp -pfvr ${home_gsi}/util/global_angupdate/global_angupdate ${home_cptec}/bin/global_angupdate
+  fi
 
   if [[ ${compbam} -eq 1 ]]; then
+    echo ""
     echo "[INFO] Compiling BAM..."
+    echo ""
     export mkname=${compiler}_${SUB}
     if [[ ${hpc_name} == "egeon" ]]; then
       module purge
@@ -375,18 +377,30 @@ compile(){
     if [ ${SUB} = "cray" ]; then 
       export NETCDF_FORTRAN_DIR=${NETCDF_DIR}
     fi
-    
-    cd ${home_pre_bam}/build
+    component='pre'
+    echo "[INFO] Compiling ${component}..."
+    cd ${home_${component}_bam}/build
     make clean ${mkname}
     make ${mkname}
     make install
 
-    for component in pos model; do
-      echo "[INFO] Compiling ${component}..."
-      cd ${home_${component}_bam}/source
-      make clean ${mkname}
-      make ${mkname}
-    done
+    component='pos'
+    echo "[INFO] Compiling ${component}..."
+    cd ${home_${component}_bam}/source
+    make clean ${mkname}
+    make ${mkname}
+
+    component='model'
+    echo "[INFO] Compiling ${component}..."
+    if [ -e ${home_${component}_bam}/build ];then
+       rm -fr ${home_${component}_bam}/build
+    fi
+    mkdir ${home_${component}_bam}/build
+    cd ${home_${component}_bam}/build
+    cmake -DCMAKE_Fortran_COMPILER=${WRAPPER}
+    make 
+    make install
+
   fi
 
   cp -pfr ${home_gsi_src}/gsi.x ${home_cptec}/bin
