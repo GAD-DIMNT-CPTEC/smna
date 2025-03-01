@@ -26,18 +26,8 @@
 #EOP
 #-----------------------------------------------------------------------------#
 #BOC
-<<<<<<< .mine
-
-#!/bin/bash
 SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
 RootDir="$(dirname "$SCRIPT_PATH")"
-||||||| .r95
-
-RootDir=$(dirname "${BASH_SOURCE}")
-=======
-SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
-RootDir="$(dirname "$SCRIPT_PATH")"
->>>>>>> .r96
 export SMG_ROOT=${RootDir}
 
 echo "[INFO] Installation path: SMG_ROOT=$SMG_ROOT"
