@@ -305,6 +305,64 @@ modify_scripts(){
 #EOC
 
 #BOP
+#  !FUNCTION: compile_component
+#  !INTERFACE: compile_component
+#  !DESCRIPTION:
+#   Compiles the component of BAM model.
+#
+#  !CALLING SEQUENCE:
+#   compile_component "component_name" "subdirectory"
+#
+#  !REMARKS:
+#   - Ensures component directory exists before attempting compilation.
+#   - Supports "pre", "pos", and "model" components.
+#EOP
+#BOC
+compile_component() {
+    local component=$1
+    local subdir=$2
+    
+    echo "[INFO] Compiling ${component}..."
+
+    # Obtém o caminho do diretório correspondente ao componente
+    local home_component_bam_var="home_${component}_bam"
+    local home_component_bam="${!home_component_bam_var}"
+
+    if [ -z "$home_component_bam" ]; then
+        echo "[ERROR] Variable ${home_component_bam_var} is not defined!" >&2
+        exit 1
+    fi
+
+    # Caminho completo do diretório de compilação
+    local component_dir="${home_component_bam}/${subdir}"
+
+    if [ ! -d "$component_dir" ]; then
+        echo "[ERROR] Directory ${component_dir} does not exist!" >&2
+        exit 1
+    fi
+
+    echo "[INFO] Changing to ${component_dir}"
+    cd "${component_dir}" || exit 1
+
+    echo "[INFO] Running make clean for ${mkname}..."
+    make clean "${mkname}"
+
+    echo "[INFO] Running make for ${mkname}..."
+    make "${mkname}"
+    
+    # Apenas para os componentes "pre" e "model"
+    if [[ "$component" == "pre" || "$component" == "model" ]]; then
+        echo "[INFO] Running make install for ${component}..."
+        make install
+    fi
+
+    echo "[INFO] Compilation of ${component} completed successfully."
+}
+#EOC
+
+
+
+#BOP
 #  !FUNCTION: compile
 #  !INTERFACE: compile
 #  !DESCRIPTION:
@@ -369,7 +427,7 @@ compile(){
     echo ""
     export mkname=${compiler}_${SUB}
     if [[ ${hpc_name} == "egeon" ]]; then
-      module purge
+      module -q purge
       module load intel/2021.4.0 mpi/2021.4.0 impi/2021.4.0
       module load netcdf/4.7.4 pnetcdf/1.12.2 netcdf-fortran/4.5.3
     fi
@@ -377,28 +435,33 @@ compile(){
     if [ ${SUB} = "cray" ]; then 
       export NETCDF_FORTRAN_DIR=${NETCDF_DIR}
     fi
-    component='pre'
-    echo "[INFO] Compiling ${component}..."
-    cd ${home_${component}_bam}/build
-    make clean ${mkname}
-    make ${mkname}
-    make install
-
-    component='pos'
-    echo "[INFO] Compiling ${component}..."
-    cd ${home_${component}_bam}/source
-    make clean ${mkname}
-    make ${mkname}
-
-    component='model'
-    echo "[INFO] Compiling ${component}..."
-    if [ -e ${home_${component}_bam}/build ];then
-       rm -fr ${home_${component}_bam}/build
+    # Compilação do "pre"
+    compile_component "pre" "build"
+    
+    # Compilação do "pos"
+    compile_component "pos" "source"
+    
+    # Compilação do "model"
+    component="model"
+    echo "[INFO] Compiling ${component}...${WRAPPER}"
+    
+    home_component_bam_var="home_${component}_bam"
+    home_component_bam="${!home_component_bam_var}"
+    
+    if [ -z "$home_component_bam" ]; then
+        echo "[ERROR] Variável ${home_component_bam_var} não definida!" >&2
+        exit 1
     fi
-    mkdir ${home_${component}_bam}/build
-    cd ${home_${component}_bam}/build
-    cmake -DCMAKE_Fortran_COMPILER=${WRAPPER}
-    make 
+    
+    if [ -e "${home_component_bam}/build" ]; then
+        rm -fr "${home_component_bam}/build"
+    fi
+    
+    mkdir -p "${home_component_bam}/build"
+    cd "${home_component_bam}/build" || exit 1
+    
+    cmake -DCMAKE_Fortran_COMPILER=${WRAPPER} ..
+    make -j$(nproc)
     make install
 
   fi

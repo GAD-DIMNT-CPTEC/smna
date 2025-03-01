@@ -50,6 +50,7 @@ detect_hpc_system() {
         export hpc_name="egeon"
         export SUB="egeon"
         export WRAPPER="mpif90"
+        export LC_ALL="en_US.UTF-8"
         echo "[INFO] Detected: EGEON Cluster"
     
     else
