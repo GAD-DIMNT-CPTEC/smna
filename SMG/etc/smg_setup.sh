@@ -391,11 +391,12 @@ compile(){
 
   echo "[INFO] Compiling SMG utilities..."
   cd ${home_gsi}
+  echo "[ INFO ] PATH ${home_gsi}"
 
   if [[ ${compgsi} -eq 1 ]]; then
     echo "[INFO] Compiling GSI..."
     ./compile.sh -C ${compiler} 2>&1 | tee ${home_gsi}/compile.log
-    if [[ ! -e ${home_gsi_src}/gsi.x ]]; then
+    if [[ ! -e ${home_gsi_bin}/gsi.x ]]; then
       echo "[FAIL] Error: GSI compilation failed. Check compile.log."
       exit 1
     fi
@@ -466,7 +467,6 @@ compile(){
 
   fi
 
-  cp -pfr ${home_gsi_src}/gsi.x ${home_cptec}/bin
   cp -pfr ${home_pre_bam}/exec/* ${subt_pre_bam}/exec
   cp -pfr ${home_model_bam}/exec/* ${subt_model_bam}/exec
   cp -pfr ${home_pos_bam}/exec/* ${subt_pos_bam}/exec
