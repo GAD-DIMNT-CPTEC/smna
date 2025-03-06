@@ -25,12 +25,38 @@
 #EOP
 #-----------------------------------------------------------------------------#
 
-# Ensure SUB is defined before using it
-if [[ -z "$SUB" ]]; then
-    echo "[WARNING]  Warning: SUB was not set before loading smg_setup.sh!"
+# Ensure hpc_name is defined before using it
+if [[ -z "${hpc_name}" ]]; then
+    echo "[WARNING]  Warning: hpc_name was not set before loading smg_setup.sh!"
     echo "Using default value: 'unknown'"
     export SUB="unknown"
 fi
+
+#BOP
+# !FUNCTION: use_local_cmake
+# !INTERFACE: use_local_cmake
+# !DESCRIPTION:
+#  Adds the project's local CMake binary directory to the PATH environment variable,
+#  ensuring the consistent use of a specific CMake version throughout the build process.
+#
+#  This function dynamically detects the location of the local CMake installation based on
+#  its relative position to the calling script and prepends its path to the existing PATH variable.
+#
+#  Usage:
+#    use_local_cmake
+#
+# !REVISION HISTORY:
+#  2024-03-05 - João Gerd - Initial implementation.
+#EOP
+#BOC
+function use_local_cmake() {
+    local script_path="$(realpath "${BASH_SOURCE[0]}")"
+    local script_dir="$(dirname "$script_path")"
+    local project_dir="$(dirname "$script_dir")"
+    export PATH="$project_dir/utils/cmake/bin:$PATH"
+    echo "[INFO] Using local CMake at: $project_dir/util/cmake/bin/cmake"
+}
+#EOC
 
 #BOP
 #  !FUNCTION: assign
@@ -205,10 +231,13 @@ configure(){
     "${subt_pre_bam}/databcs"
     "${subt_pre_bam}/dataco2"
     "${subt_pre_bam}/dataTop"
+    "${subt_pre_bam}/exec"
     "${subt_model_bam}/datain" 
     "${subt_model_bam}/dataout"
+    "${subt_model_bam}/exec"
     "${subt_pos_bam}/datain" 
     "${subt_pos_bam}/dataout"
+    "${subt_pos_bam}/exec"
     "${subt_grh_bam}/datain"
     "${subt_grh_bam}/dataout"
     "${subt_gsi}"
@@ -304,62 +333,6 @@ modify_scripts(){
 }
 #EOC
 
-#BOP
-#  !FUNCTION: compile_component
-#  !INTERFACE: compile_component
-#  !DESCRIPTION:
-#   Compiles the component of BAM model.
-#
-#  !CALLING SEQUENCE:
-#   compile_component "component_name" "subdirectory"
-#
-#  !REMARKS:
-#   - Ensures component directory exists before attempting compilation.
-#   - Supports "pre", "pos", and "model" components.
-#EOP
-#BOC
-compile_component() {
-    local component=$1
-    local subdir=$2
-    
-    echo "[INFO] Compiling ${component}..."
-
-    # Obtém o caminho do diretório correspondente ao componente
-    local home_component_bam_var="home_${component}_bam"
-    local home_component_bam="${!home_component_bam_var}"
-
-    if [ -z "$home_component_bam" ]; then
-        echo "[ERROR] Variable ${home_component_bam_var} is not defined!" >&2
-        exit 1
-    fi
-
-    # Caminho completo do diretório de compilação
-    local component_dir="${home_component_bam}/${subdir}"
-
-    if [ ! -d "$component_dir" ]; then
-        echo "[ERROR] Directory ${component_dir} does not exist!" >&2
-        exit 1
-    fi
-
-    echo "[INFO] Changing to ${component_dir}"
-    cd "${component_dir}" || exit 1
-
-    echo "[INFO] Running make clean for ${mkname}..."
-    make clean "${mkname}"
-
-    echo "[INFO] Running make for ${mkname}..."
-    make "${mkname}"
-    
-    # Apenas para os componentes "pre" e "model"
-    if [[ "$component" == "pre" || "$component" == "model" ]]; then
-        echo "[INFO] Running make install for ${component}..."
-        make install
-    fi
-
-    echo "[INFO] Compilation of ${component} completed successfully."
-}
-#EOC
-
 
 
 #BOP
@@ -389,13 +362,12 @@ compile(){
   #fi
 
 
-  echo "[INFO] Compiling SMG utilities..."
-  cd ${home_gsi}
-  echo "[ INFO ] PATH ${home_gsi}"
-
   if [[ ${compgsi} -eq 1 ]]; then
+    cd ${home_gsi}
     echo "[INFO] Compiling GSI..."
-    ./compile.sh -C ${compiler} 2>&1 | tee ${home_gsi}/compile.log
+    echo "[INFO] PATH ${home_gsi}"
+
+    . compile.sh -C ${compiler} 2>&1 | tee ${home_gsi}/compile.log
     if [[ ! -e ${home_gsi_bin}/gsi.x ]]; then
       echo "[FAIL] Error: GSI compilation failed. Check compile.log."
       exit 1
@@ -405,11 +377,7 @@ compile(){
   if [[ ${compang} -eq 1 ]]; then
     echo "[INFO] Compiling GSI bias correction utility..."
 
-    if [ ${hpc_name} = 'XC50' ]; then
-      source ./env.sh xc50 ${compiler}
-    elif [ ${hpc_name} = 'egeon' ]; then
-      source ./env.sh egeon ${compiler}
-    fi
+    source ./env.sh ${hpc_name} ${compiler}
 
     cd ${home_gsi}/util/global_angupdate
     ln -sf Makefile.conf.${hpc_name}-${compiler} Makefile.conf
@@ -423,53 +391,12 @@ compile(){
   fi
 
   if [[ ${compbam} -eq 1 ]]; then
-    echo ""
-    echo "[INFO] Compiling BAM..."
-    echo ""
-    export mkname=${compiler}_${SUB}
-    if [[ ${hpc_name} == "egeon" ]]; then
-      module -q purge
-      module load intel/2021.4.0 mpi/2021.4.0 impi/2021.4.0
-      module load netcdf/4.7.4 pnetcdf/1.12.2 netcdf-fortran/4.5.3
-    fi
-
-    if [ ${SUB} = "cray" ]; then 
-      export NETCDF_FORTRAN_DIR=${NETCDF_DIR}
-    fi
-    # Compilação do "pre"
-    compile_component "pre" "build"
-    
-    # Compilação do "pos"
-    compile_component "pos" "source"
-    
-    # Compilação do "model"
-    component="model"
-    echo "[INFO] Compiling ${component}...${WRAPPER}"
-    
-    home_component_bam_var="home_${component}_bam"
-    home_component_bam="${!home_component_bam_var}"
-    
-    if [ -z "$home_component_bam" ]; then
-        echo "[ERROR] Variável ${home_component_bam_var} não definida!" >&2
-        exit 1
-    fi
-    
-    if [ -e "${home_component_bam}/build" ]; then
-        rm -fr "${home_component_bam}/build"
-    fi
-    
-    mkdir -p "${home_component_bam}/build"
-    cd "${home_component_bam}/build" || exit 1
-    
-    cmake -DCMAKE_Fortran_COMPILER=${WRAPPER} ..
-    make -j$(nproc)
-    make install
-
+    cd ${home_bam}
+    echo "[INFO] Compiling BAM ..."
+    echo "[INFO] PATH ${home_bam}"
+    . compile.sh  2>&1 | tee ${home_bam}/compile.log
   fi
 
-  cp -pfr ${home_pre_bam}/exec/* ${subt_pre_bam}/exec
-  cp -pfr ${home_model_bam}/exec/* ${subt_model_bam}/exec
-  cp -pfr ${home_pos_bam}/exec/* ${subt_pos_bam}/exec
 
   echo "[ OK ] Compilation completed successfully."
 }

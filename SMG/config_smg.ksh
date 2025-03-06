@@ -41,14 +41,14 @@ detect_hpc_system() {
     local sys_info=$(uname -a)
 
     if echo "$sys_info" | grep -q "cray_ari_s"; then
-        export hpc_name="XC50"
-        export SUB="cray"
+        export hpc_system="cray"
+        export hpc_name="xc50"
         export WRAPPER="ftn"
         echo "[INFO] Detected: Cray XC50"
     
     elif echo "$sys_info" | grep -q "headnode.egeon.cptec.inpe.br"; then
+        export hpc_system="linux"
         export hpc_name="egeon"
-        export SUB="egeon"
         export WRAPPER="mpif90"
         export LC_ALL="en_US.UTF-8"
         echo "[INFO] Detected: EGEON Cluster"
@@ -104,6 +104,9 @@ main() {
 
     # Load functions from the external file
     source "${SMG_ROOT}/etc/smg_setup.sh"
+    
+    # Set the local CMake into PATH
+    use_local_cmake
     
     # Checks if Conda is active and deactivates it if necessary
     disable_conda
