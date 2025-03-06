@@ -195,15 +195,16 @@ copy_fixed_files(){
 #  !INTERFACE: configure
 #  !DESCRIPTION:
 #   Configures the SMG environment by creating necessary directories, copying fixed files,
-#   and adjusting required scripts. Ensures all essential paths are properly set up.
+#   adjusting required scripts, and ensuring the local CMake is correctly set up.
+#   Ensures all essential paths are properly set up.
 #
 #  !CALLING SEQUENCE:
 #   configure
 #
 #  !REMARKS:
-#   - Prompts the user for confirmation unless AUTO_ACCEPT is set to "yes".
-#   - Creates necessary directory structures if they do not exist.
-#   - Calls copy_fixed_files() to ensure essential files are present.
+#   - Prompts before proceeding unless AUTO_ACCEPT is set to "yes".
+#   - Automatically extracts the local CMake binary if it isn't already present.
+#   - Assumes CMake tarball is placed at ${SMG_ROOT}/utils/
 #EOP
 configure(){
   vars_export
@@ -216,6 +217,7 @@ configure(){
     echo
     [[ $REPLY =~ ^[Nn]$ ]] && exit 0
   fi
+
 
   # List of directories to be created
   dirs=(
@@ -252,6 +254,25 @@ configure(){
     fi
   done
 
+  # Extract local CMake if not already extracted
+  local project_dir="${RootDir}"
+  local cmake_tarball="${project_dir}/utils/cmake-3.31.6-linux-x86_64.tar.gz"
+  local cmake_dir="${project_dir}/utils/cmake"
+  local cmake_exec="${cmake_dir}/bin/cmake"
+  if [[ ! -x "${cmake_exec}" ]]; then
+    echo "Extracting local CMake..."
+    if [[ -f "${cmake_tarball}" ]]; then
+      tar -xzf "${cmake_tarball}" \
+          -C "${cmake_dir}" --strip-components=1
+      echo "[INFO] Local CMake extracted successfully."
+    else
+      echo "[FAIL] Error: CMake tarball not found in utils directory."
+      exit 1
+    fi
+  else
+    echo "[INFO] Local CMake already extracted."
+  fi
+  
   # Ensure essential files are copied
   copy_fixed_files
   
