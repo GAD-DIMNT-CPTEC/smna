@@ -65,6 +65,7 @@ detect_hpc_system() {
 # !FUNCTION: execute_function
 # !DESCRIPTION:
 #   Verifies if the function exists in `smg_setup.sh` and executes it.
+#   If the function returns a non-zero value, the script aborts.
 #EOP
 execute_function() {
     local function_name=$1
@@ -73,13 +74,18 @@ execute_function() {
         echo "[ OK ] Running: $function_name"
         vars_export
         "$function_name"
+        local exit_code=$?
+        if [[ $exit_code -ne 0 ]]; then
+            echo "[ERROR] Function $function_name failed with exit code $exit_code."
+            exit $exit_code
+        fi
     else
         echo "[FAIL] Unknown option: $function_name"
         vars_export
         help
+        exit 1
     fi
 }
-
 #BOP
 # !FUNCTION: main
 # !DESCRIPTION:
@@ -99,22 +105,37 @@ main() {
     export compgsi=${compgsi:-1}
     export compang=${compang:-0}
     export compbam=${compbam:-1}
+
     # Call HPC system detection function
     detect_hpc_system
+    local exit_code=$?
+    if [[ $exit_code -ne 0 ]]; then
+        echo "[ERROR] detect_hpc_system failed. Aborting."
+        exit $exit_code
+    fi
 
     # Load functions from the external file
     source "${SMG_ROOT}/etc/smg_setup.sh"
-    
+
     # Set the local CMake into PATH
     use_local_cmake
+    exit_code=$?
+    if [[ $exit_code -ne 0 ]]; then
+        echo "[ERROR] use_local_cmake failed. Aborting."
+        exit $exit_code
+    fi
     
     # Checks if Conda is active and deactivates it if necessary
     disable_conda
+    exit_code=$?
+    if [[ $exit_code -ne 0 ]]; then
+        echo "[ERROR] disable_conda failed. Aborting."
+        exit $exit_code
+    fi
     
     # Execute the requested function if it exists
     execute_function "$option"
 }
-
 # Call the main function
 main "$@"
 

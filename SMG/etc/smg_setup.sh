@@ -341,14 +341,21 @@ modify_scripts(){
 
   # Updating environment variables in EnvironmentalVariables
   declare -A env_replacements=(
-    ["HOMEBASE"]="${home_bam}"
-    ["SUBTBASE"]="${subt_bam}"
+      ["HOMEBASE"]="${home_bam}"
+      ["SUBTBASE"]="${subt_bam}"
+      ["WORKBASE"]="${work_bam}"  # Adicionando WORKBASE se necessário
   )
-
+  
   for key in "${!env_replacements[@]}"; do
-    sed -i "/export ${key}=\//,1d" "${home_run_bam}/EnvironmentalVariables"
-    sed -i "/# BAM path in HOME/a\\export ${key}=\"${env_replacements[$key]}\"" "${home_run_bam}/EnvironmentalVariables"
+      # Substitui a linha que começa com "export ${key}="
+      sed -i "s|^export ${key}=.*|export ${key}=\"${env_replacements[$key]}\"|" "${home_run_bam}/EnvironmentalVariables"
+      
+      # Se a variável não existir, insere a linha abaixo do comentário "# BAM path in HOME"
+      if ! grep -q "export ${key}=" "${home_run_bam}/EnvironmentalVariables"; then
+          sed -i "/# BAM path in HOME/a\\export ${key}=\"${env_replacements[$key]}\"" "${home_run_bam}/EnvironmentalVariables"
+      fi
   done
+
 
   echo "[ OK ] Script modifications completed."
 }
@@ -441,7 +448,7 @@ testcase(){
   done
   read answer
 
-  anlfile=$(ls -1 ${public_bam}/PRE/datain/${year[$answer]}/ncep_anl/gdas1.*.SAnl.*|head -n 1)
+  anlfile=$(ls -1 ${public_bam}/PRE/datain/${year[$answer]}/ncep_anl/gdas*|head -n 1)
   cp -pvfrL ${anlfile} ${subt_pre_bam}/datain/
   cp -pvfrL ${public_bam}/PRE/datain/${year[${answer}]}/sst/* ${subt_pre_bam}/datain/
   cp -pvfrL ${public_bam}/PRE/datain/${year[${answer}]}/sno/* ${subt_pre_bam}/datain/
