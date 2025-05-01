@@ -172,19 +172,23 @@ copy_fixed_files(){
        cp -pf ${public_bam}/PRE/databcs/$file ${subt_pre_bam}/databcs/
      done
    
-     cp -pf ${home_model_bam}/datain/* ${subt_model_bam}/datain/
-     cp -pf ${home_pre_bam}/datain/* ${subt_pre_bam}/datain/
-     cp -pf ${home_pre_bam}/dataout/* ${subt_pre_bam}/dataout/
-     
+#     cp -pf ${home_model_bam}/datain/* ${subt_model_bam}/datain/
+#     cp -pf ${home_pre_bam}/datain/* ${subt_pre_bam}/datain/
+#     cp -pf ${home_pre_bam}/dataout/* ${subt_pre_bam}/dataout/
+ 
+     cp -pf ${public_bam}/PRE/datain/2019/sst/* ${subt_pre_bam}/datain/
+     cp -pf ${public_bam}/PRE/datain/2019/ncep_anl/* ${subt_pre_bam}/datain/
+     cp -pf ${public_bam}/PRE/datain/2019/smc/* ${subt_pre_bam}/datain/
+
   elif [ ${HOSTNAME:0:1} = 'c' ]; then
      echo "[INFO] Linking fixed files..."
      ln -s /cray_home/joao_gerd/BAMFIX/model/datain/* ${subt_model_bam}/datain/
      ln -s /cray_home/joao_gerd/BAMFIX/pre/datain/* ${subt_pre_bam}/datain/
      ln -s /cray_home/joao_gerd/BAMFIX/pre/dataout/* ${subt_pre_bam}/dataout/
      ln -s /cray_home/joao_gerd/BAMFIX/pre/databcs/* ${subt_pre_bam}/databcs/
-     ln -s cray_home/joao_gerd/BAMFIX/pre/dataco2/* ${subt_pre_bam}/dataco2/
-     ln -s cray_home/joao_gerd/BAMFIX/pre/datasst/* ${subt_pre_bam}/datasst/
-     ln -s cray_home/joao_gerd/BAMFIX/pre/dataTop/* ${subt_pre_bam}/dataTop/ 
+     ln -s /cray_home/joao_gerd/BAMFIX/pre/dataco2/* ${subt_pre_bam}/dataco2/
+     ln -s /cray_home/joao_gerd/BAMFIX/pre/datasst/* ${subt_pre_bam}/datasst/
+     ln -s /cray_home/joao_gerd/BAMFIX/pre/dataTop/* ${subt_pre_bam}/dataTop/ 
   fi
 
 }
@@ -231,6 +235,7 @@ configure(){
     "${subt_pre_bam}/datain" 
     "${subt_pre_bam}/dataout" 
     "${subt_pre_bam}/databcs"
+    "${subt_pre_bam}/datasst"
     "${subt_pre_bam}/dataco2"
     "${subt_pre_bam}/dataTop"
     "${subt_pre_bam}/exec"
@@ -451,7 +456,7 @@ testcase(){
   anlfile=$(ls -1 ${public_bam}/PRE/datain/${year[$answer]}/ncep_anl/gdas*|head -n 1)
   cp -pvfrL ${anlfile} ${subt_pre_bam}/datain/
   cp -pvfrL ${public_bam}/PRE/datain/${year[${answer}]}/sst/* ${subt_pre_bam}/datain/
-  cp -pvfrL ${public_bam}/PRE/datain/${year[${answer}]}/sno/* ${subt_pre_bam}/datain/
+#  cp -pvfrL ${public_bam}/PRE/datain/${year[${answer}]}/sno/* ${subt_pre_bam}/datain/
   cp -pvfrL ${public_bam}/PRE/datain/${year[${answer}]}/smc/*.vfm ${subt_pre_bam}/datain/
 
   cp -pvfr ${public_bam}/PRE/dataout/* ${subt_pre_bam}/dataout/
