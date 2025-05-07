@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 #-----------------------------------------------------------------------------#
 #           Group on Data Assimilation Development - GDAD/CPTEC/INPE          #
 #-----------------------------------------------------------------------------#
@@ -47,6 +47,13 @@ detect_hpc_system() {
         echo "[INFO] Detected: Cray XC50"
     
     elif echo "$sys_info" | grep -q "headnode.egeon.cptec.inpe.br"; then
+        export hpc_system="linux"
+        export hpc_name="egeon"
+        export WRAPPER="mpif90"
+        export LC_ALL="en_US.UTF-8"
+        echo "[INFO] Detected: EGEON Cluster"
+    
+    elif echo "$sys_info" | grep -q "egeon-login.cptec.inpe.br"; then
         export hpc_system="linux"
         export hpc_name="egeon"
         export WRAPPER="mpif90"

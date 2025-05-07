@@ -38,8 +38,8 @@ case $lognode in
 esac
 
 # Carregando as variaveis do sistema
-source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
-source /home/jose.aravequia/SMNA_v3.0.0.t11889/SMG/run/smg_functions.sh    ## has inctime function wrote in bash script
+source /mnt/beegfs/$USER/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
+source /mnt/beegfs/$USER/SMNA_v3.0.0.t11889/SMG/run/smg_functions.sh    ## has inctime function wrote in bash script
 # carregando funcoes do pre-processamento
 
 source ${home_run_bam}/runPre.func
