@@ -187,7 +187,7 @@ fi
 # Rodando o Modelo
 /bin/bash runModel -das -v -np ${NPROC} -N ${tasks_per_node} -d ${cpus_per_task} \
                    -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} \
-                   -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -s sstwkl
+                   -px CPT -py ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -s sstwkl
 
 
 # Pos-processa as previsoes caso a variavel RUNPOS possua o valor Yes ou Y
