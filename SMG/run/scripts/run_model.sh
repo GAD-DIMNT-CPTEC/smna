@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/bash -x
 
 # Descomentar para debugar
 #set -o xtrace
@@ -20,6 +20,15 @@ case $lognode in
     ;;
 
   headno)
+    STR=`uname -a`
+    SUB='egeon'
+    if [[ "$STR" == *"$SUB"* ]]; then
+      echo -n "This will run on EGEON Cluster ..."
+      export hpc_name="egeon"
+    fi
+    ;;
+
+  egeon-)
     STR=`uname -a`
     SUB='egeon'
     if [[ "$STR" == *"$SUB"* ]]; then

@@ -463,7 +463,7 @@ testcase(){
   cp -pvfr ${public_bam}/PRE/databcs/* ${subt_pre_bam}/databcs/
   cp -pvfr ${public_bam}/PRE/datasst/* ${subt_pre_bam}/datasst/
 
-  ln -s ${home_pos_bam}/datain/* ${subt_pos_bam}/datain/
+  ln -sfv ${home_pos_bam}/datain/* ${subt_pos_bam}/datain/
 }
 #EOC
 

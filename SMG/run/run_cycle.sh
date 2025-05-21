@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 #-----------------------------------------------------------------------------#
 #           Group on Data Assimilation Development - GDAD/CPTEC/INPE          #
 #-----------------------------------------------------------------------------#
@@ -60,6 +60,7 @@ modelMPITasks=64  # Number of Processors used by model
 modelFCT=09        # Time length of model forecasts
 gsiMPITasks=144    # Number of Processors used by gsi
 
+do_obsmake=1
 do_gsi=1 
 do_bam=1
 
@@ -199,30 +200,35 @@ if  [ ! -z ${BcLABELI} ] || [ ! -z ${BcLABELF} ] || [ ! -z ${BcCycles} ]; then
    echo -e "\033[34;1m > Numero de Ciclos  : \033[m \033[31;1m${BcCycles}\033[m"
 
    while [ ${BcLABELI} -le ${BcLABELF} ]; do
-
       cd ${run_smg}
 
       echo ""
       echo -e "\033[34;1m >>> Submetendo o Sistema ${nome_smg} para o dia \033[31;1m${BcLABELI}\033[m \033[m"
       echo ""
 
-#      echo -e "\033[34;1m > Executando o Observer \033[m"
-#      SECONDS=0
+      echo -e "\033[34;1m > Executando o Observer \033[m"
+      SECONDS=0
+
+#      if [ ${do_obsmake} -eq 1 ] ; then
+#        # Prepara as obsevacoes para a assimilacao no GSI utilizando um background do MCGA
+#        echo /bin/bash ${scripts_smg}/run_obsmake.sh ${BcLABELI}
+#        /bin/bash ${scripts_smg}/run_obsmake.sh ${BcLABELI}
+#        if [ $? -ne 0 ]; then 
+#           echo -e "\033[31;1m > Falha no Observer \033[m"
+#           exit 1
+#        fi
 #
-#      # Prepara as obsevacoes para a assimilacao no GSI utilizando um background do MCGA
-#      /bin/bash ${scripts_smg}/run_obsmake.sh ${BcLABELI}
-#      if [ $? -ne 0 ]; then echo -e "\033[31;1m > Falha no Observer \033[m"; exit 1; fi
-#
-#      echo ""
-#      duration=$SECONDS
-#      echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
-#      echo -e "\033[34;1m > Fim do Observer \033[m"
+#        echo ""
+#        duration=$SECONDS
+#        echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
+#        echo -e "\033[34;1m > Fim do Observer \033[m"
+#      fi  
 
       echo ""
       echo -e "\033[34;1m > Executando o GSI \033[m"
 
       if [ ${do_gsi} -eq 1 ] ; then
-#      # Executa o GSI
+         # Executa o GSI
          SECONDS=0
          echo /bin/bash ${scripts_smg}/runGSI -t ${modelTrunc} -T ${gsiTrunc} -l ${modelNLevs} -p ${modelPrefix} -np ${gsiMPITasks} -I ${BcLABELI} -bc ${BcCycles}
          /bin/bash ${scripts_smg}/runGSI -t ${modelTrunc} -T ${gsiTrunc} -l ${modelNLevs} -p ${modelPrefix} -np ${gsiMPITasks} -I ${BcLABELI} -bc ${BcCycles}
@@ -274,17 +280,23 @@ while [ ${LABELI} -le ${LABELF} ]; do
    echo -e "\033[34;1m >>> Submetendo o Sistema ${nome_smg} para o dia \033[31;1m${LABELI}\033[m \033[m"
    echo ""
 
-#   echo -e "\033[34;1m > Executando o Observer \033[m"
-#   SECONDS=0
-#
-#   # Prepara as obsevacoes para a assimilacao no GSI utilizando um background do MCGA
-#   /bin/bash ${scripts_smg}/run_obsmake.sh ${LABELI}
-#   if [ $? -ne 0 ]; then echo -e "\033[31;1m > Falha no Observer \033[m"; exit 1; fi
-#
-#   echo ""
-#   duration=$SECONDS
-#   echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
-#   echo -e "\033[34;1m > Fim do Observer \033[m"
+   if [ ${do_obsmake} -eq 1 ] ; then
+     echo -e "\033[34;1m > Executando o Observer \033[m"
+     SECONDS=0
+  
+     # Prepara as obsevacoes para a assimilacao no GSI utilizando um background do MCGA
+     echo /bin/bash ${scripts_smg}/run_obsmake.sh ${LABELI}
+     /bin/bash ${scripts_smg}/run_obsmake.sh ${LABELI}
+     if [ $? -ne 0 ]; then 
+        echo -e "\033[31;1m > Falha no Observer \033[m"
+        exit 1
+     fi
+  
+     echo ""
+     duration=$SECONDS
+     echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
+     echo -e "\033[34;1m > Fim do Observer \033[m"
+   fi
 
    if [ ${do_gsi} -eq 1 ] ; then
       echo ""

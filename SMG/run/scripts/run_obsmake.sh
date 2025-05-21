@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/bash 
 #-----------------------------------------------------------------------------#
 #           Group on Data Assimilation Development - GDAD/CPTEC/INPE          #
 #-----------------------------------------------------------------------------#
@@ -59,16 +59,28 @@ HH=${START_DATE:8:10}
 YM=${START_DATE:0:6}
 DH=${START_DATE:6:10}
 Y=${START_DATE:0:4}
-DIRFILES=${ncep_ext}/ASSIMDADOS
+M=${START_DATE:4:2}
+D=${START_DATE:6:2}
+#DIRFILES=${ncep_ext}/ASSIMDADOS
+DIRFILES=${ncep_ext}/${Y}/${M}/${D}
+    echo ${subt_gsi_datain_obs}
 
 count=0
-ls -1 ${DIRFILES}/*${YMD}*.gz | while read file; do
-    echo -e "\e[32;1m${file}\e[m"
-    tar -xvzf ${file} -C ${subt_gsi_datain_obs}
-    if [ $? -eq 0 ];then
-       count=$((count+1))
-    fi
-done
+#ls -1 ${DIRFILES}/*${YMD}*.gz | while read file; do
+#    echo -e "\e[32;1m${file}\e[m"
+#    tar -xvzf ${file} -C ${subt_gsi_datain_obs}
+#    if [ $? -eq 0 ];then
+#       count=$((count+1))
+#    fi
+#done
+
+for obsfile in $(find ${DIRFILES} -type f -size +0c -name "gdas.*")
+do
+  ln -sfv ${obsfile} ${subt_gsi_datain_obs}/      
+  #cp -v ${obsfile} ${subt_gsi_datain_obs}/      
+  count=$((count+1))
+done        
+
 if [ ${count} -gt 0 ];then
    echo -e ""
    echo -e "\e[34;1m Foram obtidos\e[m \e[37;1m${count}\e[m \e[34;1marquivos.\e[m"

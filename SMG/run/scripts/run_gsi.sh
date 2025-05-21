@@ -194,6 +194,8 @@ FLAG                  FILENAME                                     ALIAS
 0  ${ObsDir}/gdas1.t${hh0}z.eshrs3.tm00.bufr_d.${yyyymmdd}    hirs3bufrears
 0  ${ObsDir}/gdas1.t${hh0}z.geoimr.tm00.bufr_d.${yyyymmdd}    geoimr
 1  ${ObsDir}/gdas1.t${hh0}z.satwnd.tm00.bufr_d.${yyyymmdd}    satwnd
+
+1  ${ObsDir}/gdas.t${hh0}z.atms.tm00.bufr_d                   atmsbufr
 EOF
 
 # Informa os tipos de observacoes selecionada e cria os links simbolicos
