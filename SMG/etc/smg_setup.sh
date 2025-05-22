@@ -458,6 +458,7 @@ testcase(){
   cp -pvfrL ${public_bam}/PRE/datain/${year[${answer}]}/sst/* ${subt_pre_bam}/datain/
 #  cp -pvfrL ${public_bam}/PRE/datain/${year[${answer}]}/sno/* ${subt_pre_bam}/datain/
   cp -pvfrL ${public_bam}/PRE/datain/${year[${answer}]}/smc/*.vfm ${subt_pre_bam}/datain/
+  cp -pvfrL ${public_bam}/PRE/datain/${year[${answer}]}/HybridLevels* ${subt_pre_bam}/datain/
 
   cp -pvfrL ${public_bam}/PRE/dataout/* ${subt_pre_bam}/dataout/
   cp -pvfrL ${public_bam}/PRE/databcs/* ${subt_pre_bam}/databcs/
