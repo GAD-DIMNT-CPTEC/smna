@@ -404,6 +404,8 @@ compile(){
     if [[ ! -e ${home_gsi_bin}/gsi.x ]]; then
       echo "[FAIL] Error: GSI compilation failed. Check compile.log."
       exit 1
+    else  
+      cp -pvfr ${home_gsi_bin}/gsi.x ${home_cptec}/bin/      
     fi
   fi
 
@@ -419,6 +421,8 @@ compile(){
     if [[ ! -e ${home_gsi}/util/global_angupdate/global_angupdate ]]; then
       echo "[FAIL] Error: GSI bias correction utility compilation failed."
       exit 1
+    else  
+      cp -pvfr ${home_gsi}/util/global_angupdate/global_angupdate ${home_cptec}/bin/      
     fi
     cp -pfvr ${home_gsi}/util/global_angupdate/global_angupdate ${home_cptec}/bin/global_angupdate
   fi
@@ -430,6 +434,20 @@ compile(){
     . compile.sh  2>&1 | tee ${home_bam}/compile.log
   fi
 
+
+  if [[ ${compinctime} -eq 1 ]]; then
+    echo "[INFO] Compiling inctime utility ..."
+    echo "[INFO] PATH ${home_bam}"
+    cd ${inctime}/src
+    export ARCH=Darwin_intel
+    make
+    if [[ ! -e ${inctime}/src/inctime ]]; then
+      echo "[FAIL] Error: inctime utility compilation failed."
+      exit 1
+    else
+      cp -pvfr ${inctime}/src/inctime ${home_cptec}/bin/
+    fi
+  fi          
 
   echo "[ OK ] Compilation completed successfully."
 }
