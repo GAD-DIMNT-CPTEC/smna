@@ -438,14 +438,16 @@ compile(){
   if [[ ${compinctime} -eq 1 ]]; then
     echo "[INFO] Compiling inctime utility ..."
     echo "[INFO] PATH ${home_bam}"
-    cd ${inctime}/src
+    # This is just to ensure the intel env is loaded
+    module swap gnu9/9.4.0 intel/2021.4.0
+    cd ${util_inctime}/src
     export ARCH=Darwin_intel
     make
-    if [[ ! -e ${inctime}/src/inctime ]]; then
+    if [[ ! -e ${util_inctime}/src/inctime ]]; then
       echo "[FAIL] Error: inctime utility compilation failed."
       exit 1
     else
-      cp -pvfr ${inctime}/src/inctime ${home_cptec}/bin/
+      cp -pvfr ${util_inctime}/src/inctime ${home_cptec}/bin/
     fi
   fi          
 
