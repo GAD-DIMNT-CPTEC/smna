@@ -110,8 +110,9 @@ main() {
 
     # Default values if not set by the user
     export compgsi=${compgsi:-1}
-    export compang=${compang:-0}
+    export compang=${compang:-1}
     export compbam=${compbam:-1}
+    export compinctime=${compinctime:-1}
 
     # Call HPC system detection function
     detect_hpc_system
