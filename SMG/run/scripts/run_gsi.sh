@@ -6,13 +6,17 @@
 
 # Carregando as variaveis do sistema
 dir_now=`pwd`
-cd $SMG_ROOT
-echo pwd
-source ${SMG_ROOT}/config_smg.ksh vars_export
 
+cd $SMG_ROOT
+
+SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
+RootDir="$(dirname "$SCRIPT_PATH")"
+export SMG_ROOT=${RootDir}
+source ${SMG_ROOT}/../../config_smg.ksh vars_export
 source ${SMG_ROOT}/run/smg_functions.sh     ## has inctime function wrote in bash script
 
 cd $dir_now
+
 # Lendo parametros de entrada
 if [ -z "${1}" ]
 then

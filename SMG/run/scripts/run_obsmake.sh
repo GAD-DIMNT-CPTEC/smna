@@ -28,7 +28,10 @@
 #BOC
 
 # Carregando as variaveis do sistema
-source /mnt/beegfs/$USER/SMNA_v3.0.0.t11889/SMG/config_smg.ksh vars_export
+SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
+RootDir="$(dirname "$SCRIPT_PATH")"
+export SMG_ROOT=${RootDir}
+source ${SMG_ROOT}/../../config_smg.ksh vars_export
 
 #-----------------------------------------------------------------------------#
 # return usage from main program
@@ -73,6 +76,8 @@ count=0
 #       count=$((count+1))
 #    fi
 #done
+
+if [ ! -d ${subt_gsi_datain_obs} ]; then mkdir -p ${subt_gsi_datain_obs}; fi
 
 for obsfile in $(find ${DIRFILES} -type f -size +0c -name "gdas.*")
 do
