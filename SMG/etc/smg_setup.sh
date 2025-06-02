@@ -247,7 +247,8 @@ configure(){
     "${subt_pos_bam}/exec"
     "${subt_grh_bam}/datain"
     "${subt_grh_bam}/dataout"
-    "${subt_gsi}"
+    "${subt_gsi}/datain"
+    "${subt_gsi}/dataout"
   )
   
   echo "Creating necessary directories..."
