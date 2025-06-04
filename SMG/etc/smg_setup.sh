@@ -402,11 +402,12 @@ compile(){
     echo "[INFO] PATH ${home_gsi}"
 
     . compile.sh -C ${compiler} 2>&1 | tee ${home_gsi}/compile.log
-    if [[ ! -e ${home_gsi_bin}/gsi.x ]]; then
+    if [[ ! -e ${home_gsi_src}/gsi.x ]]; then
       echo "[FAIL] Error: GSI compilation failed. Check compile.log."
       exit 1
     else  
-      cp -pvfr ${home_gsi_bin}/gsi.x ${home_cptec}/bin/      
+      cp -pvfr ${home_gsi_src}/gsi.x ${home_gsi_bin}/      
+      cp -pvfr ${home_gsi_src}/gsi.x ${home_cptec}/bin/      
     fi
   fi
 

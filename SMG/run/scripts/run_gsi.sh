@@ -122,7 +122,7 @@ export MPICH_PTL_UNEX_EVENTS=50000
 export MPICH_PTL_OTHER_EVENTS=2496
 
 # Copiando executavel do gsi para o diretorio de rodada
-FILE=${home_cptec_bin}/gsi.x
+FILE=${home_cptec}/bin/gsi.x
 if [ -e ${FILE} ]
 then
   ExecGSI=$(basename ${FILE})
@@ -549,7 +549,7 @@ ls -l ${RunGSI}/diag_* > listpe
 echo -e "\033[32;2m > Copiando o executável da atualização da correção do bias do ângulo \033[m"
 
 # Copiando executavel do gsi para o diretorio de rodada
-ANGEXE=${home_cptec_bin}/global_angupdate
+ANGEXE=${home_cptec}/bin/global_angupdate
 if [ -e ${ANGEXE} ]
 then
   Execang=$(basename ${ANGEXE})
