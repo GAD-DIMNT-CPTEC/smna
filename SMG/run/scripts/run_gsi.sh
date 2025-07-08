@@ -326,17 +326,29 @@ fi
 # link CRTM Spectral and Transmittance coefficients
 #
 
-ln -sf ${public_crtm}/${BYTE_ORDER}/Nalli.IRwater.EmisCoeff.bin    Nalli.IRwater.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRice.EmisCoeff.bin     NPOESS.IRice.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRland.EmisCoeff.bin    NPOESS.IRland.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRsnow.EmisCoeff.bin    NPOESS.IRsnow.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISice.EmisCoeff.bin    NPOESS.VISice.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISland.EmisCoeff.bin   NPOESS.VISland.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISsnow.EmisCoeff.bin   NPOESS.VISsnow.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISwater.EmisCoeff.bin  NPOESS.VISwater.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/FASTEM5.MWwater.EmisCoeff.bin  FASTEM5.MWwater.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/AerosolCoeff.bin               AerosolCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 CloudCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/Nalli.IRwater.EmisCoeff.bin    Nalli.IRwater.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRice.EmisCoeff.bin     NPOESS.IRice.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRland.EmisCoeff.bin    NPOESS.IRland.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRsnow.EmisCoeff.bin    NPOESS.IRsnow.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISice.EmisCoeff.bin    NPOESS.VISice.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISland.EmisCoeff.bin   NPOESS.VISland.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISsnow.EmisCoeff.bin   NPOESS.VISsnow.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISwater.EmisCoeff.bin  NPOESS.VISwater.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/FASTEM5.MWwater.EmisCoeff.bin  FASTEM5.MWwater.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/AerosolCoeff.bin               AerosolCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 CloudCoeff.bin
+
+cp -v ${plus_crtm}/${BYTE_ORDER}/Nalli.IRwater.EmisCoeff.bin    Nalli.IRwater.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.IRice.EmisCoeff.bin     NPOESS.IRice.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.IRland.EmisCoeff.bin    NPOESS.IRland.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.IRsnow.EmisCoeff.bin    NPOESS.IRsnow.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.VISice.EmisCoeff.bin    NPOESS.VISice.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.VISland.EmisCoeff.bin   NPOESS.VISland.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.VISsnow.EmisCoeff.bin   NPOESS.VISsnow.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.VISwater.EmisCoeff.bin  NPOESS.VISwater.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/FASTEM5.MWwater.EmisCoeff.bin  FASTEM5.MWwater.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/AerosolCoeff.bin               AerosolCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 CloudCoeff.bin
 
 #
 #-------------------------------------------------------------------------------#
@@ -344,8 +356,14 @@ ln -sf ${public_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 CloudCoeff.bi
 #
 
 for file in `awk '{if($1!~"!"){print $1}}' ./satinfo | sort | uniq` ;do
-   ln -s ${public_crtm}/${BYTE_ORDER}/${file}.SpcCoeff.bin ./
-   ln -s ${public_crtm}/${BYTE_ORDER}/${file}.TauCoeff.bin ./
+#   ln -s ${public_crtm}/${BYTE_ORDER}/${file}.SpcCoeff.bin ./
+#   ln -s ${public_crtm}/${BYTE_ORDER}/${file}.TauCoeff.bin ./
+   cp -v ${plus_crtm}/${BYTE_ORDER}/${file}.SpcCoeff.bin ./
+   cp -v ${plus_crtm}/${BYTE_ORDER}/${file}.TauCoeff.bin ./
+   # Carlos (02/07/2025) - estou colocando aqui os dados para o cálculo da profundidade óptica do algorítmo ODPS
+   # por ser mais adequado para dados do microondas (no caso do ATMS, os arquivos atms_*.TauCoeff.bin - com excessão do npp
+   # só esão disponíveis pelo ODPS, pelo pacote crtm-2.4.0_emc.1 disponível no GitHub)
+   cp -v ${plus_crtm}/TauCoeff/ODPS/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
 done
 
 #

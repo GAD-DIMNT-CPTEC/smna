@@ -368,17 +368,29 @@ FixedFiles ( ) {
    cp -pfr ${public_fix}/bufrtab.012                        ${runDir}/bftab_sstphr
 
    # (CRTM)
-   ln -sf ${public_crtm}/${BYTE_ORDER}/Nalli.IRwater.EmisCoeff.bin    ${runDir}/Nalli.IRwater.EmisCoeff.bin
-   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRice.EmisCoeff.bin     ${runDir}/NPOESS.IRice.EmisCoeff.bin
-   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRland.EmisCoeff.bin    ${runDir}/NPOESS.IRland.EmisCoeff.bin
-   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRsnow.EmisCoeff.bin    ${runDir}/NPOESS.IRsnow.EmisCoeff.bin
-   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISice.EmisCoeff.bin    ${runDir}/NPOESS.VISice.EmisCoeff.bin
-   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISland.EmisCoeff.bin   ${runDir}/NPOESS.VISland.EmisCoeff.bin
-   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISsnow.EmisCoeff.bin   ${runDir}/NPOESS.VISsnow.EmisCoeff.bin
-   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISwater.EmisCoeff.bin  ${runDir}/NPOESS.VISwater.EmisCoeff.bin
-   ln -sf ${public_crtm}/${BYTE_ORDER}/FASTEM5.MWwater.EmisCoeff.bin  ${runDir}/FASTEM5.MWwater.EmisCoeff.bin
-   ln -sf ${public_crtm}/${BYTE_ORDER}/AerosolCoeff.bin               ${runDir}/AerosolCoeff.bin
-   ln -sf ${public_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 ${runDir}/CloudCoeff.bin
+#   ln -sf ${public_crtm}/${BYTE_ORDER}/Nalli.IRwater.EmisCoeff.bin    ${runDir}/Nalli.IRwater.EmisCoeff.bin
+#   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRice.EmisCoeff.bin     ${runDir}/NPOESS.IRice.EmisCoeff.bin
+#   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRland.EmisCoeff.bin    ${runDir}/NPOESS.IRland.EmisCoeff.bin
+#   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRsnow.EmisCoeff.bin    ${runDir}/NPOESS.IRsnow.EmisCoeff.bin
+#   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISice.EmisCoeff.bin    ${runDir}/NPOESS.VISice.EmisCoeff.bin
+#   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISland.EmisCoeff.bin   ${runDir}/NPOESS.VISland.EmisCoeff.bin
+#   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISsnow.EmisCoeff.bin   ${runDir}/NPOESS.VISsnow.EmisCoeff.bin
+#   ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISwater.EmisCoeff.bin  ${runDir}/NPOESS.VISwater.EmisCoeff.bin
+#   ln -sf ${public_crtm}/${BYTE_ORDER}/FASTEM5.MWwater.EmisCoeff.bin  ${runDir}/FASTEM5.MWwater.EmisCoeff.bin
+#   ln -sf ${public_crtm}/${BYTE_ORDER}/AerosolCoeff.bin               ${runDir}/AerosolCoeff.bin
+#   ln -sf ${public_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 ${runDir}/CloudCoeff.bin
+
+   cp -v ${public_crtm}/${BYTE_ORDER}/Nalli.IRwater.EmisCoeff.bin    ${runDir}/Nalli.IRwater.EmisCoeff.bin
+   cp -v ${public_crtm}/${BYTE_ORDER}/NPOESS.IRice.EmisCoeff.bin     ${runDir}/NPOESS.IRice.EmisCoeff.bin
+   cp -v ${public_crtm}/${BYTE_ORDER}/NPOESS.IRland.EmisCoeff.bin    ${runDir}/NPOESS.IRland.EmisCoeff.bin
+   cp -v ${public_crtm}/${BYTE_ORDER}/NPOESS.IRsnow.EmisCoeff.bin    ${runDir}/NPOESS.IRsnow.EmisCoeff.bin
+   cp -v ${public_crtm}/${BYTE_ORDER}/NPOESS.VISice.EmisCoeff.bin    ${runDir}/NPOESS.VISice.EmisCoeff.bin
+   cp -v ${public_crtm}/${BYTE_ORDER}/NPOESS.VISland.EmisCoeff.bin   ${runDir}/NPOESS.VISland.EmisCoeff.bin
+   cp -v ${public_crtm}/${BYTE_ORDER}/NPOESS.VISsnow.EmisCoeff.bin   ${runDir}/NPOESS.VISsnow.EmisCoeff.bin
+   cp -v ${public_crtm}/${BYTE_ORDER}/NPOESS.VISwater.EmisCoeff.bin  ${runDir}/NPOESS.VISwater.EmisCoeff.bin
+   cp -v ${public_crtm}/${BYTE_ORDER}/FASTEM5.MWwater.EmisCoeff.bin  ${runDir}/FASTEM5.MWwater.EmisCoeff.bin
+   cp -v ${public_crtm}/${BYTE_ORDER}/AerosolCoeff.bin               ${runDir}/AerosolCoeff.bin
+   cp -v ${public_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 ${runDir}/CloudCoeff.bin
 
    # User fixed files
    cp -pfr ${home_gsi_fix}/global_anavinfo.l${NLevs}.txt   ${runDir}/anavinfo
@@ -391,9 +403,17 @@ FixedFiles ( ) {
    # Copy CRTM coefficient files based on entries in satinfo file
    #
    for file in $(awk '{if($1!~"!"){print $1}}' ${runDir}/satinfo | sort | uniq) ;do
-      ln -sf ${plus_crtm}/SpcCoeff/${BYTE_ORDER}/${file}.SpcCoeff.bin ${runDir}
+      #ln -sf ${plus_crtm}/SpcCoeff/${BYTE_ORDER}/${file}.SpcCoeff.bin ${runDir}
+      cp -v ${plus_crtm}/SpcCoeff/${BYTE_ORDER}/${file}.SpcCoeff.bin ${runDir}
       # ln -s ${public_crtm}/${BYTE_ORDER}/${file}.SpcCoeff.bin ${runDir}
-      ln -sf ${plus_crtm}/TauCoeff/ODAS/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
+      #ln -sf ${plus_crtm}/TauCoeff/ODAS/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
+       
+      # Carlos (02/07/2025) - estou colocando aqui os dados para o cálculo da profundidade óptica do algorítmo ODPS
+      # por ser mais adequado para dados do microondas (no caso do ATMS, os arquivos atms_*.TauCoeff.bin - com excessão do npp
+      # só esão disponíveis pelo ODPS, pelo pacote crtm-2.4.0_emc.1 disponível no GitHub)
+      cp -v ${plus_crtm}/TauCoeff/ODPS/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
+      cp -v ${plus_crtm}/TauCoeff/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
+
       # ln -s ${public_crtm}/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
    done
 
@@ -409,17 +429,18 @@ FixedFiles ( ) {
    aercoef=${plus_crtm}/AerosolCoeff/${BYTE_ORDER}/AerosolCoeff.bin
    cldcoef=${plus_crtm}/CloudCoeff/${BYTE_ORDER}/CloudCoeff.bin
 
-   ln -sf $emiscoef_IRwater ${runDir}/Nalli.IRwater.EmisCoeff.bin
-   ln -sf $emiscoef_IRice ${runDir}/NPOESS.IRice.EmisCoeff.bin
-   ln -sf $emiscoef_IRsnow ${runDir}/NPOESS.IRsnow.EmisCoeff.bin
-   ln -sf $emiscoef_IRland ${runDir}/NPOESS.IRland.EmisCoeff.bin
-   ln -sf $emiscoef_VISice ${runDir}/NPOESS.VISice.EmisCoeff.bin
-   ln -sf $emiscoef_VISland ${runDir}/NPOESS.VISland.EmisCoeff.bin
-   ln -sf $emiscoef_VISsnow ${runDir}/NPOESS.VISsnow.EmisCoeff.bin
-   ln -sf $emiscoef_VISwater ${runDir}/NPOESS.VISwater.EmisCoeff.bin
-   ln -sf $emiscoef_MWwater ${runDir}/FASTEM6.MWwater.EmisCoeff.bin
-   ln -sf $aercoef  ${runDir}/AerosolCoeff.bin
-   ln -sf $cldcoef  ${runDir}/CloudCoeff.bin
+#   ln -sf $emiscoef_IRwater ${runDir}/Nalli.IRwater.EmisCoeff.bin
+#   ln -sf $emiscoef_IRice ${runDir}/NPOESS.IRice.EmisCoeff.bin
+#   ln -sf $emiscoef_IRsnow ${runDir}/NPOESS.IRsnow.EmisCoeff.bin
+#   ln -sf $emiscoef_IRland ${runDir}/NPOESS.IRland.EmisCoeff.bin
+#   ln -sf $emiscoef_VISice ${runDir}/NPOESS.VISice.EmisCoeff.bin
+#   ln -sf $emiscoef_VISland ${runDir}/NPOESS.VISland.EmisCoeff.bin
+#   ln -sf $emiscoef_VISsnow ${runDir}/NPOESS.VISsnow.EmisCoeff.bin
+#   ln -sf $emiscoef_VISwater ${runDir}/NPOESS.VISwater.EmisCoeff.bin
+#   ln -sf $emiscoef_MWwater ${runDir}/FASTEM6.MWwater.EmisCoeff.bin
+   cp -v $emiscoef_MWwater ${runDir}/FASTEM6.MWwater.EmisCoeff.bin
+#   ln -sf $aercoef  ${runDir}/AerosolCoeff.bin
+#   ln -sf $cldcoef  ${runDir}/CloudCoeff.bin
 
 }
 #-----------------------------------------------------------------------------#
