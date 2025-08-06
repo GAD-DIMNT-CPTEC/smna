@@ -124,73 +124,135 @@ disable_conda() {
 #  !FUNCTION: copy_fixed_files
 #  !INTERFACE: copy_fixed_files
 #  !DESCRIPTION:
-#   Copies required fixed files necessary for running the model.
-#   Uses a structured array to keep track of all required files, making it easier to manage.
+#    Copies or links required fixed files for BAM model execution.
+#    Behavior depends on the system identified by HOSTNAME or hpc_name.
+#    On "egeon" or similar, files are copied with progress bar.
+#    On "cray", files are linked using symlinks.
+#    File lists are defined at the top of the script for easy maintenance.
 #EOP
+
+# List of files from ${public_bam}/MODEL/datain → ${subt_model_bam}/datain
+filesDataIn=(
+  "AeroVar.Tab"
+  "ETAMPNEW_DATA"
+  "F_nwvl200_mu20_lam50_res64_t298_c080428.bin"
+  "iceoptics_c080917.bin"
+  "ocnalbtab24bnd.bin"
+)
+
+# List of files from ${public_bam}/PRE/dataout → ${subt_pre_bam}/dataout
+filesDataOut=(
+  "WaterNavy.dat"
+  "TopoNavy.dat"
+  "HPRIME.dat"
+)
+
+# List of files from ${public_bam}/PRE/databcs → ${subt_pre_bam}/databcs
+filesDataBC=(
+  "sib2soilms.form"
+  "FluxCO2.bin"
+  "FluxCO2.ctl"
+  "claymsk.form"
+  "clmt.form"
+  "deltat.form"
+  "ersst.bin"
+  "ibismsk.form"
+  "ndviclm.form"
+  "sandmsk.form"
+  "sib2msk.form"
+  "soiltext.form"
+)
+
 #BOC
-copy_fixed_files(){
+copy_fixed_files() {
   vars_export
 
-  if [ ${HOSTNAME:0:1} = 'e' ] || [ ${hpc_name} = "egeon" ]; then
-     echo "[INFO] Copying fixed files..."
-     
-     filesDataIn=(
-       "AeroVar.Tab" 
-       "ETAMPNEW_DATA" 
-       "F_nwvl200_mu20_lam50_res64_t298_c080428.bin"
-       "iceoptics_c080917.bin" 
-       "ocnalbtab24bnd.bin"
-     )
-     for file in "${filesDataIn[@]}";do
-        cp -pf ${public_bam}/MODEL/datain/$file ${subt_model_bam}/datain/
-     done
-   
-     filesDataOut=(
-       "WaterNavy.dat" 
-       "TopoNavy.dat"
-       "HPRIME.dat"
-     )
-     for file in "${filesDataOut[@]}";do
-        cp -pf ${public_bam}/PRE/dataout/$file ${subt_pre_bam}/dataout/
-     done
-   
-     filesDataBC=(
-       "sib2soilms.form" 
-       "FluxCO2.bin" 
-       "FluxCO2.ctl"
-       "claymsk.form" 
-       "clmt.form" 
-       "deltat.form" 
-       "ersst.bin"
-       "ibismsk.form" 
-       "ndviclm.form" 
-       "sandmsk.form" 
-       "sib2msk.form" 
-       "soiltext.form"
-     ) 
-     for file in "${filesDataBC[@]}"; do
-       cp -pf ${public_bam}/PRE/databcs/$file ${subt_pre_bam}/databcs/
-     done
-   
-#     cp -pf ${home_model_bam}/datain/* ${subt_model_bam}/datain/
-#     cp -pf ${home_pre_bam}/datain/* ${subt_pre_bam}/datain/
-#     cp -pf ${home_pre_bam}/dataout/* ${subt_pre_bam}/dataout/
- 
-     cp -pf ${public_bam}/PRE/datain/2019/sst/* ${subt_pre_bam}/datain/
-     cp -pf ${public_bam}/PRE/datain/2019/ncep_anl/* ${subt_pre_bam}/datain/
-     cp -pf ${public_bam}/PRE/datain/2019/smc/* ${subt_pre_bam}/datain/
+  progress_bar() {
+    local current=$1
+    local total=$2
+    local msg="$3"
+  
+    local width=40  # largura da barra
+    local progress=$(( current * width / total ))
+    local percent=$(( 100 * current / total ))
+  
+    local bar=""
+    for ((i=0; i<width; i++)); do
+      if (( i < progress )); then
+        bar+="█"
+      else
+        bar+="░"
+      fi
+    done
+  
+    printf "\r[INFO] %s [%s] %3d%% (%d/%d)" "$msg" "$bar" "$percent" "$current" "$total"
+  }
 
-  elif [ ${HOSTNAME:0:1} = 'c' ]; then
-     echo "[INFO] Linking fixed files..."
-     ln -s /cray_home/joao_gerd/BAMFIX/model/datain/* ${subt_model_bam}/datain/
-     ln -s /cray_home/joao_gerd/BAMFIX/pre/datain/* ${subt_pre_bam}/datain/
-     ln -s /cray_home/joao_gerd/BAMFIX/pre/dataout/* ${subt_pre_bam}/dataout/
-     ln -s /cray_home/joao_gerd/BAMFIX/pre/databcs/* ${subt_pre_bam}/databcs/
-     ln -s /cray_home/joao_gerd/BAMFIX/pre/dataco2/* ${subt_pre_bam}/dataco2/
-     ln -s /cray_home/joao_gerd/BAMFIX/pre/datasst/* ${subt_pre_bam}/datasst/
-     ln -s /cray_home/joao_gerd/BAMFIX/pre/dataTop/* ${subt_pre_bam}/dataTop/ 
+  copy_with_progress() {
+    local files=("${!1}")
+    local src_dir="$2"
+    local dest_dir="$3"
+    local action="${4:-copy}"
+    local progress_msg="${5:-Processing files}"
+  
+    local total="${#files[@]}"
+    local count=0
+  
+    mkdir -p "$dest_dir"
+  
+    for file in "${files[@]}"; do
+      ((count++))
+      progress_bar "$count" "$total" "$progress_msg"
+      if [ "$action" = "copy" ]; then
+        cp -pf "$src_dir/$file" "$dest_dir/" || echo -e "\n[ERROR] Failed to copy $file"
+      else
+        ln -sf "$src_dir/$file" "$dest_dir/" || echo -e "\n[ERROR] Failed to link $file"
+      fi
+    done
+    echo " - [OK]"
+  }
+
+  copy_dir_with_progress() {
+    local src_dir="$1"
+    local dest_dir="$2"
+    local progress_msg="${3:-Copying files}"
+    local files=()
+  
+    for f in "$src_dir"/*; do
+      [[ -e "$f" ]] || continue
+      files+=( "$(basename "$f")" )
+    done
+  
+    copy_with_progress files[@] "$src_dir" "$dest_dir" "copy" "$progress_msg"
+  }
+
+  if [ "${HOSTNAME:0:1}" = 'e' ] || [ "${hpc_name}" = "egeon" ]; then
+    # Copying fixed files...
+
+    copy_with_progress filesDataIn[@]  "${public_bam}/MODEL/datain"  "${subt_model_bam}/datain" "copy" "Copying input files"
+    copy_with_progress filesDataOut[@] "${public_bam}/PRE/dataout"   "${subt_pre_bam}/dataout" "copy" "Copying output files"
+    copy_with_progress filesDataBC[@]  "${public_bam}/PRE/databcs"   "${subt_pre_bam}/databcs" "copy" "Copying boundary files"
+
+    copy_dir_with_progress "${public_bam}/PRE/datain/2019/sst" "${subt_pre_bam}/datain" "Copying SST files"
+    copy_dir_with_progress "${public_bam}/PRE/datain/2019/ncep_anl" "${subt_pre_bam}/datain" "Copying NCEP_ANL files"
+    copy_dir_with_progress "${public_bam}/PRE/datain/2019/smc" "${subt_pre_bam}/datain" "Copying SMC files"
+
+  elif [ "${HOSTNAME:0:1}" = 'c' ]; then
+    echo "[INFO] Linking fixed files..."
+
+    ln -sf /cray_home/joao_gerd/BAMFIX/model/datain/*  "${subt_model_bam}/datain/"
+    ln -sf /cray_home/joao_gerd/BAMFIX/pre/datain/*    "${subt_pre_bam}/datain/"
+    ln -sf /cray_home/joao_gerd/BAMFIX/pre/dataout/*   "${subt_pre_bam}/dataout/"
+    ln -sf /cray_home/joao_gerd/BAMFIX/pre/databcs/*   "${subt_pre_bam}/databcs/"
+    ln -sf /cray_home/joao_gerd/BAMFIX/pre/dataco2/*   "${subt_pre_bam}/dataco2/"
+    ln -sf /cray_home/joao_gerd/BAMFIX/pre/datasst/*   "${subt_pre_bam}/datasst/"
+    ln -sf /cray_home/joao_gerd/BAMFIX/pre/dataTop/*   "${subt_pre_bam}/dataTop/"
+
+    echo "[INFO] Linking completed. [OK]"
+  else
+    echo "[ERROR] Unknown environment: HOSTNAME=${HOSTNAME}, hpc_name=${hpc_name}" >&2
+    return 1
   fi
-
 }
 #EOC
 
