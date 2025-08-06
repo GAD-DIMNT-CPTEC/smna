@@ -255,6 +255,64 @@ copy_fixed_files() {
   fi
 }
 #EOC
+#BOP
+#  !FUNCTION: copy_ncep_inputs
+#  !INTERFACE: copy_ncep_inputs YYYYMMDDHH
+#  !DESCRIPTION:
+#    Copies specific NCEP input files (analysis and SST) from structured archive path.
+#    Uses global variables:
+#      - ncep_gfs: base input path to NCEP directory
+#      - subt_pre_bam: base output path for BAM PRE/datain
+#    Displays a progress bar during copy.
+#    Expected files:
+#      - gdas.T00Z.atmanl.netcdf.YYYYMMDDHH
+#      - rtgssthr_grb_0.5.grib2.YYYYMMDD
+#EOP
+
+copy_ncep_inputs() {
+
+  if [ $# -ne 1 ]; then
+    echo "[ERROR] Usage: copy_ncep_inputs YYYYMMDDHH" >&2
+    return 1
+  fi
+
+  local yyyymmddhh="$1"
+  local yyyy="${yyyymmddhh:0:4}"
+  local mm="${yyyymmddhh:4:2}"
+  local dd="${yyyymmddhh:6:2}"
+  local hh="${yyyymmddhh:8:2}"
+  local yyyymmdd="${yyyymmddhh:0:8}"
+
+  local src_dir="${ncep_gfs}/${yyyy}/${mm}/${dd}/${hh}"
+  local dest_dir="${subt_pre_bam}/datain"
+
+  local files=(
+    "gdas.T00Z.atmanl.netcdf.${yyyymmddhh}"
+    "rtgssthr_grb_0.5.grib2.${yyyymmdd}"
+  )
+
+  local total=${#files[@]}
+  local count=0
+
+  echo "[INFO] Copying NCEP input files from: ${src_dir} to ${dest_dir}"
+
+  for file in "${files[@]}"; do
+    ((count++))
+    local src="${src_dir}/${file}"
+    local dst="${dest_dir}/${file}"
+    local percent=$((100 * count / total))
+    printf "\r[INFO] Copying %-45s (%2d/%2d) [%3d%%]" "$file" "$count" "$total" "$percent"
+
+    if [ -f "$src" ]; then
+      cp -pf "$src" "$dst"
+    else
+      echo -e "\n[WARN] File not found: $src"
+    fi
+  done
+
+  echo " - [OK]"
+}
+#EOC
 
 #BOP
 #  !FUNCTION: configure
