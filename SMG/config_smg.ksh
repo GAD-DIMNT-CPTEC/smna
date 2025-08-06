@@ -72,15 +72,16 @@ detect_hpc_system() {
 # !FUNCTION: execute_function
 # !DESCRIPTION:
 #   Verifies if the function exists in `smg_setup.sh` and executes it.
-#   If the function returns a non-zero value, the script aborts.
+#   Passes all arguments to the function, not just the name.
 #EOP
 execute_function() {
     local function_name=$1
+    shift  # Remove function name to pass only actual arguments
 
     if declare -f "$function_name" > /dev/null; then
-        echo "[ OK ] Running: $function_name"
+        echo "[ OK ] Running: $function_name $*"
         vars_export
-        "$function_name"
+        "$function_name" "$@"  # Execute function with all remaining arguments
         local exit_code=$?
         if [[ $exit_code -ne 0 ]]; then
             echo "[ERROR] Function $function_name failed with exit code $exit_code."
@@ -142,7 +143,7 @@ main() {
     fi
     
     # Execute the requested function if it exists
-    execute_function "$option"
+    execute_function "$@"
 }
 # Call the main function
 main "$@"
