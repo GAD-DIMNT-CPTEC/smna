@@ -204,6 +204,7 @@ BcCycles=$?  ### recebe =1 se nÃ£o encontrar satbias_out no diretorio BkgDate (r
 # running GSI at tupa
 #
 
+
 if [ ${BcCycles} -gt 0 ];then
    BcCycles=$((${BcCycles}-1))
 fi
@@ -242,15 +243,33 @@ for cycle in $(seq 0 ${BcCycles} ); do
       exit 1
    fi
 
+   echo ">>> mergeDiagFiles"
    mergeDiagFiles ${RunDir} ${AnlDate}
 
-## Create links for diag satellite files 
-   for diagfn in diag_amsua_* 
-   do 
-      lennm=${#diagfn} 
-      lenbase=$(( lennm -14 ))  # length of file name without date
-      ln $diagfn ${diagfn:0:$lenbase}
-   done
+   echo ">>> mergeDiagFiles do diagnostico da radiância"
+
+
+   ls ${RunDir}/diag_amsua_* ${RunDir}/diag_atms_* 
+
+
+
+## Create links for diag AMSUA satellite files 
+#   for diagfn in diag_amsua_*  
+#   do 
+#      lennm=${#diagfn} 
+#      lenbase=$(( lennm -11 ))  # length of file name without date
+#      ln $diagfn ${diagfn:0:$lenbase}
+#   done
+
+## Create links for diag ATMS satellite files 
+#   for diagfn in diag_atms_*  
+#   do 
+#      lennm=${#diagfn} 
+#      lenbase=$(( lennm -11 ))  # length of file name without date
+#      ln $diagfn ${diagfn:0:$lenbase}
+#   done
+#echo "Depois dos links"   
+#ls diag_amsua_* diag_atms_*    
 
 #   echo -ne "\033[34;1m Running GSI Angle Update tool \033[m"
 #
@@ -283,8 +302,8 @@ for cycle in $(seq 0 ${BcCycles} ); do
          cp -pfr ${BcDirOut}/${satbiasOu} ${RunDir}/${satbiasIn}
          echo cp -pfr ${BcDirOut}/${satbiasPCOu} ${RunDir}/${satbiasPCIn}
          cp -pfr ${BcDirOut}/${satbiasPCOu} ${RunDir}/${satbiasPCIn}
-         echo cp -pfr ${BcDirOut}/${satbiasAngOu} ${RunDir}/${satbiasAngIn}
-         cp -pfr ${BcDirOut}/${satbiasAngOu} ${RunDir}/${satbiasAngIn}
+#         echo cp -pfr ${BcDirOut}/${satbiasAngOu} ${RunDir}/${satbiasAngIn}
+#         cp -pfr ${BcDirOut}/${satbiasAngOu} ${RunDir}/${satbiasAngIn}
 
       fi
 

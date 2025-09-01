@@ -110,8 +110,8 @@ main() {
     echo "[INFO] Selected option: $option"
 
     # Default values if not set by the user
-    export compgsi=${compgsi:-1}
-    export compang=${compang:-1}
+    export compgsi=${compgsi:-2}
+    export compang=${compang:-2}
     export compbam=${compbam:-1}
     export compinctime=${compinctime:-1}
 

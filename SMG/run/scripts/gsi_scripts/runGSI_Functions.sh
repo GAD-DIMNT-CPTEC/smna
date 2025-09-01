@@ -83,7 +83,8 @@ constants ( ) {
         export PEs=$((${MTasks}/${ThreadsPerMPITask}))
         export Nodes=$(((${MTasks}+${MaxCoresPerNode}-1)/${MaxCoresPerNode}))
         #export Queue=PESQ1
-        export Queue=PESQ2
+        #export Queue=PESQ2
+	export Queue=batch
         export WallTime=01:00:00
         export BcCycles=0
 
@@ -280,6 +281,7 @@ linkObs ( ){
    # add bufr path in EGEON
    local obsDir=${ncep_ext}/${runDate:0:4}/${runDate:4:2}/${runDate:6:2}
    local obsDir=${obsDir}:${ncep_ext}/${runDate:0:8}00/dataout/NCEP
+   local obsDir=/mnt/beegfs/luiz.sapucci/obs_V1.3.3/dataout/${runDate:0:8} 
 #   local obsDir=${obsDir}:/lustre_xc50/ioper/data/external/ASSIMDADOS
 #   local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/${runDate}
 #   local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/obs/${runDate:0:6}/${runDate:6:4}
@@ -318,7 +320,7 @@ linkObs ( ){
                fi
 
                if [ ${verbose} == 'true' ];then
-                  echo -e "\033[34;1m ]\033[m\033[34;1m link\033[m\033[37;1m ${name}\033[m @ [ ${obsPath[$i]} ]"
+                  echo -e "\033[34;1m ]\033[m\033[34;1m link\033[m\033[37;1m ${name}\033[m @ [ ${file} ]" 
                else
                   echo -e "\033[34;1m ]\033[m\033[34;1m link\033[m\033[37;1m ${name}\033[m"
                fi
@@ -412,7 +414,7 @@ FixedFiles ( ) {
       # por ser mais adequado para dados do microondas (no caso do ATMS, os arquivos atms_*.TauCoeff.bin - com excessão do npp
       # só esão disponíveis pelo ODPS, pelo pacote crtm-2.4.0_emc.1 disponível no GitHub)
       cp -v ${plus_crtm}/TauCoeff/ODPS/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
-      cp -v ${plus_crtm}/TauCoeff/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
+#      cp -v ${plus_crtm}/TauCoeff/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
 
       # ln -s ${public_crtm}/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
    done
@@ -633,7 +635,7 @@ case ${hpc_name} in
 #SBATCH --nodes=${Nodes}
 #SBATCH --time=${WallTime}
 #SBATCH --ntasks=${MTasks}
-#SBATCH --job-name=An${ana_date}
+#SBATCH --job-name=GSI-SMNA
 #SBATCH --mem=480G
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=${Queue}
@@ -880,9 +882,9 @@ copyFiles (){
    ${CP} ${fromDir}/${satbiasPCIn} ${toDir}/.
    echo ${CP} ${fromDir}/${satbiasPCOu} ${toDir}/.
    ${CP} ${fromDir}/${satbiasPCOu} ${toDir}/.
-   ${CP} ${fromDir}/${satbiasAngIn} ${toDir}/.
-   echo ${CP} ${fromDir}/${satbiasAngOu} ${toDir}/.
-   ${CP} ${fromDir}/${satbiasAngOu} ${toDir}/.
+#   ${CP} ${fromDir}/${satbiasAngIn} ${toDir}/.
+#   echo ${CP} ${fromDir}/${satbiasAngOu} ${toDir}/.
+#   ${CP} ${fromDir}/${satbiasAngOu} ${toDir}/.
 
    # arquivos de configuracao
    ${MV} ${fromDir}/gsiparm.anl ${toDir}
