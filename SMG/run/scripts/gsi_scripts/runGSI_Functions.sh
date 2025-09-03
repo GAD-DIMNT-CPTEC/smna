@@ -281,7 +281,7 @@ linkObs ( ){
    # add bufr path in EGEON
    local obsDir=${ncep_ext}/${runDate:0:4}/${runDate:4:2}/${runDate:6:2}
    local obsDir=${obsDir}:${ncep_ext}/${runDate:0:8}00/dataout/NCEP
-   local obsDir=/mnt/beegfs/luiz.sapucci/obs_V1.3.3/dataout/${runDate:0:8} 
+#   local obsDir=/mnt/beegfs/luiz.sapucci/obs_V1.3.3/dataout/${runDate:0:8} 
 #   local obsDir=${obsDir}:/lustre_xc50/ioper/data/external/ASSIMDADOS
 #   local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/${runDate}
 #   local obsDir=${obsDir}:/lustre_xc50/joao_gerd/data/obs/${runDate:0:6}/${runDate:6:4}
@@ -517,10 +517,10 @@ getSatBias ( ){
 
      echo cp -pfr ${FileSatbiasOu} ${runDir}/${satbiasIn}
      cp -pfr ${FileSatbiasOu} ${runDir}/${satbiasIn}
-
+     
    fi
 
-   local FileSatbiasAngOu=$(find ${FindDir01} ${FindDir02} -iname "${satbiasAngOu}*" -print 2> /dev/null | sort -nr | head -n 1)
+#   local FileSatbiasAngOu=$(find ${FindDir01} ${FindDir02} -iname "${satbiasAngOu}*" -print 2> /dev/null | sort -nr | head -n 1)
 
 ##     See AdvancedGSIUserGuide_v3.5.0.0.pdf , Ming Hu
 ##     Using 8.4.4 Enhanced Radiance Bias Correction, so SatbiasAng is not used 
@@ -893,7 +893,7 @@ copyFiles (){
    ${CP} ${fromDir}/convinfo ${toDir}
 
    # arquivos de log
-   ${MV} ${fromDir}/gsiAnl.* ${toDir}
+#   ${MV} ${fromDir}/gsiAnl.* ${toDir}
    ${MV} ${fromDir}/gsiStdout* ${toDir}
 #   mv -f ${fromDir}/gsiAngUpdate* ${toDir}
 
