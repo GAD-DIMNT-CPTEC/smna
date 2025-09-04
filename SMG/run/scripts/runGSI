@@ -196,10 +196,8 @@ FixedFiles ${AnlTrunc} ${AnlNLevs} ${RunDir}
 #-----------------------------------------------------------#
 # Copy info Files (satInfo, convInfo, ozInfo)
 #getInfoFiles ${AnlDate}
-echo " antes do getSatBias {BcCycles== " ${BcCycles}
 # Get Satellite bias files
 getSatBias ${AnlDate} ${BkgDate} ${RunDir} ${subt_gsi_dataout}
-echo " depois do getSatBias {BcCycles::: " ${BcCycles} $?
 if [ -z "${BcCycles}" ];then # verifica se a varaivel veio como argumento de entrada
    BcCycles=$?  ### recebe =1 se não encontrar satbias_out no diretorio BkgDate (rodada anterior) 
 fi
@@ -207,14 +205,13 @@ fi
 #------------------------------------------------------------#
 # running GSI at tupa
 #
-echo " depois do if::: " ${BcCycles}
 
 if [ ${BcCycles} -gt 0 ];then
    BcCycles=$((${BcCycles}-1))
 fi
 
 echo " Entrando no ciclo de BcCycles para "$(seq 0 ${BcCycles} )
-exit
+
 for cycle in $(seq 0 ${BcCycles} ); do
 
    if [ ${BcCycles} -gt 0 ];then
