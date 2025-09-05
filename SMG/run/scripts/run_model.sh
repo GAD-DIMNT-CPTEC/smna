@@ -50,12 +50,38 @@ esac
 SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
 RootDir="$(dirname "$SCRIPT_PATH")"
 export SMG_ROOT=${RootDir}
-source ${SMG_ROOT}/../../config_smg.ksh vars_export
-source ${SMG_ROOT}/run/smg_functions.sh
+# Localiza e carrega o runPre.func (pode estar no home_run_bam ou ao lado deste script)
+if [ -f "${home_run_bam}/runPre.func" ]; then
+  RUNPRE_FUNC="${home_run_bam}/runPre.func"
+elif [ -f "./runPre.func" ]; then
+  RUNPRE_FUNC="./runPre.func"
+else
+  echo "[ERROR] runPre.func not found (looked in \${home_run_bam} and ./)"; exit 1
+fi
+# shellcheck source=/dev/null
+source "${RUNPRE_FUNC}"
+
+# === NOVO: Carregar EnvironmentalVariables no MESMO diretório do runPre.func ===
+# Resolve o diretório do runPre.func para achar o EnvironmentalVariables “irmão”
+RUNPRE_DIR="$(cd -- "$(dirname -- "${RUNPRE_FUNC}")" && pwd)"
+ENV_FILE="${RUNPRE_DIR}/EnvironmentalVariables"
+if [ -f "${ENV_FILE}" ]; then
+  # shellcheck source=/dev/null
+  source "${ENV_FILE}"
+else
+  echo "[ERROR] EnvironmentalVariables not found at ${ENV_FILE}"; exit 1
+fi
+
+# Sanidade: garantir que funções que usaremos existam
+for fn in getBAMSize getMPIinfo; do
+  if ! type -t "$fn" >/dev/null 2>&1; then
+    echo "[ERROR] function '$fn' not found after sourcing EnvironmentalVariables"; exit 1
+  fi
+done
+
 
 # carregando funcoes do pre-processamento
-
-source ${home_run_bam}/runPre.func
+source ${RUNPRE_FUNC}
 
 # Verificando argumentos de entrada
 if [ -z "${1}" ]
@@ -114,14 +140,20 @@ else
   export RUNPOS="yes"
 fi
 
-case ${hpc_name} in
-   egeon) tasks_per_node=16
-	        cpus_per_task=8
-	;;
-   XC50)  tasks_per_node=10
-	        cpus_per_task=4
-   ;;
-esac
+## Resolve MPI/OpenMP layout from current HPC and user overrides
+# Defaults (mantém o comportamento atual se não vier do caller)
+: "${tasks_per_node:=16}"
+: "${cpus_per_task:=8}"
+
+# Faz a resolução completa (detecta máquina, checa limites, etc.)
+# Aceita também -np/-N/-d do próprio script, se você repassar.
+getMPIinfo -np "${NPROC}" -N "${tasks_per_node}" -d "${cpus_per_task}" || {
+  echo "[ERROR] getMPIinfo failed"; exit 1;
+}
+# Opcional: sincronizar com nomes locais caso você use essas variáveis adiante
+tasks_per_node="${TasksPerNode}"
+cpus_per_task="${ThreadsPerMPITask}"
+
 
 getBAMSize ${TRC}
 export postfix=$(printf "G%5.5dL%3.3d \n" $JM $NLV)
@@ -181,7 +213,7 @@ cp -pfr ${gsiDataOut}/GANL${PREFIX}${LABELANL}S.unf.${MRES} ${modelDataIn}
 #
 # /bin/bash runPre -v -t 299 -l 64 -I ${LABELANL}  -n 0 -p SMT -s -O -T -G -Gp gblav -Gt Grid
 
-/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -p CPT -n das
+/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -p ${PREFIX} -n das
 STATUS=$?
 echo "2nd call to runPre. Status: "${STATUS}
 if [ ${STATUS} -ne 0 ];then
@@ -189,9 +221,10 @@ if [ ${STATUS} -ne 0 ];then
 fi
 
 # Rodando o Modelo
+
 /bin/bash runModel -das -v -np ${NPROC} -N ${tasks_per_node} -d ${cpus_per_task} \
-                   -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} \
-                   -px CPT -py ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2 -s sstwkl
+                   -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W ${LABELFCT} \
+                   -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i 2
 
 
 # Pos-processa as previsoes caso a variavel RUNPOS possua o valor Yes ou Y
