@@ -32,41 +32,6 @@ export SMG_ROOT=${RootDir}
 
 echo "[INFO] Installation path: SMG_ROOT=$SMG_ROOT"
 
-#BOP
-# !FUNCTION: detect_hpc_system
-# !DESCRIPTION:
-#   Identifies the HPC system and sets global variables accordingly.
-#EOP
-detect_hpc_system() {
-    local sys_info=$(uname -a)
-
-    if echo "$sys_info" | grep -q "cray_ari_s"; then
-        export hpc_system="cray"
-        export hpc_name="xc50"
-        export WRAPPER="ftn"
-        echo "[INFO] Detected: Cray XC50"
-    
-    elif echo "$sys_info" | grep -q "headnode.egeon.cptec.inpe.br"; then
-        export hpc_system="linux"
-        export hpc_name="egeon"
-        export WRAPPER="mpif90"
-        export LC_ALL="en_US.UTF-8"
-        echo "[INFO] Detected: EGEON Cluster"
-    
-    elif echo "$sys_info" | grep -q "egeon-login.cptec.inpe.br"; then
-        export hpc_system="linux"
-        export hpc_name="egeon"
-        export WRAPPER="mpif90"
-        export LC_ALL="en_US.UTF-8"
-        echo "[INFO] Detected: EGEON Cluster"
-    
-    else
-        echo "[ERROR] Unknown machine: $(hostname)"
-        echo "[ACTION] 1) Add the machine to the defined systems in etc/mach/"
-        echo "[ACTION] 2) Define an option for it in the function copy_fixed_files inside etc/smg_setup.sh"
-        return 1
-    fi
-}
 
 #BOP
 # !FUNCTION: execute_function
@@ -90,9 +55,16 @@ execute_function() {
     else
         echo "[FAIL] Unknown option: $function_name"
         vars_export
-        help
+        if declare -F show_help >/dev/null 2>&1; then
+            show_help "$SMG_ROOT/etc/smg_setup.sh"
+        else
+            echo "Available commands:"
+            # fallback simples
+            declare -F | awk '{print $3}' | grep -vE '^(execute_function|main|_|show_help|get_doc|list_funcs|get_help_block|show_help_func)$' | sort
+        fi
         exit 1
     fi
+
 }
 #BOP
 # !FUNCTION: main
@@ -100,9 +72,15 @@ execute_function() {
 #   Main execution logic of the script, handling input arguments.
 #EOP
 main() {
+
+    # Load functions from the external file
+    export SMG_SETUP_AS_LIBRARY=1
+    source "${SMG_ROOT}/etc/smg_setup.sh"
+    unset SMG_SETUP_AS_LIBRARY
+
     if [[ $# -eq 0 ]]; then
         echo "[WARNING] No arguments were passed!"
-        help
+        show_help "$SMG_ROOT/etc/smg_setup.sh"
         exit 1
     fi
 
@@ -110,30 +88,11 @@ main() {
     echo "[INFO] Selected option: $option"
 
     # Default values if not set by the user
-    export compgsi=${compgsi:-2}
-    export compang=${compang:-2}
-    export compbam=${compbam:-1}
-    export compinctime=${compinctime:-1}
+    export compgsi=${compgsi:-false}
+    export compang=${compang:-false}
+    export compbam=${compbam:-false}
+    export compinctime=${compinctime:-false}
 
-    # Call HPC system detection function
-    detect_hpc_system
-    local exit_code=$?
-    if [[ $exit_code -ne 0 ]]; then
-        echo "[ERROR] detect_hpc_system failed. Aborting."
-        exit $exit_code
-    fi
-
-    # Load functions from the external file
-    source "${SMG_ROOT}/etc/smg_setup.sh"
-
-    # Set the local CMake into PATH
-    use_local_cmake
-    exit_code=$?
-    if [[ $exit_code -ne 0 ]]; then
-        echo "[ERROR] use_local_cmake failed. Aborting."
-        exit $exit_code
-    fi
-    
     # Checks if Conda is active and deactivates it if necessary
     disable_conda
     exit_code=$?
