@@ -343,7 +343,7 @@ _main() {
 
   # Optional bias-correction spin-up
   if (( BcCycles > 0 )); then
-      _spinup_bias_once "${BcLABELI}" "${BcCycles}"
+      _spinup_bias_once "${LABELI}" "${BcCycles}"
   fi
 
   # Production cycle
