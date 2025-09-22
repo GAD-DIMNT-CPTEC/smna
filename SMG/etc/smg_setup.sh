@@ -48,17 +48,29 @@ export verbose=false
 #BOP
 # !FUNCTION: _log_msg
 # !DESCRIPTION:
-#   Print a standardized log message with a given level (INFO, OK, WARNING, ACTION).
-#   Messages are only printed if the global variable 'verbose' is set to '.TRUE.'.
-#   Safe under 'set -u' (uses default when 'verbose' is unset).
+#   Print a standardized log message with a given level (INFO, OK, WARNING, ACTION, etc.).
+#   Messages are printed only when the global variable `verbose` is set to `true`,
+#   unless output is explicitly forced with the `-f` flag.
+#   Supports printf-style formatting (placeholders like %s, %d).
+#   Safe under 'set -u' (defaults to `false` when `verbose` is unset).
 #
 # !INTERFACE:
-#   _log_msg <LEVEL> <message...>
+#   _log_msg <LEVEL> [-f] <format> [args...]
 #
-# !EXAMPLE:
-#   _log_info "Starting process"
-#   _log_ok   "Compilation finished successfully"
-#-----------------------------------------------------------------------------#
+# !EXAMPLES:
+#   # Respect global verbosity (will print only if verbose=true)
+#   _log_msg INFO "Starting step %s" "$step"
+#
+#   # Force a single message regardless of `verbose`
+#   _log_msg WARNING -f "Low disk space: %s" "$mountpoint"
+#
+#   # Using numeric formatting
+#   _log_msg OK "Built %d target(s) in %0.2f s" "$n_targets" "$elapsed"
+#
+# !NOTES:
+#   • Do not add a trailing newline to <format>; the logger appends it automatically.
+#   • `verbose` is expected to be the Bash boolean string `true` or `false`.
+#   • Output goes to stdout; if you need stderr routing, adapt the implementation accordingly.
 #EOP
 #BOC
 # Core: supports printf-style formatting and a -f flag to force output
@@ -78,23 +90,35 @@ _log_msg() {
 #EOC
 
 #BOP
-# !FUNCTION: _log_info, _log_ok, _log_err, _log_warn, _log_action
+# !FUNCTION: _log_info, _log_ok, _log_err, _log_warning, _log_action, _log_fail
 # !DESCRIPTION:
-#   Convenience wrappers around '_log_msg' that automatically set the log level.
+#   Convenience wrappers around `_log_msg` that set the appropriate level.
+#   `_log_err` and `_log_fail` always force output (they behave as if `-f` was passed).
+#   Other wrappers accept an optional `-f` to force output.
 #
 # !INTERFACE:
-#   _log_info    <message...>
-#   _log_ok      <message...>
-#   _log_err     <message...>
-#   _log_warn <message...>
-#   _log_action  <message...>
-# ------------------------------------------------------------------------------
+#   _log_info    [-f] <format> [args...]
+#   _log_ok      [-f] <format> [args...]
+#   _log_warning [-f] <format> [args...]
+#   _log_action  [-f] <format> [args...]
+#   _log_err          <format> [args...]   # forced output
+#   _log_fail         <format> [args...]   # forced output
+#
+# !EXAMPLES:
+#   _log_info "Preparing NCEP input copy (layout=%s): %s" "$layout" "$cycle"
+#   _log_ok   "Artifacts available at %s" "$outdir"
+#   _log_warning -f "Retrying download (%d/%d)..." "$i" "$max"
+#   _log_err  "Failed to load cluster paths via vars_export"
+#
+# !NOTES:
+#   • Formatting follows `printf` semantics (placeholders are expanded).
+#   • Wrappers append a newline automatically; do not include one in <format>.
 #EOP
 #BOC
 # Wrappers (keep behavior consistent)
 _log_info()    { _log_msg "INFO"    "$@"; }
 _log_ok()      { _log_msg "OK"      "$@"; }
-_log_warn() { _log_msg "WARNING" "$@"; }
+_log_warn()    { _log_msg "WARNING" "$@"; }
 _log_action()  { _log_msg "ACTION"  "$@"; }
 
 # Errors should always print, regardless of verbose
@@ -913,9 +937,9 @@ copy_fixed_files(){
   # PRE/dataout
   _list_files_array filesPreDataOut "${public_bam}/PRE/dataout"
 
-  # PRE/databcs (*.form)
-  _list_files_array filesPreDataBC "${public_bam}/PRE/databcs" -name '*.form'  
 
+  # PRE/databcs (*.form & *.bin)
+  _list_files_array filesPreDataBC "${public_bam}/PRE/databcs" \( -name '*.bin' -o -name '*.form' \)
 
   if $is_egeon; then
     # ------------------------------- COPY ----------------------------------
