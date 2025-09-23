@@ -48,28 +48,32 @@ if [[ -n "${__SMG_BOOTSTRAP_DONE:-}" ]]; then
 fi
 __SMG_BOOTSTRAP_DONE=1
 
-_resolve_script() {
+_resolve_script(){
+  # usa BASH_SOURCE quando disponível (Bash). Se não existir, tenta $0 como fallback.
   local -n _out_dir="${1:?out dir var}"
   local -n _out_file="${2:?out file var}"
-  local src="${3:-${BASH_SOURCE[0]}}"
+  local __src="${BASH_SOURCE[0]:-$3}"
 
-  while [[ -L "$src" ]]; do
-    local link; link="$(readlink -- "$src")"
-    if [[ "$link" = /* ]]; then
-      src="$link"
+  # se for relativo, preserve-o (será resolvido abaixo)
+  # segue symlinks até o alvo real
+  while [ -L "$__src" ]; do
+    local __link
+    # readlink -- "$src" pode devolver relativo ou absoluto
+    __link=$(readlink -- "$__src") || break
+    if [[ "$link" == /* ]]; then
+      __src="$link"
     else
-      src="$(cd -- "$(dirname -- "$src")" && cd -- "$(dirname -- "$link")" && pwd -P)/$(basename -- "$link")"
+      __src="$(dirname -- "$__src")/$__link"
     fi
   done
 
-  _out_dir="$(cd -- "$(dirname -- "$src")" && pwd -P)"
-  _out_file="$(basename -- "$src")"
+  # transforme em diretório absoluto e canonize (resolves .. e .)
+  _out_dir=$(cd -P -- "$(dirname -- "$__src")" 2>/dev/null && pwd -P) || dir="$(pwd -P)"
+  _out_file="$(basename -- "$__src")"
+   printf '%s\n' "$_out_dir"
 }
 
 _resolve_script __smg_dir __smg_file
-
-# Canonical directory (physical path)
-__smg_dir="$(cd -- "$(dirname -- "$__smg_file")" && pwd -P)"
 
 # Export only if not already set; mark readonly for safety
 : "${SMG_DOC_FILE:="$__smg_file"}"
@@ -92,7 +96,7 @@ export C_WARN C_RST
 if ! ${__HELPERS_SH_LOADED:-false}; then
   __helpers_path="${SMG_SETUP_DIR}/__helpers__.sh"
   # shellcheck disable=SC1090
-  if ! . "${__helpers_path}" 2>/dev/null; then
+  if ! . "${__helpers_path}"; then
     # Print a compact warning to stderr, but don't abort
     printf "%s[WARN]%s %s returned non-zero; continuing\n" \
            "${C_WARN}" "${C_RST}" "${__helpers_path}" 1>&2
