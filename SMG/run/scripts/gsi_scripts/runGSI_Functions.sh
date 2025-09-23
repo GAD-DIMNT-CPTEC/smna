@@ -40,6 +40,25 @@
 #-----------------------------------------------------------------------------#
 #BOC
 
+# --- Library directory (folder where this file lives) ---
+__SRC="${BASH_SOURCE[0]}"
+while [[ -L "$__SRC" ]]; do
+  __LINK="$(readlink -- "$__SRC")"
+  if [[ "$__LINK" = /* ]]; then
+    __SRC="$__LINK"
+  else
+    __SRC="$(cd -- "$(dirname -- "$__SRC")" && cd -- "$(dirname -- "$__LINK")" && pwd)/$(basename -- "$__LINK")"
+  fi
+done
+export RUN_GSI_FUNCS_DIR="$(cd -- "$(dirname -- "$__SRC")" && pwd -P)"
+
+# --- load init (which loads helpers) ---
+__init_path="${RUN_GSI_FUNCS_DIR}/__init__.sh"
+# shellcheck disable=SC1090
+. "$__init_path" || :        # no extra prints; don't break under set -e
+
+
+# --- user defaults ---
 # --- Default logging verbosity (string boolean) ---
 : "${verbose:=false}"
 
@@ -48,183 +67,6 @@
 
 # --- Staging mode (copy, symlink, hardlink)
 : "${STAGE_LINK_MODE:=copy}"
-
-# --- Library directory (folder where this file lives) ---
-# Make the helper self-aware even when sourced from anywhere.
-# Works for both symlinked and real paths.
-__RGF_SRC="${BASH_SOURCE[0]}"
-while [[ -L "$__RGF_SRC" ]]; do
-  __RGF_LINK_TARGET="$(readlink -- "$__RGF_SRC")"
-  if [[ "$__RGF_LINK_TARGET" = /* ]]; then
-    __RGF_SRC="$__RGF_LINK_TARGET"
-  else
-    __RGF_SRC="$(cd -- "$(dirname -- "$__RGF_SRC")" && cd -- "$(dirname -- "$__RGF_LINK_TARGET")" && pwd)/$(basename -- "$__RGF_LINK_TARGET")"
-  fi
-done
-export RUN_GSI_FUNCS_DIR="$(cd -- "$(dirname -- "$__RGF_SRC")" && pwd)"
-#EOC
-
-#-----------------------------------------------------------------------------#
-#------------------------------ HELPERS LOADER --------------------------------#
-#-----------------------------------------------------------------------------#
-# -----------------------------------------------------------------------------#
-#BOP
-# !FUNCTION: source_nearby
-# !INTERFACE: source_nearby <filename> [start_dir]
-# !DESCRIPTION:
-#   Search for a target file (e.g., libs.sh) starting from the given directory
-#   (or from the caller script location if not provided), climbing up toward root,
-#   and at each level performing a pruned recursive search. Honors LIBS_PATH env
-#   as a fast-path hint. Once found, the file is sourced into the current shell.
-#
-# !USAGE:
-#   source_nearby "libs.sh"
-#   source_nearby "config.sh" /opt/myproj/run/scripts
-#
-# !ENVIRONMENT:
-#   LIBS_PATH                Optional absolute path to the file or a directory
-#                            containing it. If valid, takes precedence.
-#   SOURCE_NEARBY_VERBOSE    true|false (default: true). Controls [INFO]/[WARN] output.
-#   SOURCE_NEARBY_MAXDEPTH   Max depth per directory level during search (default: 4).
-#   SOURCE_NEARBY_GLOBAL_ROOT  Path for fallback global search (default: "/").
-#   SOURCE_NEARBY_PRUNE      Colon-separated list of dirs to skip in search (added
-#                            to defaults like .git, build, node_modules, etc.).
-#
-# !BEHAVIOR:
-#   • If LIBS_PATH is set and valid, sources directly from it.
-#   • Otherwise, resolves start_dir (or script dir) and attempts:
-#       1. Same directory as the script.
-#       2. Iteratively climb parent dirs, in each doing a pruned recursive search.
-#       3. As last fallback, global search under SOURCE_NEARBY_GLOBAL_ROOT.
-#   • Always silences "Permission denied" errors during find.
-#
-# !RETURNS:
-#   0 on success (file sourced),
-#   1 if target not found,
-#   >1 for unexpected internal errors.
-#
-# !NOTES:
-#   • Safe under 'set -euo pipefail'.
-#   • Uses 'find -xdev' to avoid crossing filesystem mounts.
-#   • Recommended: export LIBS_PATH once found to speed up subsequent calls.
-#EOP
-#BOC
-source_nearby() {
-  local target="${1:?filename required}"
-  local start="${2:-}"
-
-  # --------------------- logging control ---------------------
-  local _verbose="${SOURCE_NEARBY_VERBOSE:-true}"
-  _log() { "$_verbose" && printf '%s\n' "$*" >&2 || true; }
-
-  # ----------------- helper: resolve script dir ---------------
-  _script_dir() {
-    # Use BASH_SOURCE when available (robust for sourced scripts)
-    local src="${BASH_SOURCE[0]:-}"
-    if [[ -n "$src" && -e "$src" ]]; then
-      cd -- "$(dirname -- "$src")" && pwd -P
-    else
-      pwd -P
-    fi
-  }
-
-  # --------------------- resolve start dir -------------------
-  local script_dir
-  if [[ -n "$start" ]]; then
-    script_dir="$(cd -- "$start" && pwd -P)"
-  else
-    script_dir="$(_script_dir)"
-  fi
-
-  # -------------------- explicit path case -------------------
-  if [[ "$target" == */* && -f "$target" ]]; then
-    # shellcheck disable=SC1090
-    source "$target"
-    _log "[INFO] Loaded (explicit path): $target"
-    return 0
-  fi
-
-  # -------------------- 0) LIBS_PATH hint --------------------
-  if [[ -n "${LIBS_PATH:-}" ]]; then
-    if [[ -f "$LIBS_PATH" ]]; then
-      # shellcheck disable=SC1090
-      source "$LIBS_PATH"
-      _log "[INFO] Loaded via LIBS_PATH (file): $LIBS_PATH"
-      return 0
-    elif [[ -d "$LIBS_PATH" && -f "$LIBS_PATH/$target" ]]; then
-      # shellcheck disable=SC1090
-      source "$LIBS_PATH/$target"
-      _log "[INFO] Loaded via LIBS_PATH (dir): $LIBS_PATH/$target"
-      return 0
-    fi
-    _log "[WARN] LIBS_PATH set but not valid for '$target': $LIBS_PATH"
-  fi
-
-  # ----------------- search parameters -----------------------
-  local maxdepth="${SOURCE_NEARBY_MAXDEPTH:-4}"
-  local global_root="${SOURCE_NEARBY_GLOBAL_ROOT:-/}"
-
-  # Default prune dirs
-  local -a _prune_default=(.git .svn .hg build dist node_modules __pycache__ .mypy_cache .venv venv .tox .cache .idea .vscode)
-  IFS=':' read -r -a _prune_extra <<< "${SOURCE_NEARBY_PRUNE:-}"
-  local -a PRUNE_DIRS=("${_prune_default[@]}" "${_prune_extra[@]}")
-
-  # Helper: pruned find in base dir
-  _find_here() {
-    local base="$1"
-    local -a prune_expr=()
-    for d in "${PRUNE_DIRS[@]}"; do
-      [[ -n "$d" ]] && prune_expr+=(-name "$d" -o)
-    done
-    ((${#prune_expr[@]})) && unset 'prune_expr[${#prune_expr[@]}-1]'
-
-    # Use -xdev to avoid crossing mounts; stop at first match (-quit)
-    find "$base" -xdev \
-      \( -type d \( "${prune_expr[@]}" \) -prune \) -o \
-      \( -type f -name "$target" -maxdepth "$maxdepth" -print -quit \) 2>/dev/null
-  }
-
-  # ----------------- 1) same directory -----------------------
-  if [[ -f "$script_dir/$target" ]]; then
-    # shellcheck disable=SC1091
-    source "$script_dir/$target"
-    _log "[INFO] Loaded: $script_dir/$target"
-    return 0
-  fi
-
-  # ----------------- 2) climb parent dirs --------------------
-  local cur="$script_dir"
-  local hit=""
-  while :; do
-    hit="$(_find_here "$cur")" || true
-    if [[ -n "$hit" && -f "$hit" ]]; then
-      # shellcheck disable=SC1090
-      source "$hit"
-      _log "[INFO] Loaded: $hit"
-      return 0
-    fi
-    [[ "$cur" == "/" ]] && break
-    cur="$(dirname -- "$cur")"
-  done
-
-  # ----------------- 3) global fallback ----------------------
-  hit="$(_find_here "$global_root")" || true
-  if [[ -n "$hit" && -f "$hit" ]]; then
-    # shellcheck disable=SC1090
-    source "$hit"
-    _log "[INFO] Loaded (global): $hit"
-    return 0
-  fi
-
-  printf '[ERROR] Could not find "%s" from "%s" or under "%s".\n' \
-    "$target" "$script_dir" "$global_root" >&2
-  return 1
-}
-#EOP
-
-
-source_nearby "__helpers__.sh"
-
 
 #EOC
 
@@ -1495,7 +1337,7 @@ subGSI() {
         printf '%s\n' "#SBATCH --ntasks=${MTasks}"
         printf '%s\n' "#SBATCH --ntasks-per-node=${TasksPerNode}"
         printf '%s\n' "#SBATCH --cpus-per-task=${ThreadsPerMPITask}"
-        printf '%s\n' "#SBATCH --job-name=GSI-%s\n" "${andt}"
+        printf '%s\n' "#SBATCH --job-name=GSI-${atrc}"
         printf '%s\n' "#SBATCH --partition=${Queue}"
         printf '\n'
         printf '%s\n' "cd ${runDir_}"

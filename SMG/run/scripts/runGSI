@@ -59,16 +59,26 @@
 #-----------------------------------------------------------------------------#
 #BOC
 
-WhereIam=$(dirname ${BASH_SOURCE})
-
-# --- Load system variables
-SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
-RootDir="$(dirname "$SCRIPT_PATH")"
-export SMG_ROOT=${RootDir}
-source ${SMG_ROOT}/../../config_smg.ksh vars_export
-
+# ---------------------------------------------------------------------------- #
+# ------------------------ Environment bootstrap ----------------------------- #
+# ---------------------------------------------------------------------------- #
+# --- Library directory (folder where this file lives) ---
+__SRC="${BASH_SOURCE[0]}"
+while [[ -L "$__SRC" ]]; do
+  __LINK="$(readlink -- "$__SRC")"
+  if [[ "$__LINK" = /* ]]; then
+    __SRC="$__LINK"
+  else
+    __SRC="$(cd -- "$(dirname -- "$__SRC")" && cd -- "$(dirname -- "$__LINK")" && pwd)/$(basename -- "$__LINK")"
+  fi
+done
+export RUN_GSI_DIR="$(cd -- "$(dirname -- "$__SRC")" && pwd)"
 # --- Load functions used by runGSI
-source ${WhereIam}/gsi_scripts/runGSI_Functions.sh
+. ${RUN_GSI_DIR}/gsi_scripts/runGSI_Functions.sh
+
+# ---------------------------------------------------------------------------- #
+# ------------------------ End Environment bootstrap ------------------------- #
+# ---------------------------------------------------------------------------- #
 
 # --- Define constants and parse command-line options
 constants
@@ -107,9 +117,9 @@ FixedFiles "${AnlTrunc}" "${AnlNLevs}" "${RunDir}"
 # Bias-correction coefficients (satbias)
 getSatBias "${AnlDate}" "${BkgDate}" "${RunDir}" "${subt_gsi_dataout}"
 if (( result == 1 )); then
-  _log WARN "No satbias_out found in background date %s." "${BkgDate}"
-  _log WARN "If this is the first cycle, it is recommended to perform a bias-correction spin-up."
-  _log WARN "Otherwise, please check why the file is missing (e.g., previous cycle failed or outputs not copied)."
+  _log_warn "No satbias_out found in background date %s." "${BkgDate}"
+  _log_warn "If this is the first cycle, it is recommended to perform a bias-correction spin-up."
+  _log_warn "Otherwise, please check why the file is missing (e.g., previous cycle failed or outputs not copied)."
 fi
 
 #-----------------------------------------------------------#

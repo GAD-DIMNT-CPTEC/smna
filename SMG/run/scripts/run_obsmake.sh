@@ -1,150 +1,183 @@
-#! /bin/bash 
+#!/usr/bin/env bash
 #-----------------------------------------------------------------------------#
 #           Group on Data Assimilation Development - GDAD/CPTEC/INPE          #
 #-----------------------------------------------------------------------------#
 #BOP
-#
-# !SCRIPT: script utilizado para extrair as observações para os ciclos de
-#          assimilação de dados
+# !SCRIPT: run_obsmake.sh — Stage observation files for a given START_DATE
 #
 # !DESCRIPTION:
+#   Stages the BUFR observation files required by GSI for a specific cycle
+#   datetime (START_DATE, format YYYYMMDDHH). The script locates files under
+#   ${ncep_ext}/YYYY/MM/DD (default layout used in SMNA) and places them in
+#   ${subt_gsi_datain_obs}, using symbolic links by default (copy/hardlink
+#   available via --mode).
 #
-# !CALLING SEQUENCE:
+#   Robust, portable and idempotent:
+#     • Strict mode and safe IFS.
+#     • Validates inputs, directories and environment.
+#     • Handles empty sources gracefully and returns non-zero on no files.
+#     • Works with large directories (find + while read -d '').
 #
-#   ./run_obsmake.sh <opções>
+# !USAGE:
+#   run_obsmake.sh START_DATE [--ncep-root DIR] [--dest DIR]
+#                              [--mode link|copy|hardlink]
+#                              [--pattern 'gdas.*'] [--dry-run] [-v|-q] [-h]
 #
-#      As <opções> válidas são
-#          * START_DATE : Data da condição inicial
+# !ARGUMENTS:
+#   START_DATE         Cycle datetime label, e.g., 2015043006 (YYYYMMDDHH).
 #
-#          exemplo:
-#          ./run_obsmake.sh 2015043006
+# !OPTIONS:
+#   --ncep-root DIR    Root of NCEP external tree (defaults to $ncep_ext).
+#   --dest DIR         Destination directory (defaults to $subt_gsi_datain_obs).
+#   --mode MODE        How to stage files: link (default), copy, hardlink.
+#   --pattern GLOB     Source filename glob (default: 'gdas.*').
+#   --dry-run          Print actions without performing them.
+#   -v, --verbose      Verbose messages.
+#   -q, --quiet        Only errors.
+#   -h, --help         Show this help extracted from #BOP/#EOP.
+#
+# !EXIT CODES:
+#   0  Success and >=1 files staged
+#   1  Usage / invalid arguments / unexpected error
+#   2  No files found to stage
+#
+# !ENVIRONMENT:
+#   ncep_ext               Default source root if --ncep-root not provided.
+#   subt_gsi_datain_obs    Default destination if --dest not provided.
+#
+# !EXAMPLES:
+#   ./run_obsmake.sh 2025010106 --mode link
+#   ./run_obsmake.sh 2025010106 --ncep-root /data/NCEP --dest /run/gsi/obs --pattern 'gdas.*'
 #
 # !REVISION HISTORY:
-#
-# !REMARKS:
-#
+#   2025-09-21  Refactor for robustness, options, and ProTex documentation.
 #EOP
 #-----------------------------------------------------------------------------#
 #BOC
 
-# Carregando as variaveis do sistema
-SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
-RootDir="$(dirname "$SCRIPT_PATH")"
-export SMG_ROOT=${RootDir}
-source ${SMG_ROOT}/../../config_smg.ksh vars_export
+# --- Library directory (folder where this file lives) ---
+__SRC="${BASH_SOURCE[0]}"
+while [[ -L "$__SRC" ]]; do
+  __LINK="$(readlink -- "$__SRC")"
+  if [[ "$__LINK" = /* ]]; then
+    __SRC="$__LINK"
+  else
+    __SRC="$(cd -- "$(dirname -- "$__SRC")" && cd -- "$(dirname -- "$__LINK")" && pwd)/$(basename -- "$__LINK")"
+  fi
+done
+export RUN_OBSMAKE_DIR="$(cd -- "$(dirname -- "$__SRC")" && pwd -P)"
 
-#-----------------------------------------------------------------------------#
-# return usage from main program
-#-----------------------------------------------------------------------------#
+# --- load init (which loads helpers) ---
+__init_path="${RUN_OBSMAKE_DIR}/__init__.sh"
+# shellcheck disable=SC1090
+. "$__init_path" || :        # no extra prints; don't break under set -e
+
 usage() {
-   echo
-   echo "Usage:"
-   sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' ${BASH_SOURCE}
+  sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' "${BASH_SOURCE[0]}"
 }
 
-# Data da condição inicial
-if [ -z ${1} ]; then
-   echo -e "\e[31;1m >> Erro: \e[m\e[33;1m Data da condição inicial do modelo não foi passada\e[m"
-   usage
-   exit -1
+#------------------------------- Defaults ------------------------------------#
+verbose=false
+quiet=false
+dry_run=false
+pattern='gdas.*'
+mode='link'        # link|copy|hardlink
+ncep_root="${ncep_ext:-}"
+dest_dir="${subt_gsi_datain_obs:-}"
+
+#----------------------------- Parse options ---------------------------------#
+_with_strict_mode
+
+[[ $# -ge 1 ]] || { _log_err "Missing START_DATE."; usage; exit 1; }
+START_DATE="$1"; shift || true
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --ncep-root) ncep_root="${2:-}"; shift 2 ;;
+    --dest)      dest_dir="${2:-}"; shift 2 ;;
+    --mode)      mode="${2:-}"; shift 2 ;;
+    --pattern)   pattern="${2:-}"; shift 2 ;;
+    --dry-run)   dry_run=true; shift ;;
+    -v|--verbose) verbose=true; quiet=false; shift ;;
+    -q|--quiet)  quiet=true; verbose=false; shift ;;
+    -h|--help)   usage; exit 0 ;;
+    *) err "Unknown option: $1"; usage; exit 1 ;;
+  esac
+done
+
+# Try to auto-load SMG config if variables are missing and config is reachable
+if [[ -z "${ncep_root}" || -z "${dest_dir}" ]]; then
+  if command -v realpath >/dev/null 2>&1; then
+    SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
+    RootDir="$(dirname "$SCRIPT_PATH")"
+    SMG_ROOT="${SMG_ROOT:-$RootDir}"
+    if [[ -f "${SMG_ROOT}/../../config_smg.ksh" ]]; then
+      # shellcheck disable=SC1090
+      . "${SMG_ROOT}/../../config_smg.ksh" vars_export || true
+      # Refill defaults after sourcing
+      : "${ncep_root:=${ncep_ext:-}}"
+      : "${dest_dir:=${subt_gsi_datain_obs:-}}"
+    fi
+  fi
 fi
 
-export START_DATE=${1}
+#------------------------------ Validation -----------------------------------#
+[[ "${#START_DATE}" -eq 10 && "${START_DATE}" =~ ^[0-9]{10}$ ]] \
+  || die "START_DATE must be YYYYMMDDHH (10 digits): got '${START_DATE}'"
 
-DATE=${START_DATE}
+[[ -n "${ncep_root}" ]] || _die "--ncep-root not set and \$ncep_ext is empty."
+[[ -n "${dest_dir}"  ]] || _die "--dest not set and \$subt_gsi_datain_obs is empty."
 
-echo ""
-echo -e "\033[34;1m >>  Descompactando Observacoes... \033[m"
-echo ""
-
-YMD=${START_DATE:0:8}
-HH=${START_DATE:8:10}
-YM=${START_DATE:0:6}
-DH=${START_DATE:6:10}
 Y=${START_DATE:0:4}
 M=${START_DATE:4:2}
 D=${START_DATE:6:2}
-#DIRFILES=${ncep_ext}/ASSIMDADOS
-DIRFILES=${ncep_ext}/${Y}/${M}/${D}
-    echo ${subt_gsi_datain_obs}
+#HH=${START_DATE:8:2}  # not used by current layout
+src_dir="${ncep_root}/${Y}/${M}/${D}"
 
-count=0
-#ls -1 ${DIRFILES}/*${YMD}*.gz | while read file; do
-#    echo -e "\e[32;1m${file}\e[m"
-#    tar -xvzf ${file} -C ${subt_gsi_datain_obs}
-#    if [ $? -eq 0 ];then
-#       count=$((count+1))
-#    fi
-#done
+[[ -d "${src_dir}" ]] || _die "Source directory not found: ${src_dir}"
 
-if [ ! -d ${subt_gsi_datain_obs} ]; then mkdir -p ${subt_gsi_datain_obs}; fi
-
-for obsfile in $(find ${DIRFILES} -type f -size +0c -name "gdas.*")
-do
-  ln -sfv ${obsfile} ${subt_gsi_datain_obs}/      
-  #cp -v ${obsfile} ${subt_gsi_datain_obs}/      
-  count=$((count+1))
-done        
-
-if [ ${count} -gt 0 ];then
-   echo -e ""
-   echo -e "\e[34;1m Foram obtidos\e[m \e[37;1m${count}\e[m \e[34;1marquivos.\e[m"
-   echo -e ""
-   exit 0
-else
-   echo -e "\033[31;1m !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \033[m"
-   echo -e "\033[31;1m !!! Nenhum Arquivo de Observacoes disponível !!! \033[m"
-   echo -e "\033[31;1m !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \033[m"
-   exit 1
+# Normalize destination and create it
+if [[ ! -d "${dest_dir}" ]]; then
+  $dry_run || mkdir -p -- "${dest_dir}"
+  _log_info "Created destination: ${dest_dir}"
 fi
 
-## Primeiro verifica se os arquivos existem no seguinte diretório
-##
-## Obs.: Trocar pelo diretorio da DMD
-#DMD='/stornext/online6/das/bruna.silveira/dados_testecase_AD'
-#DMD='/stornext/online6/das/gdad/OBS_prepbufr'
-#
-#DirFiles=${DMD}/${YM}/${DH}
-#
-#if [ "$(ls -A ${DirFiles})" ]; then
-#   count=0
-#   while read line; do
-#      count=$((count+1))
-#      echo -e "\e[32;1m$line\e[m"
-#      cp -pfr ${DirFiles}/${line} ${subt_gsi_datain_obs}
-#   done < <(ls -1 ${DirFiles})
-#
-#   echo -e ""
-#   echo -e "\e[34;1m Foram obtidos\e[m \e[37;1m${count}\e[m \e[34;1marquivos.\e[m"
-#   echo -e ""
-#else
-#
-#   # Descompacta os arquivos de observacao que estao em $ncep_ext:
-##   file=${ncep_ext}/${YM}/${DH}/gdas1.bufr_${START_DATE}.tgz
-##   file=${ncep_ext}/ASSIMDADOS/gdas1.bufr_${START_DATE}.tgz
-#
-#   if [ -e ${file} ]; then
-#     count=0
-#     while read line; do
-#        count=$((count + 1))
-#        echo -e "\e[32;1m$line\e[m"
-#     done  < <(tar -zxvf ${file} -C ${subt_gsi_datain_obs})
-#
-#     echo -e ""
-#     echo -e "\e[34;1m Foram obtidos\e[m \e[37;1m${count}\e[m \e[34;1marquivos.\e[m"
-#     echo -e ""
-#   else
-#      echo ""
-#      echo -e "\033[31;1m !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \033[m"
-#      echo -e "\033[31;1m !!! Arquivo de Observacoes não disponível !!! \033[m"
-#      echo ""
-#      echo -e "\033[32;1m ${file} \033[m"
-#      echo ""
-#      echo -e "\033[31;1m !!! Abortando .....                       !!! \033[m"
-#      echo -e "\033[31;1m !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \033[m"
-#      echo ""
-#      exit 1
-#   fi
-#fi
-#
-#exit 0
+#----------------------------- Staging files ---------------------------------#
+_log_info "Scanning: ${src_dir} (pattern: ${pattern})"
+count=0
+
+# Use find -print0 and while-read loop to handle arbitrary filenames safely
+while IFS= read -r -d '' path; do
+  base=$(basename -- "$path")
+  target="${dest_dir}/${base}"
+
+  case "${mode}" in
+    link)
+      $dry_run || ln -sfn -- "$path" "$target"
+      _log_info "ln -sfn -- '$path' '$target'"
+      ;;
+    hardlink)
+      $dry_run || ln -fn -- "$path" "$target"
+      _log_info "ln -fn -- '$path' '$target'"
+      ;;
+    copy)
+      $dry_run || cp -pf -- "$path" "$target"
+      _log_info "cp -pf -- '$path' '$target'"
+      ;;
+    *)
+      _die "Invalid --mode '${mode}'. Use link|copy|hardlink."
+      ;;
+  esac
+  ((count++))
+done < <(find -P "${src_dir}" -type f -size +0c -name "${pattern}" -print0)
+
+if (( count > 0 )); then
+  _log_ok "Staged ${count} file(s) into ${dest_dir}."
+  exit 0
+else
+  _log_err "No files found in ${src_dir} matching '${pattern}'."
+  exit 2
+fi
+
+#EOP
+

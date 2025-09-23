@@ -69,64 +69,65 @@
 #EOP
 #-----------------------------------------------------------------------------#
 #BOC
-set -Eeuo pipefail
-IFS=$' \t\n'
+# --- Library directory (folder where this file lives) ---
+__SRC="${BASH_SOURCE[0]}"
+while [[ -L "$__SRC" ]]; do
+  __LINK="$(readlink -- "$__SRC")"
+  if [[ "$__LINK" = /* ]]; then
+    __SRC="$__LINK"
+  else
+    __SRC="$(cd -- "$(dirname -- "$__SRC")" && cd -- "$(dirname -- "$__LINK")" && pwd)/$(basename -- "$__LINK")"
+  fi
+done
+export RUN_CYCLE_DIR="$(cd -- "$(dirname -- "$__SRC")" && pwd -P)"
 
-#-------------------------------- Logging ------------------------------------#
-: "${verbose:=true}"     # default: print INFO
-: "${COLOR:=1}"          # set COLOR=0 to disable ANSI coloring
-if [[ -t 2 && "${COLOR}" = "1" ]]; then
-  C_INFO=$'\033[1;34m'; C_OK=$'\033[1;32m'; C_WARN=$'\033[1;33m'; C_ERR=$'\033[1;31m'; C_RST=$'\033[0m'
-else
-  C_INFO=; C_OK=; C_WARN=; C_ERR=; C_RST=
-fi
+# --- load init (which loads helpers) ---
+__init_path="${RUN_CYCLE_DIR}/__init__.sh"
+# shellcheck disable=SC1090
+. "$__init_path" || :        # no extra prints; don't break under set -e
 
-# !FUNCTION: _log
-# !DESCRIPTION: Print standardized log lines. Shows INFO only when verbose.
-_log() { # _log <LEVEL> <fmt> [args...]
-  local lvl="$1"; shift || true
-  $verbose || [[ "$lvl" =~ ^(OK|WARN|ERR)$ ]] || return 0
-  local fmt="$1"; shift || true
-  local tag="[${lvl}]"
-  case "$lvl" in
-    INFO) printf "%s%s%s %s\n" "$C_INFO" "$tag" "$C_RST" "$(printf "$fmt" "$@")" ;;
-    OK)   printf "%s%s%s %s\n" "$C_OK"   "$tag" "$C_RST" "$(printf "$fmt" "$@")" ;;
-    WARN) printf "%s%s%s %s\n" "$C_WARN" "$tag" "$C_RST" "$(printf "$fmt" "$@")" ;;
-    ERR)  printf "%s%s%s %s\n" "$C_ERR"  "$tag" "$C_RST" "$(printf "$fmt" "$@")" ;;
-    *)    printf "%s %s\n" "$tag" "$(printf "$fmt" "$@")" ;;
-  esac
-}
-_die() { local code="${1:-1}"; shift || true; _log ERR "$@"; exit "$code"; }
-
-trap '_log ERR "Interrupted (SIGINT)"; exit 130' INT
-trap '_log ERR "Terminated (SIGTERM)"; exit 143' TERM
-trap '_log ERR "Failure at line %d" "$LINENO"' ERR
+trap '_log_err "Interrupted (SIGINT)"; exit 130' INT
+trap '_log_err "Terminated (SIGTERM)"; exit 143' TERM
+trap '_log_err "Failure at line %d" "$LINENO"' ERR
 
 #------------------------- Environment bootstrap -----------------------------#
 # Prefer environment-provided SMG_ROOT. If missing, derive from script path.
+# --- Load system variables ---
 if [[ -z "${SMG_ROOT:-}" ]]; then
-  _log WARN "SMG_ROOT not set; deriving from script location"
-  self_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-  if [[ -d "${self_dir}/../config" || -f "${self_dir}/../config_smg.ksh" ]]; then
-    SMG_ROOT="$(cd -- "${self_dir}/.." && pwd)"
-  else
-    SMG_ROOT="${self_dir}"
+  _log_warn "SMG_ROOT not set; deriving from script location"
+
+  # Start from the directory of this script
+  cur_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+
+  while [[ "$cur_dir" != "/" ]]; do
+    if [[ -f "${cur_dir}/config_smg.ksh" ]]; then
+      SMG_ROOT="$cur_dir"
+      break
+    fi
+    cur_dir="$(dirname -- "$cur_dir")"
+  done
+
+  # Fallback: if not found, use the script's own directory
+  if [[ -z "${SMG_ROOT:-}" ]]; then
+    _log_warn "config_smg.ksh not found while climbing; using script dir"
+    SMG_ROOT="$cur_dir"
   fi
 fi
+
 export SMG_ROOT
 
 : "${scripts_smg:=${SMG_ROOT}/run/scripts}"
+[[ -d "${scripts_smg}" ]] || _log WARN "scripts_smg directory not found: %s" "${scripts_smg}"
 
 # Defensive sourcing: do not kill the run if config returns non-zero
 if [[ -f "${SMG_ROOT}/config_smg.ksh" ]]; then
   # shellcheck disable=SC1090
-  if ! . "${SMG_ROOT}/config_smg.ksh" vars_export; then
-    _log WARN "config_smg.ksh returned non-zero; continuing"
+  if ! . "${SMG_ROOT}/config_smg.ksh" _env_export; then
+    _log_warn "config_smg.ksh returned non-zero; continuing"
   fi
 fi
 
 command -v date >/dev/null 2>&1 || _die 3 "'date' not found in PATH"
-[[ -d "${scripts_smg}" ]] || _log WARN "scripts_smg directory not found: %s" "${scripts_smg}"
 
 #------------------------------ Usage helper ---------------------------------#
 # !FUNCTION: usage
@@ -153,8 +154,6 @@ LABELI=""
 LABELF=""
 
 BcCycles=0
-BcLABELI=""
-BcLABELF=""
 
 #------------------------------ Option parsing -------------------------------#
 # !FUNCTION: _parse_args
@@ -205,29 +204,28 @@ _validate_required() {
 # !DESCRIPTION: Execute observer pre-processing for a given analysis label.
 _run_obsmake() {
   local lbl="$1"
-  _log INFO "Executing OBSMAKE for %s" "${lbl}"
+  _log_info "Executing OBSMAKE for %s" "${lbl}"
   SECONDS=0
   /bin/bash "${scripts_smg}/run_obsmake.sh" "${lbl}"
   local rc=$?
   ((rc==0)) || _die 10 "Observer failed for %s (rc=%d)" "${lbl}" "${rc}"
-  _log OK   "Observer finished in %dm%02ds" "$((SECONDS/60))" "$((SECONDS%60))"
+  _log_ok   "Observer finished in %dm%02ds" "$((SECONDS/60))" "$((SECONDS%60))"
 }
 
 #BOP
 # !FUNCTION: _run_gsi
-# !INTERFACE: _run_gsi LABEL [IS_BC] [BC_CYCLE]
+# !INTERFACE: _run_gsi LABEL [BC_CYCLE]
 # !DESCRIPTION:
 #   Execute a single GSI analysis for the given analysis label (LABEL).
 #
-#   • By default, runs a "normal" assimilation cycle (IS_BC=false).
-#   • When IS_BC=true, the run is considered part of a bias-correction (BC)
+#   • By default, runs a "normal" assimilation cycle.
+#   • When BC_CYCLE > 0, the run is considered part of a bias-correction (BC)
 #     cycling sequence, and the BC_CYCLE index is passed downstream so that
 #     other functions (e.g. CopyOutputsForCycle) can manage satbias file
 #     handoff correctly.
 #
 #   Arguments:
 #     LABEL     → Analysis datetime label (YYYYMMDDHH)
-#     IS_BC     → [optional] "true" or "false"; defaults to "false"
 #     BC_CYCLE  → [optional] integer cycle index; defaults to 0
 #
 #   Behavior:
@@ -238,25 +236,22 @@ _run_obsmake() {
 #
 # !USAGE:
 #   _run_gsi 2025010100
-#   _run_gsi 2025010100 true  3
-#   _run_gsi 2025010100 false 0
+#   _run_gsi 2025010100 3
+#   _run_gsi 2025010100 0
 #
 # !NOTES:
-#   - IS_BC and BC_CYCLE are passed as options to runGSI so that bias
+#   - BC_CYCLE is passed as options to runGSI so that bias
 #     correction cycling can be handled consistently across scripts.
-#   - If IS_BC=false, BC_CYCLE is ignored.
 #EOP
 #BOC
 _run_gsi() {
   local lbl=${1:? "Missing LABEL"}
   local bc_cycle=${2:-0}
 
-  # derive is_bc from BcCycle
-  local is_bc=false
-  (( bc_cycle > 0 )) && is_bc=true
-
-  _log INFO "Executing GSI for %s (is_bc=%s, bc_cycle=%d)" \
-    "${lbl}" "${is_bc}" "${bc_cycle}"
+  _log_info "Executing GSI for %s" "${lbl}" 
+  if (( bc_cycle > 0 ));then
+     _log_action "running bias corretion, bc_cycle=%d" "${bc_cycle}"
+  fi
 
   SECONDS=0
   /bin/bash "${scripts_smg}/runGSI" \
@@ -270,7 +265,7 @@ _run_gsi() {
 
   local rc=$?
   ((rc==0)) || _die 20 "GSI failed for %s (rc=%d)" "${lbl}" "${rc}"
-  _log OK "GSI finished in %dm%02ds" "$((SECONDS/60))" "$((SECONDS%60))"
+  _log_info "GSI finished in %dm%02ds" "$((SECONDS/60))" "$((SECONDS%60))"
 }
 #EOC
 
@@ -280,12 +275,12 @@ _run_bam() {
   local lbl="$1"
   local fct_date
   fct_date="$(date -u +%Y%m%d%H -d "${lbl:0:8} ${lbl:8:2} +${modelFCT} hours")"
-  _log INFO "Executing BAM: start=%s  fct_end=%s" "${lbl}" "${fct_date}"
+  _log_info "Executing BAM: start=%s  fct_end=%s" "${lbl}" "${fct_date}"
   SECONDS=0
   /bin/bash "${scripts_smg}/run_model.sh" "${lbl}" "${fct_date}" "${modelPrefix}" "${modelTrunc}" "${modelNLevs}" "${modelMPITasks}" "No"
   local rc=$?
   ((rc==0)) || _die 30 "BAM failed for %s (rc=%d). Check PRE/BAM/POS." "${lbl}" "${rc}"
-  _log OK   "BAM finished in %dm%02ds" "$((SECONDS/60))" "$((SECONDS%60))"
+  _log_ok   "BAM finished in %dm%02ds" "$((SECONDS/60))" "$((SECONDS%60))"
 }
 
 #BOP
@@ -308,38 +303,38 @@ _run_bam() {
 #
 # !USAGE:
 #   _spinup_bias_once 2025010100          # 10 iterations, normal mode
-#   _spinup_bias_once 2025010100 5 true 0 # 5 iterations, BC mode (cycle 0)
+#   _spinup_bias_once 2025010100 5        # 5 iterations
 #
-# !NOTES:
-#   - If IS_BC=true, BC_CYCLE is passed downstream but does not increment
-#     automatically. For full multi-cycle BC handling, use outer cycling logic.
 #EOP
 #BOC
 _spinup_bias_once() {
   local lbl=${1:? "Missing LABEL"}
   local n=${2:-10}
 
-  _log INFO "Bias-correction spin-up: %d iterations @ %s (is_bc=%s, bc_cycle=%d)" \
-    "${n}" "${lbl}" "${is_bc}" "${bc_cycle}"
+  _log_info "Bias-correction spin-up: %d iterations @ %s" \
+    "${n}" "${lbl}"
 
   for ((i=1; i<=n; i++)); do
-    _log INFO "Spin-up iteration %d/%d" "$i" "$n"
+    _log_info "Spin-up iteration %d/%d" "$i" "$n"
     _run_gsi "${lbl}" ${i}
   done
 
-  _log OK "Bias-correction spin-up completed"
+  _log_ok "Bias-correction spin-up completed"
 }
 #EOC
 
 #------------------------------- Main ----------------------------------------#
 _main() {
+   
+   local verbose=true
+
   _parse_args "$@" || return 1
   _validate_required
 
-  _log INFO "Cycle window: %s → %s (step +6h)" "${LABELI}" "${LABELF}"
-  _log INFO "Model: trunc=%s nlevs=%s prefix=%s mnp=%s fct=%sh" \
+  _log_info "Cycle window: %s → %s (step +6h)" "${LABELI}" "${LABELF}"
+  _log_info "Model: trunc=%s nlevs=%s prefix=%s mnp=%s fct=%sh" \
              "${modelTrunc}" "${modelNLevs}" "${modelPrefix}" "${modelMPITasks}" "${modelFCT}"
-  _log INFO "GSI:   trunc=%s gnp=%s" "${gsiTrunc}" "${gsiMPITasks}"
+  _log_info "GSI:   trunc=%s gnp=%s" "${gsiTrunc}" "${gsiMPITasks}"
 
   # Optional bias-correction spin-up
   if (( BcCycles > 0 )); then
@@ -349,7 +344,7 @@ _main() {
   # Production cycle
   local current="${LABELI}"
   while [[ "${current}" -le "${LABELF}" ]]; do
-    _log INFO "Submitting system for date %s" "${current}"
+    _log_info "Submitting system for date %s" "${current}"
 
     (( do_obsmake )) && _run_obsmake "${current}"
     (( do_gsi     )) && _run_gsi     "${current}"
@@ -358,7 +353,7 @@ _main() {
     current="$(date -u +%Y%m%d%H -d "${current:0:8} ${current:8:2} +6 hours")"
   done
 
-  _log OK "run_cycle completed successfully"
+  _log_info "run_cycle completed successfully"
 }
 
 _main "$@"
