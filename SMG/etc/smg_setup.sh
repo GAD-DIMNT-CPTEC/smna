@@ -26,106 +26,92 @@
 #   15 Sep 2025 - Help system & descriptions improved; alias; small fixes
 #EOP
 #-----------------------------------------------------------------------------#
+#BOP
+# !SECTION: Bootstrap
+# !DESCRIPTION:
+#   Minimal, portable bootstrap for configuration scripts:
+#   • Resolve this file's absolute path when sourced or executed
+#   • Define SMG_SETUP_DIR (directory of this file)
+#   • Source "__helpers__.sh" if present; otherwise print a soft warning
+#   • Set sane defaults (e.g., CMAKE_VERSION_MIN, verbose) without clobbering
+#   • Be idempotent (safe on repeated sourcing)
+#
+# !NOTES:
+#   • Uses realpath/readlink when available; falls back to $BASH_SOURCE
+#   • Prints warnings to stderr; hides "No such file" from the shell 'source'
+#   • Keeps variables readonly to prevent accidental mutation downstream
+#EOP
 
-# --- Identify this script path even when sourced from another script ---
-# Use a canonical absolute path if available; otherwise, keep the raw path.
-if command -v readlink >/dev/null 2>&1; then
-  SMG_DOC_FILE="$(readlink -f "${BASH_SOURCE[0]}")"
-else
-  SMG_DOC_FILE="${BASH_SOURCE[0]}"
+# --- guard: skip if already sourced once ---
+if [[ -n "${__SMG_BOOTSTRAP_DONE:-}" ]]; then
+  return 0 2>/dev/null || true
 fi
-export SMG_DOC_FILE  # expose to wrappers or child scripts if needed
+__SMG_BOOTSTRAP_DONE=1
 
-# --- Minimum required CMake version ---
-export CMAKE_VERSION_MIN="4.1.1"
+_resolve_script() {
+  local -n _out_dir="${1:?out dir var}"
+  local -n _out_file="${2:?out file var}"
+  local src="${3:-${BASH_SOURCE[0]}}"
 
-# --- Default logging verbosity ---
-export verbose=false
+  while [[ -L "$src" ]]; do
+    local link; link="$(readlink -- "$src")"
+    if [[ "$link" = /* ]]; then
+      src="$link"
+    else
+      src="$(cd -- "$(dirname -- "$src")" && cd -- "$(dirname -- "$link")" && pwd -P)/$(basename -- "$link")"
+    fi
+  done
 
-#-----------------------------------------------------------------------------#
-#----------------------- internal helpers (hidden from help) -----------------#
-#-----------------------------------------------------------------------------#
-#BOP
-# !FUNCTION: _log_msg
-# !DESCRIPTION:
-#   Print a standardized log message with a given level (INFO, OK, WARNING, ACTION, etc.).
-#   Messages are printed only when the global variable `verbose` is set to `true`,
-#   unless output is explicitly forced with the `-f` flag.
-#   Supports printf-style formatting (placeholders like %s, %d).
-#   Safe under 'set -u' (defaults to `false` when `verbose` is unset).
-#
-# !INTERFACE:
-#   _log_msg <LEVEL> [-f] <format> [args...]
-#
-# !EXAMPLES:
-#   # Respect global verbosity (will print only if verbose=true)
-#   _log_msg INFO "Starting step %s" "$step"
-#
-#   # Force a single message regardless of `verbose`
-#   _log_msg WARNING -f "Low disk space: %s" "$mountpoint"
-#
-#   # Using numeric formatting
-#   _log_msg OK "Built %d target(s) in %0.2f s" "$n_targets" "$elapsed"
-#
-# !NOTES:
-#   • Do not add a trailing newline to <format>; the logger appends it automatically.
-#   • `verbose` is expected to be the Bash boolean string `true` or `false`.
-#   • Output goes to stdout; if you need stderr routing, adapt the implementation accordingly.
-#EOP
-#BOC
-# Core: supports printf-style formatting and a -f flag to force output
-_log_msg() {
-  local level="$1"; shift
-  local force=false
-  if [[ "${1:-}" == "-f" ]]; then force=true; shift; fi
-
-  # default is verbose=false (string "true"/"false")
-  local v="${verbose:-false}"
-
-  if $v || $force; then
-    # $1 is the format string; the rest are printf args
-    printf "[%s] $1\n" "$level" "${@:2}"
-  fi
+  _out_dir="$(cd -- "$(dirname -- "$src")" && pwd -P)"
+  _out_file="$(basename -- "$src")"
 }
-#EOC
 
-#BOP
-# !FUNCTION: _log_info, _log_ok, _log_err, _log_warning, _log_action, _log_fail
-# !DESCRIPTION:
-#   Convenience wrappers around `_log_msg` that set the appropriate level.
-#   `_log_err` and `_log_fail` always force output (they behave as if `-f` was passed).
-#   Other wrappers accept an optional `-f` to force output.
-#
-# !INTERFACE:
-#   _log_info    [-f] <format> [args...]
-#   _log_ok      [-f] <format> [args...]
-#   _log_warning [-f] <format> [args...]
-#   _log_action  [-f] <format> [args...]
-#   _log_err          <format> [args...]   # forced output
-#   _log_fail         <format> [args...]   # forced output
-#
-# !EXAMPLES:
-#   _log_info "Preparing NCEP input copy (layout=%s): %s" "$layout" "$cycle"
-#   _log_ok   "Artifacts available at %s" "$outdir"
-#   _log_warning -f "Retrying download (%d/%d)..." "$i" "$max"
-#   _log_err  "Failed to load cluster paths via vars_export"
-#
-# !NOTES:
-#   • Formatting follows `printf` semantics (placeholders are expanded).
-#   • Wrappers append a newline automatically; do not include one in <format>.
-#EOP
-#BOC
-# Wrappers (keep behavior consistent)
-_log_info()    { _log_msg "INFO"    "$@"; }
-_log_ok()      { _log_msg "OK"      "$@"; }
-_log_warn()    { _log_msg "WARNING" "$@"; }
-_log_action()  { _log_msg "ACTION"  "$@"; }
+_resolve_script __smg_dir __smg_file
 
-# Errors should always print, regardless of verbose
-_log_fail()    { _log_msg "FAIL"  -f "$@"; }
-_log_err()     { _log_msg "ERROR" -f "$@"; }
-#EOC
+# Canonical directory (physical path)
+__smg_dir="$(cd -- "$(dirname -- "$__smg_file")" && pwd -P)"
 
+# Export only if not already set; mark readonly for safety
+: "${SMG_DOC_FILE:="$__smg_file"}"
+: "${SMG_SETUP_DIR:="$__smg_dir"}"
+export SMG_DOC_FILE SMG_SETUP_DIR
+readonly SMG_DOC_FILE SMG_SETUP_DIR
+
+# --- minimal color init (lazy, only if needed) ---
+# Define C_WARN/C_RST if unset and STDERR is a tty
+if [[ -t 2 ]]; then
+  : "${C_WARN:=$'\033[1;33m'}"
+  : "${C_RST:=$'\033[0m'}"
+else
+  : "${C_WARN:=}"
+  : "${C_RST:=}"
+fi
+export C_WARN C_RST
+
+# --- source helpers (quiet "not found"; warn only if sourcing fails) ---
+if ! ${__HELPERS_SH_LOADED:-false}; then
+  __helpers_path="${SMG_SETUP_DIR}/__helpers__.sh"
+  # shellcheck disable=SC1090
+  if ! . "${__helpers_path}" 2>/dev/null; then
+    # Print a compact warning to stderr, but don't abort
+    printf "%s[WARN]%s %s returned non-zero; continuing\n" \
+           "${C_WARN}" "${C_RST}" "${__helpers_path}" 1>&2
+  fi
+fi
+
+# --- Defaults (do not clobber if user already exported) ---
+: "${CMAKE_VERSION_MIN:=4.1.1}"
+: "${verbose:=false}"
+export CMAKE_VERSION_MIN verbose
+readonly CMAKE_VERSION_MIN
+# (verbose intentionally not readonly: users may toggle at runtime)
+
+# --- cleanup internal vars ---
+unset __smg_src __smg_file __smg_dir __helpers_path
+
+# ----------------------------------------------------------------------------- #
+# ================== SMG configuration functions start here =================== #
+# ----------------------------------------------------------------------------- #
 #BOP
 # !FUNCTION: _parse_args
 # !INTERFACE: _parse_args "$@"
@@ -170,12 +156,21 @@ _log_err()     { _log_msg "ERROR" -f "$@"; }
 #EOP
 #BOC
 _parse_args() {
+
+  # 1) Parse global flags first (see __helpers__.sh)
+  __parse_args__ "$@" || true
+
+  # 2) Replace positional parameters with what was left from the global parser
+  if [[ ${leftover_args+x} ]]; then
+    set -- "${leftover_args[@]}"
+  else
+    set --
+  fi
+
+  # 3) Now reset leftover_args and parse local options
+  leftover_args=()
+
   # ---- Safe defaults (respect existing env vars, otherwise set to false) ----
-  verbose=${verbose:-false}
-  auto_yes=${auto_yes:-false}
-  dry_run=${dry_run:-false}
-  do_restore=${do_restore:-false}
-  do_fix=${do_fix:-false}
   cmake_version=${cmake_version:-""}
 
   # ---- Components: allow override from environment or default to false ----
@@ -184,20 +179,20 @@ _parse_args() {
   compbam=${compbam:-false}
   compinctime=${compinctime:-false}
 
-  leftover_args=()
-
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      # ---- Verbosity / utilities ----
-      -v|--verbose) verbose=true ;;
-      -q|--quiet)   verbose=false ;;
-      -y|--yes)     auto_yes=true ;;
-      -f|--fix)     do_fix=true ;;
-      --dry-run)    dry_run=true ;;
-      --restore)    do_restore=true ;;
 
       # ---- CMake options ----
-      -c|--cmake)   cmake_version="${2:?--cmake requires a version}"; shift ;;
+      -c|--cmake)
+        if [[ $# -lt 2 ]]; then
+          _log_err "--cmake requires a version (e.g., --cmake 3.28.3)"
+          return 2
+        fi
+        cmake_version="$2"
+        shift 2
+        continue
+        ;;
+        
       --cmake=*)    cmake_version="${1#*=}" ;;
 
       # ---- Component presets ----
@@ -225,337 +220,6 @@ _parse_args() {
   # ---- Preserve leftover positional arguments ----
   leftover_args=("$@")
 }
-#EOC
-
-#BOP
-# !FUNCTION: _progress_bar
-# !INTERFACE: _progress_bar <current> <total> <message>
-# !DESCRIPTION:
-#   Render a simple textual progress bar (width=40) with percentage and counters.
-#
-# !USAGE:
-#   _progress_bar 3 10 "Copying files"
-#
-# !BEHAVIOR:
-#   • Prints a single updating line with carriage return
-#   • Shows percent complete and current/total count
-#
-# !EXAMPLE:
-#   for i in {1..10}; do
-#     _progress_bar "$i" 10 "Processing"
-#     sleep 0.2
-#   done
-#EOP
-_progress_bar(){
-    local current=${1:-0} total=${2:-0} msg="${3:-Processing}"
-    local width=40
-    (( total <= 0 )) && { printf "\r[INFO] %s [no files]        \n" "$msg"; return; }
-    (( current < 0 )) && current=0
-    (( current > total )) && current=$total
-    local progress=$(( current * width / total ))
-    local percent=$(( 100 * current / total ))
-    local bar=""
-    for ((i=0; i<width; i++)); do
-      if (( i < progress )); then bar+="█"; else bar+="░"; fi
-    done
-    printf "\r[INFO] %s [%s] %3d%% (%d/%d) " "$msg" "$bar" "$percent" "$current" "$total"
-}
-#EOC
-
-#BOP
-# !FUNCTION: _copy_with_progress
-# !INTERFACE: _copy_with_progress <arrayname> <src_dir> <dest_dir> [copy|link] [msg]
-# !DESCRIPTION:
-#   Copy or symlink a list of files from a source directory to a destination,
-#   showing a simple progress bar on TTY (fallback mode when rsync isn't used).
-#
-# !USAGE:
-#   files=("a.txt" "b.txt")
-#   _copy_with_progress files /tmp/src /tmp/dest copy "Copying inputs"
-#
-# !OPTIONS:
-#   copy   (default)  Use `cp -pf` to copy files
-#   link              Use `ln -sf` to create symbolic links
-#
-# !BEHAVIOR:
-#   • Ensures destination directory exists
-#   • Iterates through file list and copies/links one by one
-#   • On TTY, calls `_progress_bar` to render visual feedback; otherwise logs a single line
-#
-# !NOTES:
-#   - Depends on `_progress_bar` when stdout is a TTY (`[[ -t 1 ]]`).
-#   - The first argument is the *name* of the array (without [@]).
-#EOP
-#BOC
-_copy_with_progress(){
-  local -n _files="$1"; shift
-  local src_dir="$1"; shift
-  local dest_dir="$1"; shift
-  local action="${1:-copy}"; shift || true
-  local progress_msg="${1:-Processing files}"
-
-  mkdir -p -- "$dest_dir" || { echo "[ERROR] mkdir -p '$dest_dir' failed"; return 1; }
-
-  local total=${#_files[@]}
-  if (( total == 0 )); then
-    printf "[INFO] %s [nothing to do]\n" "$progress_msg"
-    return 0
-  fi
-
-  local count=0 f src dst
-  for f in "${_files[@]}"; do
-    ((count++))
-    src="${src_dir%/}/$f"
-    dst="${dest_dir%/}/$f"
-
-    if [[ ! -e "$src" ]]; then
-      printf "[WARNING] Missing: %s\n" "$src"
-      continue
-    fi
-
-    # Log / barra antes de executar (opcional: mover para depois, se preferir)
-    if [[ -t 1 ]]; then
-      _progress_bar "$count" "$total" "$progress_msg"
-    else
-      printf "[ACTION] (%d/%d) %s -> %s\n" "$count" "$total" "$src" "$dst"
-    fi
-
-    if [[ "$action" == "copy" ]]; then
-      cp -pf -- "$src" "$dest_dir"/ || { echo "[ERROR] Failed to copy '$f'"; return 1; }
-    else
-      ln -sf -- "$src" "$dest_dir"/ || { echo "[ERROR] Failed to link '$f'"; return 1; }
-    fi
-  done
-
-  # Em TTY, a barra já atualizou; adiciona um OK ao final
-  [[ -t 1 ]] && echo " - [OK]"
-}
-#EOC
-
-#BOP
-# !FUNCTION: _copy_with_progress_
-# !INTERFACE: _copy_with_progress_ <array_name> <src_dir> <dest_dir> [copy|link] ["Mensagem"]
-# !DESCRIPTION:
-#   Copy or link a list of files from a source directory to a destination
-#   directory, with progress reporting. Supports two modes:
-#     • If `rsync` is available → uses `rsync -a --human-readable --info=progress2`
-#       for detailed progress (percentage, bytes, ETA).
-#     • If `rsync` is not available → falls back to `__copy_with_progress__`
-#       which draws a simple progress bar (TTY only).
-#   Also supports dry-run mode (global var `dry_run=true`) where operations are
-#   only logged, not executed.
-#
-# !USAGE:
-#   files=(file1 file2 file3)
-#   _copy_with_progress_ files /path/src /path/dest copy "Copying input files"
-#
-# !OPTIONS:
-#   array_name   Name of the bash array variable containing filenames (not expanded with [@]).
-#   src_dir      Source directory containing the files.
-#   dest_dir     Destination directory for copy/link.
-#   action       Either "copy" (default) or "link".
-#   message      Optional label for logging (default: "Copying files").
-#
-# !BEHAVIOR:
-#   • Creates destination directory if missing.
-#   • For each file in array:
-#       - Verifies existence in src_dir.
-#       - Executes copy/link or logs action if dry-run.
-#       - Logs progress:
-#           · With rsync: clean numeric progress (percentage, size, ETA).
-#           · Without rsync: falls back to __copy_with_progress__, which draws a bar if TTY.
-#   • Reports total processed vs expected at the end.
-#
-# !NOTES:
-#   - Requires `_log_info`, `_log_warn`, `_log_action`, `_log_ok` helpers for logging.
-#   - Respects global `dry_run` variable (true/false).
-#   - Designed for internal use inside higher-level workflows (e.g., copy_ncep_input).
-#   - Fallback function `__copy_with_progress__` must exist for the no-rsync case.
-#EOP
-
-_copy_with_progress_() {
-  local files_name="$1"; shift                 # nome do array (ex.: files), sem [@]
-  local -n _files_ref="$files_name"            # nameref para iterar aqui
-  local src_dir="$1"; shift
-  local dest_dir="$1"; shift
-  local action="${1:-copy}"; shift || true
-  local progress_msg="${1:-Copying files}"
-  local dry="${dry_run:-false}"
-
-  mkdir -p -- "$dest_dir" || { _log_err "mkdir -p failed: %s" "$dest_dir"; return 1; }
-
-  local total=${#_files_ref[@]}
-  if (( total == 0 )); then
-    _log_info "%s [nothing to do]" "$progress_msg"
-    return 0
-  fi
-
-  # Se não houver rsync, delega para a tua função (com manejo de dry-run)
-  if ! command -v rsync >/dev/null 2>&1; then
-    if $dry; then
-      local f
-      for f in "${_files_ref[@]}"; do
-        _log_info "Dry-run: would %s %s -> %s/" "$action" "${src_dir%/}/$f" "$dest_dir"
-      done
-      _log_ok "%s: %d/%d processed (dry-run)" "$progress_msg" "$total" "$total"
-      return 0
-    fi
-    # Usa tua barra antiga
-    _copy_with_progress "$files_name" "$src_dir" "$dest_dir" "$action" "$progress_msg"
-    return $?
-  fi
-
-  # Com rsync disponível: usa --info=progress2 (limpo em TTY e em log)
-  local n=0 ok=0 f src dst
-  for f in "${_files_ref[@]}"; do
-    src="${src_dir%/}/$f"
-    dst="${dest_dir%/}/$f"
-
-    if [[ ! -e "$src" ]]; then
-      _log_warn "Missing: %s" "$src"
-      continue
-    fi
-
-    ((n++))
-    _log_action "(%d/%d) %s -> %s" "$n" "$total" "$src" "$dst"
-
-    case "$action" in
-      copy)
-        if $dry; then
-          _log_info "Dry-run: would copy %s -> %s/" "$src" "$dest_dir"
-          ((ok++))
-        else
-          # pré-voo: haverá transferência?
-          if rsync -ai --dry-run -- "$src" "$dest_dir"/ | grep -q '^[^\.]'; then
-            # sim: copia com nome + progresso + itemize
-            rsync -a --human-readable --partial \
-                  --info=progress2,name0 \
-                  -i --out-format='%i %n' -- "$src" "$dest_dir"/ && ((ok++)) || _log_warn "rsync failed: %s" "$src"
-          else
-            # não: está igual
-            printf "[INFO] Up-to-date: %s -> %s/\n" "$src" "$dest_dir"
-            ((ok++))
-          fi
-        fi
-
-        ;;
-      link)
-        if $dry; then
-          _log_info "Dry-run: would link %s -> %s" "$src" "$dst"
-          ((ok++))
-        else
-          if ln -sf -- "$src" "$dst"; then
-            ((ok++))
-          else
-            _log_warn "link failed: %s" "$src"
-          fi
-        fi
-        ;;
-      *)
-        _log_warn "Unknown action: %s (skipping)" "$action"
-        ;;
-    esac
-  done
-
-  _log_ok "%s: %d/%d processed" "$progress_msg" "$ok" "$total"
-}
-
-#EOC
-
-#BOP
-# !FUNCTION: _copy_dir_with_progress
-# !INTERFACE: _copy_dir_with_progress <src_dir> <dest_dir> [msg] [action]
-# !DESCRIPTION:
-#   Enumerate all files in a directory and copy or link them to a destination,
-#   showing progress. Uses `_copy_with_progress` internally.
-#
-# !USAGE:
-#   _copy_dir_with_progress /src/path /dest/path ["message"] [copy|link]
-#
-# !OPTIONS:
-#   copy   (default)  Copy files with `cp`
-#   link              Symlink files with `ln`
-#
-# !BEHAVIOR:
-#   • Collects all files in the source directory
-#   • Builds a list of basenames
-#   • Calls `_copy_with_progress` to handle the actual operation
-#
-# !EXAMPLE:
-#   _copy_dir_with_progress ./PRE/datain/2019/sst ./datain/2019/sst "Copying SST files" copy
-#
-# !NOTES:
-#   Depends on `_copy_with_progress`
-#EOP
-#BOC
-_copy_dir_with_progress(){
-    local src_dir="$1"
-    local dest_dir="$2"
-    local progress_msg="${3:-Copying files}"
-    local action="${4:-copy}"
-
-    mkdir -p "$dest_dir" || { echo "[ERROR] mkdir -p '$dest_dir' failed"; return 1; }
-
-    local files=()
-    while IFS= read -r -d '' f; do
-      files+=( "$(basename "$f")" )
-    done < <(find -L "$src_dir" -maxdepth 1 -type f -print0)
-
-    _copy_with_progress files "$src_dir" "$dest_dir" "$action" "$progress_msg"
-}
-#EOC
-#BOP
-# !FUNCTION: _assign
-# !INTERFACE: _assign <KEY> <VALUE...>
-# !DESCRIPTION:
-#   Define and export an environment variable from a KEY and VALUE pair,
-#   expanding ${VAR} references using the current environment and variables
-#   already set by previous _assign calls.
-#
-# !USAGE:
-#   _assign HOME /home/${USER}
-#   _assign subt_smg ${SUBMIT_HOME}/${nome_smg}
-#
-# !BEHAVIOR:
-#   • Joins VALUE arguments into a single string
-#   • Expands variable references like ${USER}, ${SUBMIT_HOME}
-#   • If `envsubst` is available, uses it for expansion
-#   • Otherwise, uses a safe eval/printf fallback (disallows command substitution)
-#   • Exports KEY=expanded_value to the shell environment
-#
-# !NOTES:
-#   • Order matters: referenced variables must be defined earlier
-#   • Does not allow backticks, $(), or arithmetic $(( )) substitutions
-#EOP
-#BOC
-_assign() {
-  local key="$1"; shift
-  # Join VALUE... preserving internal spaces
-  local raw="$*"
-
-  # Safe expansion using envsubst, if available
-  if command -v envsubst >/dev/null 2>&1; then
-    # Pass the entire current environment (including variables exported by _assign itself)
-    local expanded
-    expanded="$(printf '%s' "$raw" | envsubst)" || return 1
-    export "$key=$expanded"
-    return 0
-  fi
-
-  # Fallback without envsubst: block command substitution
-  # (disallow `cmd`, $(cmd) or $((...)) in configuration values)
-  if printf '%s' "$raw" | grep -Eq '(`|\$\(|\$\(\()'; then
-    echo "[ERROR] _assign: forbidden command substitution in value for $key" >&2
-    return 1
-  fi
-
-  # Perform only variable expansion ${VAR} / $VAR using eval+printf
-  # shellcheck disable=SC2086
-  local expanded
-  expanded="$(eval "printf '%s' \"$raw\"")" || return 1
-  export "$key=$expanded"
-}
-
 #EOC
 
 #BOP
@@ -650,117 +314,6 @@ _use_local_cmake(){
 }
 #EOC
 
-#BOP
-# !FUNCTION: _list_files_array
-# !INTERFACE: _list_files_array VAR_NAME SRC_DIR [find_args...]
-# !DESCRIPTION:
-#   Populate the array named VAR_NAME with the basenames of files
-#   found in SRC_DIR (optionally filtered with extra find arguments).
-#
-# !USAGE:
-#   list_files_array filesArray /path/to/src [-name '*.txt']
-#
-# !BEHAVIOR:
-#   • Clears the target array
-#   • Runs `find` with optional filters
-#   • Stores only basenames into the array
-#
-# !EXAMPLE:
-#   list_files_array myFiles ./data -name '*.form'
-#   echo "${myFiles[@]}"
-#
-# !NOTES:
-#   Requires Bash 4+ (for nameref `local -n`)
-#EOP
-#BOC
-_list_files_array() {
-  local __outvar=$1
-  local src_dir=$2
-  shift 2
-
-  local -n arr="$__outvar"   # reference to the external array
-  arr=()                     # reset the array
-
-  while IFS= read -r -d '' f; do
-    arr+=( "$(basename "$f")" )
-  done < <(find -L "$src_dir" -maxdepth 1 -type f "$@" -print0)
-}
-#EOC
-
-#-----------------------------------------------------------------------------#
-#------------------------------ END internal helpers -------------------------#
-#-----------------------------------------------------------------------------#
-#BOP
-# !FUNCTION: detect_hpc_system
-# !INTERFACE: detect_hpc_system [-v|--verbose]
-# !DESCRIPTION:
-#   Identify the HPC system and set global environment flags accordingly.
-#
-# !USAGE:
-#   detect_hpc_system [-v]
-#
-# !BEHAVIOR:
-#   • Reads uname/hostname to infer platform
-#   • Sets: hpc_system, hpc_name, is_egeon, is_cray, WRAPPER, LC_ALL
-#
-# !EXAMPLE:
-#   detect_hpc_system -v
-#
-# !NOTES:
-#   Relies on logging helpers: _log_info, _log_warn, _log_err, _log_action
-#   Option parsing via _parse_args (optional)
-#EOP
-#BOC
-detect_hpc_system(){
-  # Parse common flags (-v/--verbose e etc.)
-  _parse_args "$@" 2>/dev/null || true
-  set -- "${leftover_args[@]}"
-    
-  # Prevent verbosity changes from leaking
-  local verbose=$verbose
-
-  local sys_info short_hostname
-  sys_info="$(uname -a)"
-  short_hostname="$(hostname -s)"
-
-  export is_egeon=false
-  export is_cray=false
-
-  if printf '%s' "$sys_info" | grep -qi 'cray_ari_s'; then
-    export hpc_system="cray"
-    export hpc_name="xc50"
-    export is_cray=true
-    export WRAPPER="ftn"
-    _log_info 'Detected: Cray XC50'
-    return 0
-
-  elif printf '%s' "$sys_info" | grep -qi 'egeon'; then
-    export hpc_system="linux"
-    export hpc_name="egeon"
-    export is_egeon=true
-    export WRAPPER="mpif90"
-    export LC_ALL="en_US.UTF-8"
-    _log_info 'Detected: EGEON Cluster'
-    return 0
-
-  elif printf '%s' "$short_hostname" | grep -qi 'headnode'; then
-    export hpc_system="linux"
-    export hpc_name="egeon"
-    export is_egeon=true
-    export WRAPPER="mpif90"
-    export LC_ALL="en_US.UTF-8"
-    _log_warn 'Detected: HEADNODE of EGEON (build-only)'
-    return 0
-
-  else
-    # Shadow verbose locally to avoid leaking the flag
-    _log_err 'Unknown machine: %s' "$short_hostname"
-    _log_action -f '1) Add the machine under etc/mach/'
-    _log_action -f '2) Create an entry in copy_fixed_files (etc/smg_setup.sh)'
-    return 1
-  fi
-}
-#EOC
 
 #BOP
 # !FUNCTION: vars_export
@@ -797,79 +350,31 @@ detect_hpc_system(){
 #EOP
 #BOC
 vars_export(){
+  # Avoid re-running if already done
+  if [[ "${VARS_EXPORTED:-false}" == "true" ]]; then
+    return 0
+  fi
+
   local confdir filepaths
   confdir="$(dirname -- "${BASH_SOURCE[0]}")/mach"
   filepaths="${confdir}/${hpc_name}_paths.conf"
 
   [[ -f "$filepaths" ]] || { echo "[ERROR] Missing: $filepaths" >&2; return 1; }
 
-  # Lê linhas "KEY  VALUE"; ignora comentários/linhas vazias
+  # Read "KEY VALUE" pairs, ignore blank/comment lines
   while IFS= read -r line; do
     [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
-    # chave = primeira palavra; valor = resto da linha (trim inicial)
     local key="${line%%[[:space:]]*}"
     local value="${line#"$key"}"
     value="${value#"${value%%[![:space:]]*}"}"   # trim leading spaces
     [[ -z "$key" || -z "$value" ]] && continue
     _assign "$key" "$value"
   done < "$filepaths"
+
+  # Mark as already exported
+  export VARS_EXPORTED=true
 }
 #EOC
-
-#BOP
-# !FUNCTION: disable_conda
-# !INTERFACE: disable_conda [-v|--verbose]
-# !DESCRIPTION:
-#   Deactivate a detected Conda environment (if any) to avoid toolchain conflicts,
-#   and clean related environment variables.
-#
-# !USAGE:
-#   disable_conda [-v]
-#
-# !BEHAVIOR:
-#   • If CONDA_PREFIX is set:
-#       - Try `conda deactivate` (or `source deactivate`)
-#       - Unset common Conda-related variables
-#   • Otherwise, no-op with OK message
-#
-# !EXAMPLE:
-#   disable_conda -v
-#
-# !NOTES:
-#   Safe to call even if Conda is not installed.
-#EOP
-#BOC
-disable_conda(){
-  # Parse common flags (-v/--verbose e etc.)
-  _parse_args "$@" 2>/dev/null || true
-  set -- "${leftover_args[@]}"
-
-  # Prevent verbosity changes from leaking
-  local verbose=$verbose
-
-  if [[ -n "$CONDA_PREFIX" ]]; then
-    _log_warn "Conda environment detected: %s" "$CONDA_PREFIX"
-    _log_action  "Deactivating Conda..."
-
-    # Try conda/mamba/micromamba deactivation; ignore errors
-    if command -v conda >/dev/null 2>&1; then
-      conda deactivate 2>/dev/null || source deactivate 2>/dev/null || true
-    elif command -v mamba >/dev/null 2>&1; then
-      mamba deactivate 2>/dev/null || true
-    elif command -v micromamba >/dev/null 2>&1; then
-      micromamba deactivate 2>/dev/null || true
-    else
-      _log_warn "Conda command not found, but CONDA_PREFIX is set."
-    fi
-
-    unset CONDA_PREFIX CONDA_DEFAULT_ENV CONDA_PROMPT_MODIFIER
-    _log_ok "Conda has been disabled."
-  else
-    _log_ok "No active Conda environment detected."
-  fi
-}
-#EOC
-
 
 #BOP
 # !FUNCTION: copy_fixed_files
@@ -937,9 +442,12 @@ copy_fixed_files(){
   # PRE/dataout
   _list_files_array filesPreDataOut "${public_bam}/PRE/dataout"
 
-
   # PRE/databcs (*.form & *.bin)
   _list_files_array filesPreDataBC "${public_bam}/PRE/databcs" \( -name '*.bin' -o -name '*.form' \)
+
+  # PRE/databcs/gtopo30 (*.dat)
+  _list_files_array filesPreDataGTOPO "${public_bam}/PRE/databcs/gtopo30" \( -name '*.dat' \)
+
 
   if $is_egeon; then
     # ------------------------------- COPY ----------------------------------
@@ -947,7 +455,7 @@ copy_fixed_files(){
     _copy_with_progress filesPreDataOut "${public_bam}/PRE/dataout"   "${subt_pre_bam}/dataout" "copy" "Copying PRE/dataout"
     _copy_with_progress filesPreDataBC  "${public_bam}/PRE/databcs"   "${subt_pre_bam}/databcs" "copy" "Copying PRE/databcs"
     _copy_with_progress filesPreDataIn  "${public_bam}/PRE/datain"    "${subt_pre_bam}/datain" "copy" "Copying PRE/datain (HybridLevels)"
-
+    _copy_with_progress filesPreDataGTOPO  "${public_bam}/PRE/databcs/gtopo30"    "${subt_pre_bam}/databcs/gtopo30" "copy" "Copying PRE/databcs (GTOPO)"
 
   elif $is_cray; then
     # ------------------------------- LINK ----------------------------------
@@ -1953,9 +1461,13 @@ testcase(){
   return $rc
 }
 #EOC
+# ----------------------------------------------------------------------------- #
+# ==================== End of SMG configuration functions ===================== #
+# ----------------------------------------------------------------------------- #
 
-
-# ================= FRIENDLY HELP + SUGGESTIONS + DESCRIPTIONS ===================
+# ==============================================================================
+# =============== FRIENDLY HELP + SUGGESTIONS + DESCRIPTIONS ===================
+# ==============================================================================
 #BOP
 # !FUNCTION: list_funcs
 # !INTERFACE: list_funcs [FILE]
@@ -2275,7 +1787,7 @@ if [[ -z "${hpc_name:-}" ]]; then
     exit_code=$?
     
     if [[ $exit_code -ne 0 ]]; then
-        _log_err -f "detect_hpc_system failed (exit code %d). Aborting." "$exit_code"
+        _log_err "detect_hpc_system failed (exit code %d). Aborting." "$exit_code"
         exit "$exit_code"
     fi
 
