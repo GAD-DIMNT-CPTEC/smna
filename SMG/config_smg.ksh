@@ -44,16 +44,16 @@ execute_function() {
     shift  # Remove function name to pass only actual arguments
 
     if declare -f "$function_name" > /dev/null; then
-        echo "[ OK ] Running: $function_name $*"
+        _log_debug "Running: $function_name $*"
         vars_export
         "$function_name" "$@"  # Execute function with all remaining arguments
         local exit_code=$?
         if [[ $exit_code -ne 0 ]]; then
-            echo "[ERROR] Function $function_name failed with exit code $exit_code."
+            _log_err "Function $function_name failed with exit code $exit_code."
             exit $exit_code
         fi
     else
-        echo "[FAIL] Unknown option: $function_name"
+        _log_err "Unknown option: $function_name"
         vars_export
         if declare -F show_help >/dev/null 2>&1; then
             show_help "$SMG_ROOT/etc/smg_setup.sh"
@@ -79,7 +79,7 @@ main() {
     unset SMG_SETUP_AS_LIBRARY
 
     if [[ $# -eq 0 ]]; then
-        echo "[WARNING] No arguments were passed!"
+        _log_warn "No arguments were passed!"
         show_help "$SMG_ROOT/etc/smg_setup.sh"
         exit 1
     fi
@@ -97,7 +97,7 @@ main() {
     disable_conda
     exit_code=$?
     if [[ $exit_code -ne 0 ]]; then
-        echo "[ERROR] disable_conda failed. Aborting."
+        _log_err "disable_conda failed. Aborting."
         exit $exit_code
     fi
     
