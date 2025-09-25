@@ -176,17 +176,17 @@ main() {
   # Vai para o diretório de execução do BAM
   cd -- "${home_run_bam:?home_run_bam is required}"
 
-  # 1) Pré (apenas chopping de ozônio); saída em bam/model/datain/
-  /bin/bash runPre -v -t "${TRC}" -l "${NLV}" -I "${LABELANL}" -s -n chp -O
-  _log_info "1st call to runPre completed."
-
-  # Copia OZONSMT -> OZON${PREFIX}
-  cp -f -- "${modelDataIn}/OZONSMT${LABELANL}S.grd.${postfix}" \
-            "${modelDataIn}/OZON${PREFIX}${LABELANL}S.grd.${postfix}"
-
-  # Limpa arquivos desnecessários
-  rm -f -- "${modelDataIn}/GANLSMT${LABELANL}S.unf."* || true
-  rm -f -- "${modelDataIn}/OZONSMT${LABELANL}S.unf."* || true
+#  # 1) Pré (apenas chopping de ozônio); saída em bam/model/datain/
+#  /bin/bash runPre -v -t "${TRC}" -l "${NLV}" -I "${LABELANL}" -s -n chp -O
+#  _log_info "1st call to runPre completed."
+#
+#  # Copia OZONSMT -> OZON${PREFIX}
+#  cp -f -- "${modelDataIn}/OZONSMT${LABELANL}S.grd.${postfix}" \
+#            "${modelDataIn}/OZON${PREFIX}${LABELANL}S.grd.${postfix}"
+#
+#  # Limpa arquivos desnecessários
+#  rm -f -- "${modelDataIn}/GANLSMT${LABELANL}S.unf."* || true
+#  rm -f -- "${modelDataIn}/OZONSMT${LABELANL}S.unf."* || true
 
   # 2) Copia análise do GSI para o Model/DataIn
   cp -fp -- "${gsiDataOut}/GANL${PREFIX}${LABELANL}S.unf.${MRES}" "${modelDataIn}/"
