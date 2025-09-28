@@ -26,12 +26,11 @@
 #EOP
 #-----------------------------------------------------------------------------#
 #BOC
-SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
-RootDir="$(dirname "$SCRIPT_PATH")"
-export SMG_ROOT=${RootDir}
-
-echo "[INFO] Installation path: SMG_ROOT=$SMG_ROOT"
-
+# Resolve absolute path to this script (no symlink issues)
+SMG_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+export SMG_ROOT
+[[ -t 1 ]] && { C_INFO=$'\033[1;34m'; C_RST=$'\033[0m'; } || { C_INFO=; C_RST=; }
+printf '%s[INFO]%s Installation path: SMG_ROOT=%s\n' "$C_INFO" "$C_RST" "$SMG_ROOT"
 
 #BOP
 # !FUNCTION: execute_function
@@ -45,7 +44,6 @@ execute_function() {
 
     if declare -f "$function_name" > /dev/null; then
         _log_debug "Running: $function_name $*"
-        vars_export
         "$function_name" "$@"  # Execute function with all remaining arguments
         local exit_code=$?
         if [[ $exit_code -ne 0 ]]; then
@@ -54,7 +52,6 @@ execute_function() {
         fi
     else
         _log_err "Unknown option: $function_name"
-        vars_export
         if declare -F show_help >/dev/null 2>&1; then
             show_help "$SMG_ROOT/etc/smg_setup.sh"
         else
@@ -74,9 +71,7 @@ execute_function() {
 main() {
 
     # Load functions from the external file
-    export SMG_SETUP_AS_LIBRARY=1
     source "${SMG_ROOT}/etc/smg_setup.sh"
-    unset SMG_SETUP_AS_LIBRARY
 
     if [[ $# -eq 0 ]]; then
         _log_warn "No arguments were passed!"
@@ -92,14 +87,6 @@ main() {
     export compang=${compang:-false}
     export compbam=${compbam:-false}
     export compinctime=${compinctime:-false}
-
-    # Checks if Conda is active and deactivates it if necessary
-    disable_conda
-    exit_code=$?
-    if [[ $exit_code -ne 0 ]]; then
-        _log_err "disable_conda failed. Aborting."
-        exit $exit_code
-    fi
     
     # Execute the requested function if it exists
     execute_function "$@"

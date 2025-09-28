@@ -48,9 +48,6 @@ fi
 
 __HELPERS_SH_LOADED=true
 
-# --- Default logging verbosity (exported for downstream scripts) ---
-export verbose=${verbose:-false}
-
 # --- Default logging debugging (exported for downstream scripts) ---
 export debug=${debug:-false}
 
@@ -61,123 +58,103 @@ export helpers_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 #----------------------- internal helpers (hidden from help) -----------------#
 #-----------------------------------------------------------------------------#
 #BOP
-# !FUNCTION: _with_strict_mode
-# !INTERFACE: _with_strict_mode
+# !SECTION: LOG CORE (centralized logging configuration)
+#
 # !DESCRIPTION:
-#   Enable "strict mode" (set -euo pipefail) inside the current function scope
-#   only. It saves the current shell options with `set +o` and registers a trap
-#   on RETURN to restore them when the function exits (either normally or due
-#   to an error).
+#   Defines global, centralized logging configuration knobs used by the helpers.
+#   These variables control tagging, timestamps, color behavior, and output
+#   file descriptors, while keeping backward compatibility with the existing
+#   `verbose`, `debug`, and `dry_run` booleans already used across scripts.
+#
+# !CONTENT:
+#   - LOG_TAG           : Optional static tag prefixed to every log line.
+#                         Example: "SMG". Empty by default (no extra tag).
+#   - LOG_TIMESTAMPS    : When "1", prepend a timestamp to log lines.
+#                         Default "0" (no timestamp).
+#   - LOG_TIME_FMT      : Format string for `date(1)` when timestamps are enabled.
+#                         Default "%Y-%m-%d %H:%M:%S".
+#   - LOG_FD_OUT        : File descriptor used for informational levels
+#                         (INFO/OK/ACTION/DEBUG). Default "1" (stdout).
+#   - LOG_FD_ERR        : File descriptor used for warning/error levels
+#                         (WARN/ERROR/FAIL). Default "2" (stderr).
+#   - COLOR             : If "1" and stdout is a TTY, enable ANSI colors.
+#                         Set FORCE_COLOR=1 to force colors regardless of TTY.
+#
+#   Backward-compatibility flags:
+#   - verbose           : "true"/"false". When true, INFO/OK/ACTION are printed.
+#                         WARN/ERROR/FAIL always print regardless of `verbose`.
+#   - debug             : "true"/"false". When true, DEBUG messages print and
+#                         optional xtrace helpers may be enabled by the caller.
+#   - dry_run           : "true"/"false". When true, execution helpers only log
+#                         the intended command (no side effects) and return 0.
 #
 # !USAGE:
-#   my_function() {
-#     _with_strict_mode
-#     # function logic here
-#   }
+#   # Minimal example (enable timestamps and tag in a calling script):
+#   export LOG_TAG="SMG"
+#   export LOG_TIMESTAMPS=1
+#   export verbose=true
+#   export debug=false
 #
-# !BEHAVIOR:
-#   • Activates safer execution by:
-#       - `-e`  → exit immediately on error
-#       - `-u`  → error on unset variables
-#       - `-o pipefail` → pipelines fail if any command fails
-#   • The original shell options are restored automatically after the function
-#     finishes, ensuring no side effects on the caller environment.
+#   # To force colors even when redirected:
+#   export FORCE_COLOR=1
 #
-# !EXAMPLE:
-#   safe_copy() {
-#     _with_strict_mode
-#     cp -- "$1" "$2"
-#   }
+#   # To route INFO to a file and keep ERR on stderr:
+#   exec 3>>/var/log/mytool-info.log
+#   export LOG_FD_OUT=3   # INFO/OK/ACTION/DEBUG → FD 3 (file)
+#   export LOG_FD_ERR=2   # WARN/ERROR/FAIL      → FD 2 (stderr)
 #
-#   # In this example, any error in cp (missing file, permission issue, etc.)
-#   # will stop execution, but once safe_copy returns the original shell
-#   # options are restored.
+# !NOTES:
+#   • These variables are read by the logging helpers during initialization.
+#   • Changing them at runtime affects subsequent log lines immediately.
+#   • `verbose`, `debug`, and `dry_run` are exported here for consistency across
+#     sourced scripts. Call-site argument parsers may override them later.
+#
+# !LICENSE:
+#   LGPL-3.0-or-later
 #EOP
-_with_strict_mode() {
-  # Snapshot current options as shell code (e.g., 'set +o errexit; set +o nounset; ...')
-  local __o; __o="$(set +o)"
 
-  # Enable strict mode
-  set -euo pipefail
-
-  # Restore snapshot when this function returns (expand __o now, not later)
-  trap -- "$(printf 'eval %q; trap - RETURN' "$__o")" RETURN
-}
-
+LOG_TAG="${LOG_TAG:-}"
+LOG_TIMESTAMPS="${LOG_TIMESTAMPS:-0}"
+LOG_TIME_FMT="${LOG_TIME_FMT:-%Y-%m-%d %H:%M:%S}"
+LOG_FD_OUT="${LOG_FD_OUT:-1}"
+LOG_FD_ERR="${LOG_FD_ERR:-2}"
 
 #BOP
-# !FUNCTION: __parse_args__
-# !INTERFACE: __parse_args__ "$@"
+# !SECTION: Compatibility Flags
+#
 # !DESCRIPTION:
-#   Parse common options and component selection flags for compilation.
+#   Preserve and export the commonly used global flags (`verbose`, `debug`,
+#   `dry_run`) so they are available across all sourced scripts. These flags
+#   control the logging verbosity, debug output, and dry-run behavior.
 #
-#   Verbosity and utilities:
-#     -v, --verbose      → verbose=true  (enable logging)
-#     -q, --quiet        → verbose=false (disable logging)
-#     -d, --debug        → debug=true    (enable logging)
-#     -y, --yes          → auto_yes=true (auto-confirm prompts)
-#     -f, --fix          → do_fix=true   (create dirs/symlinks/copies as needed)
-#     --dry-run          → dry_run=true  (skip actual actions)
-#     --restore          → do_restore=true (restore from *.bak when supported)
+# !CONTENT:
+#   - verbose : "true"/"false". When true, INFO/OK/ACTION messages are printed.
+#               Default: false.
+#   - debug   : "true"/"false". When true, DEBUG messages are printed and
+#               optional xtrace helpers may be enabled. Default: false.
+#   - dry_run : "true"/"false". When true, execution helpers (_run, copy
+#               helpers, etc.) only log the intended actions instead of
+#               executing them. Default: false.
 #
-#   Notes:
-#     1) Flags are evaluated in order: the last one wins (e.g. --verbose followed by --quiet disables verbosity).
+# !USAGE:
+#   # Enable verbose logs in a caller script:
+#   export verbose=true
 #
-#   Remaining positional arguments are preserved in leftover_args[].
+#   # Enable debug logs and traces:
+#   export debug=true
 #
-# !EXAMPLE:
-#   my_function() {
-#     _parse_args "$@"
-#     $verbose && _log_info "Components: GSI=$compgsi ANG=$compang BAM=$compbam INC=$compinctime"
-#     if $dry_run; then
-#       _log_info "DRY-RUN: would run with args: %s" "${leftover_args[*]}"
-#     fi
-#   }
+#   # Run in dry-run mode (no side effects, only logs):
+#   export dry_run=true
+#
+# !NOTES:
+#   • Defaults are assigned only if variables are unset.
+#   • The values are exported so that any sourced script sees a consistent state.
+#   • Typically overridden by argument parsing (e.g. `__parse_args__`).
 #EOP
-#BOC
-__parse_args__() {
-  _with_strict_mode   # enable strict mode only for this function
 
-  # ---- Safe defaults (respect existing env vars, otherwise set to false) ----
-  verbose=${verbose:-false}
-  debug=${debug:-false}
-  auto_yes=${auto_yes:-false}
-  dry_run=${dry_run:-false}
-  do_restore=${do_restore:-false}
-  do_fix=${do_fix:-false}
-
-  # Declare leftover_args explicitly (global) to avoid -u surprises
-  # If you don't want to rely on 'declare -g', just omit it; the assignment below will create it.
-  declare -g -a leftover_args 2>/dev/null || true
-  leftover_args=()
-  
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      # ---- Verbosity / utilities ----
-      -v|--verbose) verbose=true ;;
-      -q|--quiet)   verbose=false ;;
-      -d|--debug)   debug=true ;;
-      -y|--yes)     auto_yes=true ;;
-      -f|--fix)     do_fix=true ;;
-      --dry-run)    dry_run=true ;;
-      --restore)    do_restore=true ;;
-
-      # ---- Stop parsing options ----
-      --) shift; break ;;   # explicit end of options
-      -*) break ;;          # unknown short/long flag → stop
-      *)  break ;;          # first positional arg → stop
-    esac
-    shift
-  done
-
-  # ---- Preserve leftover positional arguments ----
-  leftover_args=("$@")
-}
-#EOC
-
-#-----------------------------------------------------------------------------#
-# Colored logging helpers (drop-in, keeps the same signatures)
-#-----------------------------------------------------------------------------#
+export verbose=${verbose:-false}
+export debug=${debug:-false}
+export dry_run=${dry_run:-false}
 
 #BOP
 # !FUNCTION: _log_colors_init
@@ -193,22 +170,55 @@ __parse_args__() {
 #BOC
 _log_colors_init() {
   local _COLOR="${COLOR:-1}"
+  [[ "${FORCE_COLOR:-0}" == 1 ]] && _COLOR=1
   if [[ -t 1 && "${_COLOR}" = "1" ]]; then
     C_INFO=$'\033[1;34m'   # bold blue
-    C_DBG=$'\033[1;35m'    # bold purple
+    C_DBG=$'\033[1;35m'    # bold magenta
     C_OK=$'\033[1;32m'     # bold green
     C_WARN=$'\033[1;33m'   # bold yellow
     C_ERR=$'\033[1;31m'    # bold red
-    C_ACT=$'\033[1;36m'    # bold cyan (ACTION)
+    C_ACT=$'\033[1;36m'    # bold cyan
     C_RST=$'\033[0m'
   else
-    C_INFO=; C_OK=; C_WARN=; C_ERR=; C_ACT=; C_RST=
+    C_INFO=; C_DBG=; C_OK=; C_WARN=; C_ERR=; C_ACT=; C_RST=
   fi
 }
 # Initialize at load time (no-op if not TTY)
 _log_colors_init
 #EOC
 
+#BOP
+# !FUNCTION: __log_ts
+#
+# !DESCRIPTION:
+#   Return a timestamp string when `LOG_TIMESTAMPS` is enabled. The format
+#   is controlled by `LOG_TIME_FMT`. If `LOG_TIMESTAMPS` is not set to "1",
+#   the function returns immediately without printing anything.
+#
+# !USAGE:
+#   ts="$(__log_ts)"   # → "2025-09-27 18:23:45" (if enabled)
+#   echo "[$ts] Starting process..."
+#
+# !ENVIRONMENT:
+#   - LOG_TIMESTAMPS : "1" to enable, "0" (default) to disable.
+#   - LOG_TIME_FMT   : Format string for date(1). Default "%Y-%m-%d %H:%M:%S".
+#
+# !RETURNS:
+#   Prints the formatted timestamp to stdout when enabled.
+#   Returns 0 in all cases.
+#
+# !NOTES:
+#   • Uses the system `date` command, so the format specifiers follow `date(1)`.
+#   • Safe to call inline inside log functions.
+#   • When disabled, it produces no output, allowing simple concatenation in
+#     log lines without extra conditionals.
+#EOP
+#BOC
+__log_ts() {
+  [[ "$LOG_TIMESTAMPS" == 1 ]] || return 0
+  command date +"$LOG_TIME_FMT"
+}
+#EOC
 
 #BOP
 # !FUNCTION: _log_msg
@@ -231,9 +241,14 @@ _log_colors_init
 #   • `verbose` is the Bash boolean string `true` or `false` (default: false).
 #   • Output goes to stdout by default; to route to stderr temporarily, wrap:
 #       { _log_msg ERR "msg"; } 1>&2
+#   • When SUPPRESS_LOGS=true (e.g., help requested as first arg), nothing is printed.
 #EOP
 #BOC
 _log_msg() {
+
+  # Silence everything (including -f) when help was requested
+  [[ "${SUPPRESS_LOGS:-false}" == true ]] && return 0
+
   local level="$1"; shift
   local force=false
   if [[ "${1:-}" == "-f" ]]; then force=true; shift; fi
@@ -243,24 +258,34 @@ _log_msg() {
   # default: debug=false
   local d="${debug:-false}"
 
-  # Unless explicitly forced:
-  $force || { [[ "${level^^}" == "DEBUG" ]] && { $d || return 0; } \
-              || { $v || [[ "$level" =~ ^(OK|WARNING|WARN|ERROR|ERR|FAIL|ACTION)$ ]] || return 0; }; }
-
-  # map level → color tag + normalized label
-  local tag color
+  # Gate by log level
   case "${level^^}" in
-    DEBUG)    tag="[DEBUG]";   color="${C_DBG:-}";;
-    INFO)     tag="[INFO]";    color="${C_INFO:-}";;
-    OK)       tag="[OK]";      color="${C_OK:-}";;
-    WARNING|WARN)
-              tag="[WARNING]"; color="${C_WARN:-}";;
-    ERROR|ERR)
-              tag="[ERROR]";   color="${C_ERR:-}";;
-    FAIL)     tag="[FAIL]";    color="${C_ERR:-}";;
-    ACTION)   tag="[ACTION]";  color="${C_ACT:-}";;
-    *)        tag="[${level}]"; color="";;
+    DEBUG)   $force || $d || return 0 ;;      # show only if forced or debug=true
+    INFO|OK|ACTION)
+             $force || $v || return 0 ;;      # show only if forced or verbose=true
+    WARNING|WARN|ERROR|ERR|FAIL)
+             ;;                               # always show
+    *)       $force || $v || return 0 ;;      # unknown levels behave like INFO
   esac
+
+  # map level → color tag + normalized label + File descriptor used (default stdout/stderr)
+  local tag color fd ts ptag
+  case "${level^^}" in
+    DEBUG)    tag="[DEBUG]";   color="$C_DBG"; fd="$LOG_FD_OUT" ;;
+    INFO)     tag="[INFO]";    color="$C_INFO"; fd="$LOG_FD_OUT" ;;
+    OK)       tag="[OK]";      color="$C_OK";  fd="$LOG_FD_OUT" ;;
+    ACTION)   tag="[ACTION]";  color="$C_ACT"; fd="$LOG_FD_OUT" ;;
+    WARNING|WARN)
+              tag="[WARNING]"; color="$C_WARN"; fd="$LOG_FD_ERR" ;;
+    ERROR|ERR)
+              tag="[ERROR]";   color="$C_ERR";  fd="$LOG_FD_ERR" ;;
+    FAIL)     tag="[FAIL]";    color="$C_ERR";  fd="$LOG_FD_ERR" ;;
+    *)        tag="[$level]";  color="";        fd="$LOG_FD_OUT" ;;
+  esac
+
+  ts="$(__log_ts)"                   # optional timestamp (empty if disabled)
+  ptag="${tag}"                      # base tag (e.g., [INFO], [ERROR])
+  [[ -n "$LOG_TAG" ]] && ptag="[$LOG_TAG] ${ptag}"   # prepend global tag if set
 
   # $1 is the format string; the rest are printf args
   local fmt; fmt="${1:-}"; shift || true
@@ -277,7 +302,7 @@ _log_msg() {
 #EOC
 
 #BOP
-# !FUNCTION: _log_debug, _log_info, _log_ok, _log_err, _log_warning, _log_action, _log_fail, _die
+# !FUNCTION: _log_debug, _log_info, _log_ok, _log_err, _log_warn, _log_action, _log_fail, _die
 # !DESCRIPTION:
 #   Convenience wrappers around `_log_msg` that set the appropriate level.
 #   `_log_err` and `_log_fail` always force output (they behave as if `-f` was passed).
@@ -287,7 +312,7 @@ _log_msg() {
 #   _log_debug   [-f] <format> [args...]
 #   _log_info    [-f] <format> [args...]
 #   _log_ok      [-f] <format> [args...]
-#   _log_warning [-f] <format> [args...]
+#   _log_warn    [-f] <format> [args...]
 #   _log_action  [-f] <format> [args...]
 #   _log_err          <format> [args...]   # forced output
 #   _log_fail         <format> [args...]   # forced output
@@ -305,7 +330,6 @@ _log_msg() {
 #EOP
 #BOC
 
-
 # Wrappers (keep behavior consistent)
 _log_debug()   { _log_msg "DEBUG"   "$@"; }
 _log_info()    { _log_msg "INFO"    "$@"; }
@@ -317,9 +341,498 @@ _log_action()  { _log_msg "ACTION"  "$@"; }
 _log_fail()    { _log_msg "FAIL"  -f "$@"; }
 _log_err()     { _log_msg "ERROR" -f "$@"; }
 _die()         { local code="${1:-1}"; shift || true; _log_err "$@"; exit "$code"; }
-
 #EOC
 
+#BOP
+# !FUNCTION: _debug_trace_on
+#
+# !DESCRIPTION:
+#   Enable Bash execution tracing (xtrace) when `debug=true`. The trace prefix
+#   (PS4) is customized to include timestamp, process ID, function name,
+#   source file, and line number, providing detailed context for debugging.
+#
+# !USAGE:
+#   export debug=true
+#   _debug_trace_on
+#   my_function arg1 arg2
+#
+# !BEHAVIOR:
+#   • Only activates when global variable `debug` is "true".
+#   • Sets PS4 so each traced command line has the format:
+#       + [<EPOCHREALTIME>] (<PID>) <FUNC>@<SOURCE>:<LINENO>: <command...>
+#   • Calls `set -x` to enable tracing.
+#
+# !EXAMPLE OUTPUT:
+#   + [1695842356.123456] (12345) main@script.sh:42: cp input.txt output.txt
+#
+# !ENVIRONMENT:
+#   - debug : "true"/"false". Controls whether trace mode is enabled.
+#   - PS4   : Modified locally to format xtrace lines.
+#
+# !SEE ALSO:
+#   _debug_trace_off (to disable tracing after use)
+#
+#EOP
+#BOC
+_debug_trace_on() {
+  [[ "${debug:-false}" == true ]] || return 0
+  # PS4 with timestamp + PID + function + source + line number
+  export PS4='+ [${EPOCHREALTIME}] ($$) ${FUNCNAME[0]:-main}@${BASH_SOURCE}:${LINENO}: '
+  set -x
+}
+#EOC
+
+#BOP
+# !FUNCTION: _debug_trace_off
+#
+# !DESCRIPTION:
+#   Disable Bash execution tracing (xtrace) when `debug=true`. This is the
+#   counterpart of `_debug_trace_on` and should be called after the section
+#   you want to trace to restore normal output.
+#
+# !USAGE:
+#   _debug_trace_on
+#   # ... commands to trace ...
+#   _debug_trace_off
+#
+# !BEHAVIOR:
+#   • Only acts when the global `debug` flag is "true".
+#   • Calls `set +x` to turn off tracing.
+#
+# !ENVIRONMENT:
+#   - debug : "true"/"false". Controls whether the function performs any action.
+#
+# !SEE ALSO:
+#   _debug_trace_on
+#EOP
+#BOC
+_debug_trace_off() {
+  [[ "${debug:-false}" == true ]] || return 0
+  set +x
+}
+#EOC
+
+#BOP
+# !FUNCTION: _with_strict_mode
+#
+# !DESCRIPTION:
+#   Temporarily enable Bash "strict mode" within the current function scope:
+#     - `set -e`       : exit on any error
+#     - `set -u`       : error on unset variables
+#     - `set -o pipefail` : pipeline fails if any command fails
+#   The original shell options are snapshotted and automatically restored
+#   on function RETURN, ensuring no side effects leak to the caller.
+#
+# !USAGE:
+#   my_func() {
+#     _with_strict_mode
+#     # ... safe code here ...
+#   }
+#
+# !BEHAVIOR:
+#   • Captures the current shell option state via `set +o`.
+#   • Enables strict mode.
+#   • Installs a RETURN trap that restores the previous options upon exit.
+#   • Emits a DEBUG-level log line if debug logging is enabled.
+#
+# !EXAMPLE:
+#   safe_copy() {
+#     _with_strict_mode
+#     cp -- "$1" "$2"
+#   }
+#
+#   # In this example, any error in cp (missing file, permission issue, etc.)
+#   # will stop execution, but once safe_copy returns the original shell
+#   # options are restored.
+#
+# !NOTES:
+#   • This pattern allows strict behavior in critical sections without forcing
+#     the entire script to run in strict mode.
+#   • Safe to reuse in multiple functions; each invocation is scoped.
+#
+# !DEPENDENCIES:
+#   - `_log_debug` for the diagnostic message (optional; silently no-ops if
+#     DEBUG logs are disabled).
+#
+#EOP
+#BOC
+_with_strict_mode() {
+  # Snapshot current options as shell code (e.g., 'set +o errexit; set +o nounset; ...')
+  local __o; __o="$(set +o)"
+
+  # Enable strict mode
+  set -euo pipefail
+
+  # Restore snapshot when this function returns (expand __o now, not later)
+  trap -- "$(printf 'eval %q; trap - RETURN' "$__o")" RETURN
+  _log_debug "Strict mode enabled within function scope"
+}
+#EOC
+
+###############################################################################
+#BOP
+# !FUNCTION: project_root_of
+#
+# !INTERFACE:
+#   project_root_of [<start_path>]
+#
+# !DESCRIPTION:
+#   Find the project root directory by walking up from <start_path> until any
+#   known marker is found. If <start_path> is omitted, the function starts from
+#   the caller script (BASH_SOURCE[1]) or $PWD as a last resort.
+#
+# !USAGE:
+#   root="$(project_root_of)"                  # auto-detect from caller
+#   root="$(project_root_of /some/path)"       # start from explicit path
+#
+# !BEHAVIOR:
+#   • Markers (OR logic) from ${PROJECT_MARKERS}, colon-separated; default:
+#       ".git:pyproject.toml:setup.py:config_smg.ksh:etc/mach"
+#   • If markers are not found and Git is available, tries:
+#       git rev-parse --show-toplevel
+#
+# !RETURNS:
+#   Prints the detected root to stdout and returns 0; returns 1 on failure.
+#
+# !NOTES:
+#   - Pure function (no exports). Uses _with_strict_mode and your loggers.
+#   - Portable: avoids GNU readlink -f; relies on cd -P / pwd -P.
+#
+#EOP
+###############################################################################
+#BOC
+project_root_of() {
+  _with_strict_mode   # enable strict mode only for this function
+
+  # Determine a sensible starting point:
+  # prefer the *caller* file (BASH_SOURCE[1]) over this helpers file (BASH_SOURCE[0])
+  local start="${1:-${BASH_SOURCE[1]:-${BASH_SOURCE[0]:-$PWD}}}"
+  local dir
+  if [[ -d "$start" ]]; then
+    dir="$(cd -P -- "$start" && pwd -P)" || { _log_err "Invalid start dir: %s" "$start"; return 1; }
+  else
+    dir="$(cd -P -- "$(dirname -- "$start")" && pwd -P)" || { _log_err "Invalid start path: %s" "$start"; return 1; }
+  fi
+
+  # Configure markers (colon-separated)
+  local default_markers=".smg_root:config_smg.ksh:.git"
+  local markers_str="${PROJECT_MARKERS:-$default_markers}"
+  local IFS=':' markers=()
+  read -r -a markers <<< "$markers_str"
+  _log_debug "Searching project root from: %s (markers: %s)" "$dir" "$markers_str"
+
+  # Walk up looking for any marker
+  while : ; do
+    for m in "${markers[@]}"; do
+      if [[ -e "$dir/$m" ]]; then
+        _log_debug "Marker matched: %s at %s" "$m" "$dir"
+        _log_info "Project root found at: %s (marker: %s)" "$dir" "$m"
+        printf '%s\n' "$dir"
+        return 0
+      fi
+    done
+    local parent
+    parent="$(dirname -- "$dir")"
+    [[ "$parent" == "$dir" ]] && break
+    dir="$parent"
+  done
+
+  # Fallback to Git (optional)
+  if command -v git >/dev/null 2>&1; then
+    local gtop
+    gtop="$(cd -P -- "${start%/*:-$PWD}" 2>/dev/null && git rev-parse --show-toplevel 2>/dev/null)" || true
+    if [[ -n "$gtop" ]]; then
+      _log_warn "Markers not found; using Git top-level: %s" "$gtop"
+      printf '%s\n' "$gtop"
+      return 0
+    fi
+  fi
+
+  _log_err "Unable to locate project root from: %s" "$start"
+  return 1
+}
+#EOC
+
+###############################################################################
+#BOP
+#
+# !FUNCTION: __parse_args__
+#
+# !INTERFACE:
+#   __parse_args__ "$@"
+#
+# !DESCRIPTION:
+#   Parse common CLI options for build/run scripts, including verbosity,
+#   safety utilities (yes/restore/fix/dry-run), scheduler queue/job metadata,
+#   and HPC resource layout (MPI/OpenMP). Unknown/legacy short flags are
+#   rejected with a helpful error.
+#
+#   Verbosity & utilities:
+#     -v, --verbose          → verbose=true     (enable logging)
+#     -q, --quiet            → verbose=false    (disable logging)
+#     -d, --debug            → debug=true       (enable debug logging)
+#     -y, --yes              → auto_yes=true    (auto-confirm prompts)
+#     -f, --fix              → do_fix=true      (create dirs/symlinks/copies as needed)
+#         --dry-run          → dry_run=true     (skip actual actions)
+#         --restore          → do_restore=true  (restore from *.bak when supported)
+#
+#   Scheduler / queueing:
+#     -Q, --queue <name>     → queue="name"     (set queue/partition)
+#         --queue=name       → same as above
+#         --job-name <name>  → job_name="name"  (scheduler job name)
+#         --walltime <HH:MM:SS> → walltime="..." (requested wall clock)
+#
+#   HPC resources (long-only):
+#         --ntasks <N>           → mpi_tasks=N
+#         --cpus-per-task <N>    → omp_threads=N
+#         --nodes <N>            → nodes=N
+#         --cores-per-node <N>   → cores_per_node=N
+#         --procs <N>            → total_procs=N
+#
+#   Behavior:
+#     1) Flags are evaluated in order — the *last one wins*.
+#     2) If only --procs and --cpus-per-task are given, mpi_tasks is derived as:
+#          mpi_tasks = ceil(total_procs / omp_threads)
+#     3) Remaining positional arguments are preserved in leftover_args[].
+#
+#   Legacy flags (explicitly removed; cause an error if used):
+#     -D, -dryrun      (use --dry-run)
+#     -pq              (use -Q|--queue <name>)
+#     -pn              (use --job-name <name>)
+#     -pw              (use --walltime <HH:MM:SS>)
+#     -np, -d, -N, -c, -P  (use the long forms: --ntasks/--cpus-per-task/--nodes/
+#                           --cores-per-node/--procs)
+#
+# !USAGE:
+#   __parse_args__ "$@"
+#   # After parsing, use exported variables:
+#   $verbose    && _log_info "Queue: %s" "$queue"
+#   $debug      && _log_dbg  "MPI=%s OMP=%s Nodes=%s" "$mpi_tasks" "$omp_threads" "$nodes"
+#   if $dry_run; then _log_info "DRY-RUN: args → %s" "${leftover_args[*]}"; fi
+#
+# !RETURNS:
+#   0 on success.
+#   2 if a removed/legacy flag is detected.
+#
+# !ENVIRONMENT:
+#   Respects existing environment defaults when set before parsing:
+#     verbose, debug, auto_yes, dry_run, do_restore, do_fix,
+#     queue, job_name, walltime,
+#     mpi_tasks, omp_threads (default 1), nodes, cores_per_node, total_procs.
+#
+# !EXAMPLES:
+#   __parse_args__ -v --dry-run -Q PESQ1 --job-name test --walltime 00:20:00 \
+#                  --ntasks 64 --cpus-per-task 2 --nodes 4 --cores-per-node 32 -- echo OK
+#
+#   __parse_args__ --procs 128 --cpus-per-task 4  # → derives mpi_tasks=32
+#
+# !NOTES:
+#   - Uses a local "strict mode" wrapper (_with_strict_mode) only for this function.
+#   - Declares leftover_args as a global array (declare -g -a) to avoid -u issues.
+#   - Queue options are optional; default scheduler policy applies when unset.
+#
+#EOP
+###############################################################################
+#BOC
+
+__parse_args__() {
+  _with_strict_mode   # enable strict mode only for this function
+
+  # ---- Safe defaults (respect existing env vars) ----
+  verbose=${verbose:-false}
+  debug=${debug:-false}
+  auto_yes=${auto_yes:-false}
+  dry_run=${dry_run:-false}
+  do_restore=${do_restore:-false}
+  do_fix=${do_fix:-false}
+
+  queue=${queue:-}
+  job_name=${job_name:-}
+  walltime=${walltime:-}
+
+  mpi_tasks=${mpi_tasks:-}
+  omp_threads=${omp_threads:-1}
+  nodes=${nodes:-}
+  cores_per_node=${cores_per_node:-}
+  total_procs=${total_procs:-}
+
+  # Declare leftover_args explicitly (global) to avoid -u surprises
+  declare -g -a leftover_args 2>/dev/null || true
+  leftover_args=()
+
+  # Parse only new canonical flags; reject legacy ones with a helpful error
+  while (($#)); do
+    case "$1" in
+      # ---- Verbosity and behavior ----
+      -v|--verbose) verbose=true ;;
+      -q|--quiet)   verbose=false ;;
+      -d|--debug)   debug=true ;;
+      -y|--yes)     auto_yes=true ;;
+      -f|--fix)     do_fix=true ;;
+      --dry-run)    dry_run=true ;;
+      --restore)    do_restore=true ;;
+
+      # ---- Queue/Job/Walltime ----
+      -Q|--queue)        queue="${2:?--queue needs a value}"; shift ;;
+      --queue=*)         queue="${1#*=}" ;;
+      --job-name)        job_name="${2:?--job-name needs a value}"; shift ;;
+      --walltime)        walltime="${2:?--walltime needs a value}"; shift ;;
+
+      # ---- HPC resources (long-only) ----
+      --ntasks)          mpi_tasks="${2:?--ntasks needs a value}"; shift ;;
+      --cpus-per-task)   omp_threads="${2:?--cpus-per-task needs a value}"; shift ;;
+      --nodes)           nodes="${2:?--nodes needs a value}"; shift ;;
+      --cores-per-node)  cores_per_node="${2:?--cores-per-node needs a value}"; shift ;;
+      --procs)           total_procs="${2:?--procs needs a value}"; shift ;;
+
+      # ---- End of options / passthrough ----
+      --) shift; break ;;
+      -*) 
+        # Legacy flags explicitly disallowed:
+        case "$1" in
+          -D|-dryrun) _log_err "Removed flag: %s → use --dry-run" "$1"; return 2 ;;
+          -pq)        _log_err "Removed flag: -pq → use -Q|--queue <name>"; return 2 ;;
+          -pn)        _log_err "Removed flag: -pn → use --job-name <name>"; return 2 ;;
+          -pw)        _log_err "Removed flag: -pw → use --walltime <HH:MM:SS>"; return 2 ;;
+          -np|-d|-N|-c|-P)
+                      _log_err "Removed short HPC flags (%s). Use long: --ntasks/--cpus-per-task/--nodes/--cores-per-node/--procs" "$1"
+                      return 2 ;;
+          *) break ;;
+        esac
+        ;;
+      *)  break ;;
+    esac
+    shift
+  done
+
+  # preserve leftover positional args
+  leftover_args=("$@")
+
+  # derive layout if only total_procs provided
+  if [[ -n "${total_procs}" && -z "${mpi_tasks}" ]]; then
+    (( omp_threads <= 0 )) && omp_threads=1
+    mpi_tasks=$(( (total_procs + omp_threads - 1) / omp_threads ))
+  fi
+
+  export verbose debug auto_yes dry_run do_restore do_fix
+  export queue job_name walltime
+  export mpi_tasks omp_threads nodes cores_per_node total_procs
+
+  _log_debug "Parsed args: verbose=%s debug=%s dry_run=%s queue=%s job=%s wall=%s MPI=%s OMP=%s nodes=%s cores/node=%s procs=%s leftovers=[%s]" \
+             "$verbose" "$debug" "$dry_run" "${queue:-}" "${job_name:-}" "${walltime:-}" \
+             "${mpi_tasks:-}" "${omp_threads:-}" "${nodes:-}" "${cores_per_node:-}" "${total_procs:-}" "${leftover_args[*]}"
+}
+#EOC
+
+#BOP
+# !FUNCTION: _run
+#
+# !DESCRIPTION:
+#   Execute a given command with arguments, respecting the global `dry_run`
+#   flag. In dry-run mode, the command is not executed; instead, a log line
+#   is emitted to indicate what would have been run. In normal mode, the
+#   command is executed directly.
+#
+# !USAGE:
+#   dry_run=false
+#   _run cp file1 file2          # executes: cp file1 file2
+#
+#   dry_run=true
+#   _run rm -rf /tmp/data        # logs "[DRY-RUN] rm -rf /tmp/data", no action
+#
+# !BEHAVIOR:
+#   • If `dry_run=true`, print a standardized "[DRY-RUN]" log message via
+#     `_log_action`, quoting arguments safely, and return success (0).
+#   • If `dry_run=false`, log a DEBUG-level message with the command line,
+#     then execute the command in place.
+#
+# !RETURNS:
+#   • In dry-run mode: always returns 0.
+#   • In normal mode: returns the exit status of the executed command.
+#
+# !ENVIRONMENT:
+#   - dry_run : "true"/"false" (default: false).
+#   - _log_action : Logger function used to print simulated command execution.
+#   - _log_debug  : Logger function used to print debug-level execution traces.
+#
+# !NOTES:
+#   • Arguments are executed without eval, preserving exact quoting and avoiding
+#     shell injection issues.
+#   • Designed to be a safe wrapper for critical commands in scripts that need
+#     dry-run simulation support.
+#EOP
+#BOC
+_run() {
+  if [[ "${dry_run:-false}" == true ]]; then
+    _log_action "[DRY-RUN] %q" "$*"
+    return 0
+  fi
+  _log_debug "_run exec: %q" "$*"
+  "$@"
+}
+#EOC
+
+#BOP
+# !FUNCTION: _list_files_array
+# !INTERFACE: _list_files_array VAR_NAME SRC_DIR [find_args...]
+# !DESCRIPTION:
+#   Populate the array named VAR_NAME with the basenames of files found in
+#   SRC_DIR (optionally filtered with extra find(1) arguments).
+#
+# !USAGE:
+#   _list_files_array filesArray /path/to/src -name '*.txt'
+#
+# !BEHAVIOR:
+#   • Validates inputs and clears the target array
+#   • Runs a pruned, single-level search: find -L SRC_DIR -maxdepth 1 -type f ...
+#   • Stores only basenames into VAR_NAME
+#   • Emits [DEBUG]/[INFO] logs if $verbose=true
+#
+# !NOTES:
+#   • Requires Bash 4+ (nameref)
+#   • Safe if no matches: returns 0 with an empty array
+#EOP
+#BOC
+_list_files_array() {
+  # optional strict mode if your helper exists
+  if declare -F with_strict_mode >/dev/null 2>&1; then with_strict_mode; fi
+
+  local __outvar="${1:?VAR_NAME required}"
+  local src_dir="${2:?SRC_DIR required}"
+  shift 2 || true
+
+  # nameref to external array
+  local -n __arr_ref="$__outvar" 2>/dev/null || {
+    _log_err "Target array '%s' is not a valid name" "$__outvar"
+    return 2
+  }
+  __arr_ref=()
+  _log_debug "list_files_array: dir=%s filters=%q" "$src_dir" "$*"
+
+  if [[ ! -d "$src_dir" ]]; then
+    _log_warn "Source directory not found: %s" "$src_dir"
+    return 0
+  fi
+
+
+  # Collect matches (null-delimited)
+  local -a __found=()
+  if ! mapfile -d '' -t __found < <(find -L "$src_dir" -maxdepth 1 -type f "$@" -print0 2>/dev/null); then
+    _log_warn "find failed in %s with args: %q" "$src_dir" "$*"
+    return 0
+  fi
+  
+  # Fill array with basenames
+  local p
+  for p in "${__found[@]}"; do
+    __arr_ref+=( "$(basename -- "$p")" )
+  done
+
+  _log_debug "list_files_array: found=%s" "${#__arr_ref[@]}"
+  _log_info "Found %d file(s) in %s" "${#__arr_ref[@]}" "$src_dir"
+  return 0
+}
+#EOC
 
 #BOP
 # !FUNCTION: _progress_bar
@@ -341,21 +854,25 @@ _die()         { local code="${1:-1}"; shift || true; _log_err "$@"; exit "$code
 #   done
 #EOP
 #BOC
-_progress_bar(){
+_progress_bar() {
   local current=${1:-0} total=${2:-0} msg="${3:-Processing}"
   local width=40
-  (( total <= 0 )) && { printf "\r[INFO] %s [no files]        \n" "$msg"; return; }
+  (( total <= 0 )) && { printf "\r%s[INFO]%s %s [no files]\n" "$C_INFO" "$C_RST" "$msg"; return; }
   (( current < 0 )) && current=0
   (( current > total )) && current=$total
+
   local progress=$(( current * width / total ))
   local percent=$(( 100 * current / total ))
+
   local bar=""
   for ((i=0; i<width; i++)); do
     if (( i < progress )); then bar+="█"; else bar+="░"; fi
   done
-  printf "\r$C_ACT[ACTION]$C_RST %s [%s] %3d%% (%d/%d) " "$msg" "$bar" "$percent" "$current" "$total"
+  printf "\r%s[ACTION]%s %s [%s] %3d%% (%d/%d) " \
+         "$C_ACT" "$C_RST" "$msg" "$bar" "$percent" "$current" "$total"
 }
 #EOC
+
 #BOP
 # !FUNCTION: _copy_one_safe
 # !INTERFACE: _copy_one_safe SRC DST [METHOD]
@@ -394,6 +911,8 @@ _copy_one_safe() {
   _with_strict_mode   # enable strict mode only for this function
 
   local src="${1:-}"; local dst="${2:-}"; local method="${3:-copy}"
+  _log_debug "copy_one_safe: src=%s dst=%s method=%s" "${src:-<nil>}" "${dst:-<nil>}" "$method"
+
   [[ -n "${src}" && -n "${dst}" ]] || { _log_err "copy_one_safe: missing SRC or DST\n" >&2; return 1; }
 
   # normalize method aliases
@@ -420,77 +939,102 @@ _copy_one_safe() {
     dst_path="${dst%/}/$(basename -- "${src}")"
   fi
   # ensure parent dir exists
-  mkdir -p -- "$(dirname -- "${dst_path}")" || { _log_err "mkdir -p '%s' failed\n" "$(dirname -- "${dst_path}")" >&2; return 4; }
+  local parent; parent="$(dirname -- "${dst_path}")"
+  if [[ "${dry_run:-false}" == true ]]; then
+    _log_action "[DRY-RUN] ensure dir: %s" "$parent"
+  else
+    mkdir -p -- "$parent" || { _log_err "mkdir -p '%s' failed" "$parent"; return 4; }
+  fi
 
   # absolute source path (for symlink target)
-  local src_abs
-  src_abs="$(cd -- "$(dirname -- "${src}")" && pwd)/$(basename -- "${src}")"
+  local src_abs; src_abs="$(cd -- "$(dirname -- "${src}")" && pwd)/$(basename -- "${src}")"
+  _log_debug "copy_one_safe paths: src_abs=%s final_dst=%s" "$src_abs" "$dst_path"
 
   # device id helper (GNU/BSD)
   _dev_id() { stat -Lc %d "$1" 2>/dev/null || stat -f %d "$1" 2>/dev/null; }
 
   case "${method}" in
     copy)
-      # atomic-ish copy: cp to temp in same dir, then mv
-      local tmp="${dst_path}.tmp.$$"
-      # -p preserve mode/mtime; -f overwrite temp if exists
-      cp -pf -- "${src_abs}" "${tmp}" 2>/dev/null || { _log_err "cp '%s' -> '%s' failed\n" "${src_abs}" "${tmp}" >&2; rm -f -- "${tmp}" 2>/dev/null || true; return 4; }
-      mv -f -- "${tmp}" "${dst_path}" 2>/dev/null || { _log_err "mv '%s' -> '%s' failed\n" "${tmp}" "${dst_path}" >&2; rm -f -- "${tmp}" 2>/dev/null || true; return 4; }
+      if [[ "${dry_run:-false}" == true ]]; then
+        _log_action "[DRY-RUN] copy %s -> %s" "$src_abs" "$dst_path"
+      else
+        # atomic-ish copy: cp to temp in same dir, then mv
+        local tmp="${dst_path}.tmp.$$"
+        # -p preserve mode/mtime; -f overwrite temp if exists
+        cp -pf -- "${src_abs}" "${tmp}" 2>/dev/null || { _log_err "cp '%s' -> '%s' failed" "${src_abs}" "${tmp}"; rm -f -- "${tmp}" 2>/dev/null || true; return 4; }
+        mv -f -- "${tmp}" "${dst_path}" 2>/dev/null || { _log_err "mv '%s' -> '%s' failed" "${tmp}" "${dst_path}"; rm -f -- "${tmp}" 2>/dev/null || true; return 4; }
+      fi
       ;;
 
     hardlink)
-      # must be same filesystem
-      local sdev ddev
-      sdev="$(_dev_id "$(dirname -- "${src_abs}")")" || { _log_err "stat device(src) failed\n" >&2; return 4; }
-      ddev="$(_dev_id "$(dirname -- "${dst_path}")")" || { _log_err  "stat device(dst) failed\n" >&2; return 4; }
-      if [[ "${sdev}" != "${ddev}" ]]; then
-        printf "[ERROR] hardlink across filesystems: %s -> %s\n" "${src_abs}" "${dst_path}" >&2
-        return 3
+      if [[ "${dry_run:-false}" == true ]]; then
+        _log_action "[DRY-RUN] hardlink %s -> %s" "$src_abs" "$dst_path"
+      else
+        # must be same filesystem
+        local sdev ddev
+        sdev="$(_dev_id "$(dirname -- "${src_abs}")")" || { _log_err "stat device(src) failed\n" >&2; return 4; }
+        ddev="$(_dev_id "$(dirname -- "${dst_path}")")" || { _log_err  "stat device(dst) failed\n" >&2; return 4; }
+        if [[ "${sdev}" != "${ddev}" ]]; then
+          printf "[ERROR] hardlink across filesystems: %s -> %s\n" "${src_abs}" "${dst_path}" >&2
+          return 3
+        fi
+        ln -f -- "${src_abs}" "${dst_path}" 2>/dev/null || { _log_err "ln (hardlink) failed: %s -> %s\n" "${src_abs}" "${dst_path}" >&2; return 4; }
       fi
-      ln -f -- "${src_abs}" "${dst_path}" 2>/dev/null || { _log_err "ln (hardlink) failed: %s -> %s\n" "${src_abs}" "${dst_path}" >&2; return 4; }
       ;;
 
     symlink)
-      # replace existing file/symlink
-      ln -sfn -- "${src_abs}" "${dst_path}" 2>/dev/null || { _log_err "ln -s failed: %s -> %s\n" "${src_abs}" "${dst_path}" >&2; return 4; }
+      if [[ "${dry_run:-false}" == true ]]; then
+        _log_action "[DRY-RUN] symlink %s -> %s" "$src_abs" "$dst_path"
+      else
+        # replace existing file/symlink
+        ln -sfn -- "${src_abs}" "${dst_path}" 2>/dev/null || { _log_err "ln -s failed: %s -> %s\n" "${src_abs}" "${dst_path}" >&2; return 4; }
+      fi
       ;;
   esac
+  
+  _log_debug "copy_one_safe done: %s -> %s (%s)" "$src_abs" "$dst_path" "$method"
 
   return 0
 }
 #EOC
 
-
 #BOP
 # !FUNCTION: _copy_with_progress
-# !INTERFACE: _copy_with_progress <arrayname> <src_dir> <dest_dir> [copy|link] [msg]
+# !INTERFACE: _copy_with_progress <ARRAY_NAME> <SRC_DIR> <DEST_DIR> [ACTION] [MESSAGE]
 # !DESCRIPTION:
-#   Copy or symlink a list of files from a source directory to a destination,
-#   showing a simple progress bar on TTY (fallback mode when rsync isn't used).
-#   Skips safely when source and destination are the same.
+#   Copy or link a list of files with a clean, minimal progress layout.
+#   This implementation draws a TTY progress bar (or emits concise ACTION lines
+#   when not attached to a TTY) and avoids rsync entirely. It is ideal when you
+#   prefer a compact, consistent look across environments.
 #
-# !USAGE:
-#   files=("a.txt" "b.txt")
-#   _copy_with_progress files /tmp/src /tmp/dest copy "Copying inputs"
-#
-# !OPTIONS:
-#   copy   (default)  Use `cp -pf` to copy files
-#   link              Use `ln -sf` to create symbolic links
+# !PARAMETERS:
+#   ARRAY_NAME  Name of a Bash array variable holding basenames (no [@]).
+#   SRC_DIR     Directory where files are read from.
+#   DEST_DIR    Directory where files are written to.
+#   ACTION      copy (default) | symlink|link|ln|sym | hardlink|hlink|hln
+#   MESSAGE     Optional label for progress/log output (default: "Processing files").
 #
 # !BEHAVIOR:
-#   • Ensures destination directory exists
-#   • Iterates through file list and copies/links one by one
-#   • On TTY, calls `_progress_bar` to render visual feedback; otherwise logs a single line
+#   • Respects global flags: dry_run, verbose, debug.
+#   • Creates DEST_DIR if needed (mkdir -p).
+#   • Progress:
+#       - TTY: single-line progress bar via _progress_bar.
+#       - Non-TTY: numbered ACTION logs.
+#   • Copy semantics:
+#       - copy: cp -pf; skips if cmp -s indicates unchanged.
+#       - symlink: ln -sfn.
+#       - hardlink: ln -f with fallback to copy on cross-device errors.
+#
+# !RETURNS:
+#   0 on success; non-zero on first encountered error.
 #
 # !NOTES:
-#   - Depends on `_progress_bar` when stdout is a TTY (`[[ -t 1 ]]`).
-#   - The first argument is the *name* of the array (without [@]).
-#   - action: copy|symlink|hardlink  (default: copy)
-#   - Requires Bash 4+ (nameref) and optional _progress_bar/_log_* helpers.
+#   • Requires Bash 4+ (nameref).
+#   • Preferred when you want the lightweight, non-rsync layout.
 #EOP
 #BOC
 _copy_with_progress() {
-  _with_strict_mode 2>/dev/null || true  # enable strict mode only for this function if available
+  _with_strict_mode   # enable strict mode only for this function
 
   local -n _files_ref="$1"; shift        # nameref to the input array
   local src_dir="$1"; shift
@@ -498,16 +1042,21 @@ _copy_with_progress() {
   local action="${1:-copy}"; shift || true
   local progress_msg="${1:-Processing files}"
 
-  mkdir -p -- "$dest_dir" || { _log_err "mkdir -p '%s' failed" "$dest_dir"; return 1; }
-
-  local total=${#_files_ref[@]}
-  if (( total == 0 )); then
-    _log_info -f "%s [nothing to do]" "$progress_msg"
+  _log_debug "copy_with_progress: action=%s src=%s dest=%s total=%s" "$action" "$src_dir" "$dest_dir" "${#_files_ref[@]}"
+  if [[ "${dry_run:-false}" == true ]]; then
+    local f; for f in "${_files_ref[@]}"; do
+      _log_action "[DRY-RUN] %s %s -> %s" "$action" "${src_dir%/}/$f" "${dest_dir%/}/$f"
+    done
+    _log_ok "%s: %d/%d processed (dry-run)" "$progress_msg" "${#_files_ref[@]}" "${#_files_ref[@]}"
     return 0
   fi
 
-  local count=0 f src dst
+  mkdir -p -- "$dest_dir" || { _log_err "mkdir -p '%s' failed" "$dest_dir"; return 1; }
 
+  local total=${#_files_ref[@]}
+  (( total == 0 )) && { _log_info -f "%s [nothing to do]" "$progress_msg"; return 0; }
+
+  local count=0 f src dst
   for f in "${_files_ref[@]}"; do
     ((count++))
     src="${src_dir%/}/$f"
@@ -517,7 +1066,7 @@ _copy_with_progress() {
       _log_warn "Missing: %s" "$src"
       continue
     fi
-
+    
     # Skip if src and dst are the same file (same inode/device)
     if [[ -e "$dst" ]] && [[ "$src" -ef "$dst" ]]; then
       _log_debug "Same file (skipping): %s" "$dst"
@@ -573,8 +1122,8 @@ _copy_with_progress() {
 #EOC
 
 #BOP
-# !FUNCTION: _copy_with_progress_
-# !INTERFACE: _copy_with_progress_ <array_name> <src_dir> <dest_dir> [copy|link] ["Message"]
+# !FUNCTION: _copy_with_progress_rsync
+# !INTERFACE: _copy_with_progress_rsync <array_name> <src_dir> <dest_dir> [copy|link] ["Message"]
 # !DESCRIPTION:
 #   Copy or link a list of files from a source directory to a destination
 #   directory, with progress reporting. Supports two modes:
@@ -612,7 +1161,7 @@ _copy_with_progress() {
 #   - Designed for internal use inside higher-level workflows.
 #EOP
 #BOC
-_copy_with_progress_() {
+_copy_with_progress_rsync() {
   _with_strict_mode   # enable strict mode only for this function
 
   local files_name="$1"; shift                 # array name (e.g., files), without [@]
@@ -622,6 +1171,21 @@ _copy_with_progress_() {
   local action="${1:-copy}"; shift || true
   local progress_msg="${1:-Copying files}"
   local dry="${dry_run:-false}"
+  _log_debug "rsync mode: files=%s src=%s dest=%s action=%s dry=%s" "${#_files_ref[@]}" "$src_dir" "$dest_dir" "$action" "$dry"
+
+  if (( ${#_files_ref[@]} == 0 )); then
+    _log_info "%s [nothing to do]" "$progress_msg"
+    return 0
+  fi
+
+  if [[ "$dry" == true ]]; then
+    local f
+    for f in "${_files_ref[@]}"; do
+      _log_action "[DRY-RUN] %s %s -> %s" "$action" "${src_dir%/}/$f" "$dest_dir"
+    done
+    _log_ok "%s: %d/%d processed (dry-run)" "$progress_msg" "${#_files_ref[@]}" "${#_files_ref[@]}"
+    return 0
+  fi
 
   mkdir -p -- "$dest_dir" || { _log_err "mkdir -p failed: %s" "$dest_dir"; return 1; }
 
@@ -634,6 +1198,8 @@ _copy_with_progress_() {
 
   # No rsync: delegate to simple bar (with dry-run handling)
   if ! command -v rsync >/dev/null 2>&1; then
+    _log_debug "rsync not found; falling back to simple progress"
+
     if $dry; then
       local f
       for f in "${_files_ref[@]}"; do
@@ -662,31 +1228,20 @@ _copy_with_progress_() {
 
     case "$action" in
       copy)
-        if $dry; then
-          _log_info "Dry-run: would copy %s -> %s/" "$src" "$dest_dir"
-          ((ok++))
+        if rsync -ai --dry-run -- "$src" "$dest_dir"/ | grep -q '^[^\.]'; then
+          rsync -a --human-readable --partial \
+                --info=progress2,name0 \
+                -i --out-format='%i %n' -- "$src" "$dest_dir"/ && ((ok++)) || _log_warn "rsync failed: %s" "$src"
         else
-          # preflight: will transfer?
-          if rsync -ai --dry-run -- "$src" "$dest_dir"/ | grep -q '^[^\.]'; then
-            rsync -a --human-readable --partial \
-                  --info=progress2,name0 \
-                  -i --out-format='%i %n' -- "$src" "$dest_dir"/ && ((ok++)) || _log_warn "rsync failed: %s" "$src"
-          else
-            printf "[INFO] Up-to-date: %s -> %s/\n" "$src" "$dest_dir"
-            ((ok++))
-          fi
+          _log_info "Up-to-date: %s -> %s/" "$src" "$dest_dir"
+          ((ok++))
         fi
         ;;
       link)
-        if $dry; then
-          _log_info "Dry-run: would link %s -> %s" "$src" "$dst"
+        if ln -sf -- "$src" "$dst"; then
           ((ok++))
         else
-          if ln -sf -- "$src" "$dst"; then
-            ((ok++))
-          else
-            _log_warn "link failed: %s" "$src"
-          fi
+          _log_warn "link failed: %s" "$src"
         fi
         ;;
       *)
@@ -699,51 +1254,89 @@ _copy_with_progress_() {
 }
 #EOC
 
+#BOP
+# !FUNCTION: _copy_with_progress_auto
+# !INTERFACE: _copy_with_progress_auto <ARRAY_NAME> <SRC_DIR> <DEST_DIR> [ACTION] [MESSAGE]
+# !DESCRIPTION:
+#   Convenience wrapper that chooses between the simple layout and the rsync
+#   layout without removing either implementation.
+#
+# !BEHAVIOR:
+#   • Honors COPY_BACKEND env var:
+#       - "simple" (default): calls _copy_with_progress.
+#       - "rsync": calls _copy_with_progress_rsync.
+#       - "auto": uses rsync only for ACTION=copy when rsync is available;
+#                 otherwise uses the simple layout.
+#   • Respects dry_run/verbose/debug through underlying helpers.
+#
+# !USAGE:
+#   COPY_BACKEND=simple _copy_with_progress_auto files ./in ./out copy "Copying"
+#   COPY_BACKEND=rsync  _copy_with_progress_auto files ./in ./out copy "Copying"
+#   COPY_BACKEND=auto   _copy_with_progress_auto files ./in ./out copy "Copying"
+#EOP
+#BOC
+_copy_with_progress_auto() {
+  _with_strict_mode   # enable strict mode only for this function
+
+  local backend="${COPY_BACKEND:-simple}" action="${4:-copy}"
+  case "$backend" in
+    rsync) _copy_with_progress_rsync "$@";;
+    auto)
+      if [[ "$action" == "copy" ]] && command -v rsync >/dev/null 2>&1; then
+        _copy_with_progress_rsync "$@"
+      else
+        _copy_with_progress "$@"
+      fi
+      ;;
+    simple|*) _copy_with_progress "$@";;
+  esac
+}
+#EOC
 
 #BOP
 # !FUNCTION: _copy_dir_with_progress
-# !INTERFACE: _copy_dir_with_progress <src_dir> <dest_dir> [msg] [action]
+# !INTERFACE: _copy_dir_with_progress <SRC_DIR> <DEST_DIR> [MESSAGE] [ACTION]
 # !DESCRIPTION:
-#   Enumerate all files in a directory and copy or link them to a destination,
-#   showing progress. Uses `_copy_with_progress` internally.
-#
-# !USAGE:
-#   _copy_dir_with_progress /src/path /dest/path ["message"] [copy|link]
-#
-# !OPTIONS:
-#   copy   (default)  Copy files with `cp`
-#   link              Symlink files with `ln`
+#   Copy or link all regular files from <SRC_DIR> into <DEST_DIR>, while
+#   delegating file enumeration and progress reporting to existing helpers.
+#   This is a thin wrapper that:
+#     1) collects basenames from <SRC_DIR> via _list_files_array, then
+#     2) calls _copy_with_progress to perform the requested ACTION.
 #
 # !BEHAVIOR:
-#   • Collects all files in the source directory
-#   • Builds a list of basenames
-#   • Calls `_copy_with_progress` to handle the actual operation
+#   • Depth: only files at max depth 1 (as implemented by _list_files_array).
+#   • ACTION: "copy" (default), "symlink"/"link", or "hardlink" (as supported by
+#     _copy_with_progress).
+#   • Progress: handled by _copy_with_progress (TTY bar or rsync variant if used
+#     elsewhere in your codebase).
+#   • dry-run / verbose / debug: respected by the underlying helpers; this
+#     wrapper does not change their semantics.
+#   • Destination creation: mkdir -p (if needed) is handled inside
+#     _copy_with_progress.
 #
-# !EXAMPLE:
-#   _copy_dir_with_progress ./PRE/datain/2019/sst ./datain/2019/sst "Copying SST files" copy
+# !USAGE:
+#   _copy_dir_with_progress /path/src /path/dst "Copying inputs" copy
+#   _copy_dir_with_progress ./in ./out "Linking files" symlink
+#
+# !RETURNS:
+#   0  on success.
+#   >0 propagates the non-zero status from _list_files_array or _copy_with_progress.
 #
 # !NOTES:
-#   Depends on `_copy_with_progress`
+#   • Requires Bash 4+ (the called _copy_with_progress uses nameref).
+#   • Filtering (e.g., name patterns) should be done with _list_files_array
+#     directly if you need more control; this wrapper collects all regular files.
 #EOP
 #BOC
-_copy_dir_with_progress(){
+_copy_dir_with_progress() {
   _with_strict_mode   # enable strict mode only for this function
 
-  local src_dir="$1"
-  local dest_dir="$2"
-  local progress_msg="${3:-Copying files}"
-  local action="${4:-copy}"
-
-  mkdir -p -- "$dest_dir" || { _log_err "mkdir -p '$dest_dir' failed"; return 1; }
-
-  local files=()
-  while IFS= read -r -d '' f; do
-    files+=( "$(basename "$f")" )
-  done < <(find -L "$src_dir" -maxdepth 1 -type f -print0)
-
-  _copy_with_progress files "$src_dir" "$dest_dir" "$action" "$progress_msg"
+  local src_dir="$1" dest_dir="$2" msg="${3:-Copying files}" action="${4:-copy}"
+  local files=(); _list_files_array files "$src_dir" || return $?
+  _copy_with_progress files "$src_dir" "$dest_dir" "$action" "$msg"
 }
 #EOC
+
 
 #BOP
 # !FUNCTION: _assign
@@ -770,15 +1363,18 @@ _copy_dir_with_progress(){
 #EOP
 #BOC
 _assign() {
-  local key="$1"; shift
+  local key="${1:?KEY required}"; shift
   # Join VALUE... preserving internal spaces
   local raw="$*"
 
   # Safe expansion using envsubst, if available
   if command -v envsubst >/dev/null 2>&1; then
     local expanded
-    expanded="$(printf '%s' "$raw" | envsubst)" || return 1
+    if ! expanded="$(printf '%s' "$raw" | envsubst)"; then
+      _log_err "_assign: envsubst failed for %s" "$key"; return 1
+    fi
     export "$key=$expanded"
+    _log_debug "_assign: %s=%q (len=%d)" "$key" "$expanded" "${#expanded}"
     return 0
   fi
 
@@ -791,73 +1387,9 @@ _assign() {
   # Perform only variable expansion ${VAR} / $VAR using eval+printf
   # shellcheck disable=SC2086
   local expanded
-  expanded="$(eval "printf '%s' \"$raw\"")" || return 1
+  expanded="$(eval "printf '%s' \"$raw\"")" || { _log_err "_assign: eval failed for %s" "$key"; return 1; }
   export "$key=$expanded"
-}
-#EOC
-
-#BOP
-# !FUNCTION: _list_files_array
-# !INTERFACE: _list_files_array VAR_NAME SRC_DIR [find_args...]
-# !DESCRIPTION:
-#   Populate the array named VAR_NAME with the basenames of files found in
-#   SRC_DIR (optionally filtered with extra find(1) arguments).
-#
-# !USAGE:
-#   _list_files_array filesArray /path/to/src -name '*.txt'
-#
-# !BEHAVIOR:
-#   • Validates inputs and clears the target array
-#   • Runs a pruned, single-level search: find -L SRC_DIR -maxdepth 1 -type f ...
-#   • Stores only basenames into VAR_NAME
-#   • Emits [DEBUG]/[INFO] logs if $verbose=true
-#
-# !NOTES:
-#   • Requires Bash 4+ (nameref)
-#   • Safe if no matches: returns 0 with an empty array
-#EOP
-#BOC
-_list_files_array() {
-  # optional strict mode if your helper exists
-  if declare -F with_strict_mode >/dev/null 2>&1; then with_strict_mode; fi
-
-  local __outvar="${1:?VAR_NAME required}"
-  local src_dir="${2:?SRC_DIR required}"
-  shift 2 || true
-
-  # nameref to external array
-  local -n __arr_ref="$__outvar" 2>/dev/null || {
-    _log_err "Target array '%s' is not a valid name" "$__outvar"
-    return 2
-  }
-  __arr_ref=()
-
-  if [[ ! -d "$src_dir" ]]; then
-    _log_warn "Source directory not found: %s" "$src_dir"
-    return 0
-  fi
-
-  # Log filters (quoted to keep wildcards literal)
-  _log_debug "Listing files in %s (filters: %q)" "$src_dir" "$*"
-
-  # Collect matches (null-delimited)
-  local -a __found=()
-  if mapfile -d '' -t __found < <(find -L "$src_dir" -maxdepth 1 -type f "$@" -print0 2>/dev/null); then
-    :
-  else
-    # find error (permissions, bad predicate, etc.)
-    _log_warn "find failed in %s with args: %q" "$src_dir" "$*"
-    return 0
-  fi
-
-  # Fill array with basenames
-  local p
-  for p in "${__found[@]}"; do
-    __arr_ref+=( "$(basename -- "$p")" )
-  done
-
-  _log_info "Found %d file(s) in %s" "${#__arr_ref[@]}" "$src_dir"
-  return 0
+  _log_debug "_assign: %s=%q (len=%d)" "$key" "$expanded" "${#expanded}"
 }
 #EOC
 
@@ -895,10 +1427,12 @@ _list_files_array() {
 #   • Requires: hpc_name set to match a config file
 #EOP
 #BOC
-_env_export(){
+_env_export() {
   _with_strict_mode   # enable strict mode only for this function
+
   # Avoid re-running if already done
   if [[ "${ENV_EXPORTED:-false}" == "true" ]]; then
+    _log_debug "_env_export: already done; skipping"
     return 0
   fi
 
@@ -913,11 +1447,11 @@ _env_export(){
     _log_info -f "hpc_name set to: %s" "$hpc_name"
   fi
 
-  local confdir filepaths
-  confdir="${helpers_dir}/mach"
-  filepaths="${confdir}/${hpc_name}_paths.conf"
+  local confdir="${helpers_dir}/mach"
+  local filepaths="${confdir}/${hpc_name}_paths.conf"
+  _log_debug "_env_export: config=%s" "$filepaths"
 
-  [[ -f "$filepaths" ]] || { echo "[ERROR] Missing: $filepaths" >&2; return 1; }
+  [[ -f "$filepaths" ]] || { _log_err "Missing: %s" "$filepaths"; return 1; }
 
   # Read lines "KEY  VALUE"; ignore comments/blank lines
   while IFS= read -r line; do
@@ -932,108 +1466,8 @@ _env_export(){
 
   # Mark as already exported
   export ENV_EXPORTED=true
-  
-}
-#EOC
+  _log_debug "_env_export: completed (ENV_EXPORTED=true)"
 
-#BOP
-# !FUNCTION: _bootstrap_env_root
-# !INTERFACE: _bootstrap_env_root <env_var> <anchor_file>
-# !DESCRIPTION:
-#   Ensure <env_var> (e.g., SMG_ROOT) is exported and points to the project root.
-#   If <env_var> is already set, do nothing. Otherwise, climb parent directories
-#   starting from the caller script location until <anchor_file> is found; export
-#   its parent directory to <env_var>. If not found, fall back to the caller
-#   script directory.
-# !EXAMPLE:
-#   _bootstrap_env_root SMG_ROOT "config_smg.sh"
-#EOP
-#BOC
-_bootstrap_env_root() {
-  _with_strict_mode 2>/dev/null || true
-
-  local env_var="${1:?environment variable name required}"    # e.g., SMG_ROOT
-  local anchor="${2:?anchor file required}"                   # e.g., config_smg.sh
-
-  # If already defined, do nothing
-  local current
-  eval "current=\"\${$env_var:-}\""
-  if [[ -n "$current" ]]; then
-    _log_debug "%s already set → %s" "$env_var" "$current"
-    return 0
-  fi
-
-  # Resolve the caller script absolute directory (follow symlinks)
-  local this_file this_dir cur
-  _resolve_this_file this_file
-  this_dir="$(cd -- "$(dirname -- "$this_file")" && pwd -P)"
-
-  cur="$this_dir"
-  while [[ "$cur" != "/" ]]; do
-    if [[ -f "$cur/$anchor" ]]; then
-      eval "export $env_var=\"\$cur\""
-      _log_info "Set %s → %s (found %s)" "$env_var" "$cur" "$anchor"
-      return 0
-    fi
-    cur="$(dirname -- "$cur")"
-  done
-
-  # Fallback: not found; use the caller script directory
-  _log_warn "%s not found while climbing; using script dir" "$anchor"
-  eval "export $env_var=\"\$this_dir\""
-  return 1
-}
-#EOC
-
-#BOP
-# !FUNCTION: _run_project_config
-# !INTERFACE: _run_project_config <env_var> <config_filename> <target_fn> [args...]
-# !DESCRIPTION:
-#   Source the config file located at "<$env_var>/<config_filename>" and invoke
-#   the given <target_fn> within that file, passing optional [args...].
-#   Fail-soft: logs warnings and returns non-zero if anything goes wrong.
-# !EXAMPLE:
-#   _run_project_config SMG_ROOT "config_smg.sh" _env_export
-#EOP
-#BOC
-_run_project_config() {
-  _with_strict_mode 2>/dev/null || true
-
-  local env_var="${1:?env var required}"                # e.g., SMG_ROOT
-  local cfg_file="${2:?config filename required}"       # e.g., config_smg.sh
-  local target="${3:?target function required}"         # e.g., _env_export
-  shift 3 || true
-  local -a target_args=( "$@" )
-
-  # Resolve root from env_var
-  local root
-  eval "root=\"\${$env_var:-}\""
-  if [[ -z "$root" ]]; then
-    _log_err "%s is not set; call _bootstrap_env_root first" "$env_var"
-    return 2
-  fi
-
-  local cfg_path="${root%/}/${cfg_file}"
-  if [[ ! -f "$cfg_path" ]]; then
-    _log_err "Config not found: %s" "$cfg_path"
-    return 3
-  fi
-
-  # Source defensively and then call the target if defined
-  _source_or_explain "$cfg_path" || true
-  if ! declare -F "$target" >/dev/null 2>&1; then
-    _log_err "Target not defined after sourcing config: %s" "$target"
-    return 4
-  fi
-
-  # Call target
-  if ! "$target" "${target_args[@]}"; then
-    _log_warn "Target %s returned non-zero" "$target"
-    return 5
-  fi
-
-  _log_ok "Config %s executed: %s" "$cfg_file" "$target"
-  return 0
 }
 #EOC
 
@@ -1062,11 +1496,11 @@ _run_project_config() {
 _resolve_script_dir() {
   local __out="${1:?out var required}"
   local __src="${2:-${BASH_SOURCE[0]}}"
+  local __orig="$__src"
 
   # Follow symlinks
   while [[ -L "$__src" ]]; do
-    local __link
-    __link="$(readlink -- "$__src")"
+    local __link; __link="$(readlink -- "$__src")"
     if [[ "$__link" = /* ]]; then
       __src="$__link"
     else
@@ -1078,77 +1512,321 @@ _resolve_script_dir() {
   local __dir
   __dir="$(cd -- "$(dirname -- "$__src")" && pwd -P)"
   printf -v "$__out" '%s' "$__dir"
+
+  _log_debug "resolve_script_dir: input=%s resolved_dir=%s" "$__orig" "$__dir"
 }
 #EOC
 
 #BOP
-# !FUNCTION: detect_hpc_system
-# !INTERFACE: detect_hpc_system [-v|--verbose]
+# !FUNCTION: _bootstrap_env_root
+# !INTERFACE: _bootstrap_env_root <ENV_VAR> <ANCHOR_FILE>
 # !DESCRIPTION:
-#   Identify the HPC system and set global environment flags accordingly.
-#
-# !USAGE:
-#   detect_hpc_system [-v]
+#   Ensure that environment variable <ENV_VAR> points to the project root.
+#   If <ENV_VAR> is already set (non-empty), the function is idempotent and
+#   does nothing. Otherwise, it discovers the root by walking upward from the
+#   *caller* script (BASH_SOURCE[1]; falls back to $PWD) using `project_root_of`.
 #
 # !BEHAVIOR:
-#   • Reads uname/hostname to infer platform
-#   • Sets: hpc_system, hpc_name, is_egeon, is_cray, WRAPPER, LC_ALL
+#   • Idempotent: if <ENV_VAR> is already set, returns 0 without changes.
+#   • Honors PROJECT_MARKERS when already defined; if unset, temporarily uses
+#     a default of ".smg_root:<ANCHOR_FILE>" during discovery.
+#   • No dry-run simulation (this function configures process environment).
+#   • On failure to detect the root, returns non-zero and logs the context.
 #
-# !EXAMPLE:
-#   detect_hpc_system -v
+# !USAGE:
+#   # Typical auto-init in a helpers file:
+#   _bootstrap_env_root SMG_ROOT ".smg_root" || exit $?
+#
+# !RETURNS:
+#   0  success (ENV_VAR exported, or already set)
+#   1  failure to detect the root (project_root_of did not find markers)
 #
 # !NOTES:
-#   Relies on logging helpers: _log_info, _log_warn, _log_err, _log_action
-#   Option parsing via _parse_args (optional)
+#   • Requires Bash 4+.
+#   • Default markers are only applied when PROJECT_MARKERS is unset; otherwise
+#     the existing PROJECT_MARKERS are used as-is.
+#   • Marker validation is delegated to `project_root_of`.
+#
+# !EXAMPLE:
+#   # Use a custom anchor alongside .smg_root:
+#   _bootstrap_env_root MY_ROOT ".project_root"
+#   printf 'Root = %s\n' "$MY_ROOT"
 #EOP
 #BOC
-detect_hpc_system(){
+_bootstrap_env_root() {
   _with_strict_mode   # enable strict mode only for this function
 
-  # Parse common flags (-v/--verbose etc.)
-  _parse_args "$@" 2>/dev/null || true
-  set -- "${leftover_args[@]}"
+  local env_var="${1:-}"
+  local anchor="${2:-}"
 
-  # Prevent verbosity changes from leaking
-  local verbose=$verbose
+  # Argument validation
+  if [[ -z "$env_var" || -z "$anchor" ]]; then
+    _log_err "_bootstrap_env_root: missing arguments (ENV_VAR='%s' ANCHOR='%s')" \
+             "${env_var:-<unset>}" "${anchor:-<unset>}"
+    return 1
+  fi
 
+  # Already set? Be idempotent.
+  # (Use indirect expansion rather than eval.)
+  local current="${!env_var-}"
+  if [[ -n "$current" ]]; then
+    _log_debug "_bootstrap_env_root: %s already set → %s" "$env_var" "$current"
+    return 0
+  fi
+
+  # Discovery start point (prefer the caller over this file)
+  local start="${BASH_SOURCE[1]:-${PWD}}"
+  _log_debug "_bootstrap_env_root: start=%s anchor=%s env_var=%s" "$start" "$anchor" "$env_var"
+
+  # Prepare markers (preserve and restore PROJECT_MARKERS around discovery)
+  local prev_markers="${PROJECT_MARKERS-}"
+  local markers="${PROJECT_MARKERS:-.smg_root:$anchor}"
+  PROJECT_MARKERS="$markers"
+  _log_debug "_bootstrap_env_root: markers=%s (prev=%s)" "$markers" "${prev_markers:-<unset>}"
+
+  # Root discovery
+  local root rc=0
+  if ! root="$(project_root_of "$start")"; then
+    rc=$?
+    # Restore previous PROJECT_MARKERS before returning
+    if [[ -n "${prev_markers+x}" ]]; then
+      PROJECT_MARKERS="$prev_markers"
+    else
+      unset PROJECT_MARKERS
+    fi
+    _log_err "_bootstrap_env_root: project_root_of failed (rc=%d) [start=%s, markers=%s]" \
+             "$rc" "$start" "$markers"
+    return 1
+  fi
+
+  # Restore PROJECT_MARKERS
+  if [[ -n "${prev_markers+x}" ]]; then
+    PROJECT_MARKERS="$prev_markers"
+  else
+    unset PROJECT_MARKERS
+  fi
+
+  # Export target env var
+  printf -v "$env_var" '%s' "$root"
+  export "$env_var"
+  _log_info "Set %s → %s" "$env_var" "$root"
+
+  return 0
+}
+#EOC
+
+#BOP
+# !FUNCTION: _run_project_config
+# !INTERFACE: _run_project_config <ENV_VAR> <CONFIG_FILENAME> <TARGET_FN> [ARGS...]
+# !DESCRIPTION:
+#   Source a project config file located at "<$ENV_VAR>/<CONFIG_FILENAME>" and
+#   invoke <TARGET_FN> (a function expected to be defined by that file),
+#   forwarding any optional [ARGS...]. Designed to be fail-soft with clear logs:
+#   it emits informative DEBUG/ERROR/WARN/OK messages and returns non-zero on
+#   recoverable errors so the caller can decide what to do next.
+#
+# !PARAMETERS:
+#   ENV_VAR         Name of an environment variable that holds the project root
+#                   directory (e.g., "SMG_ROOT").
+#   CONFIG_FILENAME File name relative to the resolved root (e.g., "config_smg.sh").
+#   TARGET_FN       Function symbol to call after sourcing the config
+#                   (e.g., "_env_export").
+#   ARGS...         Optional arguments forwarded to TARGET_FN.
+#
+# !BEHAVIOR:
+#   • Strict scope: enables `set -euo pipefail` only within this function.
+#   • Resolves the root from ENV_VAR; if unset/empty, logs an error advising
+#     `_bootstrap_env_root` and returns 2.
+#   • Builds "<root>/<CONFIG_FILENAME>" and verifies it exists; else returns 3.
+#   • Sources the file via `_source_or_explain` (expected to log/handle details).
+#   • Verifies <TARGET_FN> is defined after sourcing; else returns 4.
+#   • Calls <TARGET_FN> with [ARGS...]; on non-zero exit, logs a warning and
+#     returns 5; otherwise logs OK and returns 0.
+#   • No dry-run simulation: this function intentionally performs real sourcing
+#     and invocation (it configures live shell state).
+#
+# !RETURNS:
+#   0  success (config sourced and TARGET_FN ran successfully)
+#   2  ENV_VAR is unset/empty
+#   3  config file not found at "<root>/<CONFIG_FILENAME>"
+#   4  TARGET_FN is not defined after sourcing the config
+#   5  TARGET_FN returned non-zero
+#
+# !NOTES:
+#   • Requires Bash 4+.
+#   • `_source_or_explain <path>` must exist; if you don’t have it, replace the
+#     call with a plain `source "$path"` (and ensure you log appropriately).
+#   • Security: sourcing executes code from the file; only source trusted paths.
+#   • Side effects: any exports or definitions in the config persist in the
+#     caller environment by design (since sourcing happens in the current shell).
+#   • Logging: honors global `verbose`/`debug`; errors always print.
+#
+# !EXAMPLES:
+#   # Minimal usage
+#   _run_project_config SMG_ROOT "smg_setup.sh" _env_export
+#
+#   # With arguments forwarded to the target function
+#   _run_project_config SMG_ROOT "smg_setup.sh" compile "--all" "--no-gsi"
+#
+#   # Handling failures explicitly
+#   if ! _run_project_config SMG_ROOT "smg_setup.sh" _env_export; then
+#     _log_fail "Project environment could not be initialized"; exit 1
+#   fi
+#EOP
+#BOC
+_run_project_config() {
+  _with_strict_mode   # enable strict mode only for this function
+
+  local env_var="${1:?env var required}"                # e.g., SMG_ROOT
+  local cfg_file="${2:?config filename required}"       # e.g., smg_setup.sh
+  local target="${3:?target function required}"         # e.g., _env_export
+  shift 3 || true
+  local -a target_args=( "$@" )
+
+  # Resolve root from env_var
+  local root
+  eval "root=\"\${$env_var:-}\""
+  if [[ -z "$root" ]]; then
+    _log_err "%s is not set; call _bootstrap_env_root first" "$env_var"
+    return 2
+  fi
+
+  local cfg_path="${root%/}/${cfg_file}"
+  if [[ ! -f "$cfg_path" ]]; then
+    _log_err "Config not found: %s" "$cfg_path"
+    return 3
+  fi
+
+  _log_debug "run_project_config: cfg=%s target=%s args=[%s]" "$cfg_path" "$target" "${target_args[*]}"
+
+  # Source defensively and then call the target if defined
+  _source_or_explain "$cfg_path" || true
+  if ! declare -F "$target" >/dev/null 2>&1; then
+    _log_err "Target not defined after sourcing config: %s" "$target"
+    return 4
+  fi
+
+  # Call target
+  if ! "$target" "${target_args[@]}"; then
+    _log_warn "Target %s returned non-zero" "$target"
+    return 5
+  fi
+
+  _log_ok "Config %s executed: %s" "$cfg_file" "$target"
+  return 0
+}
+#EOC
+
+###############################################################################
+#BOP
+# !FUNCTION: detect_hpc_system
+#
+# !INTERFACE:
+#   detect_hpc_system [-v|--verbose]
+#
+# !DESCRIPTION:
+#   Identify the HPC system and set global environment flags accordingly.
+#   The function inspects uname(1) and the short hostname to recognize
+#   known platforms (Cray XC50 and EGEON). It sets a consistent set of
+#   exported variables used by downstream scripts (compiler wrapper,
+#   locale, convenience boolean flags).
+#
+# !USAGE:
+#   detect_hpc_system -v
+#
+# !BEHAVIOR:
+#   • Sources common flags via __parse_args__ (if available) to honor -v/--verbose.
+#   • Reads uname/hostname to infer platform (no external tools beyond coreutils).
+#   • Sets (exports):
+#       hpc_system, hpc_name, is_egeon, is_cray, WRAPPER, LC_ALL, LANG
+#   • Returns 0 on success; 1 on unknown machines.
+#
+# !ENVIRONMENT:
+#   • Honors pre-set variables if already exported before calling:
+#       hpc_name, hpc_system, WRAPPER, LC_ALL, LANG
+#     (If set, they are preserved; otherwise defaults are applied.)
+#
+# !EXAMPLE:
+#   detect_hpc_system --verbose
+#   if $is_cray; then _log_info "Using wrapper: %s" "$WRAPPER"; fi
+#
+# !NOTES:
+#   • Relies on logging helpers (_log_info/_log_warn/_log_err/_log_action) if defined.
+#     If not defined, the function degrades gracefully by using printf.
+#   • Option parsing via __parse_args__ is optional; the function works without it.
+#
+#EOP
+###############################################################################
+#BOC
+detect_hpc_system() {
+  _with_strict_mode   # enable strict mode only for this function
+
+  # --- Parse common flags (-v/--verbose etc.), if available ---
+  if declare -F __parse_args__ >/dev/null; then
+    __parse_args__ "$@" 2>/dev/null || true
+    set -- "${leftover_args[@]}"
+  fi
+
+  # Prevent verbosity changes from leaking (local shadow)
+  local verbose=${verbose:-false}
+
+  # --- Short-circuit: honor pre-set environment (idempotent behavior) ---
+  if [[ -n "${hpc_name:-}" && -n "${hpc_system:-}" && -n "${WRAPPER:-}" ]]; then
+    _log_info 'Using pre-set HPC environment: %s (%s) wrapper=%s' "$hpc_name" "$hpc_system" "$WRAPPER"
+    # Normalize boolean flags for convenience
+    export is_egeon=false is_cray=false
+    [[ "${hpc_name,,}" == "egeon" ]] && is_egeon=true
+    [[ "${hpc_name,,}" == "xc50"  ]] && is_cray=true
+    # Ensure locale defaults if missing
+    export LC_ALL="${LC_ALL:-en_US.UTF-8}"
+    export LANG="${LANG:-${LC_ALL}}"
+    _log_debug "detect_hpc_system: pre-set flags is_egeon=%s is_cray=%s" "$is_egeon" "$is_cray"
+    return 0
+  fi
+
+  # --- Gather minimal facts (portable) ---
   local sys_info short_hostname
   sys_info="$(uname -a)"
-  short_hostname="$(hostname -s)"
+  short_hostname="$(hostname -s 2>/dev/null || printf 'unknown')"
 
+  # --- Reset exported flags (single source of truth) ---
   export is_egeon=false
   export is_cray=false
 
-  if printf '%s' "$sys_info" | grep -qi 'cray_ari_s'; then
-    export hpc_system="cray"
-    export hpc_name="xc50"
+  # --- Helper to set env in one place ---
+  _set_env() {
+    # $1: hpc_system, $2: hpc_name, $3: wrapper, $4: info-msg
+    export hpc_system="$1"
+    export hpc_name="$2"
+    export WRAPPER="$3"
+    export LC_ALL="${LC_ALL:-en_US.UTF-8}"
+    export LANG="${LANG:-${LC_ALL}}"
+    _log_info '%s' "$4"
+    _log_debug "detect_hpc_system: system=%s name=%s wrapper=%s" "$hpc_system" "$hpc_name" "$WRAPPER"
+  }
+
+  # --- Detection logic (order matters; be liberal in matching) ---
+  # Cray XC50: some kernels expose tags like 'cray_ari_s' or 'Cray'
+  if printf '%s' "$sys_info" | grep -Eqi 'cray(_ari_s)?|xc50'; then
+    _set_env "cray" "xc50" "ftn" "Detected: Cray XC50"
     export is_cray=true
-    export WRAPPER="ftn"
-    _log_info 'Detected: Cray XC50'
     return 0
 
+  # EGEON: match by uname string or known headnode label
   elif printf '%s' "$sys_info" | grep -qi 'egeon'; then
-    export hpc_system="linux"
-    export hpc_name="egeon"
+    _set_env "linux" "egeon" "mpif90" "Detected: EGEON Cluster"
     export is_egeon=true
-    export WRAPPER="mpif90"
-    export LC_ALL="en_US.UTF-8"
-    _log_info 'Detected: EGEON Cluster'
     return 0
 
-  elif printf '%s' "$short_hostname" | grep -qi 'headnode'; then
-    export hpc_system="linux"
-    export hpc_name="egeon"
+  elif printf '%s' "$short_hostname" | grep -Eqi '^headnode(-[0-9]+)?$'; then
+    _set_env "linux" "egeon" "mpif90" "Detected: HEADNODE of EGEON (build-only)"
     export is_egeon=true
-    export WRAPPER="mpif90"
-    export LC_ALL="en_US.UTF-8"
-    _log_warn 'Detected: HEADNODE of EGEON (build-only)'
     return 0
 
   else
     _log_err 'Unknown machine: %s' "$short_hostname"
-    _log_action -f '1) Add the machine under etc/mach/'
-    _log_action -f '2) Create an entry in copy_fixed_files (etc/smg_setup.sh)'
+    _log_action '1) Add a machine entry under etc/mach/'
+    _log_action '2) Create an entry in copy_fixed_files (etc/smg_setup.sh)'
     return 1
   fi
 }
@@ -1156,54 +1834,152 @@ detect_hpc_system(){
 
 #BOP
 # !FUNCTION: disable_conda
-# !INTERFACE: disable_conda [-v|--verbose]
+#
+# !INTERFACE:
+#   disable_conda [-v|--verbose]
+#
 # !DESCRIPTION:
-#   Deactivate a detected Conda environment (if any) to avoid toolchain conflicts,
-#   and clean related environment variables.
+#   Deactivate a detected Conda-like environment (if any) to avoid toolchain
+#   conflicts (e.g. compiler wrappers, libraries, MPI). The function attempts
+#   to call the proper deactivation command and then cleans up environment
+#   variables left behind by Conda/Mamba/Micromamba.
 #
 # !USAGE:
 #   disable_conda [-v]
 #
 # !BEHAVIOR:
 #   • If CONDA_PREFIX is set:
-#       - Try `conda deactivate` (or `source deactivate`)
-#       - Unset common Conda-related variables
-#   • Otherwise, no-op with OK message
+#       - Attempt to run `conda deactivate`, falling back to
+#         `source deactivate`, `mamba deactivate`, or `micromamba deactivate`.
+#       - Ignore errors from missing commands.
+#       - Unset common Conda variables:
+#           CONDA_PREFIX, CONDA_DEFAULT_ENV, CONDA_PROMPT_MODIFIER.
+#   • If CONDA_PREFIX is not set, do nothing except log a message.
+#
+# !RETURNS:
+#   0 always (safe no-op if Conda is not present).
 #
 # !EXAMPLE:
 #   disable_conda -v
 #
 # !NOTES:
-#   Safe to call even if Conda is not installed.
+#   • Safe to call multiple times; no effect if already deactivated.
+#   • Works even if Conda/Mamba/Micromamba are not installed, as long as
+#     logging helpers are available.
+#   • Relies on logging helpers: _log_warn, _log_ok, _log_action.
+#
 #EOP
 #BOC
-disable_conda(){
-  # Parse common flags (-v/--verbose e etc.)
-  _parse_args "$@" 2>/dev/null || true
-  set -- "${leftover_args[@]}"
-
-  # Prevent verbosity changes from leaking
-  local verbose=$verbose
-
-  if [[ -n "$CONDA_PREFIX" ]]; then
-    _log_warn "Conda environment detected: %s" "$CONDA_PREFIX"
-    _log_action  "Deactivating Conda..."
-
-    # Try conda/mamba/micromamba deactivation; ignore errors
-    if command -v conda >/dev/null 2>&1; then
-      conda deactivate 2>/dev/null || source deactivate 2>/dev/null || true
-    elif command -v mamba >/dev/null 2>&1; then
-      mamba deactivate 2>/dev/null || true
-    elif command -v micromamba >/dev/null 2>&1; then
-      micromamba deactivate 2>/dev/null || true
-    else
-      _log_warn "Conda command not found, but CONDA_PREFIX is set."
-    fi
-
-    unset CONDA_PREFIX CONDA_DEFAULT_ENV CONDA_PROMPT_MODIFIER
-    _log_ok "Conda has been disabled."
-  else
-    _log_ok "No active Conda environment detected."
+disable_conda() {
+  # Parse common flags (-v/--verbose, etc.)
+  if declare -F __parse_args__ >/dev/null; then
+    __parse_args__ "$@" 2>/dev/null || true
+    set -- "${leftover_args[@]}"
   fi
+
+  # Prevent verbosity changes from leaking outside
+  local verbose=${verbose:-false}
+
+  if [[ -z "${CONDA_PREFIX:-}" ]]; then
+    _log_ok "No active Conda environment detected."
+    _log_debug "disable_conda: done"
+    return 0
+  fi
+
+  _log_warn "Conda environment detected: %s" "$CONDA_PREFIX"
+
+  if [[ "${dry_run:-false}" == true ]]; then
+    _log_action "[DRY-RUN] would deactivate conda/mamba/micromamba and unset env vars"
+    _log_debug "disable_conda: done (dry-run)"
+    return 0
+  fi
+
+  _log_action "Deactivating Conda..."
+  # Try deactivation in order of preference, ignore errors
+  if command -v conda >/dev/null 2>&1; then
+    conda deactivate 2>/dev/null || source deactivate 2>/dev/null || true
+  elif command -v mamba >/dev/null 2>&1; then
+    mamba deactivate 2>/dev/null || true
+  elif command -v micromamba >/dev/null 2>&1; then
+    micromamba deactivate 2>/dev/null || true
+  else
+    _log_warn "Conda command not found, but CONDA_PREFIX was set."
+  fi
+  
+  # Clean up leftover environment variables
+  unset CONDA_PREFIX CONDA_DEFAULT_ENV CONDA_PROMPT_MODIFIER
+  _log_ok "Conda has been disabled."
+  _log_debug "disable_conda: done"
 }
 #EOC
+
+#BOP
+#
+# !FUNCTION: bool_to_fortran
+#
+# !INTERFACE:
+#   bool_to_fortran <true|false>
+#
+# !DESCRIPTION:
+#   Convert a shell boolean-like value into a Fortran logical literal.
+#   The function accepts case-insensitive "true" to return ".TRUE." and
+#   any other value (including empty) to return ".FALSE.".
+#
+# !USAGE:
+#   bool_to_fortran true     # -> .TRUE.
+#   bool_to_fortran false    # -> .FALSE.
+#   bool_to_fortran          # -> .FALSE. (default)
+#
+# !RETURNS:
+#   Writes either ".TRUE." or ".FALSE." to stdout (no trailing newline change).
+#
+# !EXAMPLES:
+#   export DRY_RUN=true
+#   fflag="$(bool_to_fortran "${DRY_RUN}")"
+#   printf "Fortran flag: %s\n" "${fflag}"
+#
+# !DEPENDENCIES:
+#   Bash 4+ (for general script environment). Uses only built-in shell features.
+#
+# !NOTES:
+#   - Input is matched case-insensitively. Only values that look like "true"
+#     (e.g., "TRUE", "True") are considered true.
+#
+#EOP
+#BOC
+bool_to_fortran() {
+  case "${1:-false}" in
+    [Tt][Rr][Uu][Ee])  printf '.TRUE.'  ;;
+    *)                 printf '.FALSE.' ;;
+  esac
+}
+#EOC
+
+# -----------------------------------------------------------------------------
+# Auto-init: resolve SMG_ROOT when this helpers file is sourced
+# Guard: __HELPERS_INIT_DONE avoids re-entrancy
+#
+# Behavior:
+#   • Calls: _bootstrap_env_root SMG_ROOT ".smg_root"
+#   • Start path: handled inside _bootstrap_env_root (uses BASH_SOURCE[1] or $PWD)
+#   • No-op when SMG_ROOT is already set or the guard is true
+#
+# Notes:
+#   • Do NOT use 'local' at top-level (invalid in Bash outside functions).
+#   • Keep the anchor file customizable if needed (via the 'sentinel' var below).
+# -----------------------------------------------------------------------------
+if [[ "${__HELPERS_INIT_DONE:-false}" != true ]]; then
+  anchor="${SMG_ANCHOR:-.smg_root}"
+  _log_debug "Auto-init helpers: calling _bootstrap_env_root (anchor=%s)" "$anchor"
+
+  # Try to resolve and export SMG_ROOT using the generic bootstrapper.
+  # It is safe to proceed even if it returns non-zero (caller may handle later).
+  _bootstrap_env_root SMG_ROOT "$anchor" || \
+    _log_warn "Auto-init: SMG_ROOT autodetection failed; current=%s" "${SMG_ROOT:-<unset>}"
+
+  __HELPERS_INIT_DONE=true
+  export __HELPERS_INIT_DONE
+  _log_debug "Auto-init done; SMG_ROOT=%s" "${SMG_ROOT:-<unset>}"
+fi
+
+

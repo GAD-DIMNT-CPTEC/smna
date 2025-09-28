@@ -26,92 +26,61 @@
 #   15 Sep 2025 - Help system & descriptions improved; alias; small fixes
 #EOP
 #-----------------------------------------------------------------------------#
+
+# --- minimal bootstrap (idempotent) ---
+[[ -n ${__SMG_BOOTSTRAP_DONE:-} ]] && return 0 2>/dev/null || true; __SMG_BOOTSTRAP_DONE=1
+
+####################################################################################
 #BOP
-# !SECTION: Bootstrap
-# !DESCRIPTION:
-#   Minimal, portable bootstrap for configuration scripts:
-#   • Resolve this file's absolute path when sourced or executed
-#   • Define SMG_SETUP_DIR (directory of this file)
-#   • Source "__helpers__.sh" if present; otherwise print a soft warning
-#   • Set sane defaults (e.g., CMAKE_VERSION_MIN, verbose) without clobbering
-#   • Be idempotent (safe on repeated sourcing)
-#
-# !NOTES:
-#   • Uses realpath/readlink when available; falls back to $BASH_SOURCE
-#   • Prints warnings to stderr; hides "No such file" from the shell 'source'
-#   • Keeps variables readonly to prevent accidental mutation downstream
+# !FUNCTION: ensure_smg_root
+# !DESCRIPTION: Discover project root by locating ".smg_root", export SMG_ROOT,
+#               and source "$SMG_ROOT/etc/__init__.sh" exactly once (idempotent).
+# !USAGE: Place near the top of any script and call: ensure_smg_root || exit $?
+# !NOTE: Requires bash; uses PWD/BASH_SOURCE and pwd -P (no readlink -f).
 #EOP
+#EOC
+# Ensure SMG_ROOT exists and init exactly once (per root)
+ensure_smg_root() {
+  local d s init
+  if [[ -z "${SMG_ROOT:-}" || ! -f "$SMG_ROOT/.smg_root" ]]; then
+    for s in "${BASH_SOURCE[@]:-}" "$PWD"; do
+      [[ -n "$s" ]] || continue
+      d=$([[ -d "$s" ]] \
+           && { cd -- "$s" 2>/dev/null && pwd -P; } \
+           || { cd -- "$(dirname -- "$s")" 2>/dev/null && pwd -P; }) \
+        || { printf '[ERROR] cannot cd near %s\n' "$s" >&2; return 1; }
+      while [[ "$d" != "/" ]]; do
+        [[ -f "$d/.smg_root" ]] && { SMG_ROOT="$d"; break 2; }
+        d="${d%/*}"
+      done
+    done
+    [[ -n "${SMG_ROOT:-}" ]] || { printf '[ERROR] .smg_root not found\n' >&2; return 1; }
+  fi
 
-# --- guard: skip if already sourced once ---
-if [[ -n "${__SMG_BOOTSTRAP_DONE:-}" ]]; then
-  return 0 2>/dev/null || true
-fi
-__SMG_BOOTSTRAP_DONE=1
+  init="$SMG_ROOT/etc/__init__.sh"
+  [[ -r "$init" ]] || { printf '[ERROR] Missing %s\n' "$init" >&2; return 2; }
 
-_resolve_script(){
-  # usa BASH_SOURCE quando disponível (Bash). Se não existir, tenta $0 como fallback.
-  local -n _out_dir="${1:?out dir var}"
-  local -n _out_file="${2:?out file var}"
-  local __src="${BASH_SOURCE[0]:-$3}"
+  # Load __init__.sh only once *per root*
+  if [[ "${SMG_INIT_LOADED:-0}" != 1 || "${SMG_INIT_ROOT:-}" != "$SMG_ROOT" ]]; then
+    . "$init" || { printf '[ERROR] Failed to load %s\n' "$init" >&2; return 3; }
+    SMG_INIT_LOADED=1
+    SMG_INIT_ROOT="$SMG_ROOT"
+  fi
 
-  # se for relativo, preserve-o (será resolvido abaixo)
-  # segue symlinks até o alvo real
-  while [ -L "$__src" ]; do
-    local __link
-    # readlink -- "$src" pode devolver relativo ou absoluto
-    __link=$(readlink -- "$__src") || break
-    if [[ "$link" == /* ]]; then
-      __src="$link"
-    else
-      __src="$(dirname -- "$__src")/$__link"
-    fi
-  done
-
-  # transforme em diretório absoluto e canonize (resolves .. e .)
-  _out_dir=$(cd -P -- "$(dirname -- "$__src")" 2>/dev/null && pwd -P) || dir="$(pwd -P)"
-  _out_file="$(basename -- "$__src")"
-   printf '%s\n' "$_out_dir"
+  export SMG_ROOT SMG_INIT_LOADED SMG_INIT_ROOT
 }
 
-_resolve_script __smg_dir __smg_file
+ensure_smg_root || exit $?
+#EOC
+####################################################################################
 
-# Export only if not already set; mark readonly for safety
-: "${SMG_DOC_FILE:="$__smg_file"}"
-: "${SMG_SETUP_DIR:="$__smg_dir"}"
-export SMG_DOC_FILE SMG_SETUP_DIR
-readonly SMG_DOC_FILE SMG_SETUP_DIR
-
-# --- minimal color init (lazy, only if needed) ---
-# Define C_WARN/C_RST if unset and STDERR is a tty
-if [[ -t 2 ]]; then
-  : "${C_WARN:=$'\033[1;33m'}"
-  : "${C_RST:=$'\033[0m'}"
-else
-  : "${C_WARN:=}"
-  : "${C_RST:=}"
-fi
-export C_WARN C_RST
-
-# --- source helpers (quiet "not found"; warn only if sourcing fails) ---
-if ! ${__HELPERS_SH_LOADED:-false}; then
-  __helpers_path="${SMG_SETUP_DIR}/__helpers__.sh"
-  # shellcheck disable=SC1090
-  if ! . "${__helpers_path}"; then
-    # Print a compact warning to stderr, but don't abort
-    printf "%s[WARN]%s %s returned non-zero; continuing\n" \
-           "${C_WARN}" "${C_RST}" "${__helpers_path}" 1>&2
-  fi
-fi
 
 # --- Defaults (do not clobber if user already exported) ---
+: "${AUTO_ACCEPT:="No"}"
 : "${CMAKE_VERSION_MIN:=4.1.1}"
 : "${verbose:=false}"
 export CMAKE_VERSION_MIN verbose
-readonly CMAKE_VERSION_MIN
-# (verbose intentionally not readonly: users may toggle at runtime)
-
-# --- cleanup internal vars ---
-unset __smg_src __smg_file __smg_dir __helpers_path
+readonly CMAKE_VERSION_MIN 2>/dev/null || true
 
 # ----------------------------------------------------------------------------- #
 # ================== SMG configuration functions start here =================== #
