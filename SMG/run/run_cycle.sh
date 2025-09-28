@@ -69,65 +69,53 @@
 #EOP
 #-----------------------------------------------------------------------------#
 #BOC
-# --- Library directory (folder where this file lives) ---
-__SRC="${BASH_SOURCE[0]}"
-while [[ -L "$__SRC" ]]; do
-  __LINK="$(readlink -- "$__SRC")"
-  if [[ "$__LINK" = /* ]]; then
-    __SRC="$__LINK"
-  else
-    __SRC="$(cd -- "$(dirname -- "$__SRC")" && cd -- "$(dirname -- "$__LINK")" && pwd)/$(basename -- "$__LINK")"
+#BOP
+# !FUNCTION: ensure_root
+# !DESCRIPTION: Discover project root by locating ".smg_root", export SMG_ROOT,
+#               and source "$SMG_ROOT/etc/__init__.sh" exactly once (idempotent).
+# !USAGE: Place near the top of any script and call: ensure_root <ROOT_PATH_VAR> <INIT_LOADED_VAR>|| exit $?
+# !NOTE: Requires bash; uses PWD/BASH_SOURCE and pwd -P (no readlink -f).
+#EOP
+#EOC
+# Ensure SMG_ROOT exists and initialize once
+ensure_root() {
+  local root_var="${1:?root_var required}" loaded_var="${2:?load_var required}"
+  local marker="${ROOT_MARKER:-.smg_root}" init_rel="${INIT_REL:-etc/__init__.sh}"
+  local src dir found init
+
+  # 1) Root discovery (only if not set or invalid)
+  if [[ -z "${!root_var:-}" || ! -f "${!root_var}/$marker" ]]; then
+    for src in "${BASH_SOURCE[@]:-"$0"}" "$PWD"; do
+      [[ -n "$src" ]] || continue
+      dir=$([[ -d "$src" ]] && cd -- "$src" && pwd -P || cd -- "$(dirname -- "$src")" && pwd -P) || return 1
+      while [[ "$dir" != "/" && ! -f "$dir/$marker" ]]; do dir="${dir%/*}"; done
+      if [[ -f "$dir/$marker" ]]; then found="$dir"; break; fi
+    done
+    [[ -n "${found:-}" ]] || { printf '[ERROR] %s not found\n' "$marker" >&2; return 1; }
+    printf -v "$root_var" %s "$found"; export "$root_var"
   fi
-done
-export RUN_CYCLE_DIR="$(cd -- "$(dirname -- "$__SRC")" && pwd -P)"
+  # 2) Sanity check for init
+  init="${!root_var}/${init_rel}"
+  [[ -r "$init" ]] || { printf '[ERROR] Missing %s\n' "$init" >&2; return 2; }
 
-# --- load init (which loads helpers) ---
-__init_path="${RUN_CYCLE_DIR}/__init__.sh"
-# shellcheck disable=SC1090
-. "$__init_path" || :        # no extra prints; don't break under set -e
-
-trap '_log_err "Interrupted (SIGINT)"; exit 130' INT
-trap '_log_err "Terminated (SIGTERM)"; exit 143' TERM
-trap '_log_err "Failure at line %d" "$LINENO"' ERR
-
-#------------------------- Environment bootstrap -----------------------------#
-# Prefer environment-provided SMG_ROOT. If missing, derive from script path.
-# --- Load system variables ---
-if [[ -z "${SMG_ROOT:-}" ]]; then
-  _log_warn "SMG_ROOT not set; deriving from script location"
-
-  # Start from the directory of this script
-  cur_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
-
-  while [[ "$cur_dir" != "/" ]]; do
-    if [[ -f "${cur_dir}/config_smg.ksh" ]]; then
-      SMG_ROOT="$cur_dir"
-      break
-    fi
-    cur_dir="$(dirname -- "$cur_dir")"
-  done
-
-  # Fallback: if not found, use the script's own directory
-  if [[ -z "${SMG_ROOT:-}" ]]; then
-    _log_warn "config_smg.ksh not found while climbing; using script dir"
-    SMG_ROOT="$cur_dir"
+  # 3) Load init exactly once (idempotent)
+  if [[ "${!load_var:-0}" != 1 ]]; then
+    # shellcheck source=/dev/null
+    . "$init" || { printf '[ERROR] Failed to load %s\n' "$init" >&2; return 3; }
+    printf -v "$load_var" 1
+    export "$load_var"
   fi
-fi
+}
+ensure_root SMG_ROOT SMG_INIT_LOADED || exit $?
+#EOC
 
-export SMG_ROOT
-
-: "${scripts_smg:=${SMG_ROOT}/run/scripts}"
-[[ -d "${scripts_smg}" ]] || _log WARN "scripts_smg directory not found: %s" "${scripts_smg}"
-
-# Defensive sourcing: do not kill the run if config returns non-zero
-if [[ -f "${SMG_ROOT}/config_smg.ksh" ]]; then
-  # shellcheck disable=SC1090
-  if ! . "${SMG_ROOT}/config_smg.ksh" _env_export; then
-    _log_warn "config_smg.ksh returned non-zero; continuing"
-  fi
-fi
-
+#------------------------------ Mini sanity ----------------------------------#
 command -v date >/dev/null 2>&1 || _die 3 "'date' not found in PATH"
+
+# Diretório de scripts
+: "${scripts_smg:=${SMG_ROOT}/run/scripts}"
+[[ -d "${scripts_smg}" ]] || _die 4 "scripts_smg directory not found: %s" "${scripts_smg}"
+
 
 #------------------------------ Usage helper ---------------------------------#
 # !FUNCTION: usage
@@ -155,10 +143,14 @@ LABELF=""
 
 BcCycles=0
 
-#------------------------------ Option parsing -------------------------------#
+#------------------------------ Parse comum + local --------------------------#
+# 1) Parser global (__helpers__.sh) — flags comuns e HPC
+__parse_args__ "$@" || exit $?
+
+# 2) Local parser — only cycle flags, using leftover_args from the global parser
 # !FUNCTION: _parse_args
 # !DESCRIPTION: Parse CLI options in a portable way (Bash 4+).
-_parse_args() {
+_parse_cycle_args() {
   (($#)) || { usage; return 1; }
   while (($#)); do
     case "$1" in
@@ -180,12 +172,15 @@ _parse_args() {
       --no-gsi)     do_gsi=0; shift;;
       --no-bam)     do_bam=0; shift;;
 
-      -q|--quiet)   verbose=false; shift;;
-      -v|--verbose) verbose=true; shift;;
       -h|--help)    usage; exit 0;;
-      *)            _log WARN "Unknown option ignored: %s" "$1"; shift;;
-    esac
+      --) shift; break;;
+      -*) _log_warn "Unknown option ignored (cycle): %s" "$1"; shift;;
+      *)  break;;
+   esac
   done
+# any positional arguments after "--" remain in leftover_args (from the global parser)
+return 0
+
 }
 
 #------------------------------- Helpers -------------------------------------#
@@ -200,17 +195,76 @@ _validate_required() {
   if [[ -z "${gsiTrunc}" ]]; then gsiTrunc="${modelTrunc}"; fi
 }
 
+#BOP
 # !FUNCTION: _run_obsmake
-# !DESCRIPTION: Execute observer pre-processing for a given analysis label.
+# !INTERFACE: _run_obsmake LABEL
+# !DESCRIPTION:
+#   Execute the OBSMAKE stage for a given analysis label (LABEL).
+#
+#   • Automatically translates global flags from __parse_args__ into
+#     CLI options for run_obsmake.sh (--verbose/--quiet, --dry-run).
+#   • Supports environment overrides for source/destination/mode/pattern
+#     through OBSM_NCEP_ROOT, OBSM_DEST_DIR, OBSM_MODE, OBSM_PATTERN.
+#   • Delegates dry-run and logging behavior to run_obsmake.sh itself,
+#     instead of wrapping with eval/run() here.
+#
+#   Arguments:
+#     LABEL   → Analysis datetime label (YYYYMMDDHH).
+#
+#   Behavior:
+#     - Builds a CLI argument list (`obsmake_cli`) based on global variables.
+#     - Calls run_obsmake.sh with LABEL and the constructed options.
+#     - On error, aborts with code 10.
+#     - Logs elapsed runtime in minutes/seconds.
+#
+# !USAGE:
+#   _run_obsmake 2025010100
+#
+# !ENVIRONMENT:
+#   OBSM_NCEP_ROOT  → Passed as --ncep-root if set.
+#   OBSM_DEST_DIR   → Passed as --dest if set.
+#   OBSM_MODE       → Passed as --mode (link|copy|hardlink) if set.
+#   OBSM_PATTERN    → Passed as --pattern if set.
+#   verbose         → From __parse_args__, mapped to --verbose/--quiet.
+#   dry_run         → From __parse_args__, mapped to --dry-run.
+#
+# !RETURNS:
+#   0 on success; aborts with code 10 on failure.
+#EOP
+#BOC
 _run_obsmake() {
   local lbl="$1"
+
+  # --- Build CLI argument list for run_obsmake.sh ---
+  local obsmake_cli=()
+
+  # Verbosity: prefer explicit CLI flag
+  if [[ "${verbose:-false}" == true ]]; then
+    obsmake_cli+=("--verbose")
+  else
+    obsmake_cli+=("--quiet")
+  fi
+
+  # Dry-run support
+  [[ "${dry_run:-false}" == true ]] && obsmake_cli+=("--dry-run")
+
+  # Optional environment overrides
+  [[ -n "${OBSM_NCEP_ROOT:-}" ]] && obsmake_cli+=("--ncep-root" "${OBSM_NCEP_ROOT}")
+  [[ -n "${OBSM_DEST_DIR:-}"  ]] && obsmake_cli+=("--dest"      "${OBSM_DEST_DIR}")
+  [[ -n "${OBSM_MODE:-}"      ]] && obsmake_cli+=("--mode"      "${OBSM_MODE}")      # link|copy|hardlink
+  [[ -n "${OBSM_PATTERN:-}"   ]] && obsmake_cli+=("--pattern"   "${OBSM_PATTERN}")
+
   _log_info "Executing OBSMAKE for %s" "${lbl}"
   SECONDS=0
-  /bin/bash "${scripts_smg}/run_obsmake.sh" "${lbl}"
+
+  # --- Call run_obsmake.sh directly ---
+  /bin/bash "${scripts_smg}/run_obsmake.sh" "${lbl}" "${obsmake_cli[@]}"
   local rc=$?
-  ((rc==0)) || _die 10 "Observer failed for %s (rc=%d)" "${lbl}" "${rc}"
-  _log_ok   "Observer finished in %dm%02ds" "$((SECONDS/60))" "$((SECONDS%60))"
+
+  (( rc == 0 )) || _die 10 "Observer failed for %s (rc=%d)" "${lbl}" "${rc}"
+  _log_ok "Observer finished in %dm%02ds" "$((SECONDS/60))" "$((SECONDS%60))"
 }
+#EOC
 
 #BOP
 # !FUNCTION: _run_gsi
@@ -219,6 +273,12 @@ _run_obsmake() {
 #   Execute a single GSI analysis for the given analysis label (LABEL).
 #
 #   • By default, runs a "normal" assimilation cycle.
+#   • Consumes cycle-local settings (modelTrunc, modelNLevs, modelPrefix,
+#     gsiTrunc, gsiMPITasks) and global HPC layout (mpi_tasks, omp_threads)
+#     parsed previously by __parse_args__.
+#   • Avoids passing unknown flags to runGSI. Only uses runGSI-supported
+#     options (-I, -T, -t, -l, -p, -np, -bc). If OMP threads are provided by
+#     the global parser, exports OMP_NUM_THREADS to benefit the GSI run.
 #   • When BC_CYCLE > 0, the run is considered part of a bias-correction (BC)
 #     cycling sequence, and the BC_CYCLE index is passed downstream so that
 #     other functions (e.g. CopyOutputsForCycle) can manage satbias file
@@ -233,11 +293,21 @@ _run_obsmake() {
 #       levels, prefix, and MPI task count.
 #     - On error, aborts with code 20.
 #     - Logs elapsed runtime in minutes/seconds.
+#     - Resolves effective MPI tasks for GSI: prefer gsiMPITasks (-gnp),
+#       otherwise fallback to global mpi_tasks (if provided).
+#     - Exports OMP_NUM_THREADS when global --cpus-per-task was given.
+#     - Invokes runGSI with a minimal, valid CLI (only supported flags).
+#     - On failure, aborts with code 20.
 #
 # !USAGE:
 #   _run_gsi 2025010100
 #   _run_gsi 2025010100 3
 #   _run_gsi 2025010100 0
+#
+# !ENVIRONMENT:
+#   omp_threads     → If set (from __parse_args__), exported as OMP_NUM_THREADS.
+#   verbose, dry_run→ Optionally exported for downstream scripts to consult;
+#                     not passed as flags (runGSI does not declare them).
 #
 # !NOTES:
 #   - BC_CYCLE is passed as options to runGSI so that bias
@@ -253,19 +323,37 @@ _run_gsi() {
      _log_action "running bias corretion, bc_cycle=%d" "${bc_cycle}"
   fi
 
+  # --- Resolve effective MPI task count for GSI (-np) ---
+  # Prefer the cycle-local -gnp (gsiMPITasks); otherwise fallback to global --ntasks (mpi_tasks)
+  local gnp=
+  if [[ -n "${gsiMPITasks:-}" ]]; then
+    gnp="${gsiMPITasks}"
+  elif [[ -n "${mpi_tasks:-}" ]]; then
+    gnp="${mpi_tasks}"
+  fi
+  
   SECONDS=0
-  /bin/bash "${scripts_smg}/runGSI" \
-    -I "${lbl}" \
-    -T "${gsiTrunc}" \
-    -t "${modelTrunc}" \
-    -l "${modelNLevs}" \
-    -p "${modelPrefix}" \
-    -np "${gsiMPITasks}" \
-    -bc "${bc_cycle}"
 
+  # --- Build runGSI CLI (only supported flags) ---
+  # -I label, -T gsiTrunc (analysis trunc), -t modelTrunc (background trunc),
+  # -l modelNLevs, -p prefix, -np MPI, -bc BC index (0 for normal mode).
+  local argv=(
+    -I "${lbl}"
+    -T "${gsiTrunc}"
+    -t "${modelTrunc}"
+    -l "${modelNLevs}"
+    -p "${modelPrefix}"
+    -bc "${bc_cycle}"
+  )
+  [[ -n "${gnp:-}" ]] && argv+=(-np "${gnp}")
+
+  # --- Invoke runGSI (no wrapper; let runGSI handle submission/logging) ---
+  /bin/bash "${scripts_smg}/runGSI" "${argv[@]}"
   local rc=$?
+
   ((rc==0)) || _die 20 "GSI failed for %s (rc=%d)" "${lbl}" "${rc}"
   _log_info "GSI finished in %dm%02ds" "$((SECONDS/60))" "$((SECONDS%60))"
+  
 }
 #EOC
 
@@ -327,8 +415,14 @@ _spinup_bias_once() {
 _main() {
    
    local verbose=true
+ 
+  # 1) Parser global (__helpers__.sh) — flags comuns e HPC
+  __parse_args__ "$@" || exit $?
 
-  _parse_args "$@" || return 1
+  # 2) Local parser — only cycle flags, using leftover_args from the global parser
+  _parse_cycle_args "${leftover_args[@]}" || exit $?
+
+  # 3) Validate required options and derive defaults.
   _validate_required
 
   _log_info "Cycle window: %s → %s (step +6h)" "${LABELI}" "${LABELF}"

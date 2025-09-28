@@ -37,9 +37,12 @@
 #   -h, --help         Show this help extracted from #BOP/#EOP.
 #
 # !EXIT CODES:
-#   0  Success and >=1 files staged
-#   1  Usage / invalid arguments / unexpected error
-#   2  No files found to stage
+#   0  Success
+#   1  Usage / invalid arguments
+#   2  No work to do (e.g., no files to stage)
+#   3  Missing/invalid required option or env var
+#   4  Required input/source not found
+#   5  Could not create/write destination
 #
 # !ENVIRONMENT:
 #   ncep_ext               Default source root if --ncep-root not provided.
@@ -54,23 +57,48 @@
 #EOP
 #-----------------------------------------------------------------------------#
 #BOC
+# --- Exit codes (standardized) ---
+readonly EX_OK=0 EX_USAGE=1 EX_NOOP=2 EX_CONFIG=3 EX_NOINPUT=4 EX_CANTCREAT=5
 
-# --- Library directory (folder where this file lives) ---
-__SRC="${BASH_SOURCE[0]}"
-while [[ -L "$__SRC" ]]; do
-  __LINK="$(readlink -- "$__SRC")"
-  if [[ "$__LINK" = /* ]]; then
-    __SRC="$__LINK"
-  else
-    __SRC="$(cd -- "$(dirname -- "$__SRC")" && cd -- "$(dirname -- "$__LINK")" && pwd)/$(basename -- "$__LINK")"
+#BOP
+# !FUNCTION: ensure_smg_root
+# !DESCRIPTION: Discover project root by locating ".smg_root", export SMG_ROOT,
+#               and source "$SMG_ROOT/etc/__init__.sh" exactly once (idempotent).
+# !USAGE: Place near the top of any script and call: ensure_smg_root || exit $?
+# !NOTE: Requires bash; uses PWD/BASH_SOURCE and pwd -P (no readlink -f).
+#EOP
+#EOC
+# Ensure SMG_ROOT exists and initialize once
+ensure_root() {
+  local root_var="${1:?root_var required}" loaded_var="${2:?load_var required}"
+  local marker="${ROOT_MARKER:-.smg_root}" init_rel="${INIT_REL:-etc/__init__.sh}"
+  local src dir found init
+
+  # 1) Root discovery (only if not set or invalid)
+  if [[ -z "${!root_var:-}" || ! -f "${!root_var}/$marker" ]]; then
+    for src in "${BASH_SOURCE[@]:-"$0"}" "$PWD"; do
+      [[ -n "$src" ]] || continue
+      dir=$([[ -d "$src" ]] && cd -- "$src" && pwd -P || cd -- "$(dirname -- "$src")" && pwd -P) || return 1
+      while [[ "$dir" != "/" && ! -f "$dir/$marker" ]]; do dir="${dir%/*}"; done
+      if [[ -f "$dir/$marker" ]]; then found="$dir"; break; fi
+    done
+    [[ -n "${found:-}" ]] || { printf '[ERROR] %s not found\n' "$marker" >&2; return 1; }
+    printf -v "$root_var" %s "$found"; export "$root_var"
   fi
-done
-export RUN_OBSMAKE_DIR="$(cd -- "$(dirname -- "$__SRC")" && pwd -P)"
+  # 2) Sanity check for init
+  init="${!root_var}/${init_rel}"
+  [[ -r "$init" ]] || { printf '[ERROR] Missing %s\n' "$init" >&2; return 2; }
 
-# --- load init (which loads helpers) ---
-__init_path="${RUN_OBSMAKE_DIR}/__init__.sh"
-# shellcheck disable=SC1090
-. "$__init_path" || :        # no extra prints; don't break under set -e
+  # 3) Load init exactly once (idempotent)
+  if [[ "${!load_var:-0}" != 1 ]]; then
+    # shellcheck source=/dev/null
+    . "$init" || { printf '[ERROR] Failed to load %s\n' "$init" >&2; return 3; }
+    printf -v "$load_var" 1
+    export "$load_var"
+  fi
+}
+ensure_root SMG_ROOT SMG_INIT_LOADED || exit $?
+#EOC
 
 usage() {
   sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' "${BASH_SOURCE[0]}"
@@ -88,7 +116,7 @@ dest_dir="${subt_gsi_datain_obs:-}"
 #----------------------------- Parse options ---------------------------------#
 _with_strict_mode
 
-[[ $# -ge 1 ]] || { _log_err "Missing START_DATE."; usage; exit 1; }
+[[ $# -ge 1 ]] || { _log_err "Missing START_DATE."; usage; exit "$EX_USAGE"; }
 START_DATE="$1"; shift || true
 
 while [[ $# -gt 0 ]]; do
@@ -100,8 +128,8 @@ while [[ $# -gt 0 ]]; do
     --dry-run)   dry_run=true; shift ;;
     -v|--verbose) verbose=true; quiet=false; shift ;;
     -q|--quiet)  quiet=true; verbose=false; shift ;;
-    -h|--help)   usage; exit 0 ;;
-    *) err "Unknown option: $1"; usage; exit 1 ;;
+    -h|--help)   usage; exit "$EX_USAGE" ;;
+    *) err "Unknown option: $1"; usage; exit "$EX_USAGE" ;;
   esac
 done
 
@@ -123,10 +151,10 @@ fi
 
 #------------------------------ Validation -----------------------------------#
 [[ "${#START_DATE}" -eq 10 && "${START_DATE}" =~ ^[0-9]{10}$ ]] \
-  || die "START_DATE must be YYYYMMDDHH (10 digits): got '${START_DATE}'"
+  || _die "$EX_USAGE" "START_DATE must be YYYYMMDDHH (10 digits): got '${START_DATE}'"
 
-[[ -n "${ncep_root}" ]] || _die "--ncep-root not set and \$ncep_ext is empty."
-[[ -n "${dest_dir}"  ]] || _die "--dest not set and \$subt_gsi_datain_obs is empty."
+[[ -n "${ncep_root}" ]] || _die "$EX_CONFIG"  "--ncep-root not set and \$ncep_ext is empty."
+[[ -n "${dest_dir}"  ]] || _die "$EX_CONFIG"  "--dest not set and \$subt_gsi_datain_obs is empty."
 
 Y=${START_DATE:0:4}
 M=${START_DATE:4:2}
@@ -134,12 +162,17 @@ D=${START_DATE:6:2}
 #HH=${START_DATE:8:2}  # not used by current layout
 src_dir="${ncep_root}/${Y}/${M}/${D}"
 
-[[ -d "${src_dir}" ]] || _die "Source directory not found: ${src_dir}"
+[[ -d "${src_dir}" ]] || _die "$EX_NOINPUT" "Source directory not found: ${src_dir}"
 
 # Normalize destination and create it
 if [[ ! -d "${dest_dir}" ]]; then
-  $dry_run || mkdir -p -- "${dest_dir}"
-  _log_info "Created destination: ${dest_dir}"
+  if $dry_run; then
+    _log_info "Would create destination: ${dest_dir}"
+  else
+    mkdir -p -- "${dest_dir}" \
+      && _log_info "Created destination: ${dest_dir}" \
+      || _die "$EX_CANTCREAT" "Failed to create destination: ${dest_dir}"
+  fi
 fi
 
 #----------------------------- Staging files ---------------------------------#
@@ -165,7 +198,7 @@ while IFS= read -r -d '' path; do
       _log_info "cp -pf -- '$path' '$target'"
       ;;
     *)
-      _die "Invalid --mode '${mode}'. Use link|copy|hardlink."
+      _die "$EX_CONFIG" "Invalid --mode '${mode}'. Use link|copy|hardlink."
       ;;
   esac
   ((count++))
@@ -173,10 +206,9 @@ done < <(find -P "${src_dir}" -type f -size +0c -name "${pattern}" -print0)
 
 if (( count > 0 )); then
   _log_ok "Staged ${count} file(s) into ${dest_dir}."
-  exit 0
+  exit "$EX_OK"
 else
-  _log_err "No files found in ${src_dir} matching '${pattern}'."
-  exit 2
+  _die "$EX_CONFIG" "No files found in ${src_dir} matching '${pattern}'."
 fi
 
 #EOP

@@ -40,23 +40,35 @@
 #-----------------------------------------------------------------------------#
 #BOC
 
-# --- Library directory (folder where this file lives) ---
-__SRC="${BASH_SOURCE[0]}"
-while [[ -L "$__SRC" ]]; do
-  __LINK="$(readlink -- "$__SRC")"
-  if [[ "$__LINK" = /* ]]; then
-    __SRC="$__LINK"
-  else
-    __SRC="$(cd -- "$(dirname -- "$__SRC")" && cd -- "$(dirname -- "$__LINK")" && pwd)/$(basename -- "$__LINK")"
+#BOP
+# !FUNCTION: ensure_smg_root
+# !DESCRIPTION: Discover project root by locating ".smg_root", export SMG_ROOT,
+#               and source "$SMG_ROOT/etc/__init__.sh" exactly once (idempotent).
+# !USAGE: Place near the top of any script and call: ensure_smg_root || exit $?
+# !NOTE: Requires bash; uses PWD/BASH_SOURCE and pwd -P (no readlink -f).
+#EOP
+#EOC
+# Ensure SMG_ROOT exists and initialize once
+ensure_smg_root() {
+  local d s init
+  if [[ -z "${SMG_ROOT:-}" || ! -f "$SMG_ROOT/.smg_root" ]]; then
+    for s in "${BASH_SOURCE[@]}" "$PWD"; do
+      [[ -n "$s" ]] || continue
+      d=$([[ -d "$s" ]] && { cd -- "$s" && pwd -P; } || { cd -- "$(dirname -- "$s")" && pwd -P; })
+      while [[ "$d" != "/" ]]; do
+        [[ -f "$d/.smg_root" ]] && { SMG_ROOT="$d"; break 2; }
+        d="${d%/*}"
+      done
+    done
+    [[ -n "${SMG_ROOT:-}" ]] || { printf '[ERROR] .smg_root not found\n' >&2; return 1; }
   fi
-done
-export RUN_GSI_FUNCS_DIR="$(cd -- "$(dirname -- "$__SRC")" && pwd -P)"
-
-# --- load init (which loads helpers) ---
-__init_path="${RUN_GSI_FUNCS_DIR}/__init__.sh"
-# shellcheck disable=SC1090
-. "$__init_path" || :        # no extra prints; don't break under set -e
-
+  init="$SMG_ROOT/etc/__init__.sh"
+  [[ -r "$init" ]] || { printf '[ERROR] Missing %s\n' "$init" >&2; return 2; }
+  [[ "${SMG_INIT_LOADED:-0}" == 1 ]] || { . "$init" || { printf '[ERROR] Failed to load %s\n' "$init" >&2; return 3; }; SMG_INIT_LOADED=1; }
+  export SMG_ROOT SMG_INIT_LOADED
+}
+ensure_smg_root || exit $?
+#EOC
 
 # --- user defaults ---
 # --- Default logging verbosity (string boolean) ---
