@@ -1,0 +1,759 @@
+ &SETUP
+   !==========================================================================!
+   ! ▓▓▓ GSI RUNTIME CONFIGURATION – GENERAL SETUP BLOCK ▓▓▓
+   ! This namelist controls the general behavior of the GSI analysis system,  !
+   ! including diagnostics, loop structure, radiance handling, humidity       !
+   ! processing, bias correction, and preconditioning.                        !
+   !==========================================================================!
+   ! Verbose and diagnostic printing options
+   !
+   ! verbose        : Enables detailed output during the GSI run
+   ! print_obs_para : Prints the OBS_PARA configuration table for observation processing
+   !
+   verbose = .true.,       ! enable additional diagnostics on the gsi runtime output
+   print_obs_para = .true., ! turn on OBS_PARA list
+
+   !-------------------------------------------------------!
+   ! Analysis loops
+   ! miter          : Number of outer loops in the variational minimization
+   ! niter(i)       : Number of inner loop iterations for the i-th outer loop
+   ! niter_no_qc(i) : Same as niter(i), but no quality control applied during those iterations
+   
+   miter    =   2,
+   niter(1) =  50,
+   niter(2) = 100,
+   niter_no_qc(1) = 50,
+   niter_no_qc(2) =  0,
+   
+   !
+   !-------------------------------------------------------!
+   ! Write diagnostic files
+   !
+   !    The (miter + 1) diag file will contain innovations
+   ! with respect to analysis.
+   !
+   ! write_diag(1): Write diagnostic files with Observation minus Background (OmF)
+   ! write_diag(2): Write diagnostic files at intermediate step (optional)
+   ! write_diag(3): Write diagnostic files with Observation minus Analysis (OmA)
+   !
+   write_diag(1) = .true., ! (OmF)
+   write_diag(2) = .false.,
+   write_diag(3) = .true., ! (OmA)
+   !
+   !-------------------------------------------------------!
+   ! Humidity options
+   !
+   !    qoption : Set the moisture analysis variable:
+   !              (1) - the moisture analysis variable is pseudo-relative humidity. 
+   !                    The saturation specific humidity, qsatg, is computed from 
+   !                    the guess and held constant during the inner loop. Thus, 
+   !                    the relative humidity control variable can only change via 
+   !                    changes in specific humidity, q.
+   !              (2) - the moisture analysis variable is normalized relative humidity. 
+   !                    This formulation allows relative humidity to change in the 
+   !                    inner loop via changes to surface pressure, temperature, or 
+   !                    specific humidity.
+   !
+   !   factqmin : weighting factor for negative moisture constraint
+   !   factqmax : weighting factor for supersaturated moisture constraint
+   !   clip_supersaturation : flag to remove supersaturation during each outer loop
+   !
+   qoption  = 1,
+   factqmin = 0.005,
+   factqmax = 0.905,
+   clip_supersaturation = .true.,
+   !
+   !-------------------------------------------------------!
+   ! Miscellany setup options
+   !
+   ! center_name       : Label for center ("NCEP", "CPTEC", etc.)
+   ! iguess            : Initial guess mode (-1 = use background)
+   ! use_compress      : Apply compressibility correction to geopotential
+   ! oneobtest         : Run one-observation test mode
+   ! print_diag_pcg    : Enable printing diagnostics from PCG solver
+   ! lwrite_peakwt     : Output pressure level of peak radiance weighting function
+   ! lwrite_predterms  : Output bias correction predictors (not bias itself)
+   ! lread_obs_save    : Save obs selection info for reuse
+   ! lread_obs_skip    : Skip reading obs selection file (force fresh selection)
+   ! nsig_ext          : Number of extended model levels above top for GPSRO
+   ! gpstop            : Upper limit height for GPSRO usage (km)
+
+   center_name    = 'cptec',       ! NCEP or CPTEC
+   iguess         =  -1,           ! guess solution (currently not working)
+   use_compress   = .true.,        ! turn on the use of compressibility factors 
+                                   ! in geopotential heights
+   oneobtest      = .false.,        ! one observation test flag true=on
+   print_diag_pcg = .true.,        ! logical turn on of printing of GMAO diagnostics 
+                                   ! in pcgsoi.f90
+   lwrite_peakwt  = .true.,        ! write out the approximate pressure of the peak
+                                   ! of the weighting function for satellite data
+                                   ! to the radiance diagnostic files
+   lwrite_predterms=.true.,        ! write out actual predictor terms instead of predicted bias
+                                   ! to the radiance diagnostic files
+   lread_obs_save = .true.,        ! option to write out collective obs selection info
+   lread_obs_skip = .false.,       ! option to read in collective obs selection info
+   nsig_ext       = 12,            ! number of layers above the model top which 
+                                   ! are necessary to compute the bending angle for gpsro
+   gpstop         = 50.0,          ! Maximum height for gpsro data assimilation.
+                                   ! Reject anything above this height. (km)
+   !-------------------------------------------------------!
+   ! Cost function precondition options
+   !
+   ! step_start  : Initial step size in the minimization process
+   ! diag_precon : Enable diagnostic preconditioning (recommended)
+   ! newpc4pred  : Enhanced preconditioning for radiance bias predictor control vars
+
+   step_start     = 1.0e-4,        ! Initial stepSize in minimization (use if diag_precon = .false.)
+   diag_precon    = .true.,        ! do preconditioning
+   newpc4pred     = .true.,        ! option for additional preconditioning for pred coef
+   !
+   !
+   !-------------------------------------------------------!
+   ! Radiance bias correction and usage options 
+   !
+   ! adp_anglebc : Enable variational scan angle bias correction
+   ! angord      : Order of polynomial for scan angle bias correction
+   ! passive_bc  : Apply bias correction to passive/monitored channels
+   ! use_edges   : Exclude radiance data on scan edges (often noisy or unreliable)
+   ! emiss_bc    : Use emissivity bias predictors in VarBC
+   ! upd_pred    : Update bias correction coefficients (1 = evolve with time)
+   ! cwoption    : Cloud water treatment (3 = allow use of cloud water obs)
+
+   adp_anglebc    = .true.,       ! Perform variational angle bias correction
+   angord         = 4,            ! order of polynomial for variational angle bias correction
+   passive_bc     = .true.,       ! Turn on bias correction for passive (monitored) channels
+   use_edges      = .false.,      ! Exclude radiance data on scan edges.
+   emiss_bc       = .true.,       ! Turn on emissivity bias predictor
+   upd_pred       = 1,            ! bias update indicator for radiance bias correction; 
+                                  ! 1.0=bias correction coefficients evolve
+   cwoption=3,
+   !
+   !-------------------------------------------------------!
+ /
+
+&GRIDOPTS
+!------------------------------------------------------------------------------
+! GRIDOPTS – Grid and Spectral Resolution Configuration
+!
+! Defines the horizontal and vertical structure of the model background grid,
+! including spectral truncation, physical grid size and number of vertical levels.
+!
+! Parameters:
+!   JCAP     : Spectral truncation for spherical harmonics (controls resolution)
+!              For T254, JCAP = 254 (corresponds to ~50 km)
+!   JCAP_B   : Spectral truncation used in background error term (optional; usually = JCAP + 45)
+!   NLAT     : Number of Gaussian latitude points (must match background model)
+!   NLON     : Number of longitude points (must match background model)
+!   nsig     : Number of sigma (vertical) levels in the model
+!
+!   regional : .true. => use regional (LAM) grid; .false. => global spectral grid
+!   nlayers  : Optional override of structure function layering
+!              Specifies how many structure function layers each sigma level maps to
+!
+! Notes:
+! - JCAP and NLAT/NLON must be consistent with the background model resolution.
+! - Use of `nlayers()` is optional; can improve vertical localization in structure functions.
+! - In regional mode, spectral parameters (JCAP, JCAP_B) are ignored.
+!------------------------------------------------------------------------------
+
+   JCAP     = 254,        ! Spectral truncation (T254)
+   JCAP_B   = 299,        ! Truncation used in B-error representation
+   NLAT     = 386,        ! Gaussian latitudes (T254 → 2 * JCAP + 2)
+   NLON     = 768,        ! Longitudes (global grid)
+   nsig     = 64,         ! Number of vertical levels (sigma or hybrid)
+   regional = .false.,    ! Global spectral grid
+   nlayers(63) = 3,       ! Assign 3 vertical layers to sigma level 63
+   nlayers(64) = 6,       ! Assign 6 vertical layers to sigma level 64
+/
+
+&BKGERR
+!------------------------------------------------------------------------------
+! BKGERR – Background Error Structure Configuration
+!
+! This namelist block controls horizontal structure of background errors,
+! including vertical scales, spectral characteristics and flow dependence.
+!
+! Parameters:
+!   vs          : vertical structure weight for balance relationships (typical: 0.5–0.8)
+!   hzscl       : vertical correlation length scales for different regions (in model levels)
+!                 Usually specified as array: [tropopause, stratosphere, surface]
+!   hswgt       : weights associated with the correlation scales (must sum to 1.0)
+!   norsp       : spectral order (e.g., 4 = 4th order recursive filter)
+!   bkgv_flowdep: .true. => enables flow-dependent background variances (using ensemble)
+!   bkgv_rewgtfct: reweighting factor for ensemble-based variances (1.0–2.0 typical)
+!   cwcoveqqcov : .true. => use same error covariance for cloud water and specific humidity
+!
+! Notes:
+! - Flow-dependent B is used when hybrid or ensemble-based contributions are enabled.
+! - hzscl/hswgt define a 3-component (multi-scale) vertical correlation model.
+! - norsp = 4 is standard in operational GSI setups.
+! - cwcoveqqcov = .false. allows for distinct treatment of moisture and cloud water
+!------------------------------------------------------------------------------
+
+   vs            = 0.7,                    ! Weight for vertical correlation balance
+   hzscl         = 1.7, 0.8, 0.5,          ! Vertical correlation length scales (levels)
+   hswgt         = 0.45, 0.3, 0.25,        ! Weights for each vertical scale component
+   norsp         = 4,                      ! 4th-order recursive filter for spectral ops
+   bkgv_flowdep  = .true.,                 ! Enable flow-dependent variances
+   bkgv_rewgtfct = 1.5,                    ! Reweight factor for ensemble variances
+   cwcoveqqcov   = .false.,                ! Distinct Q and cloud water covariance
+/
+
+&ANBKGERR
+!------------------------------------------------------------------------------
+! ANBKGERR – Anisotropic Background Error Configuration
+!
+! This namelist block controls the use of an anisotropic formulation of the
+! background error covariance in the analysis.
+!
+! Parameters:
+!   anisotropic : .true. => activate anisotropic background error formulation
+!                .false. => use standard isotropic background errors (default)
+!
+! Optional (used only if anisotropic = .true.):
+!   normal      : correlation scale normalization flag
+!                 -200 => use recursive filter normalization
+!   rgaus       : array of Gaussian filter scales (in grid units) for each variable
+!                 (e.g., [0.5, 1.0, 2.0] for short to long scales)
+!   an_flen_u/t/z : scale length modifiers for u-, t-, and vertical (z) structure functions
+!                   = -1 disables; positive values define explicit length scales
+!
+! Notes:
+! - The anisotropic option allows scale-dependent background error structures.
+! - It is not typically used in standard 3DVar setups and may require tuning
+!   of additional parameters and support for structure functions.
+!------------------------------------------------------------------------------
+
+   anisotropic = .false.,  ! Disable anisotropic B-error formulation
+
+! Optional parameters (only used if anisotropic = .true.)
+!   normal      = -200,                  ! Recursive filter normalization
+!   rgaus       = 0.5, 1.0, 2.0,         ! Gaussian filter scale components
+!   an_flen_u   = -1,                    ! Disabled horizontal u-component scale
+!   an_flen_t   = -1,                    ! Disabled horizontal t-component scale
+!   an_flen_z   = -1,                    ! Disabled vertical scale
+/
+
+&JCOPTS
+!------------------------------------------------------------------------------
+! JCOPTS – Dry Pressure Constraint (Jc) Term in Cost Function
+!
+! Adds a weak constraint on the surface pressure increment in the analysis.
+! This helps control imbalance introduced by observations affecting pressure fields,
+! especially when surface pressure is poorly observed or over noisy terrain.
+!
+! Parameters:
+!   switch_on_derivatives : .true.  => allow derivatives of pressure term (required)
+!   tendsflag             : .true.  => include pressure tendency term in the cost function
+!   ljcpdry               : .true.  => activate the Jc dry pressure constraint
+!   bamp_jcpdry           : amplitude (penalty factor) for the pressure increment constraint
+!                           Larger values => stronger constraint on pressure increment
+!
+! Notes:
+! - Jc is most effective when used with hybrid ensemble-variational methods,
+!   but can be used in 3DVar as well to suppress spurious pressure changes.
+! - A value of bamp_jcpdry = 5.0e4 is considered moderate; adjust if pressure
+!   increments appear too weak or too strong in diagnostics.
+!------------------------------------------------------------------------------
+
+   switch_on_derivatives = .true.,  ! Enable derivative terms for JC
+   tendsflag   = .true.,            ! Include pressure tendency in cost function
+   ljcpdry     = .true.,            ! Apply dry pressure constraint
+   bamp_jcpdry = 5.0e4,             ! Penalty amplitude (Pa²)
+/
+
+&STRONGOPTS
+!------------------------------------------------------------------------------
+! Strong Constraint Options – Implicit Normal Mode Balance (INMB)
+!
+! Implements a dynamic constraint based on a simplified balance condition.
+! Useful for reducing gravity wave noise and improving mass-wind consistency.
+!
+! References:
+!   Temperton, C. (1989): Implicit normal mode initialization for spectral models.
+!     Mon. Wea. Rev., 117, 436–451.
+!   Kleist, D. T. (2009): Improving Incremental Balance in the GSI 3DVAR Analysis System.
+!     Mon. Wea. Rev., 137(3), 1046–1060.
+!
+! Parameters:
+!   tlnmc_option : 0 = no TLM NMC constraint; other values enable normal mode constraints
+!   nstrong      : Number of applications of strong constraint (usually 1 or 2)
+!   period_max   : Max period (hours) of retained balanced modes (longer = large-scale)
+!   period_width : Width (hours) of filter applied in spectral space
+!   nvmodes_keep : Number of vertical modes to retain in the balance (default ~8)
+!   baldiag_full : .true. => diagnostic output of full fields under constraint
+!   baldiag_inc  : .true. => diagnostic output of increment fields under constraint
+!
+! Notes:
+! - tlnmc_option=0 disables the constraint (default for 3DVAR).
+! - Strong constraints are more commonly used in 4DVAR and hybrid configurations.
+!------------------------------------------------------------------------------
+
+   tlnmc_option = 0,       ! Disable TLM normal mode constraint
+   nstrong      = 1,       ! Apply strong constraint once
+   period_max   = 6.0,     ! Upper cutoff period for balanced modes (hours)
+   period_width = 1.5,     ! Smoothing width of filter (hours)
+   nvmodes_keep = 8,       ! Vertical modes to retain in balance
+   baldiag_full = .false., ! Output full fields from balance operator
+   baldiag_inc  = .false., ! Output analysis increments from balance operator
+/
+
+&OBSQC
+!------------------------------------------------------------------------------
+! Observation Quality Control (QC) parameters
+!
+! dfact   : Error inflation factor applied to observation error variance.
+!           Typical range: 0.5 (strict QC) to 1.5 (more tolerant).
+! dfact1  : Additional error inflation factor for suspect observations.
+!           Typically set to 3.0 to strongly reduce weight of marginal obs.
+! noiqc   : .true.  => Disable variational QC; only apply traditional (residual-based) QC
+!           .false. => Enable variational QC (recommended in high-density scenarios)
+! c_varqc : Controls shape of variational QC cost function (e.g., 0.004 is default)
+! hub_norm: When .true., uses Huber norm distribution (robust to outliers).
+! nvqc    : Enables Purser’s nonlinear variational QC (commonly used).
+! vadfile : File containing VAD wind profiles (usually included in prepbufr)
+!
+! Notes:
+! - If noiqc = .true., the variational QC system is disabled and only threshold-based
+!   outlier rejection is used.
+! - Using noiqc = .false. and proper tuning of c_varqc leads to better performance,
+!   especially in the presence of non-Gaussian errors.
+! - Compared to the baseline (noiqc = .true.), this setup allows QC to be
+!   dynamically adjusted during minimization, reducing sensitivity to outliers.
+! - Huber norm and VarQC together prevent hard rejections, instead reweighting
+!   suspicious observations with reduced influence.
+!------------------------------------------------------------------------------
+
+   dfact   = 0.75,       ! Moderate error inflation
+   dfact1  = 3.0,        ! Strong penalty for suspect obs
+   noiqc   = .true.,     ! Variational QC disabled
+   c_varqc = 0.004,      ! Default setting for varQC cost function
+   vadfile = 'prepbufr', ! VAD wind profiles (if available)
+!------------------------------------------------------------------------------
+! Optional parameters (commented by default). Uncomment only if needed.
+!------------------------------------------------------------------------------
+
+!--- Error tables and blacklists ----------------------------------------------
+! oberrflg = .true.,        ! Read updated observation error table
+! blacklst = .true.,        ! Apply RAOB blacklist (problematic stations)
+
+!--- Choice of nonlinear/variational QC scheme -------------------------------
+! njqc     = .true.,        ! Purser nonlinear QC (legacy)
+! vqc      = .true.,        ! ECMWF nonlinear QC
+! nvqc     = .true.,        ! Purser-style variational QC
+! hub_norm = .true.,        ! Huber norm distribution (robust against outliers)
+!                            ! (Do not enable all at once: choose one coherent setup)
+!
+! Example if robust VarQC is desired:
+! noiqc   = .false.,
+! hub_norm= .true.,
+! nvqc    = .true.,
+! c_varqc = 1.5_r_kind      ! Faster VarQC tuning (adjust as needed)
+
+!--- Duplicate observations at same time/location -----------------------------
+! dfact   = 1.0_r_kind,     ! Base factor for duplicates (already set above)
+! dfact1  = 1.0_r_kind,     ! Time factor for duplicates (already set above)
+
+!--- GNSS-RO Jacobian QC ------------------------------------------------------
+! gps_jacqc = .true.,       ! QC using Jacobians for GNSSRO (avoids pathological cases)
+
+!--- Ozone Jacobians from IR sensors ------------------------------------------
+! qc_noirjaco3      = .true.,  ! Do not use O3 Jacobians in IR instruments
+! qc_noirjaco3_pole = .true.,  ! Do not use O3 Jacobians near poles
+
+!--- Satellite winds ----------------------------------------------------------
+! qc_satwnds = .true.,      ! Relax QC to avoid rejecting many mid-tropo AMVs
+
+!--- Aircraft temperature bias correction -------------------------------------
+! aircraft_t_bc       = .true., ! Apply aircraft T bias correction
+! aircraft_t_bc_pof   = .true., ! Use POF as predictor for bias correction
+! aircraft_t_bc_ext   = .true., ! Read aircraft bias correction from external file
+
+!--- Buddy check (surface, T2m) -----------------------------------------------
+! buddycheck_t   = .true.,   ! Enable buddy check for surface temperatures
+! buddydiag_save = .true.,   ! Save buddy check diagnostics
+
+!--- Radar / TDR error inflation ----------------------------------------------
+! erradar_inflate = 1.0_r_kind,  ! Inflate radar errors (increase to reduce overfit)
+! tdrerr_inflate  = .false.,     ! TDR error inflation flag
+
+!--- SBUV ozone ---------------------------------------------------------------
+! use_poq7 = .true.,        ! Accept SBUV profile quality flag 7
+
+!--- Tropical cyclone (regional models only) ---------------------------------
+! tcp_refps = 950.0,        ! Reference pressure for TCPS oberr calculation (mb)
+! tcp_width = 50.0,         ! Width for TCPS oberr inflation (mb)
+! tcp_ermin = 2.0,          ! Minimum oberr for TCPS (mb)
+! tcp_ermax = 8.0,          ! Maximum oberr for TCPS (mb)
+
+!--- Nonlinear transformations (visibility / ceiling) ------------------------
+! closest_obs  = .true.,    ! Choose obs closest in time at a station
+! pvis         = 0.5,       ! Power parameter for visibility transform
+! pcldch       = 0.5,       ! Power parameter for ceiling height transform
+! scale_cv     = 1000.0,    ! Scaling constant (m)
+! estvisoe     = 1000.0,    ! Estimated visibility obs error (m)
+! estcldchoe   = 50.0,      ! Estimated ceiling obs error (m)
+! vis_thres    = 500.0,     ! Threshold for visibility obs vs background (m)
+! cldch_thres  = 50.0,      ! Threshold for ceiling obs vs background (m)
+
+!--- Cloud detection interpretation -------------------------------------------
+! cld_det_dec2bin = .true., ! Reinterpret cld_det in satinfo as binary
+
+!--- OMPS LP -----------------------------------------------------------------
+! ompslp_mult_fact = 1.0,   ! Multiplication factor for OMPS LP obs error
+
+!--- Dynamic Observation Error (DOE) coefficients (regional/hurricane use) ----
+! q_doe_a_136  = 0.0,  q_doe_b_136  = 1.0,   ! Specific humidity DOE (type 136)
+! q_doe_a_137  = 0.0,  q_doe_b_137  = 1.0,   ! Specific humidity DOE (type 137)
+! t_doe_a_136  = 0.0,  t_doe_b_136  = 1.0,   ! Temperature DOE coefficients
+! t_doe_a_137  = 0.0,  t_doe_b_137  = 1.0,
+! uv_doe_a_236 = 0.0,  uv_doe_b_236 = 1.0,   ! Wind DOE (types 236/237/213)
+! uv_doe_a_237 = 0.0,  uv_doe_b_237 = 1.0,
+! uv_doe_a_213 = 0.0,  uv_doe_b_213 = 1.0,
+
+!--- New VAD observations -----------------------------------------------------
+! vad_near_analtime = .true.,  ! Assimilate new VAD obs only near analysis time
+/
+
+&OBS_INPUT
+!------------------------------------------------------------------------------
+! OBS_INPUT namelist block – observation ingest and preprocessing settings
+!
+! dmesh(i): Horizontal thinning distance (km) by observation type:
+!   dmesh(1) → conventional obs (e.g., prepbufr)
+!   dmesh(2) → satellite wind obs (e.g., satwndbufr)
+!   dmesh(3) → radiance obs (e.g., amsua, iasi, etc.)
+!
+!   Larger values mean more aggressive thinning (fewer obs retained).
+!   Typical values:
+!     - dmesh(1): 120–180 km
+!     - dmesh(2): 150–200 km
+!     - dmesh(3): 100–150 km
+!
+! time_window_max:
+!   Maximum time window (in hours) allowed between observation time
+!   and analysis time for obs to be accepted.
+!   Ex: 3.0 = accept obs within ±3h from analysis time
+!
+! Notes:
+! - The GSI uses a first guess at observation time (FGAT) system,
+!   so a larger time window is acceptable when FGAT is enabled.
+! - Thinning distance should be tuned based on resolution of the model
+!   and density of observations.
+!------------------------------------------------------------------------------
+
+   dmesh(1)=145.0,   ! Thinning for conventional obs
+   dmesh(2)=150.0,   ! Thinning for satellite winds
+   dmesh(3)=100.0,   ! Thinning for satellite radiances
+   time_window_max=3.0, ! Observation time window (hours)
+/
+
+OBS_INPUT::
+!-------------------------------------------------------------------------------
+! GSI OBS_INPUT configuration block
+! Each line describes a set of observations to be used in the analysis.
+!-------------------------------------------------------------------------------
+! dfile   : Input file or symbolic link
+! dtype   : Data type (e.g., 'ps', 't', 'q', 'uv', etc.)
+! dplat   : Platform/satellite (use 'null' for conventional)
+! dsis    : Dataset/sensor identifier string
+! dval    : 1.0 = use in assimilation; 0.0 = ignore
+! dthin   : Thinning flag (-1 = no thinning, 0 = default, 1 = thin obs)
+! dsfcalc : Recalculate surface pressure (0 = no, 1 = yes)
+!-------------------------------------------------------------------------------
+!
+!  Conventional Observations
+!  Surface and upper-air obs from PREPBUFR (ps, t, q, uv, sst, etc.)
+  'prepbufr'     'ps'         'null'      'ps'                1.0     0     0,  ! Surface pressure from SYNOP/SHIP
+  'prepbufr'     't'          'null'      't'                 1.0     0     0,  ! Temperature from radiosondes
+  'prepbufr'     'q'          'null'      'q'                 1.0     0     0,  ! Humidity from radiosondes
+  'prepbufr'     'uv'         'null'      'uv'                1.0     0     0,  ! Wind from conventional obs
+  'prepbufr'     'spd'        'null'      'spd'               1.0     0     0,  ! Wind speed (optional)
+  'prepbufr'     'dw'         'null'      'dw'                1.0     0     0,  ! Wind direction (optional)
+  'prepbufr'     'sst'        'null'      'sst'               1.0     0     0,  ! Sea surface temperature
+  'satwndbufr'   'uv'         'null'      'uv'                1.0     0     0,  ! Satellite-derived winds (AMVs)
+!
+!  GPS-RO (Radio Occultation)
+!  High-vertical-resolution bending angle profiles
+  'gpsrobufr'    'gps_bnd'    'null'      'gps'               1.0     0     0,  ! GNSS-RO bending angle profiles
+!
+! Microwave Temperature Sounders
+! Require CRTM, satinfo and satellite bias correction
+! 'amsubbufr'    'amsub'      'n17'       'amsub_n17'         0.0     1     1,  ! AMSU-B humidity sounder from NOAA
+! 'amsuabufr'    'amsua'      'n15'       'amsua_n15'         1.0     1     1,  ! AMSU-A radiances from NOAA-15
+! 'amsuabufr'    'amsua'      'n18'       'amsua_n18'         1.0     1     1,  ! AMSU-A radiances from NOAA-18
+! 'amsuabufr'    'amsua'      'n19'       'amsua_n19'         1.0     1     1,  ! AMSU-A radiances from NOAA-19
+! 'amsuabufr'    'amsua'      'metop-a'   'amsua_metop-a'     1.0     1     1,  ! AMSU-A from Metop-A
+  'amsuabufr'    'amsua'      'metop-b'   'amsua_metop-b'     1.0     1     1,  ! AMSU-A from Metop-B
+  'amsuabufr'    'amsua'      'metop-c'   'amsua_metop-c'     1.0     1     1,  ! AMSU-A from Metop-C
+!  
+  'atmsbufr'     'atms'       'npp'       'atms_npp'          1.0     1     0,  ! ATMS radiances from Suomi-NPP
+  'atmsbufr'     'atms'       'n20'       'atms_n20'          1.0     1     0,  ! ATMS from NOAA-20
+  'atmsbufr'     'atms'       'n21'       'atms_n21'          1.0     1     0,  ! ATMS from NOAA-21
+!
+!  High-resolution IR sounders (need CRTM and satbias_pc)
+! 'iasibufr'     'iasi'       'metop-a'   'iasi_metop-a'      0.0     1     0, ! IASI radiances from Metop-A
+! 'iasibufr'     'iasi'       'metop-b'   'iasi_metop-b'      0.0     1     0, ! IASI radiances from Metop-B
+! 'iasibufr'     'iasi'       'metop-c'   'iasi_metop-c'      0.0     1     0, ! IASI radiances from Metop-B
+! 'airsbufr'     'airs'       'aqua'      'airs_aqua'         0.0     1     1, ! AIRS radiances from Aqua
+! 'crisfsbufr'   'cris-fsr'   'npp'       'cris-fsr_npp'      0.0     1     0, ! CrIS FSR radiances from Suomi-NPP
+! 'crisfsbufr'   'cris-fsr'   'n20'       'cris-fsr_n20'      0.0     1     0, ! CrIS FSR from NOAA-20
+! 'crisbufr'     'cris'       'npp'       'cris_npp'          0.0     1     0, ! CrIS radiances from Suomi-NPP (nominal resolution)
+!
+!  Microwave imagers - surface-sensitive
+! 'ssmirrbufr'   'pcp_ssmi'   'dmsp'      'pcp_ssmi'          0.0    -1     0, ! SSM/I precipitation from DMSP
+! 'tmirrbufr'    'pcp_tmi'    'trmm'      'pcp_tmi'           0.0    -1     0, ! TRMM TMI precipitation
+! 'amsrebufr'    'amsre_low'  'aqua'      'amsre_aqua'        0.0     1     0, ! AMSR-E low freq from Aqua
+! 'amsrebufr'    'amsre_mid'  'aqua'      'amsre_aqua'        0.0     1     0, ! AMSR-E mid freq from Aqua
+! 'amsrebufr'    'amsre_hig'  'aqua'      'amsre_aqua'        0.0     1     0, ! AMSR-E high freq from Aqua
+! 'ssmisbufr'    'ssmis_las'  'f16'       'ssmis_f16'         0.0     1     0, ! SSMI/S lower sounding
+! 'ssmisbufr'    'ssmis_uas'  'f16'       'ssmis_f16'         0.0     1     0, ! SSMI/S upper sounding
+! 'ssmisbufr'    'ssmis_img'  'f16'       'ssmis_f16'         0.0     1     0, ! SSMI/S imaging channels
+! 'ssmisbufr'    'ssmis_env'  'f16'       'ssmis_f16'         0.0     1     0, ! SSMI/S environmental channels
+! 'ssmitbufr'    'ssmi'       'f15'       'ssmi_f15'          0.0     1     0, ! SSM/I radiances (surface winds, TPW) from DMSP-F15
+!
+!  Ozone and Stratospheric Observations – activate only if ozone is a prognostic variable
+! 'sbuvbufr'     'sbuv2'      'n19'       'sbuv8_n19'         0.0     0     0, ! SBUV/2 total ozone column from NOAA-19
+! 'gomebufr'     'gome'       'metop-a'   'gome_metop-a'      0.0     2     0, ! GOME ozone and trace gas profiles from Metop-A
+! 'gomebufr'     'gome'       'metop-b'   'gome_metop-b'      0.0     2     0, ! GOME ozone and trace gas profiles from Metop-B
+! 'omibufr'      'omi'        'aura'      'omi_aura'          0.0     2     0, ! OMI total ozone and vertical profiles from Aura
+! 'mlsbufr'      'mls30'      'aura'      'mls30_aura'        0.0     0     0, ! MLS temperature and water vapor profiles in the stratosphere from Aura
+!
+!  Geostationary Infrared Imagers – high temporal resolution radiance data
+! 'gimgrbufr'    'goes_img'   'g11'       'imgr_g11'          0.0     1     0, ! GOES-11 imager IR radiances
+! 'gimgrbufr'    'goes_img'   'g12'       'imgr_g12'          0.0     1     0, ! GOES-12 imager IR radiances
+! 'seviribufr'   'seviri'     'm08'       'seviri_m08'        0.0     1     0, ! SEVIRI radiances from MSG-8 (Meteosat Second Generation)
+! 'seviribufr'   'seviri'     'm09'       'seviri_m09'        0.0     1     0, ! SEVIRI radiances from MSG-9
+! 'seviribufr'   'seviri'     'm10'       'seviri_m10'        0.0     1     0, ! SEVIRI radiances from MSG-10
+!
+!  Radar and scatterometer obs
+! 'radarbufr'    'rw'         'null'      'l3rw'              0.0     0     0, ! Radar reflectivity (level 3)
+! 'l2rwbufr'     'rw'         'null'      'l2rw'              0.0     0     0, ! Radar reflectivity (level 2)
+! 'oscatbufr'    'uv'         'null'      'uv'                0.0     0     1, ! OSCAT ocean vector winds
+!
+! Legacy Sounders and Miscellaneous Data
+! 'hirs4bufr'    'hirs4'      'metop-a'   'hirs4_metop-a'     0.0     1     1, ! HIRS/4 radiances from Metop-A
+! 'hirs4bufr'    'hirs4'      'n19'       'hirs4_n19'         0.0     1     1, ! HIRS/4 radiances from NOAA-19
+! 'mhsbufr'      'mhs'        'n18'       'mhs_n18'           0.0     1     1, ! MHS humidity sounder from NOAA-18
+! 'mhsbufr'      'mhs'        'metop-a'   'mhs_metop-a'       0.0     1     1, ! MHS humidity sounder from Metop-A
+! 'mhsbufr'      'mhs'        'metop-b'   'mhs_metop-b'       0.0     1     0, ! MHS humidity sounder from Metop-B
+! 'mhsbufr'      'mhs'        'n19'       'mhs_n19'           0.0     1     1, ! MHS humidity sounder from NOAA-19
+! 'tcvitl'       'tcp'        'null'      'tcp'               0.0     0     0, ! Tropical cyclone position and intensity reports
+!
+!  GOES Sounder Radiances (IR channels D1–D4)
+! 'gsnd1bufr'    'sndrd1'     'g11'       'sndrD1_g11'        0.0     1     0, ! GOES-11 Sounder D1 channel
+! 'gsnd1bufr'    'sndrd2'     'g11'       'sndrD2_g11'        0.0     1     0,
+! 'gsnd1bufr'    'sndrd3'     'g11'       'sndrD3_g11'        0.0     1     0,
+! 'gsnd1bufr'    'sndrd4'     'g11'       'sndrD4_g11'        0.0     1     0,
+! 'gsnd1bufr'    'sndrd1'     'g12'       'sndrD1_g12'        0.0     1     0, ! GOES-12 Sounder D1 channel
+! 'gsnd1bufr'    'sndrd2'     'g12'       'sndrD2_g12'        0.0     1     0,
+! 'gsnd1bufr'    'sndrd3'     'g12'       'sndrD3_g12'        0.0     1     0,
+! 'gsnd1bufr'    'sndrd4'     'g12'       'sndrD4_g12'        0.0     1     0,
+! 'gsnd1bufr'    'sndrd1'     'g13'       'sndrD1_g13'        0.0     1     0, ! GOES-13 Sounder D1 channel
+! 'gsnd1bufr'    'sndrd2'     'g13'       'sndrD2_g13'        0.0     1     0,
+! 'gsnd1bufr'    'sndrd3'     'g13'       'sndrD3_g13'        0.0     1     0,
+! 'gsnd1bufr'    'sndrd4'     'g13'       'sndrD4_g13'        0.0     1     0,
+!
+::
+
+&SUPEROB_RADAR
+!------------------------------------------------------------------------------
+! SUPEROB_RADAR – Radar Superobbing Parameters
+!
+! This namelist controls how raw radar observations (Level 2 or 3) are thinned
+! and grouped into superobservations to reduce data volume and noise.
+!
+! Parameters:
+!
+! del_azimuth     : Azimuthal bin size (in degrees) for grouping radial beams
+! del_elev        : Elevation bin size (in degrees) for scan aggregation
+! del_range       : Radial range bin size (in meters)
+! del_time        : Time window (in hours) for grouping radar observations
+! elev_angle_max  : Maximum elevation angle (in degrees) to include in superobbing
+! minnum          : Minimum number of obs required to form a valid superob
+! range_max       : Maximum range (in meters) for radar data to be considered
+!
+! l2superob_only  : .true. => apply superobbing only to Level 2 radar (rw from l2rwbufr)
+!                   .false. => apply to all radar obs (including Level 3)
+!
+! Notes:
+! - These parameters are critical for performance in high-density radar assimilation.
+! - Typical settings for regional systems:
+!     del_azimuth = 5 deg
+!     del_range   = 5 km
+!     del_time    = 0.5 h
+! - Avoid using too coarse bins or high minnum, which can filter out important features.
+!------------------------------------------------------------------------------
+
+   del_azimuth     = 5.0,        ! Azimuthal bin (°)
+   del_elev        = 0.25,       ! Elevation bin (°)
+   del_range       = 5000.0,     ! Range bin (m)
+   del_time        = 0.5,        ! Time bin (hours)
+   elev_angle_max  = 5.0,        ! Max elevation angle to retain
+   minnum          = 50,         ! Min obs to form a superob
+   range_max       = 100000.0,   ! Max usable radar range (m)
+   l2superob_only  = .false.,    ! Include Level 3 as well
+/
+
+&LAG_DATA
+!------------------------------------------------------------------------------
+! LAG_DATA – Lagged Background States Configuration
+!
+! Used to assimilate background fields from multiple times (lagged ensembles).
+! Relevant primarily in hybrid ensemble-variational (EnVar) configurations.
+!
+! If left empty, GSI uses only the current-time background.
+!
+! Typical fields:
+!   n_lag      : number of lagged background states
+!   lag_time   : array of time offsets (in hours)
+!   lag_incr   : array of weights for lagged backgrounds
+!
+! Notes:
+! - Not used in standard 3DVar or FGAT configurations
+! - If hybrid EnKF is enabled (ens_hyb=.true.), lagged options can improve flow dependence
+!------------------------------------------------------------------------------
+
+/
+
+&HYBRID_ENSEMBLE
+!------------------------------------------------------------------------------
+! HYBRID_ENSEMBLE – Hybrid Ensemble-Variational Configuration
+!
+! This namelist enables and configures the hybrid ensemble assimilation,
+! which combines static background error covariance (B) with ensemble-derived B_ens.
+!
+! Parameters:
+!
+! l_hyb_ens : .true. => activate hybrid EnVar (3DEnVar or 4DEnVar)
+!
+! If enabled, additional required fields include:
+!   readin_beta  : method to compute ensemble weights (static vs adaptive)
+!   ens_nstarthr : time offset (in hours) to find ensemble files
+!   ...
+!
+! Notes:
+! - When l_hyb_ens = .false., GSI runs in pure 3DVar or 4DVar mode
+! - Requires appropriate ensemble mean and perturbation files
+! - Full hybrid functionality also needs &ENKF and ensemble directory structure
+!------------------------------------------------------------------------------
+
+   l_hyb_ens = .false.,  ! Disable hybrid EnVar (use pure Var analysis)
+/ 
+
+&RAPIDREFRESH_CLDSURF
+!------------------------------------------------------------------------------
+! RAPIDREFRESH_CLDSURF – Assimilation of Cloud and Surface Observations
+!
+! This block is designed for assimilation of cloud and surface data in
+! Rapid Refresh-style applications, e.g., hourly regional cycling systems.
+!
+! When left empty, these features are disabled.
+!
+! Typical parameters (used only if active):
+!   i_use_rapidrefresh_cldsurf : Enables cloud/sfc assimilation (default = 0)
+!   i_use_2m_rh                : Assimilate 2-m relative humidity
+!   i_use_2m_temp              : Assimilate 2-m temperature
+!   i_use_cld_cover            : Assimilate cloud cover from satellites or models
+!   i_use_cloudtop             : Assimilate cloud top pressure
+!   ...
+!
+! Notes:
+! - Requires external data like MODIS cloud top or model-derived cloud fields
+! - Integration with surface assimilation schemes (like STMAS or LSM) may be needed
+! - In global or conventional-only 3DVar systems, this block is typically unused
+!------------------------------------------------------------------------------
+
+/
+
+&CHEM
+!------------------------------------------------------------------------------
+! CHEM – Assimilation of Atmospheric Chemical Species
+!
+! This namelist enables assimilation of chemical constituents such as ozone.
+!
+! Typical parameters include:
+!   i_use_ozone       : Enables ozone assimilation (1 = on, 0 = off)
+!   i_use_co          : Enables CO assimilation (1 = on)
+!   i_use_no2         : Enables NO2 assimilation (1 = on)
+!   use_gocart_aod    : Assimilate aerosol optical depth from GOCART
+!   use_sat_aod       : Assimilate satellite-based AOD (MODIS, VIIRS, etc.)
+!   ...
+!
+! Notes:
+! - To assimilate ozone using SBUV or MLS, activate i_use_ozone and configure OBS_INPUT
+! - Requires model background to include ozone as prognostic variable
+! - Must coordinate with CRTM capabilities for ozone or aerosol optical depth
+! - Often used in combination with chemical transport models or aerosol-aware NWP
+!
+! When left blank, chemical assimilation is disabled (default for most GSI systems)
+!------------------------------------------------------------------------------
+
+/
+
+&NST
+!------------------------------------------------------------------------------
+! NST – Near-Surface Temperature Coupling Options
+!
+! This block configures the interface between the data assimilation system
+! and models of near-surface processes, such as:
+!   - NSST: Near-Surface Sea Temperature model (used in ocean-coupled DA)
+!   - LSM: Land Surface Model coupling
+!
+! Typical parameters:
+!   nst_gsi       : Flag to enable NSST coupling (1 = use NSST, 0 = disabled)
+!   nstinfo       : File containing NSST initial conditions
+!   use_nst_guess : Use NSST-based skin temperature in guess
+!   ...
+!
+! Notes:
+! - Leave blank if not using NSST or surface coupling schemes
+! - Important for systems where SST evolves with high-frequency observations
+! - Used in some operational GFS/GDAS configurations with NSST model
+!------------------------------------------------------------------------------
+
+/
+
+&SINGLEOB_TEST
+!------------------------------------------------------------------------------
+! SINGLEOB_TEST – Single Observation Experiment Configuration
+!
+! This namelist activates and configures a diagnostic test in which a single
+! synthetic observation is inserted into the system. This is commonly used to:
+!   - Test structure function behavior
+!   - Verify observation impact
+!   - Validate response of background error covariances
+!
+! Parameters:
+!
+!   maginnov   : Innovation magnitude (Obs − Background), in obs units
+!   magoberr   : Observation error assigned to the single observation
+!   oneob_type : Type of observation:
+!                  'ps' = surface pressure
+!                  't'  = temperature
+!                  'q'  = specific humidity
+!                  'uv' = wind components
+!                  'pw' = precipitable water
+!                  'oz' = ozone
+!
+!   oblat      : Latitude (°N) of the observation
+!   oblon      : Longitude (°E, 0–360) of the observation
+!   obpres     : Pressure level (hPa) of the observation
+!   obdattim   : Date/time of the observation (YYYYMMDDHH)
+!   obhourset  : Offset (in hours) relative to the analysis time
+!
+! Notes:
+! - SINGLEOB_TEST is only active if enabled in &SETUP via `oneobtest = .true.`
+! - To visualize the response, inspect increment fields or diagnostic outputs
+!------------------------------------------------------------------------------
+
+   maginnov   = 1.0,         ! Observation − Background innovation
+   magoberr   = 0.8,         ! Assigned observation error
+   oneob_type = 't',         ! Observation type: temperature
+   oblat      = 38.0,        ! Latitude of synthetic obs
+   oblon      = 279.0,       ! Longitude (279°E = 81°W)
+   obpres     = 500.0,       ! Pressure level (hPa)
+   obdattim   = 2020032818,  ! Date/time of observation (UTC)
+   obhourset  = 0.0,         ! Time offset from analysis (hours)
+/ 
+
