@@ -231,7 +231,7 @@ main() {
       ;;
   esac
 
-  _log "Workflow finished successfully."
+  _log_ok "Workflow finished successfully."
 }
 
 main "$@"
