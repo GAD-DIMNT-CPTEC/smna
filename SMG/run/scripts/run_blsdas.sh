@@ -8,7 +8,7 @@
 #
 # !DESCRIPTION: script para rodar o blsdas no ciclo do GSI+BAM
 #
-#      
+#
 #      ./runBldas <opções>
 #
 #         As <opções> válidas são:
@@ -25,7 +25,7 @@
 #     ./runBldas -t 299 -l 64 -d 2013010100 -Mnp 480
 
 #
-# !REVISION HISTORY: 
+# !REVISION HISTORY:
 # 07 May 2018 - J. G. de Mattos - Initial Version
 #
 # !REMARKS:
@@ -35,7 +35,10 @@
 #-----------------------------------------------------------------------------#
 #BOC
 # Carregando as variaveis do sistema
-source /lustre_xc50/joao_gerd/SMG/config_smg.ksh vars_export
+SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
+RootDir="$(dirname "$SCRIPT_PATH")"
+export SMG_ROOT=${RootDir}
+source ${SMG_ROOT}/../../config_smg.ksh vars_export
 
 subwrd ( ) {
    str=$(echo "${@}" | awk '{ for (i=1; i<=NF-1; i++) printf("%s ",$i)}')
@@ -106,10 +109,11 @@ if [ -z ${LABELI} ];then
    echo -e "\033[31;1m LABELI not set \033[m"
    exit 1
 else
-   LABELFGS=$(${inctime} ${LABELI} -6h %y4%m2%d2%h2)
+   ### LABELFGS=$(${inctime} ${LABELI} -6h %y4%m2%d2%h2)
+   LABELFGS=`date -u +%Y%m%d%H -d "${LABELI:0:8} ${LABELI:8:2} -6 hours" `
 fi
 
-# Numero de processadores que foram utilizados pelo BAM 
+# Numero de processadores que foram utilizados pelo BAM
 if [ -z ${MPITasks} ];then
    MPITasks=72
 fi
@@ -148,7 +152,7 @@ case ${TRC} in
    *)echo -e "\033[32;1m Truncamento desconhecido ${TRC} \033[m"
 esac
 
-MRES=$(printf "TQ%04dL%03d" ${TRC} ${LV}) 
+MRES=$(printf "TQ%04dL%03d" ${TRC} ${LV})
 LABL=$(printf "G%05d" ${JMax})
 
 # PBS
@@ -157,12 +161,12 @@ queue=pesq
 queue_name="BLSDAS${LABELI:6:10}"
 
 # Configurando os Diretorios
-# Considera-se que o sistema sera rodado no scratchin por isso tudo 
+# Considera-se que o sistema sera rodado no scratchin por isso tudo
 # sera configurado a partir do home do usuario no scratch1 (${SUBMIT_HOME})
 # Diretorio temporario para a rodada do SMG
 if [ ! -z ${subt_blsdas_run} ];then
    RunBLSDAS=${subt_blsdas_run}
-   if [ -e ${RunBLSDAS} ]; then 
+   if [ -e ${RunBLSDAS} ]; then
       rm -fr ${RunBLSDAS}/*
    else
       mkdir -p ${RunBLSDAS}
@@ -182,7 +186,7 @@ if [ ! -e ${work_blsdas_dataout} ];then
 fi
 if [ ! -L ${subt_blsdas_dataout} ];then
    rm -fr ${subt_blsdas_dataout}
-   ln -s ${work_blsdas_dataout} ${subt_blsdas_dataout}   
+   ln -s ${work_blsdas_dataout} ${subt_blsdas_dataout}
 fi
 
 # Copiando executavel do blsdas para o diretorio de rodada
@@ -297,9 +301,8 @@ qsub -W block=true blsdas.qsub
 
 # Copy file to model datain
 File=$(echo $SfcANL | sed -e "s/%y4%m2%d2%h2/${LABELI}/g")
-cp -pvfr ${File} ${subt_model_bam_datain} 
+cp -pvfr ${File} ${subt_model_bam_datain}
 
 exit 0
 #EOC
 #-----------------------------------------------------------------------------#
-

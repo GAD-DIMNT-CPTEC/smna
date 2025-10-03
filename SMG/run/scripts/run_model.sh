@@ -1,156 +1,238 @@
-#! /bin/bash
-
-# Descomentar para debugar
-#set -o xtrace
-
-
-# Carregando as variaveis do sistema
-source /lustre_xc50/joao_gerd/SMG/config_smg.ksh vars_export
-
-# carregando funcoes do pre-processamento
-
-source ${home_run_bam}/runPre.func
-
-# Verificando argumentos de entrada
-if [ -z "${1}" ]
-then
-  echo "LABELANL is not set" 
-  exit 3
-else
-  export LABELANL=${1}
-fi
-if [ -z "${2}" ]
-then
-  echo "LABELFCT is not set" 
-  exit 3
-else
-  export LABELFCT=${2} 
-fi
-if [ -z "${3}" ]
-then
-  echo "PREFIX is not set" 
-  exit 3
-else
-  export PREFIX=${3}
-fi
-if [ -z "${4}" ]
-then
-  echo "TRC is not set" 
-  exit 3
-else
-  export TRC=${4}
-fi
-if [ -z "${5}" ]
-then
-  echo "NLV is not set" 
-  exit 3
-else
-  export NLV=${5}
-fi
-if [ -z "${6}" ]
-then
-  echo "NPROC is not set"
-  echo "setting to 480"
-  export NPROC=480
-else
-  export NPROC=${6}
-fi
-if [ "$#" == 7 ]
-then 
-  export RUNPOS=$(echo ${7} | tr [:upper:] [:lower:])   
-else 
-  export RUNPOS="yes"
-fi
-
-getBAMSize ${TRC}
-export postfix=$(printf "G%5.5dL%3.3d \n" $JM $NLV)
-export MRES=`echo ${TRC} ${NLV} | awk '{printf("TQ%4.4dL%3.3d\n",$1,$2)}'`
-export ANL="GANL${PREFIX}${LABELANL}S.unf.${MRES}"
-export LABELFGS=`${inctime} ${LABELANL} +6h %y4%m2%d2%h2`
-export YESTERDAY=$(${inctime} ${LABELANL} -1d %y4%m2%d200)
-export modelDataIn=${subt_model_bam}/datain
-export gsiDataOut=${subt_gsi_dataout}/${LABELANL}
-
-echo -e ""
-echo -e "\033[34;1m >> Submetendo o MCGA:\033[m \033[31;1m${LABELANL}\033[m"
-echo -e " "
-echo -e "\033[34;1m > Resolucao (espectral) : \033[m \033[31;1m${MRES}\033[m"
-echo -e "\033[34;1m > Resolucao (grade)     : \033[m \033[31;1m${postfix}\033[m"
-echo -e "\033[34;1m > Condicao Inicial      : \033[m \033[31;1m${LABELANL}\033[m"
-echo -e "\033[34;1m > Previsao ate          : \033[m \033[31;1m${LABELFCT}\033[m"
-echo -e "\033[34;1m > Pos-proc. Ativado     : \033[m \033[31;1m${RUNPOS}\033[m"
-
+#!/usr/bin/env bash
+#BOP
+# !SCRIPT: run_bam_cycle.sh
+# !DESCRIPTION:
+#   Orquestra o pré-processamento (chopping de ozônio + pré completo), execução do
+#   modelo BAM e pós-processamento opcional, consumindo a análise do GSI.
+#   Mantém a convenção de argumentos posicionais:
+#     1) LABELANL (YYYYMMDDHH)
+#     2) LABELFCT (YYYYMMDDHH)
+#     3) PREFIX   (ex.: SMT/GA... conforme teu fluxo)
+#     4) TRC      (truncamento espectral, ex.: 299)
+#     5) NLV      (n níveis, ex.: 64)
+#     6) NPROC    (ntasks; default: egeon=64, XC50=480)
+#     7) RUNPOS   (yes|y para ativar pós; default yes)
 #
-# mudando para diretorio dos scripts do BAM
+# !USAGE:
+#   ./run_bam_cycle.sh 2025010100 2025010200 SMT 299 64 64 yes
 #
+# !NOTES:
+#   - Este script resolve o diretório do runPre.func e carrega o arquivo
+#     EnvironmentalVariables “irmão” do runPre.func.
+#   - Requer que getBAMSize e getMPIinfo estejam disponíveis após o source.
+#   - Usa GNU date para aritmética de datas.
+#EOP
+####################################################################################
+#BOP
+# !FUNCTION: ensure_smg_root
+# !DESCRIPTION: Discover project root by locating ".smg_root", export SMG_ROOT,
+#               and source "$SMG_ROOT/etc/__init__.sh" exactly once (idempotent).
+# !USAGE: Place near the top of any script and call: ensure_smg_root || exit $?
+# !NOTE: Requires bash; uses PWD/BASH_SOURCE and pwd -P (no readlink -f).
+#EOP
+#EOC
+# Ensure SMG_ROOT exists and initialize once
+ensure_smg_root() {
+  local d s init
+  if [[ -z "${SMG_ROOT:-}" || ! -f "$SMG_ROOT/.smg_root" ]]; then
+    for s in "${BASH_SOURCE[@]}" "$PWD"; do
+      [[ -n "$s" ]] || continue
+      d=$([[ -d "$s" ]] && { cd -- "$s" && pwd -P; } || { cd -- "$(dirname -- "$s")" && pwd -P; })
+      while [[ "$d" != "/" ]]; do
+        [[ -f "$d/.smg_root" ]] && { SMG_ROOT="$d"; break 2; }
+        d="${d%/*}"
+      done
+    done
+    [[ -n "${SMG_ROOT:-}" ]] || { printf '[ERROR] .smg_root not found\n' >&2; return 1; }
+  fi
+  init="$SMG_ROOT/etc/__init__.sh"
+  [[ -r "$init" ]] || { printf '[ERROR] Missing %s\n' "$init" >&2; return 2; }
+  [[ "${SMG_INIT_LOADED:-0}" == 1 ]] || { . "$init" || { printf '[ERROR] Failed to load %s\n' "$init" >&2; return 3; }; SMG_INIT_LOADED=1; }
+  export SMG_ROOT SMG_INIT_LOADED
+}
+ensure_smg_root || exit $?
+#EOC
 
-cd ${home_run_bam}
+# --------------- Carregar runPre.func e EnvironmentalVariables ------- #
+load_runpre_and_env() {
+  # runPre.func pode estar no ${home_run_bam} (definido por env) ou ao lado
+  if [[ -n "${home_run_bam:-}" && -f "${home_run_bam}/runPre.func" ]]; then
+    RUNPRE_FUNC="${home_run_bam}/runPre.func"
+  elif [[ -f "./runPre.func" ]]; then
+    RUNPRE_FUNC="./runPre.func"
+  else
+    die "runPre.func not found (searched in \${home_run_bam} and ./)"
+  fi
+  # shellcheck source=/dev/null
+  source "${RUNPRE_FUNC}"
 
-#
-# rodando o somente o Chopping do pré para pegar o arquivo de ozônio
-#
+  # EnvironmentalVariables “irmão” do runPre.func
+  RUNPRE_DIR="$(cd -- "$(dirname -- "${RUNPRE_FUNC}")" && pwd -P)"
+  ENV_FILE="${RUNPRE_DIR}/EnvironmentalVariables"
+  [[ -f "${ENV_FILE}" ]] || die "EnvironmentalVariables not found at ${ENV_FILE}"
+  # shellcheck source=/dev/null
+  source "${ENV_FILE}"
 
+  # Sanidade: funções requeridas
+  for fn in getBAMSize getMPIinfo; do
+    type -t "${fn}" >/dev/null 2>&1 || die "Required function '${fn}' not found after sourcing env."
+  done
+}
 
-/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -s -n 2 -O
-STATUS=$?
-if [ ${STATUS} -ne 0 ];then
-   exit ${STATUS}
-fi
+# ---------------------- Parse dos argumentos ------------------------ #
+parse_args() {
+  if [[ $# -lt 5 ]]; then
+    cat >&2 <<'USAGE'
+[ERROR] Missing required arguments.
 
+USAGE:
+  run_bam_cycle.sh LABELANL LABELFCT PREFIX TRC NLV [NPROC] [RUNPOS]
 
-mv -f ${modelDataIn}/OZONSMT${LABELANL}S.grd.${postfix} ${modelDataIn}/OZON${PREFIX}${LABELANL}S.grd.${postfix}
-
-#
-# remove arquivos desnecessarios
-#
-
-rm -fr ${modelDataIn}/GANLSMT${LABELANL}S.unf.*
-rm -fr ${modelDataIn}/OZONSMT${LABELANL}S.unf.*
-
-#
-# Copiando Analise do GSI para o Model/DataIn
-#
-
-cp -pfr ${gsiDataOut}/GANL${PREFIX}${LABELANL}S.unf.${MRES} ${modelDataIn}
-
-#
-# Rodando os demais processos do pré e usando a análise do GSI
-#
-
-/bin/bash runPre -v -t ${TRC} -l ${NLV} -I ${LABELANL} -p CPT -n 3
-STATUS=$?
-if [ ${STATUS} -ne 0 ];then
-   exit ${STATUS}
-fi
-
-# Rodando o Modelo
-
-/bin/bash runModel -das -v -np ${NPROC} -N 10 -d 4 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -W  ${LABELFCT} -p ${PREFIX} -s sstwkl -ts 3 -r -tr 6 -i -3
-STATUS=$?
-if [ ${STATUS} -ne 0 ];then
-   exit ${STATUS}
-fi
-
-# Pos-processa as previsoes caso a variavel RUNPOS possua o valor Yes ou Y
-if [ ${RUNPOS} == "yes" -o ${RUNPOS} == "y" ]
-then
-
-  # Verifica se o executavel se encontra em ${subt_pos_bam_run}
-  if [ ! -e ${subt_pos_bam}/exec/PostGrib ]
-  then 
-  
-    cp -v ${home_pos_bam}/source/PostGrib ${subt_pos_bam}/exec
-  
+ARGS:
+  LABELANL  Analysis datetime (YYYYMMDDHH)
+  LABELFCT  Forecast end datetime (YYYYMMDDHH)
+  PREFIX    Background prefix (e.g., SMT)
+  TRC       Spectral truncation (e.g., 299)
+  NLV       Number of levels (e.g., 64)
+  NPROC     (optional) ntasks; default depends on HPC (egeon=64, XC50=480)
+  RUNPOS    (optional) yes|y to enable post; default yes
+USAGE
+    exit 3
   fi
 
-  cd ${home_run_bam}
-  echo   "./runPos -np 120 -N 12 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1"
-  /bin/bash runPos -np 120 -N 12 -d 1 -t ${TRC} -l ${NLV} -I ${LABELANL} -F ${LABELFCT} -p ${PREFIX} > /dev/null 2>&1
-  STATUS=$?
-   if [ ${STATUS} -ne 0 ];then
-      exit ${STATUS}
-   fi
+  LABELANL="$1"; export LABELANL
+  LABELFCT="$2"; export LABELFCT
+  PREFIX="$3";   export PREFIX
+  TRC="$4";      export TRC
+  NLV="$5";      export NLV
 
-fi
+  # NPROC: default por plataforma
+  if [[ $# -ge 6 && -n "${6:-}" ]]; then
+    NPROC="$6"
+  else
+    case "${hpc_name}" in
+      egeon) NPROC=64  ;;
+      XC50)  NPROC=480 ;;
+      *)     NPROC=64  ;; # fallback
+    esac
+    _warn "NPROC not provided; defaulting to ${NPROC} for ${hpc_name}"
+  fi
+  export NPROC
 
-exit 0
+  # RUNPOS normalizado (default yes)
+  if [[ $# -ge 7 && -n "${7:-}" ]]; then
+    RUNPOS="$(printf '%s' "${7}" | tr '[:upper:]' '[:lower:]')"
+  else
+    RUNPOS="yes"
+  fi
+  export RUNPOS
+}
+
+# --------------------- Resolver layout MPI/OMP ---------------------- #
+resolve_mpi_layout() {
+  # Defaults locais (respeita overrides do ambiente se existirem)
+  : "${tasks_per_node:=16}"
+  : "${cpus_per_task:=8}"
+
+  # Pede ao helper calcular e validar
+  getMPIinfo -np "${NPROC}" -N "${tasks_per_node}" -d "${cpus_per_task}" || \
+    die "getMPIinfo failed"
+
+  # Aderir aos nomes resolvidos pelo helper
+  tasks_per_node="${TasksPerNode}"
+  cpus_per_task="${ThreadsPerMPITask}"
+}
+
+# -------------------------- Execução principal ---------------------- #
+main() {
+  ensure_smg_root
+  load_runpre_and_env
+  parse_args "$@"
+  resolve_mpi_layout
+
+  # getBAMSize define JM (usado para postfix)
+  getBAMSize "${TRC}"
+
+  postfix="$(printf 'G%5.5dL%3.3d' "${JM}" "${NLV}")"
+  export postfix
+
+  MRES="$(printf 'TQ%4.4dL%3.3d' "${TRC}" "${NLV}")"
+  export MRES
+
+  ANL="GANL${PREFIX}${LABELANL}S.unf.${MRES}"
+  export ANL
+
+  # LABELFGS = LABELANL + 6h; YESTERDAY = YYYYMMDD00 do dia anterior
+  LABELFGS="$(date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} +6 hours")"
+  YESTERDAY="$(date -u +%Y%m%d00 -d "${LABELANL:0:8} ${LABELANL:8:2} -1 days")"
+  export LABELFGS YESTERDAY
+
+  # Pastas de I/O (vindas do ENV_FILE)
+  : "${subt_model_bam:?subt_model_bam is required}"
+  : "${subt_gsi_dataout:?subt_gsi_dataout is required}"
+
+  modelDataIn="${subt_model_bam}/datain"
+  gsiDataOut="${subt_gsi_dataout}/${LABELANL}"
+  export modelDataIn gsiDataOut
+
+  printf '\n\033[34;1m >> Submetendo o MCGA:\033[m \033[31;1m%s\033[m\n\n' "${LABELANL}"
+  printf '\033[34;1m > Resolucao (espectral) :\033[m \033[31;1m%s\033[m\n' "${MRES}"
+  printf '\033[34;1m > Resolucao (grade)     :\033[m \033[31;1m%s\033[m\n' "${postfix}"
+  printf '\033[34;1m > Condicao Inicial      :\033[m \033[31;1m%s\033[m\n' "${LABELANL}"
+  printf '\033[34;1m > Previsao ate          :\033[m \033[31;1m%s\033[m\n' "${LABELFCT}"
+  printf '\033[34;1m > Pos-proc. Ativado     :\033[m \033[31;1m%s\033[m\n' "${RUNPOS}"
+
+  # Vai para o diretório de execução do BAM
+  cd -- "${home_run_bam:?home_run_bam is required}"
+
+#  # 1) Pré (apenas chopping de ozônio); saída em bam/model/datain/
+#  /bin/bash runPre -v -t "${TRC}" -l "${NLV}" -I "${LABELANL}" -s -n chp -O
+#  _log_info "1st call to runPre completed."
+#
+#  # Copia OZONSMT -> OZON${PREFIX}
+#  cp -f -- "${modelDataIn}/OZONSMT${LABELANL}S.grd.${postfix}" \
+#            "${modelDataIn}/OZON${PREFIX}${LABELANL}S.grd.${postfix}"
+#
+#  # Limpa arquivos desnecessários
+#  rm -f -- "${modelDataIn}/GANLSMT${LABELANL}S.unf."* || true
+#  rm -f -- "${modelDataIn}/OZONSMT${LABELANL}S.unf."* || true
+
+  # 2) Copia análise do GSI para o Model/DataIn
+  cp -fp -- "${gsiDataOut}/GANL${PREFIX}${LABELANL}S.unf.${MRES}" "${modelDataIn}/"
+  _log_info "GSI analysis staged into modelDataIn."
+
+  # 3) Pré completo (usando a análise do GSI)
+  /bin/bash runPre -v -t "${TRC}" -l "${NLV}" -I "${LABELANL}" -p "${PREFIX}" -n das
+  _log_info "2nd call to runPre (full pre) completed."
+
+  # 4) Rodar o Modelo
+  /bin/bash runModel -das -v \
+    -np "${NPROC}" -N "${tasks_per_node}" -d "${cpus_per_task}" \
+    -t "${TRC}" -l "${NLV}" -I "${LABELANL}" -F "${LABELFCT}" -W "${LABELFCT}" \
+    -p "${PREFIX}" -s sstwkl -ts 3 -r -tr 6 -i 2
+
+  # 5) Pós-processamento opcional
+  case "${RUNPOS}" in
+    yes|y)
+      # Garante executável de pós em ${subt_pos_bam}/exec/PostGrib
+      if [[ ! -x "${subt_pos_bam}/exec/PostGrib" ]]; then
+        cp -v -- "${home_pos_bam}/exec/PostGrib" "${subt_pos_bam}/exec/"
+      fi
+
+      cd -- "${home_run_bam}"
+      _log_info "Starting runPos..."
+      /bin/bash runPos -np 15 -N 3 -d 8 \
+        -t "${TRC}" -l "${NLV}" -I "${LABELANL}" -F "${LABELFCT}" -p "${PREFIX}" \
+        > /dev/null 2>&1
+      _log_info "runPos completed."
+      ;;
+    *)
+      _log_info "Post-processing disabled by RUNPOS='${RUNPOS}'."
+      ;;
+  esac
+
+  _log_ok "Workflow finished successfully."
+}
+
+main "$@"
+

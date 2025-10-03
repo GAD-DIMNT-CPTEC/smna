@@ -1,0 +1,31 @@
+#-----------------------------------------------------#
+# List of available observation files and yours alias #
+#-----------------------------------------+-----------#
+#              File Name                  |  alias    #
+#-----------------------------------------+-----------#
+OBS_FILES::
+gdas.t%h2z.airsev.tm00.bufr_d   airsbufr
+gdas.t%h2z.1bamua.tm00.bufr_d   amsuabufr
+gdas.t%h2z.1bamub.tm00.bufr_d   amsubbufr
+gdas.t%h2z.1bhrs3.tm00.bufr_d   hirs3bufr
+gdas.t%h2z.1bhrs4.tm00.bufr_d   hirs4bufr
+gdas.t%h2z.1bmhs.tm00.bufr_d    mhsbufr
+gdas.t%h2z.amsre.tm00.bufr_d    amsrebufr
+gdas.t%h2z.goesfv.tm00.bufr_d   gsnd1bufr
+gdas.t%h2z.gpsro.tm00.bufr_d.nr gpsrobufr
+gdas.t%h2z.mtiasi.tm00.bufr_d   iasibufr
+gdas.t%h2z.ncepssmit.tm00.bufr_d ssmitbufr
+gdas.t%h2z.osbuv.tm00.bufr_d    sbuvbufr
+gdas.t%h2z.sptrmm.tm00.bufr_d   tmirrbufr
+gdas.t%h2z.spssmi.tm00.bufr_d   ssmirrbufr
+gdas.t%h2z.prepbufr.nr          prepbufr
+gdas.t%h2z.osbuv8.tm00.bufr_d   sbuvbufr
+gdas.t%h2z.avcs18.tm00.bufr_d   avh18bufr
+gdas.t%h2z.avcsmeta.tm00.bufr_d avhmabufr
+gdas.t%h2z.esamua.tm00.bufr_d   amsuabufrears
+gdas.t%h2z.esamub.tm00.bufr_d   amsubbufrears
+gdas.t%h2z.eshrs3.tm00.bufr_d   hirs3bufrears
+gdas.t%h2z.geoimr.tm00.bufr_d   geoimr
+gdas.t%h2z.satwnd.tm00.bufr_d   satwndbufr
+gdas.t%h2z.atms.tm00.bufr_d     atmsbufr
+::

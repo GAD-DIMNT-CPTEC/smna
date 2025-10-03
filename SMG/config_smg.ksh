@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 #-----------------------------------------------------------------------------#
 #           Group on Data Assimilation Development - GDAD/CPTEC/INPE          #
 #-----------------------------------------------------------------------------#
@@ -6,91 +6,92 @@
 #
 # !SCRIPT: config_smg.sh
 #
-# !DESCRIPTION: Script utilizado para a configuracao e instacao do SMG
+# !DESCRIPTION:
+#   Script used for SMG configuration and installation.
 #
-# !CALLING SEQUENCE: ./config_smg.sh <opcoes>
-#                    nota: Para saber mais sobre as opcoes disponiveis
-#                          execute ./config_smg.sh ajuda
+# !CALLING SEQUENCE:
+#   ./config_smg.sh <option>
+#   To learn more about the available options, execute:
+#   ./config_smg.sh help
 #
 # !REVISION HISTORY:
 #
-#    ?? ??? ???? - ??????????????? - Initial Version
-#    20 Dec 2017 - J. G. de Mattos - separa em diferentes arquivos
-#                                    * etc/paths.sh -> caminhos
-#                                    * etc/functions.sh -> funcoes
+#   20 Dec 2017 - J. G. de Mattos - Initial Version
+#   Oct 2023 - J. A. Aravequia - Added HPC system identification
 #
 # !REMARKS:
-#  
-#    * Os caminhos do SMG estao contidos no arquivo etc/paths.sh
-#    * As funcoes que podem ser executadas estao no arquivo etc/functions.sh
+#   - SMG paths are defined in etc/paths.sh
+#   - Functions are contained in etc/smg_setup.sh
 #
 #EOP
 #-----------------------------------------------------------------------------#
 #BOC
+# Resolve absolute path to this script (no symlink issues)
+SMG_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+export SMG_ROOT
 
-RootDir=$(dirname ${BASH_SOURCE})
-. ${RootDir}/etc/functions.sh
+[[ -t 1 ]] && { C_ERR=$'\033[1;31m'; C_RST=$'\033[0m'; } || { C_INFO=; C_RST=; }
+init="$SMG_ROOT/etc/__init__.sh"
+[[ -r "$init" ]] || { printf '%s[ERROR]%s Missing %s\n' "$C_ERR" "$C_RST" "$init" >&2; exit 2; }
+. "$init" || { printf '%s[ERROR]%s Failed to load %s\n' "$C_ERR" "$C_RST" "$init" >&2; exit 3; }
 
-#
-# Verifica os argumentos passados junto com o script
-# 
+#BOP
+# !FUNCTION: execute_function
+# !DESCRIPTION:
+#   Verifies if the function exists in `smg_setup.sh` and executes it.
+#   Passes all arguments to the function, not just the name.
+#EOP
+execute_function() {
+    local function_name=$1
+    shift  # Remove function name to pass only actual arguments
+    # Debug prints should go through the logging helpers; raw echo here is noisy.
+    # _dump_cli "$@"   # uncomment if you want an argv snapshot here
+    if declare -f "$function_name" > /dev/null; then
+        _log_debug "Running: $function_name $*"
+        "$function_name" "$@"  # Execute function with all remaining arguments
+        local exit_code=$?
+        if [[ $exit_code -ne 0 ]]; then
+            _log_err "Function $function_name failed with exit code $exit_code."
+            exit $exit_code
+        fi
+    else
+        _log_err "Unknown option: $function_name"
+        if declare -F show_help >/dev/null 2>&1; then
+            show_help "$SMG_ROOT/etc/smg_setup.sh"
+        else
+            echo "Available commands:"
+            # fallback simples
+            declare -F | awk '{print $3}' | grep -vE '^(execute_function|main|_|show_help|get_doc|list_funcs|get_help_block|show_help_func)$' | sort
+        fi
+        exit 1
+    fi
 
-echo -e ""
-echo -e "\e[36;1m >>> ${BASH_SOURCE##*/} executado a partir de\e[m \e[32;1m${0##*/}\e[m"
+}
+#BOP
+# !FUNCTION: main
+# !DESCRIPTION:
+#   Main execution logic of the script, handling input arguments.
+#EOP
+main() {
 
-if [ $# = 0 ];then
-  echo -e ""
-  echo -e "\e[31;1m > Nao foi passado nenhum argumento! \e[m"
-  ajuda
-  banner
-  exit -1
-fi
+    # Load functions from the external file
+    export SMG_SETUP_AS_LIBRARY=1
+    source "${SMG_ROOT}/etc/smg_setup.sh"
+    unset SMG_SETUP_AS_LIBRARY
+    
+    # Default values if not set by the user
+    export compgsi=${compgsi:-false}
+    export compang=${compang:-false}
+    export compbam=${compbam:-false}
+    export compinctime=${compinctime:-false}
+    # _dump_cli "$@"   # uncomment for a one-line argv dump at entry
 
-echo -en "\e[34;1m Opcao escolhida: \e[m \e[37;1m ${1} \e[m"
-
-f=0
-for function in $(grep -i '(){$' ${RootDir}/etc/functions.sh | sed 's/(){//g');do
-   if [ ${1} == ${function} ];then
-     f=1
-     echo -e "\e[37;1m[\e[m\e[32;1m OK \e[m\e[37;1m]\e[m"
-     vars_export
-     ${1}
-   fi
-done
-
-#------------------------------------------------------------#
-# Pipes create SubShells, so the while read is running on a 
-# different shell than your script, that makes my f variable 
-# never changes (only the one inside the pipe subshell).
-# Passing the data in a sub-shell instead, like it's a file 
-# before the while loop. This assumes that I don't want some
-# intermittent file:
-
-#while read function; do
-#   if [ ${1} == ${function} ];then
-#     f=1
-#     echo -e "\e[37;1m[\e[m\e[32;1m OK \e[m\e[37;1m]\e[m"
-#     vars_export
-#     ${1}
-#     banner
-#   fi
-#done < <(grep -i '(){$' ${RootDir}/etc/functions.sh | sed 's/(){//g')
-
-#------------------------------------------------------------#
-
-if [ ${f} -eq 0 ];then
-  
-  echo -e "\e[37;1m[\e[m\e[31;1m FAIL \e[m\e[37;1m]\e[m"
-  echo -e ""
-  echo -e "\e[37;1m Opcao desconhecida, <ajuda>: \e[m"
-  vars_export
-  ajuda
-  banner
-fi
+    # Execute the requested function if it exists
+    execute_function "$@"
+}
+# Call the main function
+main "$@"
 
 #EOC
 #-----------------------------------------------------------------------------#
-
-
-
 

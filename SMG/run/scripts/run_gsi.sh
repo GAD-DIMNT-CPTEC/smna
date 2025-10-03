@@ -5,55 +5,67 @@
 #set -o xtrace
 
 # Carregando as variaveis do sistema
-source /scratchin/grupos/das/home/carlos.bastarz/SMG.trunk/config_smg.ksh vars_export
+dir_now=`pwd`
+
+cd $SMG_ROOT
+
+SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
+RootDir="$(dirname "$SCRIPT_PATH")"
+export SMG_ROOT=${RootDir}
+source ${SMG_ROOT}/../../config_smg.ksh vars_export
+source ${SMG_ROOT}/run/smg_functions.sh     ## has inctime function wrote in bash script
+
+cd $dir_now
 
 # Lendo parametros de entrada
 if [ -z "${1}" ]
 then
-  echo "LABELANL is not set" 
+  echo "LABELANL is not set"
   exit 3
 else
   export LABELANL=${1}
-  export LABELFGS=`${inctime} ${LABELANL} -6h %y4%m2%d2%h2`
-  export LABELFCT=`${inctime} ${LABELANL} +6h %y4%m2%d2%h2`
+export LABELFGS=`${inctime} ${LABELANL} -6h %y4%m2%d2%h2`
+  ###   export LABELFGS=`date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} -6 hours" `
+export LABELFCT=`${inctime} ${LABELANL} +6h %y4%m2%d2%h2`
+  ###   export LABELFCT=`date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} +6 hours" `
 fi
 if [ -z "${2}" ]
 then
-  echo "PREFIX is not set" 
+  echo "PREFIX is not set"
   exit 3
 else
-  export PREFIX=${2}  
+  export PREFIX=${2}
 fi
 if [ -z "${3}" ]
 then
-  echo "TRC is not set" 
+  echo "TRC is not set"
   exit 3
 else
-  export TRC=${3}  
+  export TRC=${3}
 fi
 if [ -z "${4}" ]
 then
-  echo "NLV is not set" 
+  echo "NLV is not set"
   exit 3
 else
-  export NLV=${4}  
+  export NLV=${4}
 fi
 if [ -z "${5}" ]
 then
-  echo "NPROC is not set" 
+  echo "NPROC is not set"
   exit 3
 else
-  export NPROC=${5}  
+  export NPROC=${5}
   if [ ${NPROC} -lt 24 ]
   then
     echo "NPROC less then 24"
     echo "setting NPROC to 24"
-    export NPROC=24  
+    export NPROC=24
   fi
 fi
 if [ -z "${6}" ]
 then
-  echo "TRC Model is not set" 
+  echo "TRC Model is not set"
   TRCB=${TRC}
 else
   export TRCB=${6}
@@ -70,10 +82,10 @@ case ${TRC} in
    62) IMAX=192; JMAX=96;;
    126)IMAX=384; JMAX=192;;
    213)IMAX=640; JMAX=320;;
-   254)IMAX=768; JMAX=384;;   
+   254)IMAX=768; JMAX=384;;
    299)IMAX=900; JMAX=450;;
    666)IMAX=2000; JMAX=1000;;
-   *)echo "Truncamento desconhecido ${MRES}"  
+   *)echo "Truncamento desconhecido ${MRES}"
 esac
 KMAX=${NLV}
 JMAX=$((JMAX+2))
@@ -89,11 +101,11 @@ BYTE_ORDER=Big_Endian
 
 
 # Configurando os Diretorios
-# Considera-se que o sistema sera rodado no scratchin por isso tudo 
+# Considera-se que o sistema sera rodado no scratchin por isso tudo
 # sera configurado a partir do home do usuario no scratch1 (${SUBMIT_HOME})
 # Diretorio temporario para a rodada do SMG
 RunGSI=${subt_run_gsi}
-if [ -e ${RunGSI} ]; then 
+if [ -e ${RunGSI} ]; then
    rm -fr ${RunGSI}/*
 else
    mkdir -p ${RunGSI}
@@ -105,12 +117,12 @@ export OutGSI=${work_gsi_dataout}
 
 # Preparing the environment for GSI run
 export MPICH_UNEX_BUFFER_SIZE=100000000
-export MPICH_MAX_SHORT_MSG_SIZE=4096      
+export MPICH_MAX_SHORT_MSG_SIZE=4096
 export MPICH_PTL_UNEX_EVENTS=50000
 export MPICH_PTL_OTHER_EVENTS=2496
 
 # Copiando executavel do gsi para o diretorio de rodada
-FILE=${home_cptec_bin}/gsi.exe
+FILE=${home_cptec}/bin/gsi.x
 if [ -e ${FILE} ]
 then
   ExecGSI=$(basename ${FILE})
@@ -139,8 +151,11 @@ dd1=`echo ${LABELANL}|cut -c 7-8`
 
 yymmdd=${LABELANL:2:${#LABELANL}}
 hm3=`${inctime} ${LABELANL} -3h %h2` #15
+## hm3=`date -u +%H -d "${LABELANL:0:8} ${LABELANL:8:2} -3 hours" `
 hh0=`${inctime} ${LABELANL} +0h %h2` #18
+## hh0=${LABELANL:8:2} 
 hp3=`${inctime} ${LABELANL} +3h %h2` #21
+## hp3=`date -u +%H -d "${LABELANL:0:8} ${LABELANL:8:2} +3 hours" `
 expid=cptec
 bkg=bkg
 
@@ -183,6 +198,8 @@ FLAG                  FILENAME                                     ALIAS
 0  ${ObsDir}/gdas1.t${hh0}z.eshrs3.tm00.bufr_d.${yyyymmdd}    hirs3bufrears
 0  ${ObsDir}/gdas1.t${hh0}z.geoimr.tm00.bufr_d.${yyyymmdd}    geoimr
 1  ${ObsDir}/gdas1.t${hh0}z.satwnd.tm00.bufr_d.${yyyymmdd}    satwnd
+
+1  ${ObsDir}/gdas.t${hh0}z.atms.tm00.bufr_d                   atmsbufr
 EOF
 
 # Informa os tipos de observacoes selecionada e cria os links simbolicos
@@ -232,6 +249,7 @@ echo ""
 for inc in $(seq -3 3 3); do
    TIME=$(printf "%02g" $((inc+6)))
    LABEL=$(${inctime} ${LABELANL} ${inc}h %y4%m2%d2%h2)
+   ### LABEL=`date -u +%Y%m%d%H -d "${LABELANL:0:8} ${LABELANL:8:2} +${inc} hours" `
    FFCT=GFCT${PREFIX}${LABELFGS}${LABEL}F.fct.${MRESB}
    FDIR=GFCT${PREFIX}${LABELFGS}${LABEL}F.dir.${MRESB}
 
@@ -256,7 +274,7 @@ cp -pfr ${public_fix}/prepobs_prep.bufrtable             prepobs_prep.bufrtable
 cp -pfr ${public_fix}/bufrtab.012                        bftab_sstphr
 
 # Copiando arquivos de configuracao do usuário
-cp -pfr ${home_gsi_fix}//global_anavinfo.l${NLV}.txt       anavinfo
+cp -pfr ${home_gsi_fix}/global_anavinfo.l${NLV}.txt       anavinfo
 cp -pfr ${home_gsi_fix}/global_satinfo.txt                 satinfo
 cp -pfr ${home_gsi_fix}/global_convinfo.txt                convinfo
 
@@ -297,7 +315,7 @@ else
    echo -e " "
 
    cp -pfr ${sample} ${fileOut}
- 
+
 fi
 
 
@@ -308,17 +326,29 @@ fi
 # link CRTM Spectral and Transmittance coefficients
 #
 
-ln -sf ${public_crtm}/${BYTE_ORDER}/Nalli.IRwater.EmisCoeff.bin    Nalli.IRwater.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRice.EmisCoeff.bin     NPOESS.IRice.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRland.EmisCoeff.bin    NPOESS.IRland.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRsnow.EmisCoeff.bin    NPOESS.IRsnow.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISice.EmisCoeff.bin    NPOESS.VISice.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISland.EmisCoeff.bin   NPOESS.VISland.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISsnow.EmisCoeff.bin   NPOESS.VISsnow.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISwater.EmisCoeff.bin  NPOESS.VISwater.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/FASTEM5.MWwater.EmisCoeff.bin  FASTEM5.MWwater.EmisCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/AerosolCoeff.bin               AerosolCoeff.bin
-ln -sf ${public_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 CloudCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/Nalli.IRwater.EmisCoeff.bin    Nalli.IRwater.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRice.EmisCoeff.bin     NPOESS.IRice.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRland.EmisCoeff.bin    NPOESS.IRland.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.IRsnow.EmisCoeff.bin    NPOESS.IRsnow.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISice.EmisCoeff.bin    NPOESS.VISice.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISland.EmisCoeff.bin   NPOESS.VISland.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISsnow.EmisCoeff.bin   NPOESS.VISsnow.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/NPOESS.VISwater.EmisCoeff.bin  NPOESS.VISwater.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/FASTEM5.MWwater.EmisCoeff.bin  FASTEM5.MWwater.EmisCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/AerosolCoeff.bin               AerosolCoeff.bin
+#ln -sf ${public_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 CloudCoeff.bin
+
+cp -v ${plus_crtm}/${BYTE_ORDER}/Nalli.IRwater.EmisCoeff.bin    Nalli.IRwater.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.IRice.EmisCoeff.bin     NPOESS.IRice.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.IRland.EmisCoeff.bin    NPOESS.IRland.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.IRsnow.EmisCoeff.bin    NPOESS.IRsnow.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.VISice.EmisCoeff.bin    NPOESS.VISice.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.VISland.EmisCoeff.bin   NPOESS.VISland.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.VISsnow.EmisCoeff.bin   NPOESS.VISsnow.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/NPOESS.VISwater.EmisCoeff.bin  NPOESS.VISwater.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/FASTEM5.MWwater.EmisCoeff.bin  FASTEM5.MWwater.EmisCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/AerosolCoeff.bin               AerosolCoeff.bin
+cp -v ${plus_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 CloudCoeff.bin
 
 #
 #-------------------------------------------------------------------------------#
@@ -326,8 +356,14 @@ ln -sf ${public_crtm}/${BYTE_ORDER}/CloudCoeff.bin                 CloudCoeff.bi
 #
 
 for file in `awk '{if($1!~"!"){print $1}}' ./satinfo | sort | uniq` ;do
-   ln -s ${public_crtm}/${BYTE_ORDER}/${file}.SpcCoeff.bin ./
-   ln -s ${public_crtm}/${BYTE_ORDER}/${file}.TauCoeff.bin ./
+#   ln -s ${public_crtm}/${BYTE_ORDER}/${file}.SpcCoeff.bin ./
+#   ln -s ${public_crtm}/${BYTE_ORDER}/${file}.TauCoeff.bin ./
+   cp -v ${plus_crtm}/${BYTE_ORDER}/${file}.SpcCoeff.bin ./
+   cp -v ${plus_crtm}/${BYTE_ORDER}/${file}.TauCoeff.bin ./
+   # Carlos (02/07/2025) - estou colocando aqui os dados para o cálculo da profundidade óptica do algorítmo ODPS
+   # por ser mais adequado para dados do microondas (no caso do ATMS, os arquivos atms_*.TauCoeff.bin - com excessão do npp
+   # só esão disponíveis pelo ODPS, pelo pacote crtm-2.4.0_emc.1 disponível no GitHub)
+   cp -v ${plus_crtm}/TauCoeff/ODPS/${BYTE_ORDER}/${file}.TauCoeff.bin ${runDir}
 done
 
 #
@@ -353,7 +389,7 @@ sed -i -e "s/#IMAX#/${IMAX}/g" \
 TIME=`date '+%H:%M:%S'`
 
 cat<< EOF > ${RunGSI}/qsub_gdad.qsb
-#!/bin/bash 
+#!/bin/bash
 #PBS -o ${save}/gdad_anl.${LABELANL}_${TIME}.out
 #PBS -e ${save}/gdad_anl.${LABELANL}_${TIME}.err
 #PBS -l walltime=00:45:00
@@ -531,7 +567,7 @@ ls -l ${RunGSI}/diag_* > listpe
 echo -e "\033[32;2m > Copiando o executável da atualização da correção do bias do ângulo \033[m"
 
 # Copiando executavel do gsi para o diretorio de rodada
-ANGEXE=${home_cptec_bin}/gsi_angupdate.exe
+ANGEXE=${home_cptec}/bin/global_angupdate
 if [ -e ${ANGEXE} ]
 then
   Execang=$(basename ${ANGEXE})
@@ -541,7 +577,7 @@ else
   echo -e "\033[34;1m[\033[m\033[31;1m Falhou \033[m\033[34;1m]\033[m"
   echo -e "\033[31;1m !!! Arquivo Nao Encontrado !!! \033[m"
   echo -e "\033[31;1m ${ANGEXE} \033[m"
-  
+
   exit 1
 fi
 
@@ -621,7 +657,7 @@ EOF
 ###################################################
 #fila=$(cat $home_mod_scp/fila)
 # Build the PBS script on-the-fly and run
-            
+
 cat << EOF > ${workdirSatAng}/qsub.satbang.qsb
 #!/bin/csh -x
 #PBS -o ${workdirSatAng}/satbang.${LABELANL}_${TIME}.out
@@ -638,7 +674,7 @@ cat << EOF > ${workdirSatAng}/qsub.satbang.qsb
 
 cd ${workdirSatAng}/
 
-time aprun -n 1 ${workdirSatAng}/gsi_angupdate.exe 
+time aprun -n 1 ${workdirSatAng}/global_angupdate
 
 #touch ${workdirSatAng}/monitor.t
 EOF
