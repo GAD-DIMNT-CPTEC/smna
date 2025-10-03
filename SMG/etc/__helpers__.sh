@@ -39,20 +39,7 @@
 # License:
 #   LGPL-3.0-or-later (adjust as needed for your project)
 #===============================================================================
-# guard: avoid re-sourcing this file multiple times
-__HELPERS_SH_LOADED=${__HELPERS_SH_LOADED:-false}
 
-if $__HELPERS_SH_LOADED; then
-  return 0
-fi
-
-__HELPERS_SH_LOADED=true
-
-# --- Default logging debugging (exported for downstream scripts) ---
-export debug=${debug:-false}
-
-# --- Absolute path to the directory where this helpers script resides ---
-export helpers_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 
 #-----------------------------------------------------------------------------#
 #----------------------- internal helpers (hidden from help) -----------------#
@@ -155,6 +142,7 @@ LOG_FD_ERR="${LOG_FD_ERR:-2}"
 export verbose=${verbose:-false}
 export debug=${debug:-false}
 export dry_run=${dry_run:-false}
+export auto_yes=${auto_yes:-false}
 
 #BOP
 # !FUNCTION: _log_colors_init
@@ -344,6 +332,63 @@ _die()         { local code="${1:-1}"; shift || true; _log_err "$@"; exit "$code
 #EOC
 
 #BOP
+# !EXIT CODES & WRAPPERS
+# !DESCRIPTION:
+#   Standardized exit codes and convenience wrappers for all scripts. They
+#   ensure consistent error handling and logging across the project.
+#
+# !CODES:
+#   EX_OK=0         Success — execution completed without errors.
+#   EX_USAGE=1      Usage error — invalid command-line arguments or invocation.
+#   EX_NOOP=2       No operation — script executed correctly but nothing to do
+#                   (e.g., no files staged, empty input).
+#   EX_CONFIG=3     Configuration error — required option, environment variable,
+#                   or configuration file is missing/invalid.
+#   EX_NOINPUT=4    Input missing — required source file or directory not found
+#                   or unreadable.
+#   EX_CANTCREAT=5  Output error — unable to create/write to destination (e.g.,
+#                   permission denied, disk full).
+#   EX_FAIL=6       Generic failure — execution error not covered by other codes.
+#
+# !WRAPPERS:
+#   _exit_ok        <format> [args...]     # success, logs OK, exits EX_OK
+#   _exit_usage     <format> [args...]     # logs ERROR, exits EX_USAGE
+#   _exit_noop      <format> [args...]     # logs INFO, exits EX_NOOP
+#   _exit_config    <format> [args...]     # logs ERROR, exits EX_CONFIG
+#   _exit_noinput   <format> [args...]     # logs ERROR, exits EX_NOINPUT
+#   _exit_cantcreat <format> [args...]     # logs ERROR, exits EX_CANTCREAT
+#   _exit_fail      <format> [args...]     # logs ERROR, exits EX_FAIL
+#
+# !EXAMPLES:
+#   [[ $# -eq 0 ]] && _exit_usage "Missing arguments"
+#   [[ ! -f "$file" ]] && _exit_noinput "Input file not found: %s" "$file"
+#   mkdir -p "$outdir" || _exit_cantcreat "Cannot create output dir: %s" "$outdir"
+#
+# !NOTES:
+#   • Always use symbolic names (EX_*) instead of raw numbers.
+#   • Wrappers combine logging + exit in a consistent way.
+#   • `_die` remains available for custom codes outside this set.
+#EOP
+#BOC
+readonly EX_OK=0
+readonly EX_USAGE=1
+readonly EX_NOOP=2
+readonly EX_CONFIG=3
+readonly EX_NOINPUT=4
+readonly EX_CANTCREAT=5
+readonly EX_FAIL=6
+
+_exit_ok()        { _log_ok    "$@"; exit "$EX_OK"; }
+_exit_usage()     { _die "$EX_USAGE"    "$@"; }
+_exit_noop()      { _log_info  "$@"; exit "$EX_NOOP"; }
+_exit_config()    { _die "$EX_CONFIG"   "$@"; }
+_exit_noinput()   { _die "$EX_NOINPUT"  "$@"; }
+_exit_cantcreat() { _die "$EX_CANTCREAT" "$@"; }
+_exit_fail()      { _die "$EX_FAIL"     "$@"; }
+
+#EOC
+
+#BOP
 # !FUNCTION: _debug_trace_on
 #
 # !DESCRIPTION:
@@ -411,6 +456,43 @@ _debug_trace_off() {
   set +x
 }
 #EOC
+#BOP
+# !FUNCTION: _dump_cli
+# !DESCRIPTION:
+#   Print the *effective* CLI arguments received by the entry point or function.
+#   Useful for debugging when options are re-parsed or altered.
+# !USAGE:
+#   _dump_cli "$@"
+#EOP
+#BOC
+_dump_cli() {
+  # Always show the argv in debug mode (INFO would be hidden if verbose=false).
+  _log_debug 'CLI ARGV:' >&2
+  local arg
+  for arg in "$@"; do
+    _log_debug '  %q' "$arg" >&2
+  done
+  printf '\n' >&2
+}
+#EOC
+
+
+#BOP
+# !FUNCTION: _dump_env
+# !DESCRIPTION:
+#   Print a whitelist of environment variables, avoiding accidental leaks.
+#   Accepts prefixes as arguments (e.g., SMG_, GSI_).
+# !USAGE:
+#   _dump_env SMG_ GSI_ BAM_ CRTM_ READDIAG_
+#EOP
+_dump_env() {
+  local prefix
+  for prefix in "$@"; do
+    _log_debug 'ENV %s*' "$prefix" >&2
+    env | LANG=C LC_ALL=C sort | grep -E "^${prefix}" >&2 || true
+  done
+}
+
 
 #BOP
 # !FUNCTION: _with_strict_mode
@@ -469,87 +551,59 @@ _with_strict_mode() {
 }
 #EOC
 
-###############################################################################
 #BOP
-# !FUNCTION: project_root_of
-#
-# !INTERFACE:
-#   project_root_of [<start_path>]
-#
+# !FUNCTION: __need_val
+# !INTERFACE: __need_val <opt> <val>
 # !DESCRIPTION:
-#   Find the project root directory by walking up from <start_path> until any
-#   known marker is found. If <start_path> is omitted, the function starts from
-#   the caller script (BASH_SOURCE[1]) or $PWD as a last resort.
+#   Guard helper to enforce that an option which requires an argument actually
+#   receives one. It fails when the value is missing or when the next token
+#   "looks like" another option (i.e., starts with a dash '-').
 #
 # !USAGE:
-#   root="$(project_root_of)"                  # auto-detect from caller
-#   root="$(project_root_of /some/path)"       # start from explicit path
-#
-# !BEHAVIOR:
-#   • Markers (OR logic) from ${PROJECT_MARKERS}, colon-separated; default:
-#       ".git:pyproject.toml:setup.py:config_smg.ksh:etc/mach"
-#   • If markers are not found and Git is available, tries:
-#       git rev-parse --show-toplevel
+#   # Inside an option parser:
+#   while [[ $# -gt 0 ]]; do
+#     case "$1" in
+#       -A|--analysis)
+#         __need_val "$1" "$2" || exit $?
+#         analysis="$2"; shift 2;;
+#       -n|--ntasks)
+#         __need_val "$1" "$2" || exit $?
+#         ntasks="$2"; shift 2;;
+#       --) shift; break;;
+#       *)  break;;
+#     esac
+#   done
 #
 # !RETURNS:
-#   Prints the detected root to stdout and returns 0; returns 1 on failure.
+#   0  if a non-empty value is provided and does not start with '-'
+#   EX_USAGE (default 1) otherwise
+#
+# !EXIT CODES:
+#   EX_USAGE  Usage error; missing or invalid value for the given option.
+#
+# !EXAMPLES:
+#   __need_val "--levels" "$2" || exit $?
+#   # If $2 is empty or "-x", logs an error and returns EX_USAGE.
+#
+# !DEPENDENCIES:
+#   - _log_err: logging helper supporting printf-style formatting.
+#   - EX_USAGE: optional environment variable with the numeric code for usage errors.
 #
 # !NOTES:
-#   - Pure function (no exports). Uses _with_strict_mode and your loggers.
-#   - Portable: avoids GNU readlink -f; relies on cd -P / pwd -P.
-#
+#   - This helper only validates presence and a simple shape check (leading '-').
+#     If you need type/regex validation (e.g., integers), perform it after this call.
+#   - Bash-specific conditionals ([[ ... ]]) are used intentionally.
 #EOP
-###############################################################################
 #BOC
-project_root_of() {
-  _with_strict_mode   # enable strict mode only for this function
-
-  # Determine a sensible starting point:
-  # prefer the *caller* file (BASH_SOURCE[1]) over this helpers file (BASH_SOURCE[0])
-  local start="${1:-${BASH_SOURCE[1]:-${BASH_SOURCE[0]:-$PWD}}}"
-  local dir
-  if [[ -d "$start" ]]; then
-    dir="$(cd -P -- "$start" && pwd -P)" || { _log_err "Invalid start dir: %s" "$start"; return 1; }
-  else
-    dir="$(cd -P -- "$(dirname -- "$start")" && pwd -P)" || { _log_err "Invalid start path: %s" "$start"; return 1; }
+__need_val() {  # usage: __need_val "$1" "$2" || return 1
+  local opt="$1"
+  local val="${2:-}"
+  # Fail if value is empty or looks like a new option (starts with '-')
+  if [[ -z "$val" || "$val" == -* ]]; then
+    _log_err "Option %s requires a value" "$opt"
+    return "${EX_USAGE:-1}"
   fi
-
-  # Configure markers (colon-separated)
-  local default_markers=".smg_root:config_smg.ksh:.git"
-  local markers_str="${PROJECT_MARKERS:-$default_markers}"
-  local IFS=':' markers=()
-  read -r -a markers <<< "$markers_str"
-  _log_debug "Searching project root from: %s (markers: %s)" "$dir" "$markers_str"
-
-  # Walk up looking for any marker
-  while : ; do
-    for m in "${markers[@]}"; do
-      if [[ -e "$dir/$m" ]]; then
-        _log_debug "Marker matched: %s at %s" "$m" "$dir"
-        _log_info "Project root found at: %s (marker: %s)" "$dir" "$m"
-        printf '%s\n' "$dir"
-        return 0
-      fi
-    done
-    local parent
-    parent="$(dirname -- "$dir")"
-    [[ "$parent" == "$dir" ]] && break
-    dir="$parent"
-  done
-
-  # Fallback to Git (optional)
-  if command -v git >/dev/null 2>&1; then
-    local gtop
-    gtop="$(cd -P -- "${start%/*:-$PWD}" 2>/dev/null && git rev-parse --show-toplevel 2>/dev/null)" || true
-    if [[ -n "$gtop" ]]; then
-      _log_warn "Markers not found; using Git top-level: %s" "$gtop"
-      printf '%s\n' "$gtop"
-      return 0
-    fi
-  fi
-
-  _log_err "Unable to locate project root from: %s" "$start"
-  return 1
+  return 0
 }
 #EOC
 
@@ -638,6 +692,9 @@ project_root_of() {
 __parse_args__() {
   _with_strict_mode   # enable strict mode only for this function
 
+  # --- respect optional write-leftovers toggle (generic) ---
+  local write_leftovers="${PARSER_WRITE_LEFTOVERS:-1}"
+
   # ---- Safe defaults (respect existing env vars) ----
   verbose=${verbose:-false}
   debug=${debug:-false}
@@ -656,58 +713,54 @@ __parse_args__() {
   cores_per_node=${cores_per_node:-}
   total_procs=${total_procs:-}
 
-  # Declare leftover_args explicitly (global) to avoid -u surprises
-  declare -g -a leftover_args 2>/dev/null || true
-  leftover_args=()
+  # Only (re)declare/reset leftover_args if we are allowed to write it
+  if [[ "$write_leftovers" != 0 ]]; then
+    declare -g -a leftover_args 2>/dev/null || true
+    leftover_args=()
+  fi
 
   # Parse only new canonical flags; reject legacy ones with a helpful error
-  while (($#)); do
-    case "$1" in
+  while [[ $# -gt 0 ]]; do
+    opt="$1"
+    case $opt in
       # ---- Verbosity and behavior ----
-      -v|--verbose) verbose=true ;;
-      -q|--quiet)   verbose=false ;;
-      -d|--debug)   debug=true ;;
-      -y|--yes)     auto_yes=true ;;
-      -f|--fix)     do_fix=true ;;
-      --dry-run)    dry_run=true ;;
-      --restore)    do_restore=true ;;
+      -v|--verbose) verbose=true; shift; continue ;;
+      -q|--quiet)   verbose=false; shift; continue ;;
+      -d|--debug)   debug=true; shift; continue ;;
+      -y|--yes)     auto_yes=true; shift; continue ;;
+      -f|--fix)     do_fix=true; shift; continue ;;
+      --dry-run)    dry_run=true; shift; continue ;;
+      --restore)    do_restore=true; shift; continue ;;
 
       # ---- Queue/Job/Walltime ----
-      -Q|--queue)        queue="${2:?--queue needs a value}"; shift ;;
-      --queue=*)         queue="${1#*=}" ;;
-      --job-name)        job_name="${2:?--job-name needs a value}"; shift ;;
-      --walltime)        walltime="${2:?--walltime needs a value}"; shift ;;
+      -Q|--queue)        queue="${2:?--queue needs a value}"; shift 2; continue ;;
+      --queue=*)         queue="${1#*=}"; shift; continue ;;
+      --job-name)        job_name="${2:?--job-name needs a value}"; shift 2; continue ;;
+      --walltime)        walltime="${2:?--walltime needs a value}"; shift 2; continue ;;
 
       # ---- HPC resources (long-only) ----
-      --ntasks)          mpi_tasks="${2:?--ntasks needs a value}"; shift ;;
-      --cpus-per-task)   omp_threads="${2:?--cpus-per-task needs a value}"; shift ;;
-      --nodes)           nodes="${2:?--nodes needs a value}"; shift ;;
-      --cores-per-node)  cores_per_node="${2:?--cores-per-node needs a value}"; shift ;;
-      --procs)           total_procs="${2:?--procs needs a value}"; shift ;;
-
+      --ntasks)          mpi_tasks="${2:?--ntasks needs a value}"; shift 2; continue ;;
+      --cpus-per-task)   omp_threads="${2:?--cpus-per-task needs a value}"; shift 2; continue ;;
+      --nodes)           nodes="${2:?--nodes needs a value}"; shift 2; continue ;;
+      --cores-per-node)  cores_per_node="${2:?--cores-per-node needs a value}"; shift 2; continue;;
+      --procs)           total_procs="${2:?--procs needs a value}"; shift 2; continue;;
+      # ---- legados proibidos ----
+      -D|-dryrun) _log_err "Removed flag: %s → use --dry-run" "$1"; return 2 ;;
+      -pq)        _log_err "Removed flag: -pq → use -Q|--queue <name>"; return 2 ;;
+      -pn)        _log_err "Removed flag: -pn → use --job-name <name>"; return 2 ;;
+      -pw)        _log_err "Removed flag: -pw → use --walltime <HH:MM:SS>"; return 2 ;;
+      -np|-d|-N|-c|-P)
+                   _log_err "Removed short HPC flags (%s). Use long: --ntasks/--cpus-per-task/--nodes/--cores-per-node/--procs" "$1"
+                   return 2 ;;
       # ---- End of options / passthrough ----
-      --) shift; break ;;
-      -*) 
-        # Legacy flags explicitly disallowed:
-        case "$1" in
-          -D|-dryrun) _log_err "Removed flag: %s → use --dry-run" "$1"; return 2 ;;
-          -pq)        _log_err "Removed flag: -pq → use -Q|--queue <name>"; return 2 ;;
-          -pn)        _log_err "Removed flag: -pn → use --job-name <name>"; return 2 ;;
-          -pw)        _log_err "Removed flag: -pw → use --walltime <HH:MM:SS>"; return 2 ;;
-          -np|-d|-N|-c|-P)
-                      _log_err "Removed short HPC flags (%s). Use long: --ntasks/--cpus-per-task/--nodes/--cores-per-node/--procs" "$1"
-                      return 2 ;;
-          *) break ;;
-        esac
-        ;;
-      *)  break ;;
+      --)    (( write_leftovers )) && leftover_args+=("$1"); break ;;
+      --?*)  (( write_leftovers )) && leftover_args+=("$1"); shift; continue ;;
+      -?*)   (( write_leftovers )) && leftover_args+=("$1"); shift; continue ;;
+      *)     (( write_leftovers )) && leftover_args+=("$1"); shift; continue ;;
     esac
-    shift
   done
 
-  # preserve leftover positional args
-  leftover_args=("$@")
-
+  
   # derive layout if only total_procs provided
   if [[ -n "${total_procs}" && -z "${mpi_tasks}" ]]; then
     (( omp_threads <= 0 )) && omp_threads=1
@@ -717,10 +770,12 @@ __parse_args__() {
   export verbose debug auto_yes dry_run do_restore do_fix
   export queue job_name walltime
   export mpi_tasks omp_threads nodes cores_per_node total_procs
-
-  _log_debug "Parsed args: verbose=%s debug=%s dry_run=%s queue=%s job=%s wall=%s MPI=%s OMP=%s nodes=%s cores/node=%s procs=%s leftovers=[%s]" \
-             "$verbose" "$debug" "$dry_run" "${queue:-}" "${job_name:-}" "${walltime:-}" \
-             "${mpi_tasks:-}" "${omp_threads:-}" "${nodes:-}" "${cores_per_node:-}" "${total_procs:-}" "${leftover_args[*]}"
+  
+  _log_debug "Parsed args: verbose=%s debug=%s dry_run=%s ..." "$verbose" "$debug" "$dry_run" 
+  _log_debug "job=%s Queue=%s walltime=%s MPI=%s OMP=%s nodes=%s cores/node=%s procs=%s" \
+             "${job_name:-}" "${queue:-}" "${walltime:-}" "${mpi_tasks:-}" "${omp_threads:-}" \
+             "${nodes:-}" "${cores_per_node:-}" "${total_procs:-}"
+  _log_debug 'leftovers=(%s)' "$(printf '%q ' "${leftover_args[@]}")"
 }
 #EOC
 
@@ -762,14 +817,28 @@ __parse_args__() {
 #     dry-run simulation support.
 #EOP
 #BOC
+# __helpers__.sh
 _run() {
+  # Always receive command as array
+  local -a cmd=( "$@" )
+
+  # Pretty-print for dry-run
   if [[ "${dry_run:-false}" == true ]]; then
-    _log_action "[DRY-RUN] %q" "$*"
+    _log_info "DRY-RUN: %s" "${cmd[*]}"
     return 0
   fi
-  _log_debug "_run exec: %q" "$*"
-  "$@"
+
+  # If first token is a shell function, call it directly
+  if declare -F -- "${cmd[0]}" >/dev/null 2>&1; then
+    "${cmd[@]}"
+    return $?
+  fi
+
+  # Otherwise, execute as external command/binary
+  "${cmd[@]}"
 }
+
+
 #EOC
 
 #BOP
@@ -1517,6 +1586,90 @@ _resolve_script_dir() {
 }
 #EOC
 
+###############################################################################
+#BOP
+# !FUNCTION: project_root_of
+#
+# !INTERFACE:
+#   project_root_of [<start_path>]
+#
+# !DESCRIPTION:
+#   Find the project root directory by walking up from <start_path> until any
+#   known marker is found. If <start_path> is omitted, the function starts from
+#   the caller script (BASH_SOURCE[1]) or $PWD as a last resort.
+#
+# !USAGE:
+#   root="$(project_root_of)"                  # auto-detect from caller
+#   root="$(project_root_of /some/path)"       # start from explicit path
+#
+# !BEHAVIOR:
+#   • Markers (OR logic) from ${PROJECT_MARKERS}, colon-separated; default:
+#       ".git:pyproject.toml:setup.py:config_smg.ksh:etc/mach"
+#   • If markers are not found and Git is available, tries:
+#       git rev-parse --show-toplevel
+#
+# !RETURNS:
+#   Prints the detected root to stdout and returns 0; returns 1 on failure.
+#
+# !NOTES:
+#   - Pure function (no exports). Uses _with_strict_mode and your loggers.
+#   - Portable: avoids GNU readlink -f; relies on cd -P / pwd -P.
+#
+#EOP
+###############################################################################
+#BOC
+project_root_of() {
+  _with_strict_mode   # enable strict mode only for this function
+
+  # Determine a sensible starting point:
+  # prefer the *caller* file (BASH_SOURCE[1]) over this helpers file (BASH_SOURCE[0])
+  local start="${1:-${BASH_SOURCE[1]:-${BASH_SOURCE[0]:-$PWD}}}"
+  local dir
+  if [[ -d "$start" ]]; then
+    dir="$(cd -P -- "$start" && pwd -P)" || { _log_err "Invalid start dir: %s" "$start"; return 1; }
+  else
+    dir="$(cd -P -- "$(dirname -- "$start")" && pwd -P)" || { _log_err "Invalid start path: %s" "$start"; return 1; }
+  fi
+
+  # Configure markers (colon-separated)
+  local default_markers=".smg_root:config_smg.ksh:.git"
+  local markers_str="${PROJECT_MARKERS:-$default_markers}"
+  local IFS=':' markers=()
+  read -r -a markers <<< "$markers_str"
+  _log_debug "Searching project root from: %s (markers: %s)" "$dir" "$markers_str"
+
+  # Walk up looking for any marker
+  while : ; do
+    for m in "${markers[@]}"; do
+      if [[ -e "$dir/$m" ]]; then
+        _log_debug "Marker matched: %s at %s" "$m" "$dir"
+        _log_info "Project root found at: %s (marker: %s)" "$dir" "$m"
+        printf '%s\n' "$dir"
+        return 0
+      fi
+    done
+    local parent
+    parent="$(dirname -- "$dir")"
+    [[ "$parent" == "$dir" ]] && break
+    dir="$parent"
+  done
+
+  # Fallback to Git (optional)
+  if command -v git >/dev/null 2>&1; then
+    local gtop
+    gtop="$(cd -P -- "${start%/*:-$PWD}" 2>/dev/null && git rev-parse --show-toplevel 2>/dev/null)" || true
+    if [[ -n "$gtop" ]]; then
+      _log_warn "Markers not found; using Git top-level: %s" "$gtop"
+      printf '%s\n' "$gtop"
+      return 0
+    fi
+  fi
+
+  _log_err "Unable to locate project root from: %s" "$start"
+  return 1
+}
+#EOC
+
 #BOP
 # !FUNCTION: _bootstrap_env_root
 # !INTERFACE: _bootstrap_env_root <ENV_VAR> <ANCHOR_FILE>
@@ -1761,12 +1914,6 @@ _run_project_config() {
 detect_hpc_system() {
   _with_strict_mode   # enable strict mode only for this function
 
-  # --- Parse common flags (-v/--verbose etc.), if available ---
-  if declare -F __parse_args__ >/dev/null; then
-    __parse_args__ "$@" 2>/dev/null || true
-    set -- "${leftover_args[@]}"
-  fi
-
   # Prevent verbosity changes from leaking (local shadow)
   local verbose=${verbose:-false}
 
@@ -1871,11 +2018,6 @@ detect_hpc_system() {
 #EOP
 #BOC
 disable_conda() {
-  # Parse common flags (-v/--verbose, etc.)
-  if declare -F __parse_args__ >/dev/null; then
-    __parse_args__ "$@" 2>/dev/null || true
-    set -- "${leftover_args[@]}"
-  fi
 
   # Prevent verbosity changes from leaking outside
   local verbose=${verbose:-false}
@@ -1957,7 +2099,7 @@ bool_to_fortran() {
 
 # -----------------------------------------------------------------------------
 # Auto-init: resolve SMG_ROOT when this helpers file is sourced
-# Guard: __HELPERS_INIT_DONE avoids re-entrancy
+# Guard: __HELPERS_SH_LOADED avoids re-entrancy
 #
 # Behavior:
 #   • Calls: _bootstrap_env_root SMG_ROOT ".smg_root"
@@ -1968,17 +2110,25 @@ bool_to_fortran() {
 #   • Do NOT use 'local' at top-level (invalid in Bash outside functions).
 #   • Keep the anchor file customizable if needed (via the 'sentinel' var below).
 # -----------------------------------------------------------------------------
-if [[ "${__HELPERS_INIT_DONE:-false}" != true ]]; then
+if [[ "${__HELPERS_SH_LOADED:-false}" != true ]]; then
+  # --- Default logging debugging (exported for downstream scripts) ---
+  export debug=${debug:-false}
+
+  # Determine the marker (anchor) used to locate the SMG root. If $SMG_ANCHOR is unset,
+  # default to ".smg_root". _bootstrap_env_root will use this to bootstrap paths/env.
   anchor="${SMG_ANCHOR:-.smg_root}"
   _log_debug "Auto-init helpers: calling _bootstrap_env_root (anchor=%s)" "$anchor"
 
+  # --- Absolute path to the directory where this helpers script resides ---
+  export helpers_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+  
   # Try to resolve and export SMG_ROOT using the generic bootstrapper.
   # It is safe to proceed even if it returns non-zero (caller may handle later).
   _bootstrap_env_root SMG_ROOT "$anchor" || \
     _log_warn "Auto-init: SMG_ROOT autodetection failed; current=%s" "${SMG_ROOT:-<unset>}"
 
-  __HELPERS_INIT_DONE=true
-  export __HELPERS_INIT_DONE
+  __HELPERS_SH_LOADED=true
+  export __HELPERS_SH_LOADED
   _log_debug "Auto-init done; SMG_ROOT=%s" "${SMG_ROOT:-<unset>}"
 fi
 

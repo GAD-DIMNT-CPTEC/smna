@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 #-----------------------------------------------------------------------------#
 #           Group on Data Assimilation Development - GDAD/CPTEC/INPE          #
 #-----------------------------------------------------------------------------#
@@ -16,7 +16,7 @@
 # !OPTIONS:
 #   configure        - Create directories, copy fixed files, adjust scripts.
 #   compile          - Build BAM, GSI and utilities.
-#   copy_ncep_inputs - Copy GDAS/NCEP analysis & SST inputs by cycle.
+#   copy_ncep_input  - Copy GDAS/NCEP analysis & SST inputs by cycle.
 #   testcase         - Prepare and populate a test case environment.
 #   help             - Show this documentation and a command list.
 #
@@ -27,8 +27,17 @@
 #EOP
 #-----------------------------------------------------------------------------#
 
-# --- minimal bootstrap (idempotent) ---
-[[ -n ${__SMG_BOOTSTRAP_DONE:-} ]] && return 0 2>/dev/null || true; __SMG_BOOTSTRAP_DONE=1
+# =====================[ Library/source guard ]=====================
+# If this file is being sourced (not executed), make sourcing idempotent.
+# Do NOT return on the first source; only skip on subsequent sources.
+if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
+  if [[ -n "${__SMG_SETUP_SOURCED:-}" ]]; then
+    # Already sourced in this shell: no-op to avoid re-definitions/side-effects.
+    return 0
+  fi
+  __SMG_SETUP_SOURCED=1
+fi
+# =====================[ Library/source guard ]=====================
 
 ####################################################################################
 #BOP
@@ -40,7 +49,7 @@
 #EOP
 #EOC
 # Ensure SMG_ROOT exists and init exactly once (per root)
-ensure_smg_root() {
+ensure_smg_root(){
   local d s init
   if [[ -z "${SMG_ROOT:-}" || ! -f "$SMG_ROOT/.smg_root" ]]; then
     for s in "${BASH_SOURCE[@]:-}" "$PWD"; do
@@ -70,7 +79,6 @@ ensure_smg_root() {
   export SMG_ROOT SMG_INIT_LOADED SMG_INIT_ROOT
 }
 
-ensure_smg_root || exit $?
 #EOC
 ####################################################################################
 
@@ -653,35 +661,22 @@ copy_ncep_input(){
 #   Makefiles, and namelists to point to the configured run-tree locations.
 #   If --restore is provided, revert those files from their <file>.bak backups.
 #
-# !USAGE:
-#   modify_scripts
-#   modify_scripts --dry-run
-#   modify_scripts --restore
-#
-# !OPTIONS:
-#   --dry-run   Show what would be changed/restored, without modifying files
-#   --restore   Restore all known targets from their <file>.bak backup
-#
 # !BEHAVIOR:
-#   • Default mode: idempotent edits with one-time backup (<file>.bak)
-#   • Restore mode: if <file>.bak exists, replace the edited file with its backup
-#   • Skips missing files with a warning
-#
-# !NOTES:
-#   Depends on: _parse_args, _log_info/_log_ok/_log_warn/_log_err/_log_action
-#   Requires Bash 4+ (associative arrays). Uses POSIX sed/awk and .bak backups.
+#   • One-time backup: <file>.bak
+#   • Restore mode: mv <file>.bak → <file>
+#   • Edits are idempotent; missing files are skipped with warning
+#   • After each edit, permissions/ownership/timestamps are restored from .bak
 #EOP
 #BOC
 modify_scripts(){
-  # Parse common flags (-v/--verbose e etc.)
   _parse_args "$@" 2>/dev/null || true
   set -- "${leftover_args[@]}"
 
   # Prevent verbosity changes from leaking
-  local verbose=$verbose
+  local verbose=$verbose dry_run=${dry_run:-false} do_restore=${do_restore:-false}
   local rc=0
 
-  # ------------------- target lists -------------------
+  # ------------------- targets -------------------
   local smg_scripts=(
     "${run_smg}/run_cycle.sh"
     "${scripts_smg}/runGSI"
@@ -695,8 +690,6 @@ modify_scripts(){
   )
   local nml="${home_run_bam}/PostGridHistory.nml"
   local envfile="${home_run_bam}/EnvironmentalVariables"
-
-  # Collate all targets to simplify restore loop
   local all_targets=("${smg_scripts[@]}" "${makefiles[@]}" "$nml" "$envfile")
 
   # ------------------- helpers -------------------
@@ -712,6 +705,43 @@ modify_scripts(){
     _log_ok "Backup created: %s.bak" "$f"
   }
 
+  # Detect availability of --reference flags
+  _have_ref_copy_attrs() {
+    chmod --help 2>/dev/null | grep -q -- ' --reference=' || return 1
+    chown --help 2>/dev/null | grep -q -- ' --reference=' || return 1
+    return 0
+  }
+
+  # Restore perms/owner/mtime of $f from reference $ref
+  _preserve_attrs_from_ref() {
+    local f="$1" ref="$2"
+    [[ -e "$f" && -e "$ref" ]] || return 0
+    $dry_run && { _log_info "Dry-run: would restore attrs of %s from %s" "$f" "$ref"; return 0; }
+
+    if _have_ref_copy_attrs; then
+      chmod --reference="$ref" -- "$f" 2>/dev/null || true
+      chown --reference="$ref" -- "$f" 2>/dev/null || true
+    else
+      # Fallback via stat (GNU). Em sistemas sem %u/%g, isso só não vai ajustar owner/grupo.
+      local mode u g
+      mode=$(stat -c '%a' -- "$ref" 2>/dev/null) || mode=
+      u=$(stat -c '%u' -- "$ref" 2>/dev/null) || u=
+      g=$(stat -c '%g' -- "$ref" 2>/dev/null) || g=
+      [[ -n "$mode" ]] && chmod "$mode" -- "$f" 2>/dev/null || true
+      # Só tenta chown se temos UID/GID e privilégio
+      if [[ -n "$u" && -n "$g" ]]; then chown "$u:$g" -- "$f" 2>/dev/null || true; fi
+    fi
+    # Timestamp (BSD/GNU): touch -r é bem suportado
+    touch -r "$ref" -- "$f" 2>/dev/null || true
+  }
+
+  _after_edit() {
+    # Usa <file>.bak como referência, se existir
+    local f="$1"
+    [[ -f "${f}.bak" ]] || return 0
+    _preserve_attrs_from_ref "$f" "${f}.bak"
+  }
+
   _restore_file() {
     local f="$1" b="${f}.bak"
     if [[ ! -f "$b" ]]; then
@@ -722,7 +752,7 @@ modify_scripts(){
       _log_info "Dry-run: would restore %s from %s" "$f" "$b"
       return 0
     fi
-    # Optionally keep a timestamped safety backup of current file before restore
+    # Safety backup of current file before restore (timestamped)
     if [[ -f "$f" ]]; then
       cp -p -- "$f" "${f}.pre-restore.$(date +%Y%m%d%H%M%S)" >/dev/null 2>&1 || true
     fi
@@ -737,6 +767,7 @@ modify_scripts(){
     grep -Fqx "$ins" "$f" && { _log_info "Already configured: %s" "$f"; return 0; }
     $dry_run && { _log_info "Dry-run: would insert after '%s' in %s → %s" "$pat" "$f" "$ins"; return 0; }
     sed -i -e "/$pat/a\\$ins" "$f" || { _log_err "sed insert failed for %s" "$f"; return 1; }
+    _after_edit "$f"
     _log_ok "Inserted config line in %s" "$f"
   }
 
@@ -750,6 +781,7 @@ modify_scripts(){
         if(!del && $0 ~ pat){ print; getline; del=1; next }
         print
       }' "$f" > "${f}.tmp" && mv "${f}.tmp" "$f" || { _log_err "Failed deleting after match in %s" "$f"; return 1; }
+    _after_edit "$f"
     _log_ok "Deleted line after '%s' in %s" "$pat" "$f"
   }
 
@@ -763,6 +795,7 @@ modify_scripts(){
         return 0
       fi
       sed -i -E "s|^export[[:space:]]+${key}=.*|${new}|" "$f" || { _log_err "sed replace failed for %s (%s)" "$f" "$key"; return 1; }
+      _after_edit "$f"
       _log_ok "Updated %s in %s" "$key" "$f"
     else
       if $dry_run; then
@@ -774,6 +807,7 @@ modify_scripts(){
       else
         printf '\n%s\n' "$new" >> "$f" || { _log_err "append failed for %s" "$f"; return 1; }
       fi
+      _after_edit "$f"
       _log_ok "Inserted %s into %s" "$key" "$f"
     fi
   }
@@ -819,6 +853,7 @@ modify_scripts(){
     if ! $dry_run; then
       awk '!/^DirInPut='\''\// && !/^DirOutPut='\''\// && !/^DirMain='\''\//' "$nml" > "${nml}.tmp" \
         && mv "${nml}.tmp" "$nml" || { _log_err "Failed to sanitize namelist %s" "$nml"; rc=1; }
+      _after_edit "$nml"
     else
       _log_info "Dry-run: would sanitize absolute Dir* lines in %s" "$nml"
     fi
@@ -827,9 +862,10 @@ modify_scripts(){
       ["DirOutPut"]="\"${subt_grh_bam}/dataout\"/TQ0042L028"
       ["DirMain"]="\"${subt_bam}\""
     )
+    local key anchor line
     for key in "${!nml_replacements[@]}"; do
-      local anchor="!${key}=subt_bam"
-      local line="${key}='${nml_replacements[$key]}'"
+      anchor="!${key}=subt_bam"
+      line="${key}='${nml_replacements[$key]}'"
       if grep -Fqx "$line" "$nml"; then
         _log_info "Already configured: %s in %s" "$key" "$nml"
       else
@@ -841,6 +877,7 @@ modify_scripts(){
           else
             printf '\n%s\n' "$line" >> "$nml" || { _log_err "Append failed for %s" "$nml"; rc=1; }
           fi
+          _after_edit "$nml"
           _log_ok "Set %s in %s" "$key" "$nml"
         fi
       fi
@@ -857,9 +894,9 @@ modify_scripts(){
       ["SUBTBASE"]="${subt_bam}"
       ["WORKBASE"]="${work_bam}"
     )
-    local anchor_env="# BAM path in HOME"
-    for key in "${!env_replacements[@]}"; do
-      _sed_replace_or_insert "$envfile" "$key" "${env_replacements[$key]}" "$anchor_env" || rc=1
+    local anchor_env="# BAM path in HOME" k
+    for k in "${!env_replacements[@]}"; do
+      _sed_replace_or_insert "$envfile" "$k" "${env_replacements[$k]}" "$anchor_env" || rc=1
     done
   else
     _log_warn "Missing env file: %s" "$envfile"
@@ -870,6 +907,7 @@ modify_scripts(){
   return $rc
 }
 #EOC
+
 
 #BOP
 # !FUNCTION: configure
@@ -1035,7 +1073,7 @@ configure(){
 #   • Relies on: _log_info, _log_ok, _log_warn, _log_err, _log_action
 #   • Executable check uses -x (file exists and is executable).
 #EOP
-verify_executables() {
+verify_executables(){
   # Parse common flags (-v/--verbose e etc.)
   _parse_args "$@" 2>/dev/null || true
   set -- "${leftover_args[@]}"
@@ -1053,6 +1091,34 @@ verify_executables() {
   fi
 
   local ver="${nome_smg}"
+
+  # --------------------------- directories & checks --------------------------
+  # --- gsi and tools ---
+  : "${home_cptec:=${home_smg}/cptec}"              # Default: <home_smg>/cptec
+  : "${home_gsi_src:=${home_smg}/cptec/gsi/build/src}"  # Default: GSI build src
+
+  # --- BAM (Pre, Model, Pos) ---
+  : "${subt_model_bam:=${subt_smg}/datainout/bam/model}"  # BAM model output dir
+  : "${subt_pre_bam:=${subt_smg}/datainout/bam/pre}"      # BAM preprocessing dir
+  : "${subt_pos_bam:=${subt_smg}/datainout/bam/pos}"      # BAM postprocessing dir
+
+  # --- check if required directories exist ---
+  _ml () {
+    local name="$1"                  # variable name holding the directory path
+    local path="${!name:-}"          # resolve actual value from variable name
+    [[ -n "${path}" && -d "${path}" ]] || {
+      _log_err "%s not found: %s" "${name}" "${path:-<unset>}"
+      return ${EX_NOINPUT:-4}        # standardized exit code for missing input
+    }
+  }
+
+  # Validate all critical directories (fail early if any are missing)
+  _ml home_cptec
+  _ml home_gsi_src
+  _ml subt_model_bam
+  _ml subt_pre_bam
+  _ml subt_pos_bam
+
 
   # Base paths (version may be overridden via SMNA_VER)
   local base_home="${home_smg}"
@@ -1075,12 +1141,12 @@ verify_executables() {
 
   # Build the checklist: name|home_path|beegfs_path
   local items=()
-  [[ "$compgsi"     == true ]] && items+=("gsi.x|${base_home}/cptec/gsi/build/src/gsi/gsi.x|${base_beeg}/cptec/bin/gsi.x")
-  [[ "$compang"     == true ]] && items+=("gsi_angupdate.exe|${base_home}/cptec/gsi/build/src/angle/gsi_angupdate.exe|${base_beeg}/cptec/bin/gsi_angupdate.exe")
-  [[ "$compinctime" == true ]] && items+=("inctime|${base_home}/cptec/bin/inctime|${base_beeg}/cptec/bin/inctime")
-  [[ "$compbam"     == true ]] && items+=("bam_pre_ParPre_MPI|${base_home}/cptec/bam/pre/build/ParPre_MPI|${base_beeg}/bam/pre/exec/ParPre_MPI")
-  [[ "$compbam"     == true ]] && items+=("bam_model_ParModel_MPI|${base_home}/cptec/bam/model/build/ParModel_MPI|${base_beeg}/bam/model/exec/ParModel_MPI")
-  [[ "$compbam"     == true ]] && items+=("bam_pos_PostGrib|${base_home}/cptec/bam/pos/build/PostGrib|${base_beeg}/bam/pos/exec/PostGrib")
+  [[ "$compgsi"     == true ]] && items+=("gsi.x|${home_gsi_src}/gsi/gsi.x|${home_cptec}/bin/gsi.x")
+  [[ "$compang"     == true ]] && items+=("gsi_angupdate.exe|${home_gsi_src}/angle/gsi_angupdate.exe|${home_cptec}/bin/gsi_angupdate.exe")
+  [[ "$compinctime" == true ]] && items+=("inctime|${base_home}/cptec/bin/inctime|${home_cptec}/bin/inctime")
+  [[ "$compbam"     == true ]] && items+=("ParPre_MPI|${base_home}/cptec/bam/pre/build/ParPre_MPI|${subt_pre_bam}/exec/ParPre_MPI")
+  [[ "$compbam"     == true ]] && items+=("ParModel_MPI|${base_home}/cptec/bam/model/build/ParModel_MPI|${subt_model_bam}/exec/ParModel_MPI")
+  [[ "$compbam"     == true ]] && items+=("PostGrib|${base_home}/cptec/bam/pos/build/PostGrib|${subt_pos_bam}/exec/PostGrib")
 
   if ((${#items[@]}==0)); then
     _log_warn "No items enabled by flags (compgsi/compang/compbam/compinctime)."
@@ -1434,6 +1500,277 @@ testcase(){
   return $rc
 }
 #EOC
+#-------------------------------------------------------------------------------
+#BOP
+# !FUNCTION: bootstrap_bg
+# !INTERFACE:
+#   bootstrap_bg -A YYYYMMDDHH [--ntasks N] [--trunc T] [--levels L] \
+#                [--sst KEY] [global flags]
+#
+# !DESCRIPTION:
+#   Produce a 9-hour forecast window to supply model backgrounds at A-3h, A, A+3h
+#   for a given analysis time A (UTC). The function:
+#     • Computes INIT = A-6h, FINAL = A+3h, WINDOW = FINAL.
+#     • Stages inputs for INIT via copy_ncep_input.
+#     • Runs runPre with site-wide immutable defaults (see DEFAULTS) plus
+#       the fixed options (-t, -l, -I, -p).
+#     • Runs runModel to integrate from INIT to FINAL, writing outputs
+#       every 3h (A-3, A, A+3) and restarts as configured in DEFAULTS.
+#
+#   No scheduler submission is performed here; this is a direct, synchronous
+#   execution using project helpers for logging and dry-run.
+#
+# !USAGE:
+#   ./smg_setup.sh bootstrap_bg -A YYYYMMDDHH [--ntasks N] [--trunc T] [--levels L] \
+#                                 [--sst KEY] [--job-name NAME] \
+#                                 [-Q|--queue Q] [--walltime HH:MM] [-v|--verbose] [--dry-run]
+#
+# !REQUIRED:
+#   -A, --analysis  YYYYMMDDHH   Target GSI analysis time A (UTC).
+#
+# !OPTIONS:
+#   -np, --ntasks, --model-ntasks  INT    MPI tasks for runModel (default: 128).
+#   -t,  --trunc                   INT    Spectral truncation (default: 299).
+#   -l,  --levels                  INT    Number of vertical levels (default: 64).
+#   -s,  --sst                     KEY    SST dataset key for runModel (default: sstwkl).
+#
+# !GLOBAL FLAGS (forwarded when set):
+#   --job-name NAME | -Q/--queue Q | --walltime HH:MM | -v/--verbose | --dry-run
+#
+# !DEFAULTS (immutable, set via arrays before calling this function):
+#   PRE_EXTRA=( -n 0 -s -O -T -G -p SMT )
+#     -n 0  : run full pre-processing pipeline
+#     -s    : orography smoothing (toggle)
+#     -O    : generate ozone field
+#     -T    : generate tracer field(s)
+#     -G    : produce GrADS outputs for quick QA
+#     -p SMT: default experiment prefix used by runModel
+#             (applied via the fixed option -p "${prefix}", whose default is SMT)
+#
+#   MODEL_EXTRA=( -das -ts 3 -r -tr 6 -i 2 -p SMT )
+#     -das  : use data assimilation namelist
+#     -ts 3 : 3-hourly outputs (aligns to A-3, A, A+3)
+#     -r    : write restart files
+#     -tr 6 : restart dump every 6 hours
+#     -i 2  : initialization type = 2 (DNMI)
+#     -p SMT: default experiment prefix used by runModel
+#             (applied via the fixed option -p "${prefix}", whose default is SMT)
+#   To change site policy, modify PRE_EXTRA/MODEL_EXTRA arrays upstream (e.g., in a
+#   sourced profile). CLI no longer accepts extra free-form tokens.
+#
+# !BEHAVIOR:
+#   1) Parse global flags (via _parse_args) and local options (via __need_val).
+#   2) Validate numerics (>0) and analysis time format (YYYYMMDDHH).
+#   3) Compute INIT/FINAL/WINDOW using GNU date in UTC.
+#   4) Discover executables: copy_ncep_input, runPre, runModel.
+#   5) Stage inputs: copy_ncep_input INIT
+#   6) runPre   "${PRE_EXTRA[@]}"  with (-t, -l, -I, -p) + forwarded globals
+#   7) runModel "${MODEL_EXTRA[@]}" with (-das, -np, -t, -l, -I, -W FINAL, -F FINAL,
+#                                          -p, -s sst_key) + forwarded globals
+#   8) On success, backgrounds at A-3h, A, A+3h are available for use by GSI.
+#
+# !EXIT CODES:
+#   0   Success
+#   1   Bad or missing arguments (usage error)
+#   21  Staging failed (copy_ncep_input)
+#   31  runPre failed
+#   41  runModel failed
+#
+# !DEPENDENCIES:
+#   Bash 4+, GNU date (for -u -d arithmetic)
+#   ensure_smg_root (optional), copy_ncep_input, runPre, runModel
+#   __need_val (option validator), _parse_args (global flags)
+#   _run (project runner), _log_* (logging helpers)
+#
+# !ASSUMPTIONS & CONSTRAINTS:
+#   - Timestamps are interpreted in UTC.
+#   - copy_ncep_input accepts INIT as its sole positional argument
+#     (adjust here if your site wrapper requires flags).
+#   - Required directories (home_bam_run, run_smg, scripts_smg) must exist.
+#   - PRE_EXTRA and MODEL_EXTRA are defined as Bash arrays in the current shell
+#     (not exported) before calling this function.
+#
+# !EXAMPLES:
+#   # Standard 128-task run at trunc T299/L64 using sstwkl SST:
+#   ./smg_setup.sh bootstrap_bg -A 2025010106 --ntasks 128 -t 299 -l 64 -p SMT -s sstwkl -v
+#
+#   # Dry-run only (prints commands with resolved flags):
+#   ./smg_setup.sh bootstrap_bg -A 2025010106 --dry-run -v
+#
+# !NOTES:
+#   - No batch submission: this function is intended for direct invocation or for
+#     higher-level wrappers that orchestrate scheduling.
+#   - If your site uses alternate names (e.g., copy_ncep_inputs), add a fallback in
+#     the resolver section before staging.
+#   - For reproducibility, prefer to keep PRE_EXTRA/MODEL_EXTRA under version control.
+#EOP
+#BOC
+bootstrap_bg(){
+  # Ensure root/helpers if your tree uses that pattern
+  declare -F ensure_smg_root >/dev/null && ensure_smg_root || true
+
+  ${debug:-false} && _dump_cli "$@"
+  # Parse common flags (-v/--verbose e etc.)
+  _parse_args "$@" 2>/dev/null || true
+  set -- "${leftover_args[@]}"
+  
+  # Prevent verbosity changes from leaking
+  local verbose=$verbose
+
+  # runPre/runModel DEFAULTS (immutable)
+  PRE_EXTRA=( -n 0 -s -O -T -G -p SMT )
+  MODEL_EXTRA=( -das -ts 3 -r -tr 6 -i 2 -p SMT )
+  readonly PRE_EXTRA MODEL_EXTRA 2>/dev/null || true
+  
+  # ------------------------------ local args --------------------------------
+  local analysis=""                       # A (required)
+  local ntasks=128 trunc=299 levels=64 sst_key="sstwkl"
+
+   # Parse only the necessary CLI options for this function.
+   # Notes:
+   # - Options that take a value are validated with __need_val to catch
+   #   missing/ambiguous values early (e.g., "-t -l 64" would be flagged).
+   # - Multiple aliases are supported where practical (e.g., -np/--ntasks/--model-ntasks).
+   # - "--" ends option parsing; remaining tokens (if any) are ignored here.
+   # - Deprecated options are accepted but ignored with a warning to avoid breaking older scripts.
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -A|--analysis)  __need_val "$1" "$2" || return ${EX_USAGE:-1}; analysis="$2"; shift 2;;
+      -np|--ntasks|--model-ntasks)
+                      __need_val "$1" "$2" || return ${EX_USAGE:-1}; ntasks="$2";  shift 2;;
+      -t|--trunc)     __need_val "$1" "$2" || return ${EX_USAGE:-1}; trunc="$2";   shift 2;;
+      -l|--levels)    __need_val "$1" "$2" || return ${EX_USAGE:-1}; levels="$2";  shift 2;;
+      -s|--sst)       __need_val "$1" "$2" || return ${EX_USAGE:-1}; sst_key="$2"; shift 2;;
+      -h|--help) echo "Usage: bootstrap_bg -A YYYYMMDDHH [--ntasks N] [-t T] [-l L] [-p STR] [-s KEY]"; return 0;;
+      --) shift; break;;
+      -*) _log_err "Unknown option: %s" "$1"; return ${EX_USAGE:-1};;
+      *)  shift;;
+    esac
+  done
+  # Snapshot do que chegou na função:
+  ${debug:-false} && _dump_cli "$@"
+
+  #------------------------------- validate ---------------------------------
+  [[ "$analysis" =~ ^[0-9]{10}$ ]] || { _log_err "Missing -A/--analysis YYYYMMDDHH"; return ${EX_USAGE:-1}; }
+  [[ "$ntasks"  =~ ^[0-9]+$    ]]  || { _log_err "--ntasks must be integer: %s" "$ntasks"; return ${EX_CONFIG:-5}; }
+  [[ "$trunc"   =~ ^[0-9]+$    ]]  || { _log_err "--trunc must be integer: %s"  "$trunc";  return ${EX_CONFIG:-5}; }
+  [[ "$levels"  =~ ^[0-9]+$    ]]  || { _log_err "--levels must be integer: %s" "$levels"; return ${EX_CONFIG:-5}; }
+  # Valida numéricos > 0
+  (( ntasks > 0 )) || { _log_err "--ntasks must be > 0 (got %s)" "$ntasks"; return ${EX_CONFIG:-5}; }
+  (( trunc  > 0 )) || { _log_err "--trunc must be > 0 (got %s)"  "$trunc";  return ${EX_CONFIG:-5}; }
+  (( levels > 0 )) || { _log_err "--levels must be > 0 (got %s)" "$levels"; return ${EX_CONFIG:-5}; }
+
+
+  # Compute INIT=A-6h, FINAL=A+3h, WINDOW=FINAL  (requires GNU date)
+  local Adate="${analysis:0:8}" Ahh="${analysis:8:2}"
+  local INIT FINAL WINDOW
+  INIT=$(date -u -d "${Adate} ${Ahh} - 6 hours" +%Y%m%d%H)   || { _log_err "GNU date is required"; return ${EX_CONFIG:-5}; }
+  FINAL=$(date -u -d "${Adate} ${Ahh} + 3 hours" +%Y%m%d%H)  || { _log_err "GNU date is required"; return ${EX_CONFIG:-5}; }
+  WINDOW="${FINAL}"
+
+  # --------------------------- directories & checks --------------------------
+  : "${home_bam_run:=${SMG_ROOT}/cptec/bam/run}"
+  : "${run_smg:=${SMG_ROOT}/run}"
+  : "${scripts_smg:=${SMG_ROOT}/run/scripts}"
+
+  # --- check if required directories exist ---
+  _ml () {
+    local name="$1"                  # variable name holding the directory path
+    local path="${!name:-}"          # resolve actual value from variable name
+    [[ -n "${path}" && -d "${path}" ]] || {
+      _log_err "%s not found: %s" "${name}" "${path:-<unset>}"
+      return ${EX_NOINPUT:-4}        # standardized exit code for missing input
+    }
+  }
+  # Validate all critical directories (fail early if any are missing)
+  _ml home_bam_run
+  _ml run_smg
+  _ml scripts_smg
+
+  local vflag=""; ${verbose:-false} && vflag="-v"
+
+  _log_info "Bootstrap BG for A=%s | INIT=%s FINAL=%s (9h window @ 3h step)" "${analysis}" "${INIT}" "${FINAL}"
+  _log_info "Background times: %s, %s, %s" \
+    "$(date -u -d "${Adate} ${Ahh} - 3 hours" +%Y%m%d%H)" \
+    "${analysis}" \
+    "$(date -u -d "${Adate} ${Ahh} + 3 hours" +%Y%m%d%H)"
+
+  # -------------------------- resolve external cmds --------------------------
+  # 1) Staging
+  local stage_cmd=""
+  if   declare -F copy_ncep_input  >/dev/null; then stage_cmd="copy_ncep_input"
+  elif command -v copy_ncep_input  >/dev/null 2>&1; then stage_cmd="$(command -v copy_ncep_input)"
+  else
+    _log_err "Staging command not found: copy_ncep_input[s]"
+    return ${EX_NOINPUT:-4}
+  fi
+
+  # 2) Pre / Model — under ${home_bam_run}
+  local pre_cmd="${home_bam_run}/runPre"
+  local model_cmd="${home_bam_run}/runModel"
+  [[ -x "${pre_cmd}"   ]] || { _log_err "runPre not found or not executable: %s"   "${pre_cmd}";   return ${EX_NOINPUT:-4}; }
+  [[ -x "${model_cmd}" ]] || { _log_err "runModel not found or not executable: %s" "${model_cmd}"; return ${EX_NOINPUT:-4}; }
+
+  # run_cycle.sh / runGSI — under ${run_smg}
+  # Optional references for hints
+  local run_cycle_cmd="${run_smg}/run_cycle.sh"
+  local runGSI_cmd="${scripts_smg}/runGSI"
+  [[ -x "${run_cycle_cmd}"   ]] || _log_err "run_cycle.sh not found or not executable: %s"   "${run_cycle_cmd}"
+  [[ -x "${runGSI_cmd}" ]] || _log_err "runGSI not found or not executable: %s" "${runGSI_cmd}"
+
+
+  # ------------------------------- compose -----------------------------------
+  # Build a null-separated list of global flags and read them back into an array
+  _build_forward_flags_array() {
+    local -a fwd=()
+    [[ "${verbose:-false}" == true ]] && fwd+=("-v")
+    [[ "${dry_run:-false}" == true ]] && fwd+=("--dry-run")
+    [[ -n "${job_name:-}"        ]] && fwd+=("--job-name" "${job_name}")
+    local _q="${Q:-${queue:-}}"
+    [[ -n "${_q}"                ]] && fwd+=("-Q" "${_q}")
+    [[ -n "${walltime:-}"        ]] && fwd+=("--walltime" "${walltime}")
+    printf '%s\0' "${fwd[@]}"
+  }
+  IFS=$'\0' read -r -d '' -a fwd_flags_a < <(_build_forward_flags_array; printf '\0')
+
+  # 1) Staging step: only INIT is passed (no global flags here for safety)
+  local -a cmd_stage=( "${stage_cmd}" "${INIT}" )
+  # If staging ends up being an external binary (not a Bash function), ensure
+  # the dry-run behavior is preserved by explicitly forwarding the flag.
+  if ! declare -F "${stage_cmd}" >/dev/null 2>&1; then
+    [[ "${dry_run:-false}" == true ]] && cmd_stage+=("--dry-run")
+    [[ "${verbose:-false}" == true ]] && cmd_stage+=("-v")
+  fi
+
+  # 2) runPre: fixed options + user extras + forwarded global flags
+  local -a cmd_pre=( "${pre_cmd}" ${vflag:+-v} -t "${trunc}" -l "${levels}" -I "${INIT}" )
+  cmd_pre+=("${PRE_EXTRA[@]}")  
+  # shellcheck disable=SC2206
+  [[ -n "${pre_extra}" ]]          && cmd_pre+=(   ${pre_extra} )
+  [[ "${#fwd_flags_a[@]}" -gt 0 ]] && cmd_pre+=("${fwd_flags_a[@]}")
+
+  # 3) runModel: fixed options + user extras + forwarded global flags
+  local -a cmd_model=( "${model_cmd}" ${vflag:+-v} -np "${ntasks}" -t "${trunc}" -l "${levels}"
+                      -I "${INIT}" -W "${FINAL}" -F "${FINAL}" -s "${sst_key}" )
+  cmd_model+=("${MODEL_EXTRA[@]}")
+  # shellcheck disable=SC2206
+  [[ -n "${model_extra}" ]]          && cmd_model+=( ${model_extra} )
+  [[ "${#fwd_flags_a[@]}"   -gt 0 ]] && cmd_model+=("${fwd_flags_a[@]}")
+
+  # ------------------------------- run chain ---------------------------------
+  # _run_cmd MUST use "$@" (not "$*" and not `command`) to allow functions too
+  _run "${cmd_stage[@]}" || { _log_err "Staging failed";  return 21; }
+  _run "${cmd_pre[@]}"   || { _log_err "runPre failed";   return 31; }
+  _run "${cmd_model[@]}" || { _log_err "runModel failed"; return 41; }
+
+  _log_ok "Bootstrap finished. Backgrounds ready for A-3h, A, A+3h."
+
+}
+#EOC
+
+#-------------------------------------------------------------------------------
+
+
 # ----------------------------------------------------------------------------- #
 # ==================== End of SMG configuration functions ===================== #
 # ----------------------------------------------------------------------------- #
@@ -1751,35 +2088,60 @@ help(){
   fi
 }
 
-# Ensure hpc_name is defined before using it
-if [[ -z "${hpc_name:-}" ]]; then
-    _log_warn -f "hpc_name was not set before loading smg_setup.sh!"
-    
-    # Try to detect HPC system automatically
-    detect_hpc_system
-    exit_code=$?
-    
-    if [[ $exit_code -ne 0 ]]; then
-        _log_err "detect_hpc_system failed (exit code %d). Aborting." "$exit_code"
-        exit "$exit_code"
+
+# =====================[ CLI dispatcher ]===========================
+# Only run when executed directly (not when sourced).
+# SMG_SETUP_AS_LIBRARY=1 can force library mode even if executed.
+if [[ "${BASH_SOURCE[0]}" == "$0" && -z "${SMG_SETUP_AS_LIBRARY:-}" ]]; then
+  # Safer shell for the CLI path; sourcing users are unaffected.
+  set -euo pipefail
+  IFS=$'\n\t'
+
+  # Minimal bootstrap (idempotent if ensure_smg_root is)
+  ensure_smg_root || exit $?
+
+  # Help path first: keep output clean.
+  if [[ $# -eq 0 || "$1" == "help" || "$1" == "-h" || "$1" == "--help" ]]; then
+    SMG_DOC_FILE="${SMG_DOC_FILE:-$0}"
+    if [[ $# -ge 2 ]]; then
+      help "$2"   # help for a specific function
+    else
+      help        # general help
     fi
+    exit 0
+  fi
 
+  # Configure global flags early (verbose/debug/dry-run) without mutating "$@".
+  if declare -F __parse_args__ >/dev/null 2>&1; then
+    PARSER_WRITE_LEFTOVERS=0 __parse_args__ "$@"
+  elif declare -F _parse_args >/dev/null 2>&1; then
+    PARSER_WRITE_LEFTOVERS=0 _parse_args "$@"
+  fi
+
+  # Detect HPC system if not already defined (logs now respect verbose/debug).
+  if [[ -z "${hpc_name:-}" ]]; then
+    detect_hpc_system
+    rc=$?
+    if (( rc != 0 )); then
+      _log_err "detect_hpc_system failed (rc=%d). Aborting." "$rc"
+      exit "$rc"
+    fi
     _log_info -f "hpc_name set to: %s" "$hpc_name"
-fi
+  fi
 
-if [[ "${BASH_SOURCE[0]}" == "$0" && -z "${SMG_SETUP_AS_LIBRARY}" ]]; then
-  
-  # If a valid function is called, execute it; otherwise, show help
+  # Dispatch to the requested function, preserving subcommand argv intact.
   if declare -F "$1" >/dev/null 2>&1; then
     cmd="$1"; shift
     "$cmd" "$@"
   else
-    _log_err "Unknown command: $1"
+    _log_err "Unknown command: %s" "${1:-<none>}"
     echo
-    show_help
+    if declare -F help >/dev/null 2>&1; then help; else show_help; fi
     exit 1
   fi
 fi
+# =====================[ CLI dispatcher ]===========================
+
 #EOC
 # ============================================================================
 

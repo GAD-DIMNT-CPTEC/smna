@@ -57,52 +57,111 @@
 #EOP
 #-----------------------------------------------------------------------------#
 #BOC
-# --- Exit codes (standardized) ---
-readonly EX_OK=0 EX_USAGE=1 EX_NOOP=2 EX_CONFIG=3 EX_NOINPUT=4 EX_CANTCREAT=5
 
 #BOP
-# !FUNCTION: ensure_smg_root
-# !DESCRIPTION: Discover project root by locating ".smg_root", export SMG_ROOT,
-#               and source "$SMG_ROOT/etc/__init__.sh" exactly once (idempotent).
-# !USAGE: Place near the top of any script and call: ensure_smg_root || exit $?
-# !NOTE: Requires bash; uses PWD/BASH_SOURCE and pwd -P (no readlink -f).
+# !FUNCTION: ensure_root
+# !DESCRIPTION:
+#   Discover the project root by searching for a marker file (default: ".smg_root").
+#   Defines/exports the environment variable ROOT_VAR pointing to the root path,
+#   without sourcing any init scripts. Idempotent.
+# !USAGE:
+#   ensure_root <ROOT_VAR> [MARKER='.smg_root']
+# !EXAMPLE:
+#   ensure_root SMG_ROOT           || exit $?
+#   ensure_root SMG_ROOT .smg_root || exit $?
+# !NOTES:
+#   - Requires bash; relies on BASH_SOURCE, PWD, and "pwd -P" (no readlink -f).
+#   - Walks upward from ${BASH_SOURCE} and $PWD until the MARKER is found.
 #EOP
-#EOC
-# Ensure SMG_ROOT exists and initialize once
+#BOC
 ensure_root() {
-  local root_var="${1:?root_var required}" loaded_var="${2:?load_var required}"
-  local marker="${ROOT_MARKER:-.smg_root}" init_rel="${INIT_REL:-etc/__init__.sh}"
-  local src dir found init
+  local root_var="${1:?root_var required}" marker="${2:-${ROOT_MARKER:-.smg_root}}"
+  local src dir found
 
-  # 1) Root discovery (only if not set or invalid)
-  if [[ -z "${!root_var:-}" || ! -f "${!root_var}/$marker" ]]; then
-    for src in "${BASH_SOURCE[@]:-"$0"}" "$PWD"; do
-      [[ -n "$src" ]] || continue
-      dir=$([[ -d "$src" ]] && cd -- "$src" && pwd -P || cd -- "$(dirname -- "$src")" && pwd -P) || return 1
-      while [[ "$dir" != "/" && ! -f "$dir/$marker" ]]; do dir="${dir%/*}"; done
-      if [[ -f "$dir/$marker" ]]; then found="$dir"; break; fi
-    done
-    [[ -n "${found:-}" ]] || { printf '[ERROR] %s not found\n' "$marker" >&2; return 1; }
-    printf -v "$root_var" %s "$found"; export "$root_var"
-  fi
-  # 2) Sanity check for init
-  init="${!root_var}/${init_rel}"
-  [[ -r "$init" ]] || { printf '[ERROR] Missing %s\n' "$init" >&2; return 2; }
+  # variable names must be valid identifiers
+  [[ "$root_var" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]] || {
+    printf '[ERROR] invalid var name: %s\n' "$root_var" >&2; return 1; }
 
-  # 3) Load init exactly once (idempotent)
-  if [[ "${!load_var:-0}" != 1 ]]; then
-    # shellcheck source=/dev/null
-    . "$init" || { printf '[ERROR] Failed to load %s\n' "$init" >&2; return 3; }
-    printf -v "$load_var" 1
-    export "$load_var"
+  # if already set and valid, keep it
+  if [[ -n "${!root_var:-}" && -f "${!root_var}/$marker" ]]; then
+    export "$root_var"
+    return 0
   fi
+
+  # search from BASH_SOURCE chain and PWD
+  for src in "${BASH_SOURCE[@]:-"$0"}" "$PWD"; do
+    [[ -n "$src" ]] || continue
+    if [[ -d "$src" ]]; then
+      dir="$(cd -- "$src" && pwd -P)" || return 1
+    else
+      dir="$(cd -- "$(dirname -- "$src")" && pwd -P)" || return 1
+    fi
+    while [[ "$dir" != "/" && ! -f "$dir/$marker" ]]; do dir="${dir%/*}"; done
+    if [[ -f "$dir/$marker" ]]; then found="$dir"; break; fi
+  done
+
+  [[ -n "${found:-}" ]] || { printf '[ERROR] %s not found\n' "$marker" >&2; return 1; }
+  printf -v "$root_var" %s "$found"
+  export "$root_var"
 }
-ensure_root SMG_ROOT SMG_INIT_LOADED || exit $?
+#EOC
+#-----------------------------------------------------------------------------#
+#BOP
+# !FUNCTION: source_init_once
+# !DESCRIPTION:
+#   Sources "$<ROOT_VAR>/<INIT_REL>" exactly once, controlled by a flag LOADED_VAR.
+#   Does not attempt to discover the project root: assumes <ROOT_VAR> was already
+#   set/exported by smg_ensure_root (or another mechanism).
+# !USAGE:
+#   smg_source_init_once <ROOT_VAR> <LOADED_VAR> [INIT_REL='etc/__init__.sh']
+# !EXAMPLE:
+#   smg_ensure_root SMG_ROOT || exit $?
+#   smg_source_init_once SMG_ROOT SMG_INIT_LOADED || exit $?
+# !NOTES:
+#   - Idempotent: if LOADED_VAR==1, it will not re-source the init.
+#   - Return codes: 2 if init missing/unreadable, 3 if sourcing fails.
+#EOP
+#BOC
+source_init_once() {
+  local root_var="${1:?root_var required}" loaded_var="${2:?loaded_var required}"
+  local init_rel="${3:-${INIT_REL:-etc/__init__.sh}}"
+  local init
+
+  # variable names must be valid identifiers
+  [[ "$root_var"   =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]] || { printf '[ERROR] invalid var: %s\n' "$root_var" >&2; return 1; }
+  [[ "$loaded_var" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]] || { printf '[ERROR] invalid var: %s\n' "$loaded_var" >&2; return 1; }
+
+  # require root to be already set
+  [[ -n "${!root_var:-}" ]] || { printf '[ERROR] %s is unset\n' "$root_var" >&2; return 1; }
+
+  # simple idempotence check (1 == already loaded)
+  if [[ "${!loaded_var:-0}" == 1 ]]; then
+    return 0
+  fi
+
+  init="${!root_var}/${init_rel}"
+  [[ -r "$init" ]] || { printf '[ERROR] Missing init: %s\n' "$init" >&2; return 2; }
+
+  # shellcheck source=/dev/null
+  . "$init" || { printf '[ERROR] Failed to load: %s\n' "$init" >&2; return 3; }
+
+  printf -v "$loaded_var" '%d' 1
+  export "$loaded_var"
+}
 #EOC
 
 usage() {
   sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' "${BASH_SOURCE[0]}"
 }
+
+# 0) Ensure SMG_ROOT is set and init sourced once
+if ! declare -p SMG_ROOT >/dev/null 2>&1; then
+  ensure_root SMG_ROOT || {
+    printf '[ERROR] Could not locate project root\n' >&2
+    return 1
+  }
+fi
+source_init_once SMG_ROOT INIT_LOADED || return $?
 
 #------------------------------- Defaults ------------------------------------#
 verbose=false
@@ -177,39 +236,10 @@ fi
 
 #----------------------------- Staging files ---------------------------------#
 _log_info "Scanning: ${src_dir} (pattern: ${pattern})"
-count=0
 
-# Use find -print0 and while-read loop to handle arbitrary filenames safely
-while IFS= read -r -d '' path; do
-  base=$(basename -- "$path")
-  target="${dest_dir}/${base}"
+_list_files_array obsFiles "${src_dir}" \( -name "${pattern}" \)
 
-  case "${mode}" in
-    link)
-      $dry_run || ln -sfn -- "$path" "$target"
-      _log_info "ln -sfn -- '$path' '$target'"
-      ;;
-    hardlink)
-      $dry_run || ln -fn -- "$path" "$target"
-      _log_info "ln -fn -- '$path' '$target'"
-      ;;
-    copy)
-      $dry_run || cp -pf -- "$path" "$target"
-      _log_info "cp -pf -- '$path' '$target'"
-      ;;
-    *)
-      _die "$EX_CONFIG" "Invalid --mode '${mode}'. Use link|copy|hardlink."
-      ;;
-  esac
-  ((count++))
-done < <(find -P "${src_dir}" -type f -size +0c -name "${pattern}" -print0)
-
-if (( count > 0 )); then
-  _log_ok "Staged ${count} file(s) into ${dest_dir}."
-  exit "$EX_OK"
-else
-  _die "$EX_CONFIG" "No files found in ${src_dir} matching '${pattern}'."
-fi
+_copy_with_progress obsFiles "${src_dir}" "${dest_dir}" "$mode" "Copying Obs Files"
 
 #EOP
 

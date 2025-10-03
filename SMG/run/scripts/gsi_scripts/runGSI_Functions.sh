@@ -41,51 +41,100 @@
 #BOC
 
 #BOP
-# !FUNCTION: ensure_smg_root
-# !DESCRIPTION: Discover project root by locating ".smg_root", export SMG_ROOT,
-#               and source "$SMG_ROOT/etc/__init__.sh" exactly once (idempotent).
-# !USAGE: Place near the top of any script and call: ensure_smg_root || exit $?
-# !NOTE: Requires bash; uses PWD/BASH_SOURCE and pwd -P (no readlink -f).
+# !FUNCTION: ensure_root
+# !DESCRIPTION:
+#   Discover the project root by searching for a marker file (default: ".smg_root").
+#   Defines/exports the environment variable ROOT_VAR pointing to the root path,
+#   without sourcing any init scripts. Idempotent.
+# !USAGE:
+#   ensure_root <ROOT_VAR> [MARKER='.smg_root']
+# !EXAMPLE:
+#   ensure_root SMG_ROOT           || exit $?
+#   ensure_root SMG_ROOT .smg_root || exit $?
+# !NOTES:
+#   - Requires bash; relies on BASH_SOURCE, PWD, and "pwd -P" (no readlink -f).
+#   - Walks upward from ${BASH_SOURCE} and $PWD until the MARKER is found.
 #EOP
-#EOC
-# Ensure SMG_ROOT exists and initialize once
-ensure_smg_root() {
-  local d s init
-  if [[ -z "${SMG_ROOT:-}" || ! -f "$SMG_ROOT/.smg_root" ]]; then
-    for s in "${BASH_SOURCE[@]}" "$PWD"; do
-      [[ -n "$s" ]] || continue
-      d=$([[ -d "$s" ]] && { cd -- "$s" && pwd -P; } || { cd -- "$(dirname -- "$s")" && pwd -P; })
-      while [[ "$d" != "/" ]]; do
-        [[ -f "$d/.smg_root" ]] && { SMG_ROOT="$d"; break 2; }
-        d="${d%/*}"
-      done
-    done
-    [[ -n "${SMG_ROOT:-}" ]] || { printf '[ERROR] .smg_root not found\n' >&2; return 1; }
+#BOC
+ensure_root() {
+  local root_var="${1:?root_var required}" marker="${2:-${ROOT_MARKER:-.smg_root}}"
+  local src dir found
+
+  # variable names must be valid identifiers
+  [[ "$root_var" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]] || {
+    printf '[ERROR] invalid var name: %s\n' "$root_var" >&2; return 1; }
+
+  # if already set and valid, keep it
+  if [[ -n "${!root_var:-}" && -f "${!root_var}/$marker" ]]; then
+    export "$root_var"
+    return 0
   fi
-  init="$SMG_ROOT/etc/__init__.sh"
-  [[ -r "$init" ]] || { printf '[ERROR] Missing %s\n' "$init" >&2; return 2; }
-  [[ "${SMG_INIT_LOADED:-0}" == 1 ]] || { . "$init" || { printf '[ERROR] Failed to load %s\n' "$init" >&2; return 3; }; SMG_INIT_LOADED=1; }
-  export SMG_ROOT SMG_INIT_LOADED
+
+  # search from BASH_SOURCE chain and PWD
+  for src in "${BASH_SOURCE[@]:-"$0"}" "$PWD"; do
+    [[ -n "$src" ]] || continue
+    if [[ -d "$src" ]]; then
+      dir="$(cd -- "$src" && pwd -P)" || return 1
+    else
+      dir="$(cd -- "$(dirname -- "$src")" && pwd -P)" || return 1
+    fi
+    while [[ "$dir" != "/" && ! -f "$dir/$marker" ]]; do dir="${dir%/*}"; done
+    if [[ -f "$dir/$marker" ]]; then found="$dir"; break; fi
+  done
+
+  [[ -n "${found:-}" ]] || { printf '[ERROR] %s not found\n' "$marker" >&2; return 1; }
+  printf -v "$root_var" %s "$found"
+  export "$root_var"
 }
-ensure_smg_root || exit $?
 #EOC
+#-----------------------------------------------------------------------------#
+#BOP
+# !FUNCTION: source_init_once
+# !DESCRIPTION:
+#   Sources "$<ROOT_VAR>/<INIT_REL>" exactly once, controlled by a flag LOADED_VAR.
+#   Does not attempt to discover the project root: assumes <ROOT_VAR> was already
+#   set/exported by smg_ensure_root (or another mechanism).
+# !USAGE:
+#   smg_source_init_once <ROOT_VAR> <LOADED_VAR> [INIT_REL='etc/__init__.sh']
+# !EXAMPLE:
+#   smg_ensure_root SMG_ROOT || exit $?
+#   smg_source_init_once SMG_ROOT SMG_INIT_LOADED || exit $?
+# !NOTES:
+#   - Idempotent: if LOADED_VAR==1, it will not re-source the init.
+#   - Return codes: 2 if init missing/unreadable, 3 if sourcing fails.
+#EOP
+#BOC
+source_init_once() {
+  local root_var="${1:?root_var required}" loaded_var="${2:?loaded_var required}"
+  local init_rel="${3:-${INIT_REL:-etc/__init__.sh}}"
+  local init
 
-# --- user defaults ---
-# --- Default logging verbosity (string boolean) ---
-: "${verbose:=false}"
+  # variable names must be valid identifiers
+  [[ "$root_var"   =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]] || { printf '[ERROR] invalid var: %s\n' "$root_var" >&2; return 1; }
+  [[ "$loaded_var" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]] || { printf '[ERROR] invalid var: %s\n' "$loaded_var" >&2; return 1; }
 
-# --- per-rank post-merge action (PEs) (move, delete, keep)
-: "${PES_ACTION:=move}"
+  # require root to be already set
+  [[ -n "${!root_var:-}" ]] || { printf '[ERROR] %s is unset\n' "$root_var" >&2; return 1; }
 
-# --- Staging mode (copy, symlink, hardlink)
-: "${STAGE_LINK_MODE:=copy}"
+  # simple idempotence check (1 == already loaded)
+  if [[ "${!loaded_var:-0}" == 1 ]]; then
+    return 0
+  fi
 
+  init="${!root_var}/${init_rel}"
+  [[ -r "$init" ]] || { printf '[ERROR] Missing init: %s\n' "$init" >&2; return 2; }
+
+  # shellcheck source=/dev/null
+  . "$init" || { printf '[ERROR] Failed to load: %s\n' "$init" >&2; return 3; }
+
+  printf -v "$loaded_var" '%d' 1
+  export "$loaded_var"
+}
 #EOC
 
 #-----------------------------------------------------------------------------#
 #------------------------------- SMALL UTILS ---------------------------------#
 #-----------------------------------------------------------------------------#
-
 
 #BOP
 # !FUNCTION: usage
@@ -388,17 +437,17 @@ CopyOutputsForCycle() {
 #   • Sets default BYTE_ORDER if unset: Big_Endian
 #   • Applies cluster presets according to $hpc_name:
 #       egeon:
-#         MaxCoresPerNode=60, MTasks (default 120), ThreadsPerMPITask=1,
-#         TasksPerNode=MaxCoresPerNode/ThreadsPerMPITask,
-#         PEs=MTasks/ThreadsPerMPITask,
+#         MaxCoresPerNode=60, MTasks (default 120), omp_threads=1,
+#         TasksPerNode=MaxCoresPerNode/omp_threads,
+#         PEs=MTasks/omp_threads,
 #         Nodes=(MTasks+MaxCoresPerNode-1)/MaxCoresPerNode,
 #         Queue=batch, WallTime=01:00:00, BcCycles=0,
 #         MPICH_* tuning variables exported
 #       XC50/xc50:
-#         MaxCoresPerNode=40, MPITasks (default 120), ThreadsPerMPITask=1,
-#         TasksPerNode=MaxCoresPerNode/ThreadsPerMPITask,
-#         PEs=MPITasks/ThreadsPerMPITask,
-#         Nodes=(MPITasks+MaxCoresPerNode-1)/MaxCoresPerNode,
+#         MaxCoresPerNode=40, mpi_tasks (default 120), omp_threads=1,
+#         TasksPerNode=MaxCoresPerNode/omp_threads,
+#         PEs=mpi_tasks/omp_threads,
+#         Nodes=(mpi_tasks+MaxCoresPerNode-1)/MaxCoresPerNode,
 #         Queue=pesq, WallTime=01:00:00, BcCycles=0,
 #         MPICH_* tuning variables exported
 #       other:
@@ -416,8 +465,8 @@ CopyOutputsForCycle() {
 #     home_cptec          Base path for executables (used for execGSI, execBCAng)
 #     home_gsi_fix        Base path for GSI fix files (parmGSI, obsGSI, etc.)
 #     public_fix          Base path for public fix assets (SatBias* samples)
-#     MTasks / MPITasks   Total MPI ranks (cluster-specific default = 120)
-#     ThreadsPerMPITask   OpenMP threads per MPI rank (default = 1)
+#     MTasks / mpi_tasks   Total MPI ranks (cluster-specific default = 120)
+#     omp_threads   OpenMP threads per MPI rank (default = 1)
 #     Queue, WallTime     Scheduler defaults (cluster-specific)
 #   Outputs (exported):
 #     runGSI, runGSIDir, BYTE_ORDER, cluster layout vars, MPICH_* tunables,
@@ -431,9 +480,9 @@ CopyOutputsForCycle() {
 # !NOTES:
 #   • Path resolution uses GNU readlink -e; on systems without -e, consider a
 #     portability shim or 'realpath' fallback.
-#   • MTasks vs MPITasks:
+#   • MTasks vs mpi_tasks:
 #       - egeon branch uses MTasks to compute PEs/Nodes
-#       - XC50 branch uses MPITasks
+#       - XC50 branch uses mpi_tasks
 #     Ensure the appropriate variable is set for your cluster.
 #   • This helper is side-effectful by design (exports many variables).
 #     Call it early in your runGSI workflow.
@@ -443,6 +492,7 @@ constants() {
   _with_strict_mode   # enable strict mode only for this function
 
   # detect runGSI path from the call stack if available
+  local i
   for (( i=0; i<${#FUNCNAME[@]}; i++ )); do
     if [[ "${FUNCNAME[$i]}" == "main" ]]; then
       export runGSIDir
@@ -458,30 +508,58 @@ constants() {
 
   case "${hpc_name:-unknown}" in
     egeon)
-      export MaxCoresPerNode=60
-      export MTasks="${MTasks:-120}"
-      export ThreadsPerMPITask="${ThreadsPerMPITask:-1}"
-      export TasksPerNode=$(( MaxCoresPerNode / ThreadsPerMPITask ))
-      export PEs=$(( MTasks / ThreadsPerMPITask ))
-      export Nodes=$(( (MTasks + MaxCoresPerNode - 1) / MaxCoresPerNode ))
-      export Queue="${Queue:-batch}"
-      export WallTime="${WallTime:-01:00:00}"
-      export BcCycles="${BcCycles:-0}"
+      # ---- CANÔNICOS ----
+      export cores_per_node=${cores_per_node:-64}
+      export mpi_tasks=${mpi_tasks:-128}        # total de ranks MPI
+      export omp_threads=${omp_threads:-1}      # threads por rank (OMP)
+      
+      # tasks por nó que cabem com esse OMP (floor; mínimo 1)
+      ntasks_per_node=$(( cores_per_node / omp_threads ))
+      (( ntasks_per_node >= 1 )) || ntasks_per_node=1
+      
+      # número de nós (ceil pelo tpn calculado)
+      export nodes=$(( (mpi_tasks + ntasks_per_node - 1) / ntasks_per_node ))
+      
+      # total de ranks (aprun -n / mpirun -np)
+      export mpi_ranks=${mpi_ranks:-$mpi_tasks}
+      
+      # fila e walltime
+      export queue=${queue:-batch}
+      export walltime=${walltime:-01:00:00}
+      
+      # índice de ciclo de bias-correction (0 = sem BC)
+      export BcCycles=${bc_cycle:-0}
+      
+      # -------------------- MPICH (mantém maiúsculas) --------------------
       export MPICH_UNEX_BUFFER_SIZE=100000000
       export MPICH_MAX_SHORT_MSG_SIZE=4096
       export MPICH_PTL_UNEX_EVENTS=50000
       export MPICH_PTL_OTHER_EVENTS=2496
       ;;
     XC50|xc50)
-      export MaxCoresPerNode=40
-      export MPITasks="${MPITasks:-120}"
-      export ThreadsPerMPITask="${ThreadsPerMPITask:-1}"
-      export TasksPerNode=$(( MaxCoresPerNode / ThreadsPerMPITask ))
-      export PEs=$(( MPITasks / ThreadsPerMPITask ))
-      export Nodes=$(( (MPITasks + MaxCoresPerNode - 1) / MaxCoresPerNode ))
-      export Queue="${Queue:-pesq}"
-      export WallTime="${WallTime:-01:00:00}"
-      export BcCycles="${BcCycles:-0}"
+      # ---- CANÔNICOS ----
+      export cores_per_node=${cores_per_node:-40}
+      export mpi_tasks=${mpi_tasks:-120}        # total de ranks MPI
+      export omp_threads=${omp_threads:-1}      # threads por rank (OMP)
+
+      # tasks MPI por nó que cabem com esse OMP (floor; mínimo 1)
+      export ntasks_per_node=$(( cores_per_node / omp_threads ))
+      (( ntasks_per_node >= 1 )) || ntasks_per_node=1
+
+      # número de nós (ceil pelo tpn calculado)
+      export nodes=$(( (mpi_tasks + ntasks_per_node - 1) / ntasks_per_node ))
+      
+      # total de ranks (aprun -n / mpirun -np)
+      export mpi_ranks=${mpi_ranks:-$mpi_tasks}
+            
+      # fila e walltime
+      export queue="${queue:-pesq}"
+      export walltime="${walltime:-01:00:00}"
+
+      # índice de ciclo de bias-correction (0 = sem BC)
+      export BcCycles="${bc_cycle:-0}"
+      
+      # -------------------- MPICH (mantém maiúsculas) --------------------
       export MPICH_UNEX_BUFFER_SIZE=100000000
       export MPICH_MAX_SHORT_MSG_SIZE=4096
       export MPICH_PTL_UNEX_EVENTS=50000
@@ -554,7 +632,7 @@ BAM_CoordSize() {
 #
 # !USAGE:
 #   ParseOpts -- -t 299 -l 64 -p PREF -I 2025010100 [-T 299] [-bc 0|1|2...] \
-#                 [-np 120] [-N 60] [-d 1] [-om true|false] [-h]
+#                 [-om true|false] [-h]
 #
 # !OPTIONS:
 #   -t <int>   Background truncation (BkgTrunc)                 [REQUIRED]
@@ -564,17 +642,15 @@ BAM_CoordSize() {
 #   -T <int>   Analysis truncation (AnlTrunc); defaults to BkgTrunc
 #   -bc <int>  Bias-correction cycle index (BcCycle); default 0
 #              • If BcCycle > 0 → IsBC=true ; else → IsBC=false
-#   -np <int>  MPI tasks (MPITasks) / legacy alias MTasks
-#   -N  <int>  TasksPerNode
-#   -d  <int>  ThreadsPerMPITask
 #   -om <bool> One-observation test flag (ObsMod), true|false; default false
 #   -h         Print usage (extracted from $runGSI) and return 0
+#   --gsi-ntasks <int>   MPI tasks for runGSI (default: 128).
 #
 # !BEHAVIOR:
 #   • Validates required options and basic formats
 #   • Exports: BkgTrunc, BkgNLevs, BkgPrefix, AnlDate, AnlTrunc,
 #              BcCycle, IsBC, ObsMod, (compat) BcCycles=BcCycle
-#              and optional MPITasks, TasksPerNode, ThreadsPerMPITask
+#              and optional mpi_tasks, TasksPerNode, omp_threads
 #   • Computes and exports:
 #       - AnlNLevs = BkgNLevs
 #       - BkgDate = inctime(AnlDate, -6h)
@@ -586,6 +662,9 @@ BAM_CoordSize() {
 #   0 on success; non-zero on missing/invalid arguments or inctime failure.
 #
 # !NOTES:
+#   HPC resources são parseados globalmente por __parse_args__:
+#     --ntasks (mpi_tasks), --cpus-per-task (omp_threads),
+#     --nodes (nodes), --cores-per-node (cores_per_node), --procs (total_procs)
 #   Requires: inctime tool in PATH/env; helper 'usage' for -h.
 #   Safety: runs under local strict mode (set -euo pipefail) and restores on return.
 #   Compatibility: exports BcCycles as alias of BcCycle for older callers.
@@ -594,6 +673,19 @@ BAM_CoordSize() {
 ParseOpts() {
   _with_strict_mode   # enable strict mode only for this function
 
+  # 1) Parse global flags first (see __helpers__.sh)
+  __parse_args__ "$@" || true
+
+  # 2) Replace positional parameters with what was left from the global parser
+  if [[ ${leftover_args+x} ]]; then
+    set -- "${leftover_args[@]}"
+  else
+    set --
+  fi
+
+  # 3) Now reset leftover_args and parse local options
+  leftover_args=()
+  
   # defaults
   ObsMod="${ObsMod:-false}"
   BcCycle="${BcCycle:-0}"   # novo nome
@@ -610,13 +702,12 @@ ParseOpts() {
       -p) BkgPrefix="${2:?missing value for -p}"; shift 2 ;;
       -I) AnlDate="${2:?missing value for -I}"; shift 2 ;;
       -T) AnlTrunc="${2:?missing value for -T}"; shift 2 ;;
+      --gsi-ntasks) mpi_tasks="${2:?missing value for --gsi-ntasks}";  shift 2;;
+
       -bc)
         BcCycle="${2:?missing value for -bc}"
         shift 2
         ;;
-      -np) MPITasks="${2:?missing value for -np}"; shift 2 ;;
-      -N)  TasksPerNode="${2:?missing value for -N}"; shift 2 ;;
-      -d)  ThreadsPerMPITask="${2:?missing value for -d}"; shift 2 ;;
       -om) ObsMod="${2:?missing value for -om}"; shift 2 ;;
       -h)
         usage || true
@@ -632,6 +723,9 @@ ParseOpts() {
         break ;;
     esac
   done
+  
+  # ---- Preserve leftover positional arguments ----
+  leftover_args=("$@")
 
   # --- validations -----------------------------------------------------------
   : "${BkgTrunc:?BkgTrunc (-t) not set}"
@@ -670,9 +764,8 @@ ParseOpts() {
   export BkgTrunc BkgNLevs BkgPrefix AnlDate AnlTrunc ObsMod
   export BcCycle IsBC
 
-  [[ -n "${MPITasks:-}"           ]] && export MPITasks
+  
   [[ -n "${TasksPerNode:-}"       ]] && export TasksPerNode
-  [[ -n "${ThreadsPerMPITask:-}"  ]] && export ThreadsPerMPITask
 }
 #EOC
 
@@ -1289,13 +1382,13 @@ getSatBias() {
 # !BEHAVIOR:
 #   • Copies gsiparm template (cold/normal) into runDir and substitutes placeholders
 #   • Generates job script (gsi.qsb) with scheduler settings (SLURM/PBS)
-#   • Performs sanity check: TasksPerNode * ThreadsPerMPITask == MaxCoresPerNode
+#   • Performs sanity check: TasksPerNode * omp_threads == MaxCoresPerNode
 #   • Submits the job with sbatch -W (SLURM) or qsub -W block=true (PBS)
 #   • Standard output/error logs are redirected to gsiStdout_* and .out files
 #
 # !NOTES:
 #   Requires: env vars (execGSI, parmGSI, cldRadInfo, hpc_name, Nodes,
-#             TasksPerNode, ThreadsPerMPITask, MaxCoresPerNode, MTasks, Queue)
+#             TasksPerNode, omp_threads, cores_per_node, m_tasks, queue)
 #   Logs: All stdout/stderr routed to runDir/gsiStdout_${AnlDate}.<timestamp>.log
 #   Safe under Bash strict mode (set -euo pipefail).
 #EOP
@@ -1309,7 +1402,29 @@ subGSI() {
 
   : "${parmGSI:?}"; : "${cldRadInfo:?}"; : "${execGSI:?}"; : "${hpc_name:?}"
 
-  # prepara gsiparm e info de execução
+  # Derivados
+  local tpn pes
+  # ntasks-per-node (ceil para evitar subalocação)
+  tpn=$(( (mpi_tasks + nodes - 1) / nodes ))
+  pes="${m_tasks}"   # aprun -n
+
+  # Sanidade: tpn * omp_thr == ppn (nó cheio). Ajusta tpn se necessário.
+  # Se preferir permitir nós parcialmente ocupados, troca '==' por '<=' e remove ajuste.
+  if (( tpn * omp_threads != cores_per_node )); then
+    local fit=$(( cores_per_node / omp_threads ))
+    (( fit > 0 )) || { _log_err "omp_threads=%s > cores_per_node=%s" "$omp_threads" "$cores_per_node"; return 3; }
+    tpn="$fit"
+    # Capacidade total com este layout:
+    local capacity=$(( nodes * tpn ))
+    if (( mpi_tasks > capacity )); then
+      _log_warn "Reducing ntasks: %s -> %s (nodes=%s * tpn=%s)" "$mpi_tasks" "$capacity" "$nodes" "$tpn"
+      mpi_tasks="$capacity"
+      pes="$m_tasks"
+    fi
+  fi
+
+  # -------------------- prepara gsiparm e info de execução -------------------
+
   cp -pf -- "${cldRadInfo}" "${runDir_}/$(basename -- "${cldRadInfo}")"
   local gsiparm_dst="${runDir_}/$(basename -- "${parmGSI}")"
   if [[ "$cold" == ".true." || "$cold" == "true" || "$cold" == "1" ]]; then
@@ -1327,15 +1442,18 @@ subGSI() {
          -e "s/#LABELANL#/${andt}/g" \
          -e "s/#ONEOBTEST#/${onet}/" "${gsiparm_dst}"
 
-  # sanity: TasksPerNode * ThreadsPerMPITask == MaxCoresPerNode
-  local sanity=$(( ${TasksPerNode:?} * ${ThreadsPerMPITask:?} ))
-  if (( sanity != ${MaxCoresPerNode:?} )); then
-    printf '[ERROR] MPI/OpenMP layout mismatch: %d != %d\n' "$sanity" "$MaxCoresPerNode" >&2
-    return 3
+  # ----------------------------- submit scripts ------------------------------
+  local runTime jobfile
+  runTime="$(date '+runTime-%H:%M:%S')"
+  jobfile="${runDir_}/gsi.qsb"
+
+  if [[ "${dry_run:-false}" == true ]]; then
+    _log_info "DRY-RUN: %s" "$(basename -- "${jobfile}")"
+    return 0
   fi
 
-  local runTime; runTime="$(date '+runTime-%H:%M:%S')"
-  local jobfile="${runDir_}/gsi.qsb"
+  echo -ne "\033[34;1m Running GSI \033[m"
+  cd -- "${runDir_}" || { _log_err "cd failed: %s" "${runDir_}"; return 3; }
 
   case "${hpc_name}" in
     egeon)
@@ -1344,13 +1462,13 @@ subGSI() {
         printf '%s\n' '#!/bin/bash'
         printf '%s\n' "#SBATCH --output=${runDir_}/gsiStdout.${andt}.${runTime}.out"
         printf '%s\n' "#SBATCH --error=${runDir_}/gsiStdErr.${andt}.${runTime}.out"
-        printf '%s\n' "#SBATCH --time=${WallTime}"
-        printf '%s\n' "#SBATCH --nodes=${Nodes}"
-        printf '%s\n' "#SBATCH --ntasks=${MTasks}"
-        printf '%s\n' "#SBATCH --ntasks-per-node=${TasksPerNode}"
-        printf '%s\n' "#SBATCH --cpus-per-task=${ThreadsPerMPITask}"
+        printf '%s\n' "#SBATCH --time=${walltime}"
+        printf '%s\n' "#SBATCH --nodes=${nodes}"
+        printf '%s\n' "#SBATCH --ntasks=${mpi_tasks}"
+        printf '%s\n' "#SBATCH --ntasks-per-node=${ntasks_per_node}"
+        printf '%s\n' "#SBATCH --cpus-per-task=${omp_threads}"
         printf '%s\n' "#SBATCH --job-name=GSI-${atrc}"
-        printf '%s\n' "#SBATCH --partition=${Queue}"
+        printf '%s\n' "#SBATCH --partition=${queue}"
         printf '\n'
         printf '%s\n' "cd ${runDir_}"
         printf '%s\n' 'pwd'
@@ -1365,16 +1483,20 @@ subGSI() {
         printf '\n'
         printf '%s\n' "mpirun -np \$SLURM_NTASKS ./$(basename -- "${execGSI}")"
       } > "${jobfile}"
-      ( cd "${runDir_}" && sbatch -W "$(basename -- "${jobfile}")" );;
-
+            
+      # Submete e captura JobID de forma “limpa”
+      local sb_out 
+      sb_out="$(LC_ALL=C sbatch --wait "$(basename -- "${jobfile}")";  exit ${PIPESTATUS[0]})"
+      return $?
+      ;;
     XC50|xc50)
       # ------------------------- PBS (XC50) --------------------------
       {
         printf '%s\n' '#!/bin/bash'
         printf '%s\n' "#PBS -o ${runDir_}/gsiAnl.${andt}.${runTime}.out"
         printf '%s\n' '#PBS -S /bin/bash'
-        printf '%s\n' "#PBS -q ${Queue}"
-        printf '%s\n' "#PBS -l nodes=${Nodes}:ppn=${MaxCoresPerNode}"
+        printf '%s\n' "#PBS -q ${queue}"
+        printf '%s\n' "#PBS -l nodes=${Nodes}:ppn=${cores_per_node}"
         printf '%s\n' '#PBS -N gsiAnl'
         printf '%s\n' '#PBS -A CPTEC'
         printf '\n'
@@ -1384,10 +1506,19 @@ subGSI() {
         printf '%s\n' 'export ATP_ENABLED=1'
         printf '%s\n' 'cd "${PBS_O_WORKDIR:-.}"'
         printf '\n'
-        printf '%s\n' "aprun -n ${PEs} -N ${TasksPerNode} -d ${ThreadsPerMPITask} $(basename -- "${execGSI}") > gsiStdout_${andt}.${runTime}.log 2>&1"
+        printf '%s\n' "aprun -n ${mpi_tasks} -N ${ntasks_per_node} -d ${omp_threads} $(basename -- "${execGSI}") > gsiStdout_${andt}.${runTime}.log 2>&1"
       } > "${jobfile}"
-      ( cd "${runDir_}" && qsub -W block=true "$(basename -- "${jobfile}")" );;
 
+      local qs_out qs_rc jobid
+      # Monta comando qsub
+      local -a qs_cmd=( qsub )
+      qs_cmd+=( -W "block=${QSUB_BLOCK:-true}" )                  # block=true|false
+      qs_cmd+=( "$(basename -- "${jobfile}")" )
+      
+      # Submete e captura saída/rc
+      qs_out="$( LC_ALL=C "${qs_cmd[@]}"; exit ${PIPESTATUS[0]})"
+      return $?
+      ;;
     *)
       printf '[ERROR] Unsupported hpc_name=%s\n' "${hpc_name}" >&2
       return 4;;
@@ -1419,7 +1550,7 @@ subGSI() {
 #
 # !NOTES:
 #   Requires: env vars (execBCAng, parmBCAng, hpc_name, Nodes, TasksPerNode,
-#             ThreadsPerMPITask, MTasks, Queue)
+#             omp_threads, MTasks, Queue)
 #   Logs: Output captured in runDir/gsiAngUpdateStdout_${AnlDate}.<timestamp>.log
 #   Cold/warm start handling is not relevant for angle bias correction.
 #   Safe under Bash strict mode (set -euo pipefail).
@@ -1454,7 +1585,7 @@ subBCAng() {
         printf '%s\n' "#SBATCH --nodes=${Nodes}"
         printf '%s\n' "#SBATCH --ntasks=${MTasks}"
         printf '%s\n' "#SBATCH --ntasks-per-node=${TasksPerNode}"
-        printf '%s\n' "#SBATCH --cpus-per-task=${ThreadsPerMPITask}"
+        printf '%s\n' "#SBATCH --cpus-per-task=${omp_threads}"
         printf '%s\n' "#SBATCH --job-name=AngUp${andt:4:6}"
         printf '%s\n' "#SBATCH --partition=${Queue}"
         printf '\n'
@@ -1758,42 +1889,244 @@ copyFiles() {
 
 
 #-----------------------------------------------------------------------------#
-# Simple colored logger (level-aware)
+# CLI usable when sourced or executed
 #-----------------------------------------------------------------------------#
+
 #BOP
-# !FUNCTION: .log
-# !INTERFACE: .log LEVEL MESSAGE...
+# !FUNCTION: _gsi__short_help_for
+# !INTERFACE: _gsi__short_help_for FUNCTION_NAME
 # !DESCRIPTION:
-#   Minimal colorized logger; LEVEL is 0..7 (emerg..debug).
-#   This helper ignores the global 'verbose'. Use _log_* for standardized logs.
+#   Extracts a one-line short help from the ProTex block of the given function.
+#   It scans this file for the function's `!FUNCTION:` block and returns the
+#   first non-comment line after `!DESCRIPTION:` as the short help string.
+# !USAGE:
+#   _gsi__short_help_for FixedFiles
+# !RETURNS:
+#   Prints the short description to stdout (empty if not found).
+# !NOTES:
+#   - Helper used by gsi_list to show a concise description for each command.
+#   - Robust to missing or incomplete ProTex blocks (returns empty).
 #EOP
 #BOC
-function .log () {
-  local LOG_LEVELS=([0]="emerg"  [1]="alert" [2]="crit"  [3]="err" \
-                    [4]="warning"[5]="notice"[6]="info"  [7]="debug")
-  local LOG_COLORS=([0]="\033[31;1m" [1]="\033[33;1m" [2]="\033[31;1m" [3]="\033[31;1m" \
-                    [4]="\033[33;1m" [5]="\033[32;1m" [6]="\033[34;1m" [7]="\033[32;1m")
-  local LEVEL="${1:?missing level}"; shift
-  local msg="$*"
-  if [[ "$LEVEL" =~ ^[0-7]$ ]]; then
-    printf "%s[%s]\033[0m %s\n" "${LOG_COLORS[$LEVEL]}" "${LOG_LEVELS[$LEVEL]}" "$msg"
-  else
-    printf "[log] %s\n" "$msg"
-  fi
+_gsi__short_help_for() { # $1=function_name
+  local fn="$1"
+  awk -v tgt="$fn" '
+    /^#BOP/ {inb=1; fun=""; desc=""}
+    inb && /!FUNCTION:[[:space:]]*/ {
+      fun=$0; sub(/.*!FUNCTION:[[:space:]]*/,"",fun)
+    }
+    inb && /!DESCRIPTION:/ {indesc=1; next}
+    inb && /^#EOP/ {inb=0; indesc=0}
+    indesc && !/^#/ && desc=="" {desc=$0}
+    indesc && /^#/{next}
+    !inb && fun==tgt {print desc; exit}
+  ' -- "${BASH_SOURCE[0]}" 2>/dev/null | sed -e 's/^[[:space:]]\+//' -e 's/[[:space:]]\+$//'
 }
 #EOC
 
-if [[ "${BASH_SOURCE[0]}" == "$0" && -z "${SMG_SETUP_AS_LIBRARY}" ]]; then
-  
-  # If a valid function is called, execute it; otherwise, show help
-  if declare -F "$1" >/dev/null 2>&1; then
-    cmd="$1"; shift
-    "$cmd" "$@"
-  else
-    _log_err "Unknown command: $1"
+#BOP
+# !FUNCTION: gsi_list
+# !INTERFACE: gsi_list
+# !DESCRIPTION:
+#   Lists public commands exposed by this library (allowlist), printing a short
+#   description for each function when available. Intended for interactive use
+#   after sourcing the file or via the CLI dispatcher.
+# !USAGE:
+#   gsi_list
+# !OUTPUT:
+#   Human-readable list: one line per command with a short description.
+# !NOTES:
+#   - Only shows functions present in the allowlist and declared in the shell.
+#   - Uses _gsi__short_help_for to extract the first line of description.
+#EOP
+#BOC
+gsi_list() {
+  local _old; _old=$(set +o); set -euo pipefail
+  local fn
+  echo "Available commands:"
+  # allowlist: expose only typical CLI-safe functions
+  for fn in \
+    constants ParseOpts BAM_CoordSize \
+    StageBackgrounds CopyGSIExec CopyOutputsForCycle \
+    getInfoFiles getSatBias linkObs linkObs_ \
+    FixedFiles subGSI subBCAng mergeDiagFiles copyFiles \
+    usage ensure_root source_init_once
+  do
+    if declare -F "$fn" >/dev/null 2>&1; then
+      local d; d=$(_gsi__short_help_for "$fn")
+      printf "  %-20s  %s\n" "$fn" "${d:-}"
+    fi
+  done
+  eval "$_old"
+}
+#EOC
+
+#BOP
+# !FUNCTION: gsi_help
+# !INTERFACE: gsi_help [COMMAND]
+# !DESCRIPTION:
+#   Shows general help for the GSI helper CLI or detailed ProTex documentation
+#   for a specific COMMAND. With no arguments, prints usage, tips, and the list
+#   of available commands. With a command name, prints the corresponding
+#   ProTex block (`#BOP`..`#EOP`) extracted from this file.
+# !USAGE:
+#   gsi_help
+#   gsi_help FixedFiles
+# !RETURNS:
+#   0 on success; 2 if COMMAND is unknown.
+# !NOTES:
+#   - Assumes this file contains ProTex blocks for documented functions.
+#   - Safe to call in sourced or executed contexts.
+#EOP
+#BOC
+gsi_help() {
+  local _old; _old=$(set +o); set -euo pipefail
+  if [[ $# -eq 0 ]]; then
     echo
-    show_help
-    exit 1
+    echo "GSI helper library CLI"
+    echo "Usage: gsi_cli <command> [args...]"
+    echo
+    gsi_list
+    echo
+    echo "Tips:"
+    echo "  - Use: gsi_help <command>  for detailed docs."
+    echo "  - Most commands expect env vars configured by 'constants' and/or ParseOpts."
+    eval "$_old"; return 0
   fi
+
+  local cmd="$1"; shift || true
+  if ! declare -F "$cmd" >/dev/null 2>&1; then
+    printf '[ERROR] Unknown command: %s\n' "$cmd" >&2
+    echo
+    gsi_list
+    eval "$_old"; return 2
+  fi
+
+  # Show ProTex block for the function
+  awk -v tgt="$cmd" '
+    /^#BOP/ {inb=1; keep=0}
+    inb && /!FUNCTION:[[:space:]]*/ {
+      fun=$0; sub(/.*!FUNCTION:[[:space:]]*/,"",fun)
+      keep=(fun==tgt)
+    }
+    inb && keep {print}
+    inb && /^#EOP/ && keep {print; exit}
+  ' -- "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+  eval "$_old"
+}
+#EOC
+
+#BOP
+# !FUNCTION: gsi_cli
+# !INTERFACE: gsi_cli <command> [args...]
+# !DESCRIPTION:
+#   Main CLI dispatcher. When called with a known command, invokes the matching
+#   function with the remaining arguments. Supports built-in subcommands:
+#   `help|--help|-h` and `list|ls`.
+# !USAGE:
+#   gsi_cli list
+#   gsi_cli help FixedFiles
+#   gsi_cli subGSI /path/to/run 960 482 64 299 299 2025010100 .false. .false.
+# !RETURNS:
+#   0 on success; 1 on missing command; 2 on unknown command.
+# !NOTES:
+#   - Designed for both sourced and executed usage.
+#   - Does not modify global shell options (strict mode is local).
+#EOP
+#BOC
+gsi_cli() {
+  local _old; _old=$(set +o); set -euo pipefail
+
+  if [[ $# -eq 0 ]]; then
+    gsi_help
+    eval "$_old"; return 1
+  fi
+
+  local cmd="$1"; shift || true
+
+  case "$cmd" in
+    help|-h|--help)
+      gsi_help "$@"
+      ;;
+    list|ls)
+      gsi_list
+      ;;
+    *)
+      if declare -F "$cmd" >/dev/null 2>&1; then
+        "$cmd" "$@"
+      else
+        printf '[ERROR] Unknown command: %s\n' "$cmd" >&2
+        echo
+        gsi_list
+        eval "$_old"; return 2
+      fi
+      ;;
+  esac
+  eval "$_old"
+}
+#EOC
+
+#BOP
+# !FUNCTION: __auto_cli_entry
+# !DESCRIPTION:
+#   Auto-entry point when this file is executed as a script (not sourced).
+#   If SMG_SETUP_AS_LIBRARY is unset/empty, forwards arguments to gsi_cli.
+# !USAGE:
+#   # No direct call; executed on file run: ./runGSI_functions.sh <args>
+# !NOTES:
+#   - When sourced, this block does nothing.
+#   - Export SMG_SETUP_AS_LIBRARY=1 to disable CLI behavior even if executed.
+#EOP
+#BOC
+# If executed directly: act as a CLI; if sourced, user can call gsi_cli manually.
+if [[ "${BASH_SOURCE[0]}" == "$0" && -z "${SMG_SETUP_AS_LIBRARY:-}" ]]; then
+  gsi_cli "$@"
 fi
+#EOC
+
+#-----------------------------------------------------------------------------#
+# Library bootstrap (runs only on "source", not when executed as CLI)
+#-----------------------------------------------------------------------------#
+
+#BOP
+# !FUNCTION: __library_bootstrap
+# !DESCRIPTION:
+#   Bootstrap that runs only when this file is sourced. It ensures the project
+#   root (SMG_ROOT) is discovered and exported, sources the project init file
+#   exactly once (guarded by INIT_LOADED=1), and applies safe defaults for
+#   common knobs if they are unset.
+# !BEHAVIOR:
+#   - Calls: ensure_root SMG_ROOT ; source_init_once SMG_ROOT INIT_LOADED
+#   - Sets defaults (only if unset): mpi_tasks=72, omp_threads=1, nodes=12,
+#     queue=batch, walltime=01:00:00, do_obsmake=1, do_gsi=1, do_bam=1.
+# !USAGE:
+#   # Implicit on: source /path/to/runGSI_functions.sh
+# !NOTES:
+#   - This block is skipped when the file is executed as a script.
+#   - Uses parameter expansion `:=` to avoid overriding pre-configured values.
+#   - Emits an error and returns non-zero if SMG_ROOT cannot be resolved.
+#EOP
+#BOC
+if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
+  # 0) Ensure SMG_ROOT is set and init sourced once
+  if ! declare -p SMG_ROOT >/dev/null 2>&1; then
+    ensure_root SMG_ROOT || {
+      printf '[ERROR] Could not locate project root\n' >&2
+      return 1
+    }
+  fi
+  source_init_once SMG_ROOT INIT_LOADED || return $?
+
+  # --- user defaults ---
+  # --- Default logging verbosity (string boolean) ---
+  : "${verbose:=false}"
+  
+  # --- per-rank post-merge action (PEs) (move, delete, keep)
+  : "${PES_ACTION:=move}"
+  
+  # --- Staging mode (copy, symlink, hardlink)
+  : "${STAGE_LINK_MODE:=copy}"
+
+fi
+#EOC
 

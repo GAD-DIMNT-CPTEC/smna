@@ -3,7 +3,7 @@
 #                            GLOBAL INIT / HELPERS                            #
 #=============================================================================#
 # Modo estrito antecipado (antes de carregar helpers). Mantém robustez geral.
-set -o errexit -o nounset -o pipefail
+#set -o errexit -o nounset -o pipefail
 
 # Full silence if the first arg requests help (even forced messages)
 if [[ "${1:-}" =~ ^(-h|h|--help)$ ]]; then
@@ -276,27 +276,33 @@ ensure_helpers_and_env() {
 #EOC
 
 #=============================================================================#
-# Initialize helpers + environment, then parse CLI arguments
+# Initialize helpers + environment (idempotent) and parse global flags ONCE
 #=============================================================================#
 
-# Ensure that base helpers are loaded and environment variables are exported.
-# This will source "__helpers__.sh" if not already loaded and run _env_export.
-ensure_helpers_and_env __helpers__.sh
+# 1) Always ensure helpers+env are available (idempotent)
+ensure_helpers_and_env __helpers__.sh || return $?
 
-# Ensure leftover_args exists as a global array (avoids "unbound variable"
-# errors under 'set -u' when resetting "$@" with its contents).
-declare -ga leftover_args=()
+## 2) Ensure leftover_args exists BUT do not clobber if already declared
+#if ! declare -p leftover_args &>/dev/null; then
+#  declare -ga leftover_args=()
+#fi
+#
+## 3) Parse global flags (verbose/dry_run/debug/etc.) ONLY ONCE.
+##    - Do NOT modify "$@" here (init must be non-destructive).
+##    - Keep a snapshot of the current argv so we don't depend on caller's scope.
+#if [[ "${__INIT_GLOBALS_PARSED:-0}" -eq 0 ]]; then
+#  __INIT_GLOBALS_PARSED=1
+#
+#  if declare -F __parse_args__ >/dev/null; then
+#    PARSER_WRITE_LEFTOVERS=0 __parse_args__ "$@"
+#  elif declare -F _parse_args >/dev/null; then
+#    PARSER_WRITE_LEFTOVERS=0 _parse_args "$@"
+#  fi
+#  unset __INIT_ARGV
+#fi
+#
+## IMPORTANT:
+## - Do NOT: set -- "${leftover_args[@]}"
+## - Parsing here exists only to initialize global knobs early.
+## - If a caller wants to filter positional args, it must do it explicitly.
 
-# Call the argument parser provided by helpers. It will populate leftover_args[]
-# with positional arguments not consumed by option parsing.
-__parse_args__ "$@"
-
-# Replace "$@" with the filtered leftover_args so downstream code only sees
-# true positional arguments and not global/common flags.
-set -- "${leftover_args[@]}"
-
-# -- debug info --- #
-_log_debug "queue=%s job=%s walltime=%s dry_run=%s verbose=%s debug=%s" \
-              "${queue:-}" "${job_name:-}" "${walltime:-}" "${dry_run}" "${verbose}" "${debug}"
-_log_debug "MPI=%s OMP=%s Nodes=%s C/Node=%s Procs=%s" \
-              "${mpi_tasks:-}" "${omp_threads}" "${nodes:-}" "${cores_per_node:-}" "${total_procs:-}"

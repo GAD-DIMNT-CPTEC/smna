@@ -8,13 +8,13 @@
 #
 # !DESCRIPTION:
 #   Driver script to configure and execute a single GSI (Gridpoint Statistical
-#   Interpolation) analysis cycle. This script:
-#     ¿ Parses user-provided options (truncation, levels, cycle date, etc.)
-#     ¿ Prepares the execution environment and working directories
-#     ¿ Stages required input files (backgrounds, observations, fixed files)
-#     ¿ Retrieves bias-correction coefficients if available
-#     ¿ Submits the GSI run to the batch system
-#     ¿ Post-processes outputs (merge diagnostics, copy satbias files)
+#   Interpolation) analysis cycle. This script performs the following steps:
+#     - Parses user-provided options (truncation, levels, cycle date, etc.)
+#     - Prepares the execution environment and working directories
+#     - Stages required input files (backgrounds, observations, fixed files)
+#     - Retrieves bias-correction coefficients if available
+#     - Submits the GSI run to the batch system
+#     - Post-processes outputs (merge diagnostics, copy satbias files)
 #
 #   Supports optional bias-correction cycling mode (BC) for radiance data.
 #
@@ -27,14 +27,16 @@
 #   -p  <str>   Background file prefix (BkgPrefix)         [REQUIRED]
 #   -I  <yyyymmddhh> Analysis datetime (AnlDate)           [REQUIRED]
 #   -T  <int>   Analysis truncation (AnlTrunc); default: BkgTrunc
-#   -np <int>   Number of MPI tasks (MPITasks); default: 72
-#   -N  <int>   Number of nodes; default: 12
-#   -d  <int>   Threads per MPI task; default: 1
 #   -bc <int>   Bias-correction cycle index (BcCycle); default: 0
-#               ¿ If >0 ¿ BC mode active (IsBC=true)
-#               ¿ If =0 ¿ normal mode (IsBC=false)
+#               - If >0: BC mode active (IsBC=true)
+#               - If =0: normal mode (IsBC=false)
 #   -om <bool>  One-observation test (ObsMod=true|false); default: false
-#   -h          Print usage/help
+#   -h          Print usage/help and exit
+#   --gsi-ntasks <int>   MPI tasks for runGSI (default: 128).
+
+#
+# !GLOBAL FLAGS (forwarded when set):
+#   --ntasks INT | --job-name NAME | -Q/--queue Q | --walltime HH:MM | -v/--verbose | --dry-run
 #
 # !EXAMPLE:
 #   ./runGSI -t 299 -l 64 -p CPT -T 254 -I 2015050100 -bc 10 -om true
@@ -44,40 +46,48 @@
 #   20 Sep 2025 - Refactored: ProTex docs, BC-cycle support, modular workflow
 #
 # !REMARKS:
-#   ¿ Designed for coupled BAM+GSI runs at CPTEC/INPE HPC clusters
-#   ¿ By default, GSI analysis truncation = BAM truncation
-#   ¿ Analysis may be computed at a different truncation, but output is always
-#     written at the BAM resolution to remain consistent with background fields
+#   - Designed for coupled BAM+GSI runs on CPTEC/INPE HPC clusters
+#   - By default, GSI analysis truncation = BAM truncation
+#   - Analysis can be computed at a different truncation, but output is always
+#     written at the BAM resolution for consistency with background fields
 #
-# !BUGS:
-#   - None known
+# !NOTES:
+#   HPC resources são parseados globalmente por __parse_args__:
+#     --ntasks (mpi_tasks), --cpus-per-task (omp_threads),
+#     --nodes (nodes), --cores-per-node (cores_per_node), --procs (total_procs)
+#   Requires: inctime tool in PATH/env; helper 'usage' for -h.
+#   Safety: runs under local strict mode (set -euo pipefail) and restores on return.
+#   Compatibility: exports BcCycles as alias of BcCycle for older callers.
 #
 # !USES:
-#   runGSI_Functions.sh   ¿ core functions for staging, running, and postproc
+#   runGSI_Functions.sh - core functions for staging, running, and post-processing
 #
 #EOP
+#-----------------------------------------------------------------------------#
+
 #-----------------------------------------------------------------------------#
 #BOC
 
 # ---------------------------------------------------------------------------- #
-# ------------------------ Environment bootstrap ----------------------------- #
+# Environment bootstrap: determine script location and load helper functions
 # ---------------------------------------------------------------------------- #
-# --- Library directory (folder where this file lives) ---
 __SRC="${BASH_SOURCE[0]}"
 while [[ -L "$__SRC" ]]; do
   __LINK="$(readlink -- "$__SRC")"
   if [[ "$__LINK" = /* ]]; then
     __SRC="$__LINK"
   else
-    __SRC="$(cd -- "$(dirname -- "$__SRC")" && cd -- "$(dirname -- "$__LINK")" && pwd)/$(basename -- "$__LINK")"
+    __SRC="$(cd -- "$(dirname -- "$__SRC")" \
+              && cd -- "$(dirname -- "$__LINK")" && pwd)/$(basename -- "$__LINK")"
   fi
 done
 export RUN_GSI_DIR="$(cd -- "$(dirname -- "$__SRC")" && pwd)"
-# --- Load functions used by runGSI
-. ${RUN_GSI_DIR}/gsi_scripts/runGSI_Functions.sh
+
+# Load core functions for runGSI workflow
+. "${RUN_GSI_DIR}/gsi_scripts/runGSI_Functions.sh"
 
 # ---------------------------------------------------------------------------- #
-# ------------------------ End Environment bootstrap ------------------------- #
+# End environment bootstrap
 # ---------------------------------------------------------------------------- #
 
 # --- Define constants and parse command-line options
@@ -87,11 +97,11 @@ ParseOpts "$@"
 # --- Define model sizes
 BAM_CoordSize "${AnlTrunc}"
 KMax=${AnlNLevs}
-JMax=$((JMax+2)) # required for GSI horizontal interpolation
+JMax=$((JMax+2)) # +2 is required for GSI horizontal interpolation
 
-#-----------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Directories
-#-----------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Working directory for current analysis
 RunDir=${subt_run_gsi}/${AnlDate}
 if [ -e "${RunDir}" ]; then
@@ -104,12 +114,12 @@ fi
 DataOutDir=${subt_gsi_dataout}/${AnlDate}
 mkdir -p "${DataOutDir}"
 
-#-----------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Stage input files
-#-----------------------------------------------------------#
-CopyGSIExec "${execGSI}" "${RunDir}"         # GSI executable
+# ---------------------------------------------------------------------------- #
+CopyGSIExec "${execGSI}" "${RunDir}"        # Copy GSI executable
 if ! ${ObsMod}; then
-  linkObs "${AnlDate}" "${RunDir}"           # Observations (if not oneobtest)
+  linkObs "${AnlDate}" "${RunDir}"          # Link observations (unless one-observation test)
 fi
 StageBackgrounds "${RunDir}" "${BkgPrefix}" "${BkgDate}" "${BkgMRES}" "${AnlDate}" "${subt_model_bam}"
 FixedFiles "${AnlTrunc}" "${AnlNLevs}" "${RunDir}"
@@ -118,14 +128,15 @@ FixedFiles "${AnlTrunc}" "${AnlNLevs}" "${RunDir}"
 getSatBias "${AnlDate}" "${BkgDate}" "${RunDir}" "${subt_gsi_dataout}"
 if (( result == 1 )); then
   _log_warn "No satbias_out found in background date %s." "${BkgDate}"
-  _log_warn "If this is the first cycle, it is recommended to perform a bias-correction spin-up."
-  _log_warn "Otherwise, please check why the file is missing (e.g., previous cycle failed or outputs not copied)."
+  _log_warn "If this is the first cycle, consider performing a bias-correction spin-up."
+  _log_warn "Otherwise, check why the file is missing (e.g., previous cycle failed or outputs not copied)."
 fi
 
-#-----------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Run GSI
-#-----------------------------------------------------------#
-subGSI "${RunDir}" "${IMax}" "${JMax}" "${KMax}" "${AnlTrunc}" "${BkgTrunc}" "${AnlDate}" "${ObsMod}" "${IsBC}"
+# ---------------------------------------------------------------------------- #
+subGSI "${RunDir}" "${IMax}" "${JMax}" "${KMax}" \
+       "${AnlTrunc}" "${BkgTrunc}" "${AnlDate}" "${ObsMod}" "${IsBC}"
 if [ $? -eq 0 ]; then
    echo -e "\033[34;1m [\033[m\033[32;2m OK \033[m\033[34;1m]\033[m"
 else
@@ -133,8 +144,11 @@ else
    exit 1
 fi
 
-# Merge diagnostics and handle outputs
+# ---------------------------------------------------------------------------- #
+# Post-processing: merge diagnostics and copy outputs
+# ---------------------------------------------------------------------------- #
 mergeDiagFiles "${RunDir}" "${AnlDate}"
+
 CopyOutputsForCycle "${RunDir}" "${DataOutDir}" "${IsBC}" "${BcCycle}"
 
 #EOC
