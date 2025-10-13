@@ -295,68 +295,6 @@ _use_local_cmake(){
 }
 #EOC
 
-
-#BOP
-# !FUNCTION: vars_export
-# !INTERFACE: vars_export
-# !DESCRIPTION:
-#   Load and export cluster-specific environment variables from a config file
-#   in `etc/mach/${hpc_name}_paths.conf`. Each line has the format:
-#     KEY   VALUE
-#   Blank lines and lines starting with '#' are ignored. Leading/trailing
-#   whitespace is trimmed. Uses _assign to perform variable expansion and export.
-#
-# !USAGE:
-#   vars_export
-#
-# !BEHAVIOR:
-#   • Builds config file path: $(dirname ${BASH_SOURCE})/mach/${hpc_name}_paths.conf
-#   • Aborts if the file is missing
-#   • Reads each non-empty, non-comment line
-#   • Splits into KEY and VALUE
-#   • Calls _assign KEY VALUE (which expands ${VAR} references)
-#   • Exports all resulting variables
-#
-# !EXAMPLE:
-#   # inside mach/egeon_paths.conf
-#   HOME        /home/${USER}
-#   subt_smg    ${SUBMIT_HOME}/${nome_smg}
-#
-#   # usage
-#   vars_export   # sets HOME and subt_smg expanded
-#
-# !NOTES:
-#   • Depends on: _assign
-#   • Requires: hpc_name set to match a config file
-#EOP
-#BOC
-vars_export(){
-  # Avoid re-running if already done
-  if [[ "${VARS_EXPORTED:-false}" == "true" ]]; then
-    return 0
-  fi
-
-  local confdir filepaths
-  confdir="$(dirname -- "${BASH_SOURCE[0]}")/mach"
-  filepaths="${confdir}/${hpc_name}_paths.conf"
-
-  [[ -f "$filepaths" ]] || { echo "[ERROR] Missing: $filepaths" >&2; return 1; }
-
-  # Read "KEY VALUE" pairs, ignore blank/comment lines
-  while IFS= read -r line; do
-    [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
-    local key="${line%%[[:space:]]*}"
-    local value="${line#"$key"}"
-    value="${value#"${value%%[![:space:]]*}"}"   # trim leading spaces
-    [[ -z "$key" || -z "$value" ]] && continue
-    _assign "$key" "$value"
-  done < "$filepaths"
-
-  # Mark as already exported
-  export VARS_EXPORTED=true
-}
-#EOC
-
 #BOP
 # !FUNCTION: copy_fixed_files
 # !INTERFACE: copy_fixed_files [-v|--verbose]
@@ -388,8 +326,8 @@ copy_fixed_files(){
   local verbose=$verbose
 
   # 1) load env variables
-  if ! vars_export; then
-    _log_err "Failed to load cluster paths via vars_export"
+  if ! _env_export; then
+    _log_err "Failed to load cluster paths via _env_export"
     return 1
   fi
 
@@ -827,7 +765,7 @@ modify_scripts(){
 
   # ------------------- default modify mode -------------------
   local marker_scripts="# Loading system variables"
-  local source_line="source \"${home_smg}/config_smg.ksh\" vars_export"
+  local source_line="source \"${home_smg}/config_smg.ksh\" _env_export"
 
   # 1) RUN SCRIPTS
   for f in "${smg_scripts[@]}"; do
@@ -927,7 +865,7 @@ modify_scripts(){
 #   --dry-run     Validate and list actions, but do not apply changes
 #
 # !BEHAVIOR:
-#   • Load cluster paths with vars_export
+#   • Load cluster paths with _env_export
 #   • Prompt for confirmation (unless auto-accepted)
 #   • Create all needed directories
 #   • Ensure CMake availability via use_local_cmake
@@ -936,7 +874,7 @@ modify_scripts(){
 #
 # !NOTES:
 #   Depends on: _parse_args, _log_info/_log_ok/_log_warn/_log_err/_log_action,
-#               vars_export, use_local_cmake, copy_fixed_files, modify_scripts
+#               _env_export, use_local_cmake, copy_fixed_files, modify_scripts
 #   Uses env var AUTO_ACCEPT=yes as auto-confirmation.
 #EOP
 configure(){
@@ -948,8 +886,8 @@ configure(){
   local verbose=$verbose
 
   # 1) load env variables
-  if ! vars_export; then
-    _log_err "Failed to load cluster paths via vars_export"
+  if ! _env_export; then
+    _log_err "Failed to load cluster paths via _env_export"
     return 1
   fi
 
@@ -1085,8 +1023,8 @@ verify_executables(){
   local do_fix=$do_fix
 
   # 1) load env variables
-  if ! vars_export; then
-    _log_err "Failed to load cluster paths via vars_export"
+  if ! _env_export; then
+    _log_err "Failed to load cluster paths via _env_export"
     return 1
   fi
 
@@ -1230,7 +1168,7 @@ verify_executables(){
 #   --dry-run   Show planned actions and exit without building
 #
 # !BEHAVIOR:
-#   • Load cluster paths (vars_export)
+#   • Load cluster paths (_env_export)
 #   • Ensure ${home_cptec}/bin exists
 #   • Conditionally build components based on boolean flags:
 #       compgsi/compang/compbam/compinctime (true|false)
@@ -1238,7 +1176,7 @@ verify_executables(){
 #   • Verify expected artifacts and copy them to ${home_cptec}/bin
 #
 # !NOTES:
-#   Depends on: _parse_args, _log_info/_log_ok/_log_warn/_log_err/_log_action, vars_export, verify_executables
+#   Depends on: _parse_args, _log_info/_log_ok/_log_warn/_log_err/_log_action, _env_export, verify_executables
 #   Expects env flags (boolean): compgsi, compang, compbam, compinctime (default: false)
 #   Expects env: compiler, hpc_name, home_* paths
 #EOP
@@ -1260,8 +1198,8 @@ compile(){
   : "${compinctime:=false}"
 
   # --- Load paths ---
-  if ! vars_export; then
-    _log_err "Failed to load cluster paths via vars_export"
+  if ! _env_export; then
+    _log_err "Failed to load cluster paths via _env_export"
     return 1
   fi
 

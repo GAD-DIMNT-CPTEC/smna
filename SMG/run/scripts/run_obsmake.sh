@@ -151,7 +151,7 @@ source_init_once() {
 #EOC
 
 usage() {
-  sed -n '/^#BOP/,/^#EOP/{/^#BOP/d;/^#EOP/d;p}' "${BASH_SOURCE[0]}"
+  sed -n '/^#BOP/,/^#EOP/{/^#EOP/q; /^#BOP/d; /^#EOP/d; p}' "${BASH_SOURCE[0]}"
 }
 
 # 0) Ensure SMG_ROOT is set and init sourced once
@@ -167,13 +167,26 @@ source_init_once SMG_ROOT INIT_LOADED || return $?
 verbose=false
 quiet=false
 dry_run=false
-pattern='gdas.*'
+pattern=''
 mode='link'        # link|copy|hardlink
 ncep_root="${ncep_ext:-}"
 dest_dir="${subt_gsi_datain_obs:-}"
 
 #----------------------------- Parse options ---------------------------------#
-_with_strict_mode
+_with_strict_mode   # enable strict mode only for this function
+
+# 1) Parse global flags first (see __helpers__.sh)
+__parse_args__ "$@" || true
+
+# 2) Replace positional parameters with what was left from the global parser
+if [[ ${leftover_args+x} ]]; then
+  set -- "${leftover_args[@]}"
+else
+  set --
+fi
+
+# 3) Now reset leftover_args and parse local options
+leftover_args=()
 
 [[ $# -ge 1 ]] || { _log_err "Missing START_DATE."; usage; exit "$EX_USAGE"; }
 START_DATE="$1"; shift || true
@@ -184,29 +197,13 @@ while [[ $# -gt 0 ]]; do
     --dest)      dest_dir="${2:-}"; shift 2 ;;
     --mode)      mode="${2:-}"; shift 2 ;;
     --pattern)   pattern="${2:-}"; shift 2 ;;
-    --dry-run)   dry_run=true; shift ;;
-    -v|--verbose) verbose=true; quiet=false; shift ;;
-    -q|--quiet)  quiet=true; verbose=false; shift ;;
     -h|--help)   usage; exit "$EX_USAGE" ;;
-    *) err "Unknown option: $1"; usage; exit "$EX_USAGE" ;;
+    *) _log_err "Unknown option: $1"; usage; exit "$EX_USAGE" ;;
   esac
 done
 
-# Try to auto-load SMG config if variables are missing and config is reachable
-if [[ -z "${ncep_root}" || -z "${dest_dir}" ]]; then
-  if command -v realpath >/dev/null 2>&1; then
-    SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
-    RootDir="$(dirname "$SCRIPT_PATH")"
-    SMG_ROOT="${SMG_ROOT:-$RootDir}"
-    if [[ -f "${SMG_ROOT}/../../config_smg.ksh" ]]; then
-      # shellcheck disable=SC1090
-      . "${SMG_ROOT}/../../config_smg.ksh" vars_export || true
-      # Refill defaults after sourcing
-      : "${ncep_root:=${ncep_ext:-}}"
-      : "${dest_dir:=${subt_gsi_datain_obs:-}}"
-    fi
-  fi
-fi
+# ---- Preserve leftover positional arguments ----
+leftover_args=("$@")
 
 #------------------------------ Validation -----------------------------------#
 [[ "${#START_DATE}" -eq 10 && "${START_DATE}" =~ ^[0-9]{10}$ ]] \
@@ -218,10 +215,20 @@ fi
 Y=${START_DATE:0:4}
 M=${START_DATE:4:2}
 D=${START_DATE:6:2}
-#HH=${START_DATE:8:2}  # not used by current layout
+HH=${START_DATE:8:2}
 src_dir="${ncep_root}/${Y}/${M}/${D}"
 
 [[ -d "${src_dir}" ]] || _die "$EX_NOINPUT" "Source directory not found: ${src_dir}"
+
+# --- Pattern logic ---#
+if [[ -z "${pattern}" ]]; then
+  if [[ -n "${HH}" ]]; then
+    pattern="gdas.t${HH}z.*"
+  else
+    pattern="gdas.*"
+  fi
+fi
+
 
 # Normalize destination and create it
 if [[ ! -d "${dest_dir}" ]]; then
@@ -235,7 +242,8 @@ if [[ ! -d "${dest_dir}" ]]; then
 fi
 
 #----------------------------- Staging files ---------------------------------#
-_log_info "Scanning: ${src_dir} (pattern: ${pattern})"
+_log_info "Searching in: ${src_dir}"
+_log_info "Using pattern: ${pattern}"
 
 _list_files_array obsFiles "${src_dir}" \( -name "${pattern}" \)
 

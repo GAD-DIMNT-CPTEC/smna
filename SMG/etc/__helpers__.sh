@@ -691,6 +691,7 @@ __need_val() {  # usage: __need_val "$1" "$2" || return 1
 
 __parse_args__() {
   _with_strict_mode   # enable strict mode only for this function
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
 
   # --- respect optional write-leftovers toggle (generic) ---
   local write_leftovers="${PARSER_WRITE_LEFTOVERS:-1}"
@@ -726,10 +727,10 @@ __parse_args__() {
       # ---- Verbosity and behavior ----
       -v|--verbose) verbose=true; shift; continue ;;
       -q|--quiet)   verbose=false; shift; continue ;;
-      -d|--debug)   debug=true; shift; continue ;;
+      -d|--debug)   debug=true; verbose=true; shift; continue ;;
       -y|--yes)     auto_yes=true; shift; continue ;;
       -f|--fix)     do_fix=true; shift; continue ;;
-      --dry-run)    dry_run=true; shift; continue ;;
+      --dry-run)    dry_run=true; verbose=true; shift; continue ;;
       --restore)    do_restore=true; shift; continue ;;
 
       # ---- Queue/Job/Walltime ----
@@ -819,6 +820,7 @@ __parse_args__() {
 #BOC
 # __helpers__.sh
 _run() {
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
   # Always receive command as array
   local -a cmd=( "$@" )
 
@@ -863,6 +865,7 @@ _run() {
 #EOP
 #BOC
 _list_files_array() {
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
   # optional strict mode if your helper exists
   if declare -F with_strict_mode >/dev/null 2>&1; then with_strict_mode; fi
 
@@ -977,6 +980,7 @@ _progress_bar() {
 #EOP
 #BOC
 _copy_one_safe() {
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
   _with_strict_mode   # enable strict mode only for this function
 
   local src="${1:-}"; local dst="${2:-}"; local method="${3:-copy}"
@@ -1104,6 +1108,7 @@ _copy_one_safe() {
 #BOC
 _copy_with_progress() {
   _with_strict_mode   # enable strict mode only for this function
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
 
   local -n _files_ref="$1"; shift        # nameref to the input array
   local src_dir="$1"; shift
@@ -1232,6 +1237,7 @@ _copy_with_progress() {
 #BOC
 _copy_with_progress_rsync() {
   _with_strict_mode   # enable strict mode only for this function
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
 
   local files_name="$1"; shift                 # array name (e.g., files), without [@]
   local -n _files_ref="$files_name"            # nameref to iterate here
@@ -1346,6 +1352,7 @@ _copy_with_progress_rsync() {
 #BOC
 _copy_with_progress_auto() {
   _with_strict_mode   # enable strict mode only for this function
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
 
   local backend="${COPY_BACKEND:-simple}" action="${4:-copy}"
   case "$backend" in
@@ -1399,6 +1406,7 @@ _copy_with_progress_auto() {
 #BOC
 _copy_dir_with_progress() {
   _with_strict_mode   # enable strict mode only for this function
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
 
   local src_dir="$1" dest_dir="$2" msg="${3:-Copying files}" action="${4:-copy}"
   local files=(); _list_files_array files "$src_dir" || return $?
@@ -1463,6 +1471,53 @@ _assign() {
 #EOC
 
 #BOP
+# !FUNCTION: _strip_inline_comment
+# !DESCRIPTION:
+#   Removes inline comments starting with '#' that are *not* enclosed within double quotes.
+#   It preserves everything within quotes, even if it contains '#'.
+#
+# !INPUTS:
+#   $1 : String possibly containing inline comments and quoted substrings.
+#
+# !OUTPUTS:
+#   Prints the string without the comment part (trims trailing spaces).
+#
+# !EXAMPLES:
+#   Input : 'VAR "abc#123"   # comment'
+#   Output: 'VAR "abc#123"'
+#
+# !NOTES:
+#   - Supports escaped quotes (\"), so sequences like '\"' don't toggle quote state.
+#   - Trims trailing whitespace after comment removal.
+#EOP
+#BOP
+_strip_inline_comment() {
+  local s="${1-}" out="" inquote=0 prev='' c
+  local i
+
+  # Iterate through each character
+  for (( i=0; i<${#s}; i++ )); do
+    c="${s:i:1}"
+
+    # Toggle quote state when encountering an unescaped double quote
+    if [[ "$c" == '"' && "$prev" != '\' ]]; then
+      (( inquote = 1 - inquote ))
+      out+="$c"
+    # If '#' is found outside quotes, stop (comment begins here)
+    elif [[ "$c" == '#' && $inquote -eq 0 ]]; then
+      break
+    else
+      out+="$c"
+    fi
+    prev="$c"
+  done
+
+  # Trim trailing spaces
+  printf '%s' "${out%"${out##*[![:space:]]}"}"
+}
+#EOC
+
+#BOP
 # !FUNCTION: _env_export
 # !INTERFACE: _env_export
 # !DESCRIPTION:
@@ -1498,6 +1553,7 @@ _assign() {
 #BOC
 _env_export() {
   _with_strict_mode   # enable strict mode only for this function
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
 
   # Avoid re-running if already done
   if [[ "${ENV_EXPORTED:-false}" == "true" ]]; then
@@ -1520,19 +1576,27 @@ _env_export() {
   local filepaths="${confdir}/${hpc_name}_paths.conf"
   _log_debug "_env_export: config=%s" "$filepaths"
 
-  [[ -f "$filepaths" ]] || { _log_err "Missing: %s" "$filepaths"; return 1; }
+  # Read config line by line
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    # trim leading spaces
+    line="${line#"${line%%[![:space:]]*}"}"
+    # skip empty or comment-only lines
+    [[ -z "$line" || "${line:0:1}" == "#" ]] && continue
 
-  # Read lines "KEY  VALUE"; ignore comments/blank lines
-  while IFS= read -r line; do
-    [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
-    # key = first token; value = the rest (left-trim)
-    local key="${line%%[[:space:]]*}"
-    local value="${line#"$key"}"
-    value="${value#"${value%%[![:space:]]*}"}"   # trim leading spaces
+    # remove inline comments while preserving '#' inside quotes
+    line="$(_strip_inline_comment "$line")"
+    [[ -z "$line" ]] && continue
+
+    # split into key and value (trim leading spaces from value)
+    local key value
+    key="${line%%[[:space:]]*}"
+    value="${line#"$key"}"
+    value="${value#"${value%%[![:space:]]*}"}"
+
     [[ -z "$key" || -z "$value" ]] && continue
     _assign "$key" "$value"
   done < "$filepaths"
-
+  
   # Mark as already exported
   export ENV_EXPORTED=true
   _log_debug "_env_export: completed (ENV_EXPORTED=true)"
@@ -1563,6 +1627,7 @@ _env_export() {
 #EOP
 #BOC
 _resolve_script_dir() {
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
   local __out="${1:?out var required}"
   local __src="${2:-${BASH_SOURCE[0]}}"
   local __orig="$__src"
@@ -1619,6 +1684,7 @@ _resolve_script_dir() {
 ###############################################################################
 #BOC
 project_root_of() {
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
   _with_strict_mode   # enable strict mode only for this function
 
   # Determine a sensible starting point:
@@ -1707,6 +1773,7 @@ project_root_of() {
 #EOP
 #BOC
 _bootstrap_env_root() {
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
   _with_strict_mode   # enable strict mode only for this function
 
   local env_var="${1:-}"
@@ -1828,6 +1895,7 @@ _bootstrap_env_root() {
 #EOP
 #BOC
 _run_project_config() {
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
   _with_strict_mode   # enable strict mode only for this function
 
   local env_var="${1:?env var required}"                # e.g., SMG_ROOT
@@ -1912,6 +1980,7 @@ _run_project_config() {
 ###############################################################################
 #BOC
 detect_hpc_system() {
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
   _with_strict_mode   # enable strict mode only for this function
 
   # Prevent verbosity changes from leaking (local shadow)
@@ -2018,6 +2087,7 @@ detect_hpc_system() {
 #EOP
 #BOC
 disable_conda() {
+  _log_debug "→ Entering function: ${FUNCNAME[0]}"
 
   # Prevent verbosity changes from leaking outside
   local verbose=${verbose:-false}

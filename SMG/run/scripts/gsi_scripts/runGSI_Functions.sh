@@ -1148,7 +1148,17 @@ FixedFiles() {
   # Extrai sensores da 1ª coluna (ignora linhas vazias e comentários iniciados por '!')
   if [[ -s "${runDir}/satinfo" ]]; then
     mapfile -t _sensors < <(awk 'NF>0 && $1 !~ /^!/ {print $1}' "${runDir}/satinfo" | sort -u)
+    total=${#_sensors[@]}
+    local count=0
     for sensor in "${_sensors[@]}"; do
+      ((count++))
+      # Show progress/log before executing
+      if [[ -t 1 ]]; then
+        _progress_bar "$count" "$total" "Copying sensors coefficient"
+      else
+        _log_action -f "(%d/%d) %s -> %s" "$count" "$total" "$src" "$dst"
+      fi
+      
       # SpcCoeff
       local spc
       spc=$(_first_found_under_byteorder "${sensor}.SpcCoeff.bin" "SpcCoeff")
@@ -1175,6 +1185,13 @@ FixedFiles() {
     done
   else
     _log_warn -f "satinfo not found or empty at %s; skipping Spc/TauCoeff copy." "${runDir}/satinfo"
+  fi
+  
+  # In TTY, the bar draws inline; append a clean OK marker once.
+  if [[ -t 1 ]]; then
+    printf " - $C_OK[Done]$C_RST\n"
+  else
+    _log_ok "%s done" "$progress_msg"
   fi
 
   # -------------------------- Done -------------------------------------------
