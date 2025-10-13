@@ -96,13 +96,13 @@ ParseOpts "$@"
 
 # --- Define model sizes
 BAM_CoordSize "${AnlTrunc}"
-# Validate ¿submultiple of 3600¿ quickly (bash):
+# Validate submultiple of 3600s quickly (bash):
 # Check whether TimeStep is an exact divisor of 3600 s (1 hour)
 if (( 3600 % TimeStep == 0 )); then
-  _log_debug "BAM TimeStep hour-aligned (¿t=%s s, 3600/%s=%d)" \
+  _log_debug "BAM TimeStep hour-aligned (Dt=%s s, 3600/%s=%d)" \
              "$TimeStep" "$TimeStep" "$((3600/TimeStep))"
 else
-  _log_warn  "BAM TimeStep not aligned (¿t=%s s, 3600/%s=%.3f)" \
+  _log_warn  "BAM TimeStep not aligned (Dt=%s s, 3600/%s=%.3f)" \
              "$TimeStep" "$TimeStep" "$(awk -v t=$TimeStep 'BEGIN{print 3600/t}')"
 fi
 
