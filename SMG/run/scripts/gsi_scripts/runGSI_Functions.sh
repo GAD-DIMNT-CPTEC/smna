@@ -589,37 +589,93 @@ constants() {
 }
 #EOC
 
-#-----------------------------------------------------------------------------#
-#------------------------ GRID RESOLUTION (BAM) -------------------------------#
-#-----------------------------------------------------------------------------#
+#BOP
+# !ROUTINE: BAM_CoordSize
+# !INTERFACE:
+#   BAM_CoordSize <trunc>
+#
+# !DESCRIPTION:
+#   Map a given triangular truncation (spectral resolution) to the recommended
+#   model time step (TimeStep, in seconds) and the associated Gaussian grid
+#   dimensions (IMax x JMax) used by BAM/SMNA.
+#
+#   This table consolidates empirically validated settings from tests and ops.
+#   Choices of TimeStep consider:
+#     • Numerical stability (CFL and high-frequency modes),
+#     • Synchronization with physics (e.g., radiation call intervals),
+#     • Cost/performance trade-offs for each resolution.
+#
+# !NOTES ON RADIATION SCHEDULING:
+#   If longwave/shortwave radiation are called at whole-hour boundaries
+#   (e.g., every 1 h or 3 h), prefer TimeStep values that are exact
+#   divisors of 3600 s (submultiples), to avoid phase drift in physics calls.
+#   Examples of 3600-s submultiples: 20, 50, 60, 75, 90, 100, 120, 150,
+#   180, 200, 225, 240, 300, 360, 400, 450, 600, 720, 900, 1200, 1800, 3600.
+#
+# !CFL CONTROL:
+#   BAM includes a CFL-control mechanism (short-wave filtering keyed to max
+#   zonal wind). Keep it enabled; however, TimeStep still matters for robust
+#   stability, especially during strong jet regimes or steep gradients.
+#
+# !KNOWN EXCEPTION:
+#   For truncation T254, the listed TimeStep is 255 s, which is NOT a
+#   submultiple of 3600 s (3600/255 ≈ 14.117...). If your radiation scheme
+#   requires whole-hour alignment, consider adjusting to a nearby submultiple
+#   (e.g., 240 s or 225 s) after targeted stability tests.
+#
+# !USAGE:
+#   BAM_CoordSize 299
+#   echo "$TimeStep $IMax $JMax"
+#
+# !RETURNS:
+#   Sets the following shell variables in the caller's scope:
+#     • TimeStep : integer (seconds)
+#     • IMax     : integer (zonal grid points)
+#     • JMax     : integer (meridional grid points)
+#
+# !ERRORS:
+#   - Logs and returns non-zero if an unknown truncation is provided.
+#
+# !EXAMPLES:
+#   # Get recommended settings for T299:
+#   BAM_CoordSize 299
+#   # -> TimeStep=200 (submultiple of 3600), IMax=900, JMax=450
+#
+#   # Validate “submultiple of 3600” quickly (bash):
+#   # [[ $(( 3600 % TimeStep )) -eq 0 ]] && echo "hour-aligned" || echo "not aligned"
+#
+#EOP
 BAM_CoordSize() {
   local trunc=${1:? "Missing trunc"}
   case "${trunc}" in
-    21) TimeStep=3600; IMax=64;   JMax=32  ;;
-    31) TimeStep=1800; IMax=96;   JMax=48  ;;
-    42) TimeStep=1800; IMax=128;  JMax=64  ;;
-    62) TimeStep=900;  IMax=192;  JMax=96  ;;
-    106)TimeStep=900;  IMax=320;  JMax=160 ;;
-    126)TimeStep=600;  IMax=384;  JMax=192 ;;
-    133)TimeStep=600;  IMax=400;  JMax=200 ;;
-    159)TimeStep=600;  IMax=480;  JMax=240 ;;
-    170)TimeStep=450;  IMax=512;  JMax=256 ;;
-    213)TimeStep=300;  IMax=640;  JMax=320 ;;
-    254)TimeStep=255;  IMax=768;  JMax=384 ;;
-    299)TimeStep=200;  IMax=900;  JMax=450 ;;
-    319)TimeStep=225;  IMax=960;  JMax=480 ;;
-    341)TimeStep=200;  IMax=1024; JMax=512 ;;
-    382)TimeStep=180;  IMax=1152; JMax=576 ;;
-    511)TimeStep=150;  IMax=1536; JMax=768 ;;
-    533)TimeStep=150;  IMax=1600; JMax=800 ;;
-    666)TimeStep=240;  IMax=2000; JMax=1000;;
-    863)TimeStep=150;  IMax=2592; JMax=1296;;
-    1279)TimeStep=20;  IMax=3840; JMax=1920;;
-    1332)TimeStep=20;  IMax=4000; JMax=2000;;
-    *) _log_fail "Unknown truncation: %s" "$trunc" ; return 2 ;;
+    21)  TimeStep=3600; IMax=64;   JMax=32  ;;  # 3600/3600=1   (aligned)
+    31)  TimeStep=1800; IMax=96;   JMax=48  ;;  # 3600/1800=2   (aligned)
+    42)  TimeStep=1800; IMax=128;  JMax=64  ;;  # 3600/1800=2   (aligned)
+    62)  TimeStep=900;  IMax=192;  JMax=96  ;;  # 3600/900=4    (aligned)
+    106) TimeStep=900;  IMax=320;  JMax=160 ;;  # 3600/900=4    (aligned)
+    126) TimeStep=600;  IMax=384;  JMax=192 ;;  # 3600/600=6    (aligned)
+    133) TimeStep=600;  IMax=400;  JMax=200 ;;  # 3600/600=6    (aligned)
+    159) TimeStep=600;  IMax=480;  JMax=240 ;;  # 3600/600=6    (aligned)
+    170) TimeStep=450;  IMax=512;  JMax=256 ;;  # 3600/450=8    (aligned)
+    213) TimeStep=300;  IMax=640;  JMax=320 ;;  # 3600/300=12   (aligned)
+
+    # T254 originalmente: 255 s (3600/255≈14.117, not aligned).
+    # Ajuste proposto para sincronizar com 1h/3h: 225 s (ou 200 s).
+    254) TimeStep=225;  IMax=768;  JMax=384 ;;  # 3600/225=16   (aligned; candidate; pending validation at T254)
+
+    299) TimeStep=200;  IMax=900;  JMax=450 ;;  # 3600/200=18   (aligned; empirically stable; 220 s also stable; 225 s failed)
+    319) TimeStep=225;  IMax=960;  JMax=480 ;;  # 3600/225=16   (aligned)
+    341) TimeStep=200;  IMax=1024; JMax=512 ;;  # 3600/200=18   (aligned)
+    382) TimeStep=180;  IMax=1152; JMax=576 ;;  # 3600/180=20   (aligned)
+    511) TimeStep=150;  IMax=1536; JMax=768 ;;  # 3600/150=24   (aligned)
+    533) TimeStep=150;  IMax=1600; JMax=800 ;;  # 3600/150=24   (aligned)
+    666) TimeStep=240;  IMax=2000; JMax=1000;;  # 3600/240=15   (aligned)
+    863) TimeStep=150;  IMax=2592; JMax=1296;;  # 3600/150=24   (aligned)
+    1279)TimeStep=20;   IMax=3840; JMax=1920;;  # 3600/20=180   (aligned)
+    1332)TimeStep=20;   IMax=4000; JMax=2000;;  # 3600/20=180   (aligned)
+    *)   _log_fail "Unknown truncation: %s" "$trunc" ; return 2 ;;
   esac
 }
-
 #-----------------------------------------------------------------------------#
 #------------------------------ CLI PARSER -----------------------------------#
 #-----------------------------------------------------------------------------#
