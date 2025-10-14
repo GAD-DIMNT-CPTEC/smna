@@ -1096,6 +1096,9 @@ verify_executables(){
   local ready=0 built_only=0 runtime_only=0 missing=0 fixed=0
   local IFS='|' name hpath bpath
 
+  # --- buckets for end-of-run report ---
+  local -a READY_ROWS BUILT_ONLY_ROWS RUNTIME_ONLY_ROWS MISSING_ROWS
+
   for row in "${items[@]}"; do
     read -r name hpath bpath <<<"$row"
     local have_home=false have_beeg=false
@@ -1104,35 +1107,49 @@ verify_executables(){
 
     if $have_beeg && $have_home; then
       _log_ok "READY        | %s | home=%s | beegfs=%s" "$name" "$hpath" "$bpath"
+      READY_ROWS+=("$name|$hpath|$bpath")
       ((ready++))
     elif $have_beeg && ! $have_home; then
       _log_info "RUNTIME_ONLY | %s | home=%s | beegfs=%s" "$name" "$hpath" "$bpath"
+      RUNTIME_ONLY_ROWS+=("$name|$hpath|$bpath")
       ((runtime_only++))
     elif ! $have_beeg && $have_home; then
       _log_warn "BUILT_ONLY   | %s | home=%s | beegfs=%s" "$name" "$hpath" "$bpath"
+      BUILT_ONLY_ROWS+=("$name|$hpath|$bpath")
       ((built_only++))
 
       if $do_fix; then
         _log_action "Copying to runtime (beegfs) → %s" "$bpath"
-        mkdir -p -- "$(dirname "$bpath")" || { _log_err "mkdir failed: %s" "$(dirname "$bpath")"; continue; }
-        if command -v rsync >/dev/null 2>&1; then
-          if rsync "${rsync_opts[@]}" -- "$hpath" "$(dirname "$bpath")/"; then
-            _log_ok "Copied via rsync: %s → %s" "$hpath" "$bpath"
-            ((fixed++))
+        if mkdir -p -- "$(dirname "$bpath")"; then
+          if command -v rsync >/dev/null 2>&1; then
+            if rsync "${rsync_opts[@]}" -- "$hpath" "$(dirname "$bpath")/"; then
+              _log_ok "Copied via rsync: %s → %s" "$hpath" "$bpath"
+              ((fixed++))
+              # after copy, reclassify this entry as READY in the report
+              READY_ROWS+=("$name|$hpath|$bpath")
+              ((ready++))
+              ((built_only--))
+            else
+              _log_err "rsync failed: %s → %s" "$hpath" "$bpath"
+            fi
           else
-            _log_err "rsync failed: %s → %s" "$hpath" "$bpath"
+            if cp -pf -- "$hpath" "$bpath"; then
+              _log_ok "Copied via cp: %s → %s" "$hpath" "$bpath"
+              ((fixed++))
+              READY_ROWS+=("$name|$hpath|$bpath")
+              ((ready++))
+              ((built_only--))
+            else
+              _log_err "cp failed: %s → %s" "$hpath" "$bpath"
+            fi
           fi
         else
-          if cp -pf -- "$hpath" "$bpath"; then
-            _log_ok "Copied via cp: %s → %s" "$hpath" "$bpath"
-            ((fixed++))
-          else
-            _log_err "cp failed: %s → %s" "$hpath" "$bpath"
-          fi
+          _log_err "mkdir failed: %s" "$(dirname "$bpath")"
         fi
       fi
     else
       _log_err "MISSING      | %s | home=%s | beegfs=%s" "$name" "$hpath" "$bpath"
+      MISSING_ROWS+=("$name|$hpath|$bpath")
       ((missing++))
     fi
   done
@@ -1140,7 +1157,50 @@ verify_executables(){
   _log_info -f "Summary: READY=%d, BUILT_ONLY=%d, RUNTIME_ONLY=%d, MISSING=%d, FIXED=%d" \
             "$ready" "$built_only" "$runtime_only" "$missing" "$fixed"
 
-  # Return codes as specified
+  # --------------------------- detailed end-of-run report --------------------
+  # Renders a compact, aligned table for each non-empty bucket.
+  _print_group() {
+    # $1 = Title, $2.. = rows array (name|home|beegfs)
+    local title="$1"; shift
+    local -a rows=( "$@" )
+    : ${head:=true}
+    
+    ((${#rows[@]}==0)) && return 0
+
+    local color_geral="${C_INFO:-\033[0;32m}"
+    local color_reset="${C_RST:-\033[0m}"
+    local color_title color_item
+
+    case "$title" in
+      READY)        color_title="${C_OK:-\033[0;32m}";   color_item="${C_OK:-\033[0;32m}" ;;
+      BUILT_ONLY)   color_title="${C_WARN:-\033[0;33m}"; color_item="${C_WARN:-\033[0;33m}" ;;
+      RUNTIME_ONLY) color_title="${C_ACT:-\033[0;36m}";  color_item="${C_ACT:-\033[0;36m}" ;;
+      MISSING)      color_title="${C_ERR:-\033[0;31m}";  color_item="${C_ERR:-\033[0;31m}" ;;
+      *)            color_title="${color_geral}"; color_item="${color_geral}" ;;
+    esac
+
+    if $head;then
+       printf '\n'
+       printf '  %-13s | %-22s | %-s\n' "Status" "Name" "Paths"
+       printf '  %-13s-+-%-22s-+-%-s\n' "$(printf -- '%.0s-' {1..13})" "$(printf -- '%.0s-' {1..22})" "$(printf -- '%.0s-' {1..40})"
+       head=false
+    fi
+
+    local IFS='|' n h b
+    for r in "${rows[@]}"; do
+      IFS='|' read -r n h b <<<"$r"
+      printf '  %b%-13s%b | %b%-22s%b | home=%s\n' \
+        "$color_title" "$title" "$color_reset" "$color_geral" "$n" "$color_reset" "$h"
+      printf '  %-13s | %-22s | beegfs=%s\n' "" "" "$b"
+    done
+  }
+
+  _print_group "READY"        "${READY_ROWS[@]}"
+  _print_group "BUILT_ONLY"   "${BUILT_ONLY_ROWS[@]}"
+  _print_group "RUNTIME_ONLY" "${RUNTIME_ONLY_ROWS[@]}"
+  _print_group "MISSING"      "${MISSING_ROWS[@]}"
+
+  # ------------------------------- return codes ------------------------------
   if ((missing>0)); then
     _log_warn "There are MISSING items: build/copy required before running on beegfs."
     return 2
@@ -1219,7 +1279,7 @@ compile(){
   # --------------- GSI ----------------
   if $compgsi; then
     if [[ -z "$home_gsi" || -z "$home_gsi_src" || -z "$home_gsi_bin" ]]; then
-      _log_err "GSI paths not set (home_gsi/home_gsi_src/home_gsi_bin)"; rc=1
+      _log_err "GSI paths not set (home_gsi || home_gsi_src || home_gsi_bin)"; rc=1
     else
       _log_action -f "Compiling GSI …"
       _log_info   "PATH %s" "$home_gsi"
@@ -1229,11 +1289,11 @@ compile(){
         pushd "$home_gsi" >/dev/null || { local verbose=true; _log_err "cd failed: %s" "$home_gsi"; return 1; }
         . ./compile.sh -C "${compiler}" 2>&1 | tee "${home_gsi}/compile.log"
         popd >/dev/null || true
-        if [[ ! -e "${home_gsi_src}/gsi.x" ]]; then
+        if [[ ! -e "${home_gsi_bin}/gsi.x" ]]; then
           _log_err "GSI compilation failed. See %s" "${home_gsi}/compile.log"; rc=1
         else
           $dry_run && _log_info "Dry-run: would copy gsi.x to %s and %s" "$home_gsi_bin" "${home_cptec}/bin" \
-                  || { cp -pvf -- "${home_gsi_src}/gsi.x" "${home_gsi_bin}/" && cp -pvf -- "${home_gsi_src}/gsi.x" "${home_cptec}/bin/"; } || rc=1
+                  || { cp -pvf -- "${home_gsi_src}/gsi/gsi.x" "${home_gsi_bin}/" && cp -pvf -- "${home_gsi_src}/gsi/gsi.x" "${home_cptec}/bin/"; } || rc=1
         fi
       fi
     fi
