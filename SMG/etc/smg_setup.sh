@@ -1106,15 +1106,15 @@ verify_executables(){
     [[ -x "$bpath" ]] && have_beeg=true
 
     if $have_beeg && $have_home; then
-      _log_ok "READY        | %s | home=%s | beegfs=%s" "$name" "$hpath" "$bpath"
+      _log_ok "READY          | %13s | home=%s | submit=%s" "$name" "$hpath" "$bpath"
       READY_ROWS+=("$name|$hpath|$bpath")
       ((ready++))
     elif $have_beeg && ! $have_home; then
-      _log_info "RUNTIME_ONLY | %s | home=%s | beegfs=%s" "$name" "$hpath" "$bpath"
+      _log_info "RUNTIME_ONLY | %13s | home=%s | submit=%s" "$name" "$hpath" "$bpath"
       RUNTIME_ONLY_ROWS+=("$name|$hpath|$bpath")
       ((runtime_only++))
     elif ! $have_beeg && $have_home; then
-      _log_warn "BUILT_ONLY   | %s | home=%s | beegfs=%s" "$name" "$hpath" "$bpath"
+      _log_warn "BUILT_ONLY   | %13s | home=%s | submit=%s" "$name" "$hpath" "$bpath"
       BUILT_ONLY_ROWS+=("$name|$hpath|$bpath")
       ((built_only++))
 
@@ -1148,7 +1148,7 @@ verify_executables(){
         fi
       fi
     else
-      _log_err "MISSING      | %s | home=%s | beegfs=%s" "$name" "$hpath" "$bpath"
+      _log_err "MISSING      | %13s | home=%s | submit=%s" "$name" "$hpath" "$bpath"
       MISSING_ROWS+=("$name|$hpath|$bpath")
       ((missing++))
     fi
@@ -1181,7 +1181,7 @@ verify_executables(){
 
     if $head;then
        printf '\n'
-       printf '  %-13s | %-22s | %-s\n' "Status" "Name" "Paths"
+       printf '  %-13s | %-22s | %-s\n' "Status" "Name" "Search Paths"
        printf '  %-13s-+-%-22s-+-%-s\n' "$(printf -- '%.0s-' {1..13})" "$(printf -- '%.0s-' {1..22})" "$(printf -- '%.0s-' {1..40})"
        head=false
     fi
@@ -1191,7 +1191,9 @@ verify_executables(){
       IFS='|' read -r n h b <<<"$r"
       printf '  %b%-13s%b | %b%-22s%b | home=%s\n' \
         "$color_title" "$title" "$color_reset" "$color_geral" "$n" "$color_reset" "$h"
-      printf '  %-13s | %-22s | beegfs=%s\n' "" "" "$b"
+      printf '  %-13s | %-22s | submit=%s\n' "" "" "$b"
+      printf '  %-13s-+-%-22s-+-%-s\n' "$(printf -- '%.0s-' {1..13})" "$(printf -- '%.0s-' {1..22})" "$(printf -- '%.0s-' {1..40})"
+      #printf '  %-13s + %-22s + %s\n' "" "" ""
     done
   }
 
@@ -1202,7 +1204,7 @@ verify_executables(){
 
   # ------------------------------- return codes ------------------------------
   if ((missing>0)); then
-    _log_warn "There are MISSING items: build/copy required before running on beegfs."
+    _log_warn "There are MISSING items: build/copy required before running on SUBMIT_HOME."
     return 2
   fi
   if ((built_only>0)) && ! $do_fix; then
