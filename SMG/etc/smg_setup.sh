@@ -367,6 +367,9 @@ copy_fixed_files(){
   # PRE/databcs/gtopo30 (*.dat)
   _list_files_array filesPreDataGTOPO "${public_bam}/PRE/databcs/gtopo30" \( -name '*.dat' \)
 
+  # POS/datain/*
+  _list_files_array filesPosDataIn "${public_bam}/POS/datain"
+  
 
   if $is_egeon; then
     # ------------------------------- COPY ----------------------------------
@@ -375,6 +378,7 @@ copy_fixed_files(){
     _copy_with_progress filesPreDataBC  "${public_bam}/PRE/databcs"   "${subt_pre_bam}/databcs" "copy" "Copying PRE/databcs"
     _copy_with_progress filesPreDataIn  "${public_bam}/PRE/datain"    "${subt_pre_bam}/datain" "copy" "Copying PRE/datain (HybridLevels)"
     _copy_with_progress filesPreDataGTOPO  "${public_bam}/PRE/databcs/gtopo30"    "${subt_pre_bam}/databcs/gtopo30" "copy" "Copying PRE/databcs (GTOPO)"
+    _copy_with_progress filesPosDataIn "${public_bam}/POS/datain" "${subt_pos_bam}/datain" "copy" "Copying POS/datain"
 
   elif $is_cray; then
     # ------------------------------- LINK ----------------------------------
