@@ -408,7 +408,7 @@ fi
 mpirun -np \$SLURM_NTASKS  ./${POSEXE} < ${POSNML} > setout/${POSLOG} 
 DATAOUT=${DATAOUT}
     
-    module load grads-2.2.1
+    module load grads/2.2.1
     for arqctl in \$(find \${DATAOUT} -name "*.ctl")
     do
     
@@ -438,7 +438,7 @@ EOT1
     #   exit ${qstatus}
     #fi
     
-#    module load grads-2.2.1
+#    module load grads/2.2.1
 #    for arqctl in $(find ${DATAOUT} -name "*.ctl")
 #    do
 #    
