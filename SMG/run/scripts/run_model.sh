@@ -209,7 +209,7 @@ main() {
   /bin/bash runModel -das -v \
     -np "${NPROC}" -N "${tasks_per_node}" -d "${cpus_per_task}" \
     -t "${TRC}" -l "${NLV}" -I "${LABELANL}" -F "${LABELFCT}" -W "${LABELFCT}" \
-    -p "${PREFIX}" -s sstwkl -ts 3 -r -tr 6 -i 2
+    -p "${PREFIX}" -s sstwkl -ts 3 -r -tr 6 -i -3
 
   # 5) Pós-processamento opcional
   case "${RUNPOS}" in
