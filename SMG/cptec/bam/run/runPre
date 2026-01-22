@@ -424,8 +424,8 @@ fi
 #
 sed -e "s;#MODULESTORUN#;${modulesToRun};g" \
     -e "s;#dirdata#;${SUBTBASE};g"           \
-    -e "s;#IM#;$IM;g"                       \
-    -e "s;#JM#;$JM;g"                       \
+    -e "s;#IM#;$IMax;g"                       \
+    -e "s;#JM#;$JMax;g"                       \
     -e "s;#RESOUT#;${TRC};g"                \
     -e "s;#KMOUT#;${LV};g"                  \
     -e "s;#RESO#;${TRC};g"                  \
