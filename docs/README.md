@@ -1,28 +1,96 @@
-# Documentação (docs/)
+# Documentação Técnica — SMNA
 
-Este diretório reúne documentação técnica do **SMNA** (BAM + GSI) e materiais auxiliares.
+Este diretório reúne documentação técnica consolidada do SMNA (Sistema de Modelagem Numérica e Assimilação), incluindo aspectos de:
 
-> Este índice é gerado automaticamente. Se tu adicionar/remover arquivos em `docs/`, rode o gerador novamente.
+* Configuração do BAM
+* Parametrizações do GSI
+* Controle de qualidade
+* Execução operacional
+* Compilação
+* Ambientes HPC
 
-_Última atualização do índice: 2026-02-27 18:20_
+---
 
-## Arquivos
+# 1. Modelo BAM
 
-- [`BAM_DELTAT.md`](BAM_DELTAT.md)
-- [`Bc.md`](Bc.md)
-- [`OBS_INPUT.md`](OBS_INPUT.md)
-- [`paths.md`](paths.md)
-- [`pcgsoi.md`](pcgsoi.md)
-- [`PostAlt_comp.md`](PostAlt_comp.md)
-- [`QC_GSI.md`](QC_GSI.md)
-- [`qc_marker.md`](qc_marker.md)
-- [`Read_Prepbufr_Messages.md`](Read_Prepbufr_Messages.md)
-- [`SMNA_egeon.md`](SMNA_egeon.md)
-- [`SMNA_pre-operacional.md`](SMNA_pre-operacional.md)
-- [`SMNA_v3.0.1.md`](SMNA_v3.0.1.md)
+## Ajuste do DeltaT
 
-## Como atualizar este índice
+`BAM_DELTAT.md`
+Análise detalhada da instabilidade numérica no BAM (T299L64), diagnóstico do erro de segmentação e testes com diferentes valores de `DeltaT`, incluindo implicações na condição CFL e chamadas de radiação.
 
-```bash
-python3 tools/gen_docs_readme.py
-```
+---
+
+# 2. Sistema de Assimilação GSI
+
+## Parâmetros do OBS_INPUT
+
+`OBS_INPUT.md`
+Análise técnica dos parâmetros `dval`, `dthin` e `dsfcalc`, baseada em inspeção direta do código-fonte do GSI.
+
+---
+
+## Controle de Qualidade no GSI
+
+`QC_GSI.md`
+Descrição dos métodos de controle de qualidade no GSI: VarQC, Huber norm, gross check, buddy check, thinning e bias correction.
+
+`qc_marker.md`
+Documentação das marcas de controle de qualidade (`idqc`, `iuse`, `lim_qm`, `noiqc`) no fluxo PREPBUFR → GSI.
+
+---
+
+## PCGSOI – Cálculo do Stepsize
+
+`pcgsoi.md`
+Descrição matemática e estrutural do algoritmo `stpcalc` utilizado no método PCGSOI no GSI, incluindo representação interna dos coeficientes e estrutura diferencial da matriz `pbc`.
+
+---
+
+# 3. PREPBUFR
+
+## Leitura de Mensagens
+
+`Read_Prepbufr_Messages.md`
+Lista e interpretação das mensagens do código `read_prepbufr.f90`, incluindo erros fatais, avisos e mensagens informativas.
+
+---
+
+# 4. Implementação Pré-Operacional
+
+## SMNA no Egeon
+
+`SMNA_egeon.md`
+Guia para obtenção, configuração, compilação e execução do SMNA no cluster Egeon.
+
+## Implementação Pré-Operacional Geral
+
+`SMNA_pre-operacional.md`
+Estratégia de implantação pré-operacional no XC50 com preparação paralela para o Egeon.
+
+## Tag Estável SMNA_v3.0.1
+
+`SMNA_v3.0.1.md`
+Guia específico para a tag `SMNA_v3.0.1`, com início rápido, bootstrap do ciclo e execução com spin-up de bias.
+
+---
+
+# 5. Compilação e Ferramentas
+
+## PostAlt
+
+`PostAlt_comp.md`
+Passo-a-passo de compilação do PostAlt (local, Egeon e XC50), incluindo dependências `sharedLibs`, Autotools e diferenças de ambiente.
+
+## Diretórios entre Clusters
+
+`paths.md`
+Correspondência de diretórios entre BASTOS, EGEON e XC50, com recomendações para scripts portáveis.
+
+---
+
+# 6. Bias Correction
+
+## Guia de Spin-up de Satbias
+
+`Bc.md`
+Guia para spin-up de coeficientes de correção de viés (`satbias` e `satbias_angle`) no GSI, incluindo checagens de consistência e script de automação.
