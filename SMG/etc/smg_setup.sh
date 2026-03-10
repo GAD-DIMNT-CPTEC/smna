@@ -1628,7 +1628,7 @@ bootstrap_bg(){
   
   # ------------------------------ local args --------------------------------
   local analysis=""                       # A (required)
-  local ntasks=128 trunc=299 levels=64 sst_key="sstwkl"
+  local ntasks=64 trunc=299 levels=64 sst_key="sstwkl"
 
    # Parse only the necessary CLI options for this function.
    # Notes:
